@@ -6,3 +6,6 @@
 # Installing
 - Build the previous package using the instructions of each project.
 - Execute the command: `sudo ./start.sh` to clean the compose and run mattermost and cs-connect with the faker data provider.
+
+# System architecture overview
+![architecture](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/raw/main/assets/architecture_overview.png)
