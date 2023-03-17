@@ -1,0 +1,67 @@
+version: "3.9"
+services:
+  mattermost:
+    container_name: "mattermost"
+    image: "csconnect/mattermost"
+    restart: "unless-stopped"
+    depends_on:
+      - "db"
+      - "cs-data-provider"
+    volumes:
+      - "./config/logs:/mattermost/logs:rw"
+      - "./config/plugins:/mattermost/plugins:rw"
+      - "./config/config/config.json:/mattermost/config/config.json"
+    ports:
+      - "8065:8065"
+    networks:
+      - mattermost
+  db:
+    container_name: db
+    image: "postgres"
+    restart: "unless-stopped"
+    environment:
+      POSTGRES_PASSWORD: "mostest"
+      POSTGRES_USER: "mmuser"
+      POSTGRES_DB: "mattermost_test"
+      PGDATA: "/data/postgres"
+    volumes:
+      - "postgres:/data/postgres"
+    ports:
+      - "5432:5432"
+    networks:
+      mattermost:
+        ipv4_address: 10.5.0.5
+  pgadmin:
+    container_name: "pgadmin"
+    image: "dpage/pgadmin4"
+    restart: "unless-stopped"
+    depends_on:
+      - "db"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "root"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - "pgadmin:/var/lib/pgadmin"
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    networks:
+      - mattermost
+  cs-data-provider:
+    container_name: cs-data-provider
+    image: "csconnect/cs-data-provider"
+    restart: "unless-stopped"
+    ports:
+      - "3000:3000"
+    networks:
+      - mattermost
+volumes:
+  postgres:
+  pgadmin:
+networks:
+  mattermost:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

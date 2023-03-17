@@ -1,0 +1,26 @@
+{
+    "id": "cs-aware-connect",
+    "name": "CS-AWARE CONNECT",
+    "description": "CS-AWARE CONNECT is a plugin for a Cybersecurity-based collaboration platform.",
+    "homepage_url": "https://github.com/tizianocitro/csa-connect/",
+    "support_url": "https://github.com/tizianocitro/csa-connect/issues",
+    "icon_path": "assets/plugin_icon.svg",
+    "min_server_version": "7.6.0",
+    "server": {
+        "executables": {
+            "linux-amd64": "server/dist/plugin-linux-amd64",
+            "linux-arm64": "server/dist/plugin-linux-arm64",
+            "darwin-amd64": "server/dist/plugin-darwin-amd64",
+            "darwin-arm64": "server/dist/plugin-darwin-arm64",
+            "windows-amd64": "server/dist/plugin-windows-amd64.exe"
+        }
+    },
+    "webapp": {
+        "bundle_path": "webapp/dist/main.js"
+    },
+    "settings_schema": {
+        "header": "",
+        "footer": "",
+        "settings": []
+    }
+}
