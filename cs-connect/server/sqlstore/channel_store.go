@@ -10,8 +10,8 @@ import (
 	sq "github.com/Masterminds/squirrel"
 	"github.com/mattermost/mattermost-server/v6/model"
 
-	"github.com/tizianocitro/csa-connect/server/app"
-	"github.com/tizianocitro/csa-connect/server/util"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/app"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/util"
 )
 
 // channelStore is a sql store for channels

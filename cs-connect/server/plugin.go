@@ -12,11 +12,11 @@ import (
 
 	pluginapi "github.com/mattermost/mattermost-plugin-api"
 
-	"github.com/tizianocitro/csa-connect/server/api"
-	"github.com/tizianocitro/csa-connect/server/app"
-	"github.com/tizianocitro/csa-connect/server/command"
-	"github.com/tizianocitro/csa-connect/server/config"
-	"github.com/tizianocitro/csa-connect/server/sqlstore"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/api"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/app"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/command"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/config"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/sqlstore"
 )
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.

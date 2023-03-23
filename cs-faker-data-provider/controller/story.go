@@ -3,9 +3,9 @@ package controller
 import (
 	"encoding/json"
 
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
-	"github.com/tizianocitro/csa-server/model"
-	"github.com/tizianocitro/csa-server/util"
 )
 
 func GetStories(c *fiber.Ctx) error {

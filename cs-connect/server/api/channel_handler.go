@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/tizianocitro/csa-connect/server/app"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/app"
 )
 
 // ChannelsHandler is the API handler.

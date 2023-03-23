@@ -1,8 +1,8 @@
 package controller
 
 import (
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/gofiber/fiber/v2"
-	"github.com/tizianocitro/csa-server/model"
 )
 
 func GetPolicies(c *fiber.Ctx) error {

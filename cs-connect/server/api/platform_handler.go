@@ -5,7 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/tizianocitro/csa-connect/server/config"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/config"
 )
 
 // PlatformHandler is the API handler.

@@ -1,4 +1,4 @@
-module github.com/tizianocitro/csa-server
+module github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider
 
 go 1.18
 

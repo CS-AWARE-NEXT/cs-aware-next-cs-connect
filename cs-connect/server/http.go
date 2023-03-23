@@ -7,8 +7,8 @@ import (
 
 	"github.com/mattermost/mattermost-server/v6/model"
 
-	"github.com/tizianocitro/csa-connect/server/command"
-	"github.com/tizianocitro/csa-connect/server/user"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/command"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/user"
 )
 
 func (p *Plugin) handleGetOrganizationURL(w http.ResponseWriter, r *http.Request) {

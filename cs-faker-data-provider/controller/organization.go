@@ -3,8 +3,8 @@ package controller
 import (
 	"strconv"
 
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/gofiber/fiber/v2"
-	"github.com/tizianocitro/csa-server/model"
 )
 
 func GetOrganizations(c *fiber.Ctx) error {

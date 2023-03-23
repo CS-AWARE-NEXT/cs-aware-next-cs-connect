@@ -2,8 +2,8 @@
     "id": "cs-aware-connect",
     "name": "CS-AWARE CONNECT",
     "description": "CS-AWARE CONNECT is a plugin for a Cybersecurity-based collaboration platform.",
-    "homepage_url": "https://github.com/tizianocitro/csa-connect/",
-    "support_url": "https://github.com/tizianocitro/csa-connect/issues",
+    "homepage_url": "https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/",
+    "support_url": "https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/issues",
     "icon_path": "assets/plugin_icon.svg",
     "min_server_version": "7.6.0",
     "server": {

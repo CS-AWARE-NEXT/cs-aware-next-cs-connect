@@ -1,4 +1,4 @@
-module github.com/tizianocitro/csa-connect
+module github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect
 
 go 1.18
 
