@@ -40,6 +40,7 @@ type Plugin struct {
 
 	channelService  *app.ChannelService
 	platformService *config.PlatformService
+	eventService    *app.EventService
 }
 
 func (p *Plugin) OnActivate() error {
@@ -65,6 +66,7 @@ func (p *Plugin) OnActivate() error {
 
 	p.channelService = app.NewChannelService(p.API, channelStore)
 	p.platformService = config.NewPlatformService(p.API)
+	p.eventService = app.NewEventService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
 	if err != nil {
@@ -86,6 +88,10 @@ func (p *Plugin) OnActivate() error {
 		p.handler.APIRouter,
 		p.platformService,
 	)
+	api.NewEventHandler(
+		p.handler.APIRouter,
+		p.eventService,
+	)
 
 	// if err := p.registerCommands(); err != nil {
 	// 	return errors.Wrapf(err, "failed to register commands")
@@ -94,6 +100,11 @@ func (p *Plugin) OnActivate() error {
 	p.API.LogInfo("Plugin activated successfully", "pluginID", p.pluginID, "botID", p.botID)
 	return nil
 }
+
+// func (p *Plugin) WebSocketMessageHasBeenPosted(webConnID, userID string, req *model.WebSocketRequest) {
+// 	p.API.LogInfo("Received an event", "req", req, "userId", userID)
+// 	p.API.LogInfo("Completed event processing", "req", req, "userId", userID)
+// }
 
 // See more on https://developers.mattermost.com/extend/plugins/server/reference/
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
