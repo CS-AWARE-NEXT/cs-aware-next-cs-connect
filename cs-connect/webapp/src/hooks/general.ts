@@ -10,6 +10,7 @@ import {
 import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {useUpdateEffect} from 'react-use';
@@ -31,6 +32,7 @@ import {
     fetchTableData,
     fetchTextBoxData,
     fetchTimelineData,
+    userAdded,
 } from 'src/clients';
 import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
 import {
@@ -105,6 +107,24 @@ export const useOrganizationsNoPageList = (): Organization[] => {
     }, [currentTeamId]);
 
     return organizations;
+};
+
+export const useUserAdded = () => {
+    const teamId = useSelector(getCurrentTeamId);
+    const userId = useSelector(getCurrentUserId);
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function userAddedAsync() {
+            userAdded({teamId, userId});
+        }
+
+        userAddedAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [teamId, userId]);
 };
 
 export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true): [

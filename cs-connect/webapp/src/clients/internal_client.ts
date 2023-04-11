@@ -17,6 +17,7 @@ import {
 
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
+import {UserAddedParams} from 'src/types/events';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
 
@@ -90,6 +91,13 @@ export const addChannel = async (params: AddChannelParams): Promise<AddChannelRe
         data = {channelId: '', parentId: '', sectionId: ''} as AddChannelResult;
     }
     return data;
+};
+
+export const userAdded = async (params: UserAddedParams): Promise<void> => {
+    await doPost(
+        `${apiUrl}/events/user_added`,
+        JSON.stringify(params),
+    );
 };
 
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {
