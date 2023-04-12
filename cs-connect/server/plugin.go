@@ -38,8 +38,8 @@ type Plugin struct {
 	// How the plugin URLs starts
 	pluginURLPathPrefix string
 
-	channelService  *app.ChannelService
 	platformService *config.PlatformService
+	channelService  *app.ChannelService
 	eventService    *app.EventService
 }
 
@@ -64,8 +64,8 @@ func (p *Plugin) OnActivate() error {
 	}
 	channelStore := sqlstore.NewChannelStore(apiClient, sqlStore)
 
-	p.channelService = app.NewChannelService(p.API, channelStore)
 	p.platformService = config.NewPlatformService(p.API)
+	p.channelService = app.NewChannelService(p.API, channelStore)
 	p.eventService = app.NewEventService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
@@ -80,13 +80,13 @@ func (p *Plugin) OnActivate() error {
 	mutex.Unlock()
 
 	p.handler = api.NewHandler(p.pluginAPI)
+	api.NewConfigHandler(
+		p.handler.APIRouter,
+		p.platformService,
+	)
 	api.NewChannelHandler(
 		p.handler.APIRouter,
 		p.channelService,
-	)
-	api.NewPlatformHandler(
-		p.handler.APIRouter,
-		p.platformService,
 	)
 	api.NewEventHandler(
 		p.handler.APIRouter,
