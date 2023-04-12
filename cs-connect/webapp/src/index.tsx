@@ -8,7 +8,7 @@ import {DEFAULT_PATH, PRODUCT_ICON, PRODUCT_NAME} from 'src/constants';
 import {DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig} from 'src/config/config';
 import {loadPlatformConfig, setSiteUrl} from 'src/clients';
 import Backstage from 'src/components/backstage/backstage';
-import {ChannelHeaderButtonIcon} from 'src/components/icons/icons';
+import {RhsIcon} from 'src/components/icons/icons';
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import RHSView from 'src/components/rhs/rhs';
 import {pluginId} from 'src/manifest';
@@ -85,7 +85,7 @@ export default class Plugin {
 
         const {toggleRHSPlugin} = registry.registerRightHandSidebarComponent(RHSView, PRODUCT_NAME);
         registry.registerChannelHeaderButtonAction(
-            <ChannelHeaderButtonIcon/>,
+            <RhsIcon/>,
             () => store.dispatch(toggleRHSPlugin),
             PRODUCT_NAME,
             PRODUCT_NAME,
