@@ -13,7 +13,7 @@ import {
 } from 'src/components/rhs/rhs';
 import {hideOptions, useUserAdded} from 'src/hooks';
 
-export const ChannelHeaderButtonIcon = () => {
+export const RhsIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
     const {hash: urlHash, search} = useLocation();
@@ -24,7 +24,8 @@ export const ChannelHeaderButtonIcon = () => {
     useEffect(() => {
         const timeouts = hideOptions();
         return () => {
-            timeouts.forEach((timeout) => clearTimeout(timeout));
+            timeouts[0].forEach((timeout) => clearTimeout(timeout));
+            timeouts[1].forEach((interval) => clearInterval(interval));
         };
     });
 

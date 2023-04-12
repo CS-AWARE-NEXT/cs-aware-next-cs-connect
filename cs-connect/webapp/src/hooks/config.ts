@@ -14,7 +14,7 @@ export const getSection = (id: string): Section => {
 export const hideOptions = (): NodeJS.Timeout[] => {
     (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
 
-    const timeout = setTimeout(() => {
+    const interval = setInterval(() => {
         const indicator = document.getElementById('unreadIndicatorTop');
         if (indicator) {
             indicator.style.display = 'none';
@@ -39,5 +39,6 @@ export const hideOptions = (): NodeJS.Timeout[] => {
         }
     }, estimatedOptionsLoadTime);
 
-    return [timeout];
+    return [interval];
 };
+
