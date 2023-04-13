@@ -7,5 +7,7 @@
 # Jetbrains
 .idea/
 
+docker/package/
+
 config/logs
 config/plugins
