@@ -25,7 +25,7 @@ import OrganizationDetails from 'src/components/backstage/organizations/organiza
 import OrganizationsPage from 'src/components/backstage/organizations/organizations_page';
 import {pluginErrorUrl, pluginUrl} from 'src/browser_routing';
 
-const useInitTeamRoutingLogic = () => {
+export const useInitTeamRoutingLogic = () => {
     const dispatch = useDispatch();
     const location = useLocation();
     const {url} = useRouteMatch();
