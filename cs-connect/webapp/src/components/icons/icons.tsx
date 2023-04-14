@@ -13,7 +13,7 @@ import {
 } from 'src/components/rhs/rhs';
 import {hideOptions, useUserAdded} from 'src/hooks';
 
-export const RhsIcon = () => {
+export const RHSIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
     const {hash: urlHash, search} = useLocation();
@@ -67,6 +67,10 @@ export const RhsIcon = () => {
         />
     );
 };
+
+export const InfoIcon = () => (
+    <i className='icon fa fa-info-circle'/>
+);
 
 export const MainMenuMobileIcon = () => (
     <i className='icon fa fa-plug'/>
