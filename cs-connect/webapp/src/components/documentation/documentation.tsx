@@ -12,7 +12,7 @@ export type DocumentationMapItem = {
 };
 
 const items: DocumentationMapItem[] = [
-    {id: 'about-the-platform', name: 'About the platform', path: 'about'},
+    {id: 'about-the-platform', name: 'About The Platform', path: 'about'},
     {id: 'hyperlinking-mechanism', name: 'Hyperlinking Mechanism', path: 'mechanism'},
 ];
 
