@@ -3,19 +3,27 @@
 
 import React, {useEffect} from 'react';
 import {Theme, getTheme} from 'mattermost-redux/selectors/entities/preferences';
-import {matchPath, useLocation, useRouteMatch} from 'react-router-dom';
+import {
+    Route,
+    Switch,
+    matchPath,
+    useLocation,
+    useRouteMatch,
+} from 'react-router-dom';
 import styled, {css} from 'styled-components';
 import {GlobalState} from '@mattermost/types/store';
 import {useSelector} from 'react-redux';
 
 import {
     DEFAULT_PATH,
+    DOCUMENTATION_PATH,
     ORGANIZATIONS_PATH,
     ORGANIZATION_ID_PARAM,
     PRODUCT_NAME,
 } from 'src/constants';
 import {applyTheme} from 'src/components/backstage/css_utils';
 import {useForceDocumentTitle} from 'src/hooks';
+import Documentation from 'src/components/documentation/documentation';
 
 import LHSNavigation from './lhs/lhs_navigation';
 import MainBody from './main_body';
@@ -52,8 +60,15 @@ const Backstage = () => {
         <BackstageContainer id={BackstageID}>
             <ToastProvider>
                 <MainContainer noContainerScroll={Boolean(noContainerScroll)}>
-                    <LHSNavigation/>
-                    <MainBody/>
+                    <Switch>
+                        <Route path={`${url}/${DOCUMENTATION_PATH}`}>
+                            <Documentation/>
+                        </Route>
+                        <Route path={`${url}/`}>
+                            <LHSNavigation/>
+                            <MainBody/>
+                        </Route>
+                    </Switch>
                 </MainContainer>
             </ToastProvider>
         </BackstageContainer>

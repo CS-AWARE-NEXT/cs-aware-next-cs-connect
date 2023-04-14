@@ -11,7 +11,7 @@ const LHSNavigation = () => {
     );
 };
 
-const LHSContainer = styled.div`
+export const LHSContainer = styled.div`
     width: 240px;
     background-color: var(--sidebar-bg);
 
