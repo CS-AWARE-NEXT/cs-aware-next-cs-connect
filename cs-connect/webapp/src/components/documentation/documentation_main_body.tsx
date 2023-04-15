@@ -12,8 +12,13 @@ import {pluginErrorUrl} from 'src/browser_routing';
 import {useInitTeamRoutingLogic} from 'src/components/backstage/main_body';
 
 import DocumentationPage from './documentation_page';
+import {DocumentationItem} from './documentation';
 
-const DocumentationMainBody = () => {
+type Props = {
+    items: DocumentationItem[];
+};
+
+const DocumentationMainBody = ({items}: Props) => {
     const match = useRouteMatch();
     useInitTeamRoutingLogic();
 
@@ -25,7 +30,7 @@ const DocumentationMainBody = () => {
                     `${match.url}/mechanism`,
                 ]}
             >
-                <DocumentationPage/>
+                <DocumentationPage items={items}/>
             </Route>
             <Route path={`${match.url}/error`}>
                 <ErrorPage/>
@@ -34,13 +39,13 @@ const DocumentationMainBody = () => {
                 exact={true}
                 path={`${match.url}/${DOCUMENTATION_PATH}`}
             >
-                <Redirect to={`${match.url}/about#about-the-platform`}/>
+                <Redirect to={`${match.url}/about`}/>
             </Route>
             <Route
                 exact={true}
                 path={`${match.url}/`}
             >
-                <Redirect to={`${match.url}/about#about-the-platform`}/>
+                <Redirect to={`${match.url}/about`}/>
             </Route>
             <Route>
                 <Redirect to={pluginErrorUrl(ErrorPageTypes.DEFAULT)}/>

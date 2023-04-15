@@ -8,13 +8,13 @@ import Sidebar from 'src/components/sidebar/sidebar';
 import {pluginUrl} from 'src/browser_routing';
 import {DOCUMENTATION_PATH} from 'src/constants';
 
-import {DocumentationMapItem} from './documentation';
+import {DocumentationItem} from './documentation';
 
 type Props = {
-    items: DocumentationMapItem[];
+    items: DocumentationItem[];
 };
 
-const useLHSData = (items: DocumentationMapItem[]) => {
+const useLHSData = (items: DocumentationItem[]) => {
     const {hash: urlHash} = useLocation();
     const normalizeCategoryName = useReservedCategoryTitleMapper();
     const icon = 'icon-play-outline';
