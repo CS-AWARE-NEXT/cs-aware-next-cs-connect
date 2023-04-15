@@ -4,9 +4,9 @@ import {
     Switch,
     useRouteMatch,
 } from 'react-router-dom';
-import React from 'react';
+import React, {useCallback} from 'react';
 
-import {DOCUMENTATION_PATH, ErrorPageTypes} from 'src/constants';
+import {ErrorPageTypes} from 'src/constants';
 import ErrorPage from 'src/components/commons/error_page';
 import {pluginErrorUrl} from 'src/browser_routing';
 import {useInitTeamRoutingLogic} from 'src/components/backstage/main_body';
@@ -19,33 +19,27 @@ type Props = {
 };
 
 const DocumentationMainBody = ({items}: Props) => {
-    const match = useRouteMatch();
+    const {url} = useRouteMatch();
     useInitTeamRoutingLogic();
+
+    const getPathsFromItems = useCallback(() => items.map(({path}) => `${url}/${path}`), []);
+    const paths = getPathsFromItems();
 
     return (
         <Switch>
             <Route
-                path={[
-                    `${match.url}/about`,
-                    `${match.url}/mechanism`,
-                ]}
+                path={paths}
             >
                 <DocumentationPage items={items}/>
             </Route>
-            <Route path={`${match.url}/error`}>
+            <Route path={`${url}/error`}>
                 <ErrorPage/>
             </Route>
             <Route
                 exact={true}
-                path={`${match.url}/${DOCUMENTATION_PATH}`}
+                path={`${url}/`}
             >
-                <Redirect to={`${match.url}/about`}/>
-            </Route>
-            <Route
-                exact={true}
-                path={`${match.url}/`}
-            >
-                <Redirect to={`${match.url}/about`}/>
+                <Redirect to={`${url}/about`}/>
             </Route>
             <Route>
                 <Redirect to={pluginErrorUrl(ErrorPageTypes.DEFAULT)}/>
