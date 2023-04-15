@@ -1,5 +1,5 @@
 import {Collapse, Input, Table} from 'antd';
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 import {useLocation, useRouteMatch} from 'react-router-dom';
@@ -13,6 +13,7 @@ import {
     buildTo,
     buildToForCopy,
     formatSectionPath,
+    formatStringToCapitalize,
     formatStringToLowerCase,
     isReferencedByUrlHash,
 } from 'src/hooks';
@@ -101,6 +102,11 @@ const PaginatedTable = ({
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
+    const formatColumnNames = useCallback(() => {
+        return data.columns.map((column) => ({...column, title: formatStringToCapitalize(column.title)}));
+    }, []);
+    const formattedColumns = formatColumnNames();
+
     const handleSearch = (value: string) => {
         const filtered = data.rows.filter((record: PaginatedTableRow) => {
             const recordName = formatStringToLowerCase(record.name);
@@ -152,7 +158,7 @@ const PaginatedTable = ({
                     <StyledTable
                         id={paginatedTableId}
                         dataSource={filteredRows}
-                        columns={[iconColumn, ...data.columns]}
+                        columns={[iconColumn, ...formattedColumns]}
                         components={{
                             body: {
                                 row: TableRow,
