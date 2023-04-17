@@ -1,9 +1,6 @@
 import {Organization, PlatformConfig} from 'src/types/organization';
-import {ECOSYSTEM} from 'src/constants';
-import {formatStringToLowerCase} from 'src/hooks';
 
 export const DEFAULT_PLATFORM_CONFIG_PATH = '/configs/platform';
-
 export const PLATFORM_CONFIG_CACHE_NAME = 'platform-config-cache';
 
 let platformConfig: PlatformConfig = {
@@ -26,11 +23,11 @@ export const getOrganizations = (): Organization[] => {
 };
 
 export const getOrganizationsNoEcosystem = (): Organization[] => {
-    return getOrganizations().filter((o) => formatStringToLowerCase(o.name) !== ECOSYSTEM);
+    return getOrganizations().filter((o) => !o.isEcosystem);
 };
 
 export const getEcosystem = (): Organization => {
-    return getOrganizations().filter((o) => formatStringToLowerCase(o.name) === ECOSYSTEM)[0];
+    return getOrganizations().filter((o) => o.isEcosystem)[0];
 };
 
 export const getOrganizationById = (id: string): Organization => {

@@ -59,6 +59,7 @@ import {formatSectionPath, formatStringToLowerCase} from './format';
 type FetchParams = FetchOrganizationsParams;
 
 export enum ReservedCategory {
+    Documentation = 'Documentation',
     Ecosystem = 'Ecosystem',
     Organizations = 'Organizations',
 }
@@ -67,6 +68,8 @@ export const useReservedCategoryTitleMapper = (): (categoryName: ReservedCategor
     const {formatMessage} = useIntl();
     return (categoryName: ReservedCategory | string) => {
         switch (categoryName) {
+        case ReservedCategory.Documentation:
+            return formatMessage({defaultMessage: 'Documentation'});
         case ReservedCategory.Ecosystem:
             return formatMessage({defaultMessage: 'Ecosystem'});
         case ReservedCategory.Organizations:

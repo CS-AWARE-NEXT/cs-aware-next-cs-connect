@@ -13,9 +13,8 @@ import {
 } from 'src/hooks';
 import {LHSOrganizationDotMenu} from 'src/components/backstage/lhs/lhs_organization_dot_menu';
 import {pluginUrl} from 'src/browser_routing';
-
-import {ItemContainer, StyledNavLink} from './item';
-import Sidebar, {SidebarGroup} from './sidebar';
+import {ItemContainer, StyledNavLink} from 'src/components/sidebar/item';
+import Sidebar, {SidebarGroup} from 'src/components/sidebar/sidebar';
 
 const useLHSData = () => {
     const normalizeCategoryName = useReservedCategoryTitleMapper();

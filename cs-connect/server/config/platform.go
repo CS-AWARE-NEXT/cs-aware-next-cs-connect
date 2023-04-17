@@ -11,6 +11,7 @@ type PlatformConfig struct {
 }
 
 type Organization struct {
+	IsEcosystem bool      `json:"isEcosystem" yaml:"isEcosystem"`
 	Description string    `json:"description" yaml:"description"`
 	ID          string    `json:"id" yaml:"id"`
 	Name        string    `json:"name" yaml:"name"`
