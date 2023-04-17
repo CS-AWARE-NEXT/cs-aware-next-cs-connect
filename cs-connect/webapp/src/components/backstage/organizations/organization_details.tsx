@@ -1,13 +1,8 @@
 import React, {createContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 
-import {DEFAULT_PATH, ECOSYSTEM, ORGANIZATIONS_PATH} from 'src/constants';
-import {
-    formatStringToLowerCase,
-    useForceDocumentTitle,
-    useOrganization,
-    useScrollIntoView,
-} from 'src/hooks';
+import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
+import {useForceDocumentTitle, useOrganization, useScrollIntoView} from 'src/hooks';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
 
@@ -30,7 +25,7 @@ const OrganizationDetails = () => {
     }
 
     return (
-        (formatStringToLowerCase(organization.name) === ECOSYSTEM) ?
+        (organization.isEcosystem) ?
             <OrganizationIdContext.Provider value={organization.id}>
                 <EcosystemDetails/>
             </OrganizationIdContext.Provider> :

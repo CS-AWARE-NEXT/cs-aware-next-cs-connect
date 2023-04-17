@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import {formatName, useSectionData} from 'src/hooks';
 import PaginatedTable from 'src/components/backstage/widgets/paginated_table/paginated_table';
 import {Section} from 'src/types/organization';
+import Loading from 'src/components/commons/loading';
 
 export const SectionUrlContext = createContext('');
 
@@ -18,15 +19,16 @@ const SectionList = ({section}: Props) => {
     return (
         <Body>
             <SectionUrlContext.Provider value={url}>
-                <PaginatedTable
-                    id={formatName(name)}
-                    internal={internal}
-                    isSection={true}
-                    name={name}
-                    data={data}
-                    parentId={id}
-                    pointer={true}
-                />
+                {data ?
+                    <PaginatedTable
+                        id={formatName(name)}
+                        internal={internal}
+                        isSection={true}
+                        name={name}
+                        data={data}
+                        parentId={id}
+                        pointer={true}
+                    /> : <Loading/>}
             </SectionUrlContext.Provider>
         </Body>
     );

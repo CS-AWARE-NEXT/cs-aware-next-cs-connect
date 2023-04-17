@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import OrganizationsSidebar from 'src/components/sidebar/organizations_sidebar';
+import OrganizationsSidebar from 'src/components/backstage/organizations/organizations_sidebar';
 
 const LHSNavigation = () => {
     return (

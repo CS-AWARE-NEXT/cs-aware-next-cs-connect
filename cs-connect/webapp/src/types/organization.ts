@@ -3,6 +3,7 @@ export interface PlatformConfig {
 }
 
 export interface Organization {
+    isEcosystem?: boolean,
     description?: string,
     id: string,
     name: string,
