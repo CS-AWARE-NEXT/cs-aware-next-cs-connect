@@ -14,7 +14,7 @@ import {
 import {DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig} from 'src/config/config';
 import {loadPlatformConfig, setSiteUrl} from 'src/clients';
 import Backstage from 'src/components/backstage/backstage';
-import {InfoIcon, RHSIcon} from 'src/components/icons/icons';
+import {InfoIcon, RHSIcon} from 'src/components/icons';
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import RHSView from 'src/components/rhs/rhs';
 import {pluginId} from 'src/manifest';
@@ -101,7 +101,7 @@ export default class Plugin {
 
         registry.registerChannelHeaderButtonAction(
             <InfoIcon/>,
-            () => navigateToPluginUrl(`/${DOCUMENTATION_PATH}#about-the-platform`),
+            () => navigateToPluginUrl(`/${DOCUMENTATION_PATH}`),
             PRODUCT_DOCUMENTATION,
             PRODUCT_DOCUMENTATION,
         );
