@@ -1,7 +1,7 @@
 import React from 'react';
 import {Spin} from 'antd';
 
-import {LoadingIcon} from 'src/components/icons/icons';
+import {LoadingIcon} from 'src/components/icons';
 
 const Loading = () => (
     <Spin
