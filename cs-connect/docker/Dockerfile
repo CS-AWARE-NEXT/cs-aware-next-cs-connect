@@ -1,8 +1,9 @@
 FROM cs-connect-base  AS BUILDER
-WORKDIR home/mattermost/csa-connect
+WORKDIR home/mattermost/cs-connect
 COPY . .
-RUN make
+ARG CONFIG_FILE_NAME=config.yml
+RUN make CONFIG_FILE_NAME=$CONFIG_FILE_NAME
 
 FROM mattermost/mattermost-enterprise-edition:7.8.0
 WORKDIR /mattermost
-COPY --from=BUILDER /home/mattermost/csa-connect/dist/cs-aware-connect-+.tar.gz ./prepackaged_plugins/cs-aware-connect-+.tar.gz
+COPY --from=BUILDER /home/mattermost/cs-connect/dist/cs-aware-connect-+.tar.gz ./prepackaged_plugins/cs-aware-connect-+.tar.gz
