@@ -1,23 +1,33 @@
 import {NavLink, Route, Switch} from 'react-router-dom';
-import React from 'react';
+import React, {ReactNode} from 'react';
 import styled from 'styled-components';
 
 import {SECTION_ID_PARAM} from 'src/constants';
 import {Section} from 'src/types/organization';
 import SectionDetails from 'src/components/backstage/sections/section_details';
 import SectionList from 'src/components/backstage/sections/section_list';
-import {formatStringToLowerCase} from 'src/hooks';
+import {formatStringToLowerCase, isUrlEqualWithoutQueryParams} from 'src/hooks';
+import {getSiteUrl} from 'src/clients';
 
 type Props = {
     path: string;
     sections: Section[];
     url: string;
+    children?: ReactNode;
+    childrenBottom?: boolean;
 };
 
 export const SECTION_NAV_ITEM = 'section-nav-item';
 export const SECTION_NAV_ITEM_ACTIVE = 'active';
 
-const Sections = ({path, sections, url}: Props) => {
+const Sections = ({
+    path,
+    sections,
+    url,
+    children = [],
+    childrenBottom = true,
+}: Props) => {
+    const showChildren = isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}`);
     const safeSections = sections == null ? [] : sections;
     return (
         <>
@@ -39,6 +49,7 @@ const Sections = ({path, sections, url}: Props) => {
                     );
                 })}
             </NavBar>
+            {(showChildren && !childrenBottom) && children}
             <Switch>
                 {safeSections.map((section, index) => {
                     let toPath = `${path}/${formatStringToLowerCase(section.name)}`;
@@ -67,6 +78,7 @@ const Sections = ({path, sections, url}: Props) => {
                     );
                 })}
             </Switch>
+            {(showChildren && childrenBottom) && children}
         </>
     );
 };

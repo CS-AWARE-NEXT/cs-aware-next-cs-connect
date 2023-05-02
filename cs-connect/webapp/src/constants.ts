@@ -21,10 +21,12 @@ export const estimatedOptionsLoadTime = 150;
 
 export const PRODUCT_ICON = 'power-plug-outline';
 export const PRODUCT_NAME = pluginName;
+export const PRODUCT_DOCUMENTATION = 'Documentation';
 
 export const DEFAULT_PATH = pluginId;
 export const ORGANIZATIONS_PATH = 'organizations';
 export const ORGANIZATION_PATH = 'organization';
+export const DOCUMENTATION_PATH = 'documentation';
 
 // In case you change these, pay attention to change the files
 // where it was not possible to use the constants
@@ -32,5 +34,5 @@ export const ORGANIZATION_ID_PARAM = 'organizationId';
 export const PARENT_ID_PARAM = 'parentId';
 export const SECTION_ID_PARAM = 'sectionId';
 
-export const ECOSYSTEM = 'ecosystem';
+// TODO: those should be obtained using an API call, or another dynamic way
 export const ecosystemDefaultFields = ['name', 'description'];

@@ -159,9 +159,11 @@ const StepsModal = ({
 
     return (
         <Container>
-            <PrimaryButtonLarger onClick={() => setVisible(true)}>
-                <FormattedMessage defaultMessage='Create New'/>
-            </PrimaryButtonLarger>
+            <ButtonContainer>
+                <PrimaryButtonLarger onClick={() => setVisible(true)}>
+                    <FormattedMessage defaultMessage='Create'/>
+                </PrimaryButtonLarger>
+            </ButtonContainer>
             <Modal
                 centered={true}
                 open={visible}
@@ -235,6 +237,10 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 24px;
+`;
+
+const ButtonContainer = styled.div`
+    width: 50px;
 `;
 
 const TextInput = styled(Input)`

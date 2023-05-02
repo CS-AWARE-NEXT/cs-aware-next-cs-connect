@@ -1,5 +1,5 @@
 import {Collapse, Input, Table} from 'antd';
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 import {useLocation, useRouteMatch} from 'react-router-dom';
@@ -13,11 +13,11 @@ import {
     buildTo,
     buildToForCopy,
     formatSectionPath,
+    formatStringToCapitalize,
     formatStringToLowerCase,
     isReferencedByUrlHash,
 } from 'src/hooks';
 import {FullUrlContext} from 'src/components/rhs/rhs';
-import Loading from 'src/components/commons/loading';
 import {navigateToUrl} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {PARENT_ID_PARAM} from 'src/constants';
@@ -101,6 +101,11 @@ const PaginatedTable = ({
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
 
+    const formatColumnNames = useCallback(() => {
+        return data.columns.map((column) => ({...column, title: formatStringToCapitalize(column.title)}));
+    }, []);
+    const formattedColumns = formatColumnNames();
+
     const handleSearch = (value: string) => {
         const filtered = data.rows.filter((record: PaginatedTableRow) => {
             const recordName = formatStringToLowerCase(record.name);
@@ -141,7 +146,14 @@ const PaginatedTable = ({
                     title={name}
                 />
             </Header>
-            {(filteredRows.length < 1 && searchText === '') && <Loading/>}
+            {(filteredRows.length < 1 && searchText === '') &&
+                <Table
+                    id={paginatedTableId}
+                    dataSource={[]}
+                    columns={formattedColumns}
+                    rowKey='key'
+                    size='middle'
+                />}
             {(filteredRows.length > 0 || searchText !== '') &&
                 <>
                     <TableSearch
@@ -152,7 +164,7 @@ const PaginatedTable = ({
                     <StyledTable
                         id={paginatedTableId}
                         dataSource={filteredRows}
-                        columns={[iconColumn, ...data.columns]}
+                        columns={[iconColumn, ...formattedColumns]}
                         components={{
                             body: {
                                 row: TableRow,

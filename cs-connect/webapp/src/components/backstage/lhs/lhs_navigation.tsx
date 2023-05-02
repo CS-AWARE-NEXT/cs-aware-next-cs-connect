@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import OrganizationsSidebar from 'src/components/sidebar/organizations_sidebar';
+import OrganizationsSidebar from 'src/components/backstage/organizations/organizations_sidebar';
 
 const LHSNavigation = () => {
     return (
@@ -11,7 +11,7 @@ const LHSNavigation = () => {
     );
 };
 
-const LHSContainer = styled.div`
+export const LHSContainer = styled.div`
     width: 240px;
     background-color: var(--sidebar-bg);
 

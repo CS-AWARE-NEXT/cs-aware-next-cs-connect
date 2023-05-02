@@ -64,7 +64,7 @@ func (p *Plugin) OnActivate() error {
 	}
 	channelStore := sqlstore.NewChannelStore(apiClient, sqlStore)
 
-	p.platformService = config.NewPlatformService(p.API)
+	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
 	p.channelService = app.NewChannelService(p.API, channelStore)
 	p.eventService = app.NewEventService(p.API)
 
@@ -121,14 +121,14 @@ func (p *Plugin) getPluginIDFromManifest() string {
 }
 
 func (p *Plugin) getPluginURLPathPrefix() string {
-	return DefaultPath
+	return defaultPath
 }
 
 func (p *Plugin) getBotID() (string, error) {
 	botID, err := p.pluginAPI.Bot.EnsureBot(&model.Bot{
-		Username:    "csawareconnect",
-		DisplayName: "CS-AWARE CONNECT Bot",
-		Description: "A bot account created by the CS-AWARE CONNECT product.",
+		Username:    botUsername,
+		DisplayName: botName,
+		Description: botDescription,
 	})
 	if err != nil {
 		return "", errors.Wrap(err, "failed to ensure bot, so cannot get botID")
