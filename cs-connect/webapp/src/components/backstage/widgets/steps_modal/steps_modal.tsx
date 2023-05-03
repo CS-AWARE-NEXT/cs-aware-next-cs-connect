@@ -136,23 +136,19 @@ const StepsModal = ({
         return {
             title,
             content: (
-                <Checkbox.Group
+                <CheckboxGroup
                     onChange={(values) => setStepValues({...stepValues, [title]: values})}
                     value={stepValues[title]}
-                    style={{display: 'flex', flexDirection: 'column', overflowY: 'scroll'}}
                 >
                     {step.options.map((option, index) => (
-                        <Checkbox
+                        <OptionsCheckbox
                             key={`${option.name}-${index}`}
                             value={option}
-                            style={{marginLeft: '8px', marginTop: '2px', marginBottom: '2px', borderBottom: '1px solid rgba(var(--center-channel-color-rgb), 0.08)'}}
                         >
                             <div>{option.name}</div>
-                            <div style={{fontSize: '12px', color: 'rgba(var(--center-channel-color-rgb), 0.72)', marginTop: '2px'}}>
-                                {option.description}
-                            </div>
-                        </Checkbox>))}
-                </Checkbox.Group>
+                            <OptionDescription>{option.description}</OptionDescription>
+                        </OptionsCheckbox>))}
+                </CheckboxGroup>
             ),
         };
     });
@@ -165,10 +161,12 @@ const StepsModal = ({
                 </PrimaryButtonLarger>
             </ButtonContainer>
             <Modal
+                bodyStyle={modalBodyStyle}
                 centered={true}
                 open={visible}
                 onOk={handleOk}
                 onCancel={handleCancel}
+                title={formatMessage({defaultMessage: 'Create New'})}
                 footer={[
                     <Button
                         key='back'
@@ -193,44 +191,51 @@ const StepsModal = ({
                     </Button>,
                 ]}
             >
-                {fields.map((key) => (
-                    <>
-                        <Text>{formatStringToCapitalize(key)}</Text>
-                        <TextInput
-                            key={key}
-                            placeholder={key}
-                            value={inputValues[key] || ''}
-                            onChange={(e) => handleInputChange(e, key)}
-                        />
-                        <PaddedErrorMessage
-                            display={errors[key] && errors[key] !== ''}
-                            marginBottom={'12px'}
-                            marginLeft={'0px'}
-                        >
-                            {errors[key]}
-                        </PaddedErrorMessage>
-                    </>
-                ))}
-                <Steps
-                    current={currentStep}
-                    progressDot={true}
-                    size='small'
-                    style={{margin: '12px 0 12px 0'}}
-                >
-                    {steps.map((item) => (
-                        <Step
-                            key={item.title}
-                            title={item.title}
-                        />))}
-                </Steps>
-                {steps[currentStep].content}
-                <HorizontalSpacer size={1}/>
-                <ErrorMessage display={errorMessage !== ''}>
-                    {errorMessage}
-                </ErrorMessage>
+                <ModalBody>
+                    {fields.map((key) => (
+                        <>
+                            <Text>{formatStringToCapitalize(key)}</Text>
+                            <TextInput
+                                key={key}
+                                placeholder={key}
+                                value={inputValues[key] || ''}
+                                onChange={(e) => handleInputChange(e, key)}
+                            />
+                            <PaddedErrorMessage
+                                display={errors[key] && errors[key] !== ''}
+                                marginBottom={'12px'}
+                                marginLeft={'0px'}
+                            >
+                                {errors[key]}
+                            </PaddedErrorMessage>
+                        </>
+                    ))}
+                    <OptionSteps
+                        current={currentStep}
+                        progressDot={true}
+                        size='small'
+                    >
+                        {steps.map((item) => (
+                            <Step
+                                key={item.title}
+                                title={item.title}
+                            />))}
+                    </OptionSteps>
+                    <StepsBody>
+                        {steps[currentStep].content}
+                    </StepsBody>
+                    <HorizontalSpacer size={1}/>
+                    <ErrorMessage display={errorMessage !== ''}>
+                        {errorMessage}
+                    </ErrorMessage>
+                </ModalBody>
             </Modal>
         </Container>
     );
+};
+
+const modalBodyStyle = {
+    height: '500px',
 };
 
 const Container = styled.div`
@@ -249,6 +254,41 @@ const TextInput = styled(Input)`
 
 const Text = styled.div`
     text-align: left;
+`;
+
+const ModalBody = styled.div`
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 8px;
+`;
+
+const StepsBody = styled.div`
+    /* This is to enable scrolling only on steps
+    max-height: 300px;
+    overflow-y: auto;
+    */
+`;
+
+const OptionSteps = styled(Steps)`
+    margin: 12px 0 12px 0;
+`;
+
+const CheckboxGroup = styled(Checkbox.Group)`
+    display: flex;
+    flex-direction: column;
+`;
+
+const OptionsCheckbox = styled(Checkbox)`
+    margin-left: 8px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+`;
+
+const OptionDescription = styled.div`
+    font-size: 12px;
+    color: rgba(var(--center-channel-color-rgb), 0.72);
+    margin-top: 2px;
 `;
 
 export default StepsModal;
