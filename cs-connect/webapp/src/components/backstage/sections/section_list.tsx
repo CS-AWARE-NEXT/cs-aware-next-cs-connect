@@ -1,10 +1,12 @@
 import React, {createContext} from 'react';
 import styled from 'styled-components';
 
-import {formatName, useSectionData} from 'src/hooks';
+import {formatName, useNavHighlighting, useSectionData} from 'src/hooks';
 import PaginatedTable from 'src/components/backstage/widgets/paginated_table/paginated_table';
 import {Section} from 'src/types/organization';
 import Loading from 'src/components/commons/loading';
+
+import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 
 export const SectionUrlContext = createContext('');
 
@@ -15,6 +17,8 @@ type Props = {
 const SectionList = ({section}: Props) => {
     const {id, internal, name, url} = section;
     const data = useSectionData(section);
+
+    useNavHighlighting(SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE, name, []);
 
     return (
         <Body>

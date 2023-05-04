@@ -1,10 +1,11 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {
     buildQuery,
     useForceDocumentTitle,
+    useNavHighlighting,
     useScrollIntoView,
     useSection,
     useSectionInfo,
@@ -27,35 +28,8 @@ const SectionDetails = () => {
     const isEcosystem = useContext(IsEcosystemContext);
 
     useForceDocumentTitle(sectionInfo.name ? (sectionInfo.name) : 'Section');
-
     useScrollIntoView(urlHash);
-
-    useEffect(() => {
-        const navItems = document.getElementsByClassName(SECTION_NAV_ITEM) as HTMLCollectionOf<HTMLElement>;
-        let currentNavItem: HTMLElement;
-        for (let i = 0; i < navItems.length; i++) {
-            currentNavItem = navItems[i];
-            const isCurrentNavItem = currentNavItem.innerText === section.name;
-            if (isCurrentNavItem) {
-                currentNavItem.classList.add(SECTION_NAV_ITEM_ACTIVE);
-                break;
-            }
-        }
-        return () => {
-            let isAnotherNavItemActive = false;
-            for (let i = 0; i < navItems.length; i++) {
-                const isNotCurrentNavItem = navItems[i].innerText !== currentNavItem.innerText;
-                const isNextCurrentNavItem = navItems[i].classList.contains(SECTION_NAV_ITEM_ACTIVE);
-                if (isNotCurrentNavItem && isNextCurrentNavItem) {
-                    isAnotherNavItemActive = true;
-                    break;
-                }
-            }
-            if (isAnotherNavItemActive && currentNavItem) {
-                currentNavItem.classList.remove(SECTION_NAV_ITEM_ACTIVE);
-            }
-        };
-    }, [parentIdParam]);
+    useNavHighlighting(SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE, section.name, [parentIdParam]);
 
     // Loading state
     if (!section) {
