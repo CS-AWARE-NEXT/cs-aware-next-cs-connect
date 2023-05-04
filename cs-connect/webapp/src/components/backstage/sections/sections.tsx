@@ -17,6 +17,7 @@ type Props = {
     childrenBottom?: boolean;
 };
 
+const DEFAULT_SECTION = 0;
 export const SECTION_NAV_ITEM = 'section-nav-item';
 export const SECTION_NAV_ITEM_ACTIVE = 'active';
 
@@ -34,7 +35,7 @@ const Sections = ({
             <NavBar>
                 {safeSections.map((section, index) => {
                     let toUrl = `${url}/${formatStringToLowerCase(section.name)}`;
-                    if (index === 0) {
+                    if (index === DEFAULT_SECTION) {
                         toUrl = url;
                     }
                     return (
@@ -51,21 +52,23 @@ const Sections = ({
             </NavBar>
             {(showChildren && !childrenBottom) && children}
             <Switch>
-                {safeSections.map((section, index) => {
-                    let toPath = `${path}/${formatStringToLowerCase(section.name)}`;
-                    if (index === 0) {
-                        toPath = path;
-                    }
-                    return (
-                        <Route
-                            key={`route-${section.id}`}
-                            path={toPath}
-                            exact={true}
-                        >
-                            <SectionList section={section}/>
-                        </Route>
-                    );
-                })}
+                {safeSections.length > 0 &&
+                    <Route
+                        key={`route-${safeSections[DEFAULT_SECTION].id}`}
+                        path={path}
+                        exact={true}
+                    >
+                        <SectionList section={safeSections[DEFAULT_SECTION]}/>
+                    </Route>}
+                {safeSections.map((section) => (
+                    <Route
+                        key={`route-${section.id}`}
+                        path={`${path}/${formatStringToLowerCase(section.name)}`}
+                        exact={true}
+                    >
+                        <SectionList section={section}/>
+                    </Route>
+                ))}
                 {safeSections.map((section) => {
                     return (
                         <Route
