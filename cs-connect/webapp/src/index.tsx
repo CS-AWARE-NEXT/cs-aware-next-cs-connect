@@ -19,6 +19,7 @@ import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import RHSView from 'src/components/rhs/rhs';
 import {pluginId} from 'src/manifest';
 
+import {messageWillBePosted, slashCommandWillBePosted} from './hooks';
 import {navigateToPluginUrl} from './browser_routing';
 
 type WindowObject = {
@@ -105,6 +106,9 @@ export default class Plugin {
             PRODUCT_DOCUMENTATION,
             PRODUCT_DOCUMENTATION,
         );
+
+        registry.registerSlashCommandWillBePostedHook(slashCommandWillBePosted);
+        registry.registerMessageWillBePostedHook(messageWillBePosted);
     }
 
     public initialize(registry: any, store: Store<GlobalState>): void {
