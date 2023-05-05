@@ -6,6 +6,7 @@ import {Widget} from 'src/types/organization';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {buildTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/providers/text_box_id_provider';
 import {buildTableWidgetId} from 'src/components/backstage/widgets/table/providers/table_id_provider';
+import {buildGraphWidgetId} from 'src/components/backstage/widgets/graph/providers/graph_id_provider';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
@@ -108,7 +109,7 @@ const parseWidgetHashByType = (
 ): WidgetHash | Promise<WidgetHash> => {
     switch (widget.type) {
     case WidgetType.Graph:
-        return {hash: '', text: ''};
+        return buildGraphWidgetId(hyperlinkReference, tokens, widget);
     case WidgetType.PaginatedTable:
         return {hash: '', text: ''};
     case WidgetType.List:
