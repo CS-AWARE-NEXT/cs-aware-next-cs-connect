@@ -1,9 +1,11 @@
 import {getOrganizationByName, getSymbol} from 'src/config/config';
-import {HyperlinkReference} from 'src/types/parser';
+import {HyperlinkReference, WidgetHash} from 'src/types/parser';
 import {fetchPaginatedTableData} from 'src/clients';
 
 import {Widget} from 'src/types/organization';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
+import {buildTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/providers/text_box_id_provider';
+import {buildTableWidgetId} from 'src/components/backstage/widgets/table/providers/table_id_provider';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
@@ -90,30 +92,34 @@ const parseWidgetHash = async (hyperlinkReference: HyperlinkReference, tokens: s
     const widgetName = tokens.splice(0, 1)[0];
     const widget = hyperlinkReference.section?.widgets.filter(({name}) => name === widgetName)[0];
     if (!widget) {
-        return {...hyperlinkReference, widgetHash: ''};
+        return hyperlinkReference;
     }
-    return {...hyperlinkReference, widget, widgetHash: parseWidgetHashByType(hyperlinkReference, tokens, widget)};
+    const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget);
+    if (Object.keys(widgetHash).some((key) => !key)) {
+        return hyperlinkReference;
+    }
+    return {...hyperlinkReference, widgetHash};
 };
 
 const parseWidgetHashByType = (
     hyperlinkReference: HyperlinkReference,
     tokens: string[],
     widget: Widget,
-): string => {
+): WidgetHash | Promise<WidgetHash> => {
     switch (widget.type) {
     case WidgetType.Graph:
-        return '';
+        return {hash: '', text: ''};
     case WidgetType.PaginatedTable:
-        return '';
+        return {hash: '', text: ''};
     case WidgetType.List:
-        return '';
+        return {hash: '', text: ''};
     case WidgetType.Table:
-        return '';
+        return buildTableWidgetId(hyperlinkReference, tokens, widget);
     case WidgetType.TextBox:
-        return '';
+        return buildTextBoxWidgetId(hyperlinkReference, widget);
     case WidgetType.Timeline:
-        return '';
+        return {hash: '', text: ''};
     default:
-        return '';
+        return {hash: '', text: ''};
     }
 };
