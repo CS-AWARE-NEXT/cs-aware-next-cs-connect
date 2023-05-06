@@ -10,3 +10,10 @@ export const buildMap = <T>(entries: MapEntry<T>[]): Map<string, T> => {
     });
     return map;
 };
+
+export const getAndRemoveOneFromArray = <T>(array: T[], index: number): T | undefined => {
+    if (!array || array.length < index) {
+        return undefined;
+    }
+    return array.splice(index, 1)[0];
+};

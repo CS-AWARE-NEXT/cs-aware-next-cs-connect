@@ -11,6 +11,13 @@ export const getSection = (id: string): Section => {
         filter((s: Section) => s.id === id)[0];
 };
 
+export const isSectionByName = (name: string): boolean => {
+    return getOrganizations().
+        map((o) => o.sections).
+        flat().
+        some((s: Section) => s.name === name);
+};
+
 export const hideOptions = (): NodeJS.Timeout[][] => {
     (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
 
