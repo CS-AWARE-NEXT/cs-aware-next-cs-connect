@@ -19,6 +19,8 @@ export const DateTimeFormats = {
 
 export const estimatedOptionsLoadTime = 150;
 
+export const TOKEN_SEPARATOR = '.';
+
 export const PRODUCT_ICON = 'power-plug-outline';
 export const PRODUCT_NAME = pluginName;
 export const PRODUCT_DOCUMENTATION = 'Documentation';
