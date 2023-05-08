@@ -15,6 +15,7 @@ export type TextBoxStyle = {
 };
 
 type Props = {
+    idPrefix?: string;
     name: string;
     parentId: string;
     sectionId: string;
@@ -23,6 +24,7 @@ type Props = {
 };
 
 const TextBox = ({
+    idPrefix = '',
     name,
     parentId,
     sectionId,
@@ -35,7 +37,7 @@ const TextBox = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
-    const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
+    const id = `${idPrefix}${formatName(name)}-${sectionId}-${parentId}-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
 
     return (

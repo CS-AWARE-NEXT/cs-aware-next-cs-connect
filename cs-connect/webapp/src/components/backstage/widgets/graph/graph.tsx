@@ -44,6 +44,8 @@ type Props = {
     parentId: string;
 };
 
+const DESCRIPTION_ID_PREFIX = 'graph-';
+
 const defaultGraphStyle: GraphStyle = {
     containerDirection: 'row',
     graphWidth: '75%',
@@ -167,6 +169,7 @@ const Graph = ({
             </GraphContainer>
             {isDescriptionProvided(description) &&
                 <TextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
                     name={description.name}
                     sectionId={sectionId}
                     style={graphStyle.textBoxStyle}
