@@ -14,14 +14,18 @@ export const buildTableWidgetId = async (
     {name, url}: Widget,
 ): Promise<WidgetHash> => {
     const tableWidgetHash = {
-        hash: `${formatName(name as string)}-${object.id}-${section?.id}-widget`,
+        hash: `${formatName(name as string)}-${object?.id}-${section?.id}-widget`,
         text: name as string,
     };
     const isReferenceToTable = tokens.length < 1;
     if (isReferenceToTable) {
         return tableWidgetHash;
     }
-    const rowPair = await buildRowPair(tokens, formatUrlWithId(url as string, object.id));
+    let widgetUrl = url as string;
+    if (object) {
+        widgetUrl = formatUrlWithId(widgetUrl, object.id);
+    }
+    const rowPair = await buildRowPair(tokens, widgetUrl);
     return rowPair ? {
         hash: rowPair.id,
         text: rowPair.text,

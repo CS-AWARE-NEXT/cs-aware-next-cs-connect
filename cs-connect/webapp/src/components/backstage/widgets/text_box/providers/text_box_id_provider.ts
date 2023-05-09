@@ -8,7 +8,7 @@ export const buildTextBoxWidgetId = (
     {name}: Widget,
 ): WidgetHash => {
     return {
-        hash: `${formatName(name as string)}-${object.id}-${section?.id}-widget`,
+        hash: `${formatName(name as string)}-${object?.id}-${section?.id}-widget`,
         text: name as string,
     };
 };
