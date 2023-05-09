@@ -4,7 +4,12 @@ export const DEFAULT_PLATFORM_CONFIG_PATH = '/configs/platform';
 export const PLATFORM_CONFIG_CACHE_NAME = 'platform-config-cache';
 
 const PATTERN_SYMBOL = ':symbol';
+
+// Match text in form of PATTERN_SYMBOL(...)
 const PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\(.+?\\)`;
+
+// Match text after PATTERN_SYMBOL( up until the ), if present
+const SUGGESTION_PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\((?!.*\\)).*$`;
 
 let platformConfig: PlatformConfig = {
     organizations: [],
@@ -12,6 +17,7 @@ let platformConfig: PlatformConfig = {
 
 let symbol = '';
 let pattern: RegExp | null = null;
+let suggestionPattern: RegExp | null = null;
 
 export const getPlatformConfig = (): PlatformConfig => {
     return platformConfig;
@@ -45,13 +51,27 @@ export const getOrganizationByName = (name: string): Organization => {
 };
 
 export const getPattern = (): RegExp => {
-    if (symbol === '' || pattern === null) {
-        symbol = 'hood';
+    if (!pattern) {
+        setSymbol();
         pattern = new RegExp(PATTERN_PLACEHOLDER.replace(PATTERN_SYMBOL, symbol), 'g');
     }
     return pattern;
 };
 
+export const getSuggestionPattern = (): RegExp => {
+    if (!suggestionPattern) {
+        setSymbol();
+        suggestionPattern = new RegExp(SUGGESTION_PATTERN_PLACEHOLDER.replace(PATTERN_SYMBOL, symbol), 'g');
+    }
+    return suggestionPattern;
+};
+
 export const getSymbol = (): string => {
     return symbol;
+};
+
+const setSymbol = () => {
+    if (symbol === '') {
+        symbol = 'hood';
+    }
 };
