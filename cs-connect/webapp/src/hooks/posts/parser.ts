@@ -7,6 +7,8 @@ import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {buildTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/providers/text_box_id_provider';
 import {buildTableWidgetId} from 'src/components/backstage/widgets/table/providers/table_id_provider';
 import {buildGraphWidgetId} from 'src/components/backstage/widgets/graph/providers/graph_id_provider';
+import {getAndRemoveOneFromArray, isSectionByName} from 'src/hooks';
+import {TOKEN_SEPARATOR} from 'src/constants';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
@@ -16,7 +18,7 @@ export const parseMatchToTokens = (match: string): string[] => {
     if (reference === null) {
         return [];
     }
-    const tokens = reference.split('.');
+    const tokens = reference.split(TOKEN_SEPARATOR);
     return tokens.filter((token) => token !== '');
 };
 
@@ -24,8 +26,10 @@ export const parseTokensToHyperlinkReference = async (tokens: string[]): Promise
     let hyperlinkReference: HyperlinkReference = {};
     try {
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseOrganization);
-
-        // TODO: Add check for if the next token references a section or a organization's widget
+        if (!isSectionByName(tokens[0])) {
+            hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseWidgetHash);
+            return hyperlinkReference;
+        }
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseSection);
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseObject);
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseWidgetHash);
@@ -57,7 +61,10 @@ const withTokensLengthCheck = async (
 };
 
 const parseOrganization = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
-    const organizationName = tokens.splice(0, 1)[0];
+    const organizationName = getAndRemoveOneFromArray(tokens, 0);
+    if (!organizationName) {
+        throw new ParseError('Cannot get organization\'s name');
+    }
     const organization = getOrganizationByName(organizationName);
     if (!organization) {
         throw new ParseError(`Cannot find organization named ${organizationName}`);
@@ -67,7 +74,10 @@ const parseOrganization = async (hyperlinkReference: HyperlinkReference, tokens:
 
 // TODO: had handling for section hash (use the # character)
 const parseSection = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
-    const sectionName = tokens.splice(0, 1)[0];
+    const sectionName = getAndRemoveOneFromArray(tokens, 0);
+    if (!sectionName) {
+        return hyperlinkReference;
+    }
     const section = hyperlinkReference.organization?.sections.filter((s) => s.name === sectionName)[0];
     if (!section) {
         throw new ParseError(`Cannot find section named ${sectionName}`);
@@ -76,7 +86,10 @@ const parseSection = async (hyperlinkReference: HyperlinkReference, tokens: stri
 };
 
 const parseObject = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
-    const objectName = tokens.splice(0, 1)[0];
+    const objectName = getAndRemoveOneFromArray(tokens, 0);
+    if (!objectName) {
+        return hyperlinkReference;
+    }
     const url = hyperlinkReference.section?.url as string;
     const data = await fetchPaginatedTableData(url);
     if (!data) {
@@ -90,10 +103,17 @@ const parseObject = async (hyperlinkReference: HyperlinkReference, tokens: strin
 };
 
 const parseWidgetHash = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
-    const widgetName = tokens.splice(0, 1)[0];
-    const widget = hyperlinkReference.section?.widgets.filter(({name}) => name === widgetName)[0];
-    if (!widget) {
+    const widgetName = getAndRemoveOneFromArray(tokens, 0);
+    if (!widgetName) {
         return hyperlinkReference;
+    }
+    let widget = hyperlinkReference.section?.widgets.filter(({name}) => name === widgetName)[0];
+    if (!widget) {
+        // If the section is not found, check whether it is a reference to a object's widget
+        widget = hyperlinkReference.organization?.widgets.filter(({name}) => name === widgetName)[0];
+        if (!widget) {
+            return hyperlinkReference;
+        }
     }
     const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget);
     if (Object.keys(widgetHash).some((key) => !key)) {
