@@ -1,4 +1,3 @@
-import {CommandArgs} from 'mattermost-webapp/packages/types/src/integrations';
 import {Post} from 'mattermost-webapp/packages/types/src/posts';
 
 import {getSiteUrl} from 'src/clients';
@@ -9,27 +8,11 @@ import {Organization} from 'src/types/organization';
 
 import {parseMatchToTokens, parseTokensToHyperlinkReference} from './parser';
 
-export const slashCommandWillBePosted = async (message: string, args: CommandArgs) => {
-    return {message, args};
-};
-
-export const messageWillBePosted = async (post: Post) => {
-    if (!isMessageToHyperlink(post)) {
-        return {post};
-    }
-    const hyperlinkedPost = await hyperlinkPost(post);
-    return {post: hyperlinkedPost};
-};
-
-export const messageWillBeUpdated = async (post: Post) => {
-    return messageWillBePosted(post);
-};
-
-const isMessageToHyperlink = ({message}: Post): boolean => {
+export const isMessageToHyperlink = ({message}: Post): boolean => {
     return getPattern().test(message);
 };
 
-const hyperlinkPost = async (post: Post): Promise<Post> => {
+export const hyperlinkPost = async (post: Post): Promise<Post> => {
     const {message} = post;
     const map = await buildHyperlinksMap(message);
     if (map === null) {
