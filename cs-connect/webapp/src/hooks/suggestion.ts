@@ -30,30 +30,52 @@ const useCreateSuggestions = (): Element | undefined => {
 
 const useHandleSuggestionsVisibility = (): boolean => {
     const [isVisible, setIsVisible] = useState(false);
+
     useEffect(() => {
         const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
 
-        const handleKeyDown = (event: any) => {
-            console.log('Key pressed:', event.key);
+        const handleKeyDown = (event: KeyboardEvent) => {
+            // console.log('Key pressed:', event.key);
             if (event.key === 'Enter') {
-                console.log('Closing because enter detected');
                 setIsVisible(false);
                 return;
             }
-            handleInput();
+            if (event.key === 'Escape') {
+                setIsVisible(false);
+                return;
+            }
+            const startSymbol = getStartSymbol();
+            const text = textarea.value;
+            const cursorStartPosition = textarea.selectionStart;
+            const cursorEndPosition = textarea.selectionEnd;
+
+            // console.log('text', text, 'start', cursorStartPosition, 'char at start', text.charAt(cursorStartPosition - 1), 'end', cursorEndPosition, 'char at end', text.charAt(cursorEndPosition));
+            const symbolStartIndex = text.lastIndexOf(startSymbol, cursorStartPosition);
+            if (symbolStartIndex === -1) {
+                setIsVisible(false);
+                return;
+            }
+            const textBetweenStartCursorAndSymbol = text.substring(symbolStartIndex, cursorStartPosition - 1);
+            const textBetweenSymbolAndEndCursor = text.substring(symbolStartIndex, cursorEndPosition + 1);
+            if (event.key === 'ArrowRight') {
+                if (textBetweenSymbolAndEndCursor.length >= startSymbol.length && !textBetweenSymbolAndEndCursor.includes(END_SYMBOL)) {
+                    setIsVisible(true);
+                    return;
+                }
+                setIsVisible(false);
+            }
+            if (event.key === 'ArrowLeft') {
+                if (textBetweenStartCursorAndSymbol.length >= startSymbol.length && !textBetweenStartCursorAndSymbol.includes(END_SYMBOL)) {
+                    setIsVisible(true);
+                    return;
+                }
+                setIsVisible(false);
+            }
         };
 
         const handleInput = () => {
             const text = textarea.value;
             const pointerStartPosition = textarea.selectionStart;
-
-            // const match = currentText.match(getSuggestionPattern());
-            // console.log('match', match);
-            // if (match) {
-            //     setIsVisible(true);
-            // } else {
-            //     setIsVisible(false);
-            // }
             const symbolStartIndex = text.lastIndexOf(getStartSymbol(), pointerStartPosition);
             if (symbolStartIndex === -1) {
                 setIsVisible(false);
@@ -62,9 +84,9 @@ const useHandleSuggestionsVisibility = (): boolean => {
             const textBetweenCursorAndSymbol = text.substring(symbolStartIndex, pointerStartPosition);
             if (textBetweenCursorAndSymbol.includes(END_SYMBOL)) {
                 setIsVisible(false);
-            } else {
-                setIsVisible(true);
+                return;
             }
+            setIsVisible(true);
         };
 
         if (textarea) {
@@ -78,5 +100,6 @@ const useHandleSuggestionsVisibility = (): boolean => {
             }
         };
     }, []);
+
     return isVisible;
 };
