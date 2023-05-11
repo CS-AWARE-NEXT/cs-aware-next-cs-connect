@@ -1,7 +1,12 @@
-import {getOrganizationByName, getSymbol} from 'src/config/config';
+import {
+    END_SYMBOL,
+    getOrganizationByName,
+    getOrganizations,
+    getStartSymbol,
+    getSymbol,
+} from 'src/config/config';
 import {HyperlinkReference, WidgetHash} from 'src/types/parser';
 import {fetchPaginatedTableData} from 'src/clients';
-
 import {Widget} from 'src/types/organization';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {buildTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/providers/text_box_id_provider';
@@ -9,9 +14,55 @@ import {buildTableWidgetId} from 'src/components/backstage/widgets/table/provide
 import {buildGraphWidgetId} from 'src/components/backstage/widgets/graph/providers/graph_id_provider';
 import {getAndRemoveOneFromArray, isSectionByName} from 'src/hooks';
 import {TOKEN_SEPARATOR} from 'src/constants';
+import {SuggestionData, SuggestionsData} from 'src/types/suggestions';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
+
+export const parseTextToTokens = (text: string, start: number): string[] => {
+    const symbolStartIndex = text.lastIndexOf(getStartSymbol(), start);
+    if (symbolStartIndex === -1) {
+        return [];
+    }
+    let reference = text.substring(symbolStartIndex);
+    const endSymbolIndex = reference.indexOf(END_SYMBOL);
+    if (endSymbolIndex !== -1) {
+        reference = reference.substring(0, endSymbolIndex);
+    }
+    reference = reference.substring(getStartSymbol().length);
+    const tokens = reference.split(TOKEN_SEPARATOR);
+    return tokens.filter((token) => token !== '');
+};
+
+export const parseTokensToSuggestions = async (tokens: string[]): Promise<SuggestionsData> => {
+    // if there's no string
+    // --- return all organizations
+    // search for organization and build suggestions
+    // if there's no string
+    // --- return the current suggestions
+    // search for section and build suggestions
+    // if there's no string
+    // --- return the current suggestions
+    // search for object and build suggestions
+    // if there's no string
+    // --- return the current suggestions
+    // search for widget and build suggestions
+    // if there's no string
+    // --- return the current suggestions
+    // search for widget' data and build suggestions (this has to be done based on widget type)
+    if (tokens.length < 1) {
+        return parseOrganizationSuggestions();
+    }
+    return {suggestions: []};
+};
+
+const parseOrganizationSuggestions = async (): Promise<SuggestionsData> => {
+    const suggestions = getOrganizations().map<SuggestionData>(({id, name}) => ({
+        id,
+        text: name,
+    }));
+    return {suggestions};
+};
 
 export const parseMatchToTokens = (match: string): string[] => {
     const reference = extractReferenceFromMatch(match);
@@ -22,6 +73,7 @@ export const parseMatchToTokens = (match: string): string[] => {
     return tokens.filter((token) => token !== '');
 };
 
+// TODO: Add support for the issues' elements default section
 export const parseTokensToHyperlinkReference = async (tokens: string[]): Promise<HyperlinkReference | null> => {
     let hyperlinkReference: HyperlinkReference = {};
     try {
@@ -72,7 +124,7 @@ const parseOrganization = async (hyperlinkReference: HyperlinkReference, tokens:
     return {...hyperlinkReference, organization};
 };
 
-// TODO: had handling for section hash (use the # character)
+// TODO: Add handling for section hash (use the # character)
 const parseSection = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
     const sectionName = getAndRemoveOneFromArray(tokens, 0);
     if (!sectionName) {

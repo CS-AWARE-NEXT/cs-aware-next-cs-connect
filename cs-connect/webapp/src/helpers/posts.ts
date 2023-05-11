@@ -6,7 +6,7 @@ import {DEFAULT_PATH, ORGANIZATIONS_PATH, PARENT_ID_PARAM} from 'src/constants';
 import {HyperlinkReference} from 'src/types/parser';
 import {Organization} from 'src/types/organization';
 
-import {parseMatchToTokens, parseTokensToHyperlinkReference} from './parser';
+import {parseMatchToTokens, parseTokensToHyperlinkReference} from 'src/helpers';
 
 export const isMessageToHyperlink = ({message}: Post): boolean => {
     return getPattern().test(message);
