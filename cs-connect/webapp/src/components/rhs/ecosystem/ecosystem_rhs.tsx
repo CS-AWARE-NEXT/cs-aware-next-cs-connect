@@ -1,5 +1,4 @@
 import React from 'react';
-import {useIntl} from 'react-intl';
 
 import {
     Body,
@@ -28,32 +27,29 @@ const EcosystemRhs = ({
     parentId,
     sectionId,
     sectionInfo,
-}: Props) => {
-    const {formatMessage} = useIntl();
-    return (
-        <Container>
-            <MainWrapper>
-                <Header>
-                    <NameHeader
-                        id={sectionInfo.id}
-                        path={headerPath}
-                        name={sectionInfo.name}
+}: Props) => (
+    <Container>
+        <MainWrapper>
+            <Header>
+                <NameHeader
+                    id={sectionInfo.id}
+                    path={headerPath}
+                    name={sectionInfo.name}
+                />
+            </Header>
+            <Main>
+                <Body>
+                    <Accordion
+                        name={formatStringToCapitalize(ecosystemElementsWidget)}
+                        childComponent={EcosystemAccordionChild}
+                        elements={sectionInfo.elements}
+                        parentId={parentId}
+                        sectionId={sectionId}
                     />
-                </Header>
-                <Main>
-                    <Body>
-                        <Accordion
-                            name={formatStringToCapitalize(ecosystemElementsWidget)}
-                            childComponent={EcosystemAccordionChild}
-                            elements={sectionInfo.elements}
-                            parentId={parentId}
-                            sectionId={sectionId}
-                        />
-                    </Body>
-                </Main>
-            </MainWrapper>
-        </Container>
-    );
-};
+                </Body>
+            </Main>
+        </MainWrapper>
+    </Container>
+);
 
 export default EcosystemRhs;
