@@ -55,25 +55,6 @@ export const parseTokensToSuggestions = async (tokens: string[]): Promise<Sugges
     // if there's no string
     // --- return the current suggestions
     // search for widget' data and build suggestions (this has to be done based on widget type)
-
-    // const organizationName = getAndRemoveOneFromArray(tokens, 0);
-    // if (!organizationName) {
-    //     return parseNoOrganizationSuggestions();
-    // }
-    // let suggestions = await parseOrganizationSuggestions(organizationName);
-    // const sectionName = getAndRemoveOneFromArray(tokens, 0);
-    // if (!sectionName) {
-    //     return suggestions;
-    // }
-
-    // // TODO: think about adding support for organizations' widgets
-    // suggestions = await parseSectionSuggestions(organizationName, sectionName);
-    // const objectName = getAndRemoveOneFromArray(tokens, 0);
-    // if (!objectName) {
-    //     return suggestions;
-    // }
-    // return suggestions;
-
     let hyperlinkSuggestion: HyperlinkSuggestion = {suggestions: {suggestions: []}};
     try {
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseOrganizationSuggestions);
@@ -172,17 +153,6 @@ const extractReferenceFromMatch = (match: string): string | null => {
     return match.substring(getSymbol().length + 1, match.length - 1);
 };
 
-const withTokensLengthCheck = async <T>(
-    obj: T,
-    tokens: string[],
-    parse: (obj: T, tokens: string[]) => Promise<T>,
-): Promise<T> => {
-    if (tokens.length < 1) {
-        throw new NoMoreTokensError('No more tokens to parse');
-    }
-    return parse(obj, tokens);
-};
-
 const parseOrganization = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
     const organizationName = getAndRemoveOneFromArray(tokens, 0);
     if (!organizationName) {
@@ -275,4 +245,15 @@ const parseWidgetHashByType = (
     default:
         return {hash: '', text: ''};
     }
+};
+
+const withTokensLengthCheck = async <T>(
+    obj: T,
+    tokens: string[],
+    parse: (obj: T, tokens: string[]) => Promise<T>,
+): Promise<T> => {
+    if (tokens.length < 1) {
+        throw new NoMoreTokensError('No more tokens to parse');
+    }
+    return parse(obj, tokens);
 };
