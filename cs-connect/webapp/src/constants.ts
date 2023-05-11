@@ -35,6 +35,8 @@ export const DOCUMENTATION_PATH = 'documentation';
 export const ORGANIZATION_ID_PARAM = 'organizationId';
 export const PARENT_ID_PARAM = 'parentId';
 export const SECTION_ID_PARAM = 'sectionId';
+export const OBJECT_ID_TOKEN = ':id';
 
 // TODO: those should be obtained using an API call, or another dynamic way
 export const ecosystemDefaultFields = ['name', 'description'];
+export const ecosystemElementsWidget = 'elements';

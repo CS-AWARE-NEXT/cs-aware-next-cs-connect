@@ -11,6 +11,8 @@ import {
 import {NameHeader} from 'src/components/backstage/header/header';
 import Accordion from 'src/components/backstage/widgets/accordion/accordion';
 import {SectionInfo} from 'src/types/organization';
+import {formatStringToCapitalize} from 'src/hooks';
+import {ecosystemElementsWidget} from 'src/constants';
 
 import EcosystemAccordionChild from './ecosystem_accordion_child';
 
@@ -41,7 +43,7 @@ const EcosystemRhs = ({
                 <Main>
                     <Body>
                         <Accordion
-                            name={`${sectionInfo.name} ${formatMessage({defaultMessage: 'Elements'})}`}
+                            name={formatStringToCapitalize(ecosystemElementsWidget)}
                             childComponent={EcosystemAccordionChild}
                             elements={sectionInfo.elements}
                             parentId={parentId}
