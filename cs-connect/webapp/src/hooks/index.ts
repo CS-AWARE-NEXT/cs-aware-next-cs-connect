@@ -1,5 +1,5 @@
 export * from './browser';
-export * from './posts/post';
+export * from './posts';
 export * from './config';
 export * from './data';
 export * from './format';
