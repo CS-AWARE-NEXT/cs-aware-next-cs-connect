@@ -3,6 +3,8 @@ import {Organization, PlatformConfig} from 'src/types/organization';
 export const DEFAULT_PLATFORM_CONFIG_PATH = '/configs/platform';
 export const PLATFORM_CONFIG_CACHE_NAME = 'platform-config-cache';
 
+export const END_SYMBOL = ')';
+export const START_SYMBOL = '(';
 const PATTERN_SYMBOL = ':symbol';
 
 // Match text in form of PATTERN_SYMBOL(...)
@@ -50,9 +52,18 @@ export const getOrganizationByName = (name: string): Organization => {
     return getOrganizations().filter((o) => o.name === name)[0];
 };
 
+export const getOrganizationBySectionName = (name: string): Organization => {
+    return getOrganizations().filter((o) => o.sections.some((s) => s.name === name))[0];
+};
+
+export const getStartSymbol = (): string => {
+    checkAndSetSymbol();
+    return `${symbol}${START_SYMBOL}`;
+};
+
 export const getPattern = (): RegExp => {
     if (!pattern) {
-        setSymbol();
+        checkAndSetSymbol();
         pattern = new RegExp(PATTERN_PLACEHOLDER.replace(PATTERN_SYMBOL, symbol), 'g');
     }
     return pattern;
@@ -60,7 +71,7 @@ export const getPattern = (): RegExp => {
 
 export const getSuggestionPattern = (): RegExp => {
     if (!suggestionPattern) {
-        setSymbol();
+        checkAndSetSymbol();
         suggestionPattern = new RegExp(SUGGESTION_PATTERN_PLACEHOLDER.replace(PATTERN_SYMBOL, symbol), 'g');
     }
     return suggestionPattern;
@@ -70,7 +81,8 @@ export const getSymbol = (): string => {
     return symbol;
 };
 
-const setSymbol = () => {
+// TODO: Read symbol from configuration
+const checkAndSetSymbol = () => {
     if (symbol === '') {
         symbol = 'hood';
     }
