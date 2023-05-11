@@ -5,24 +5,24 @@ import {
     getStartSymbol,
     getSymbol,
 } from 'src/config/config';
-import {HyperlinkReference, WidgetHash} from 'src/types/parser';
+import {HyperlinkReference, HyperlinkSuggestion, WidgetHash} from 'src/types/parser';
 import {fetchPaginatedTableData} from 'src/clients';
 import {Widget} from 'src/types/organization';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {buildTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/providers/text_box_id_provider';
 import {buildTableWidgetId} from 'src/components/backstage/widgets/table/providers/table_id_provider';
 import {buildGraphWidgetId} from 'src/components/backstage/widgets/graph/providers/graph_id_provider';
-import {getAndRemoveOneFromArray, isSectionByName} from 'src/hooks';
-import {TOKEN_SEPARATOR} from 'src/constants';
+import {formatStringToCapitalize, getAndRemoveOneFromArray, isSectionByName} from 'src/hooks';
+import {OBJECT_ID_TOKEN, TOKEN_SEPARATOR, ecosystemElementsWidget} from 'src/constants';
 import {SuggestionData, SuggestionsData} from 'src/types/suggestions';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
 
-export const parseTextToTokens = (text: string, start: number): string[] => {
+export const parseTextToReference = (text: string, start: number): string => {
     const symbolStartIndex = text.lastIndexOf(getStartSymbol(), start);
     if (symbolStartIndex === -1) {
-        return [];
+        return '';
     }
     let reference = text.substring(symbolStartIndex);
     const endSymbolIndex = reference.indexOf(END_SYMBOL);
@@ -30,6 +30,11 @@ export const parseTextToTokens = (text: string, start: number): string[] => {
         reference = reference.substring(0, endSymbolIndex);
     }
     reference = reference.substring(getStartSymbol().length);
+    return reference;
+};
+
+export const parseTextToTokens = (text: string, start: number): string[] => {
+    const reference = parseTextToReference(text, start);
     const tokens = reference.split(TOKEN_SEPARATOR);
     return tokens.filter((token) => token !== '');
 };
@@ -50,18 +55,84 @@ export const parseTokensToSuggestions = async (tokens: string[]): Promise<Sugges
     // if there's no string
     // --- return the current suggestions
     // search for widget' data and build suggestions (this has to be done based on widget type)
-    if (tokens.length < 1) {
-        return parseOrganizationSuggestions();
+
+    // const organizationName = getAndRemoveOneFromArray(tokens, 0);
+    // if (!organizationName) {
+    //     return parseNoOrganizationSuggestions();
+    // }
+    // let suggestions = await parseOrganizationSuggestions(organizationName);
+    // const sectionName = getAndRemoveOneFromArray(tokens, 0);
+    // if (!sectionName) {
+    //     return suggestions;
+    // }
+
+    // // TODO: think about adding support for organizations' widgets
+    // suggestions = await parseSectionSuggestions(organizationName, sectionName);
+    // const objectName = getAndRemoveOneFromArray(tokens, 0);
+    // if (!objectName) {
+    //     return suggestions;
+    // }
+    // return suggestions;
+
+    let hyperlinkSuggestion: HyperlinkSuggestion = {suggestions: {suggestions: []}};
+    try {
+        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseOrganizationSuggestions);
+
+        // TODO: think about adding support for organizations' widgets
+        // if (!isSectionByName(tokens[0])) {
+        //     hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetSuggestion);
+        //     return hyperlinkSuggestion.suggestions;
+        // }
+        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseSectionSuggestions);
+
+        // hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseObject);
+        // hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetHash);
+    } catch (error: any) {
+        if (error instanceof NoMoreTokensError) {
+            return hyperlinkSuggestion.suggestions;
+        }
+        return hyperlinkSuggestion.suggestions;
     }
-    return {suggestions: []};
+    return hyperlinkSuggestion.suggestions;
 };
 
-const parseOrganizationSuggestions = async (): Promise<SuggestionsData> => {
+const parseNoOrganizationSuggestions = async (): Promise<SuggestionsData> => {
     const suggestions = getOrganizations().map<SuggestionData>(({id, name}) => ({
         id,
         text: name,
     }));
     return {suggestions};
+};
+
+const parseOrganizationSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+    const organizationName = getAndRemoveOneFromArray(tokens, 0);
+    if (!organizationName) {
+        return {...hyperlinkSuggestion, suggestions: await parseNoOrganizationSuggestions()};
+    }
+    const suggestions = getOrganizations().
+        filter(({name}) => name.includes(organizationName)).
+        map(({id, name}) => ({
+            id,
+            text: name,
+        }));
+    const organization = getOrganizationByName(organizationName);
+    return {...hyperlinkSuggestion, organization, suggestions: {suggestions}};
+};
+
+const parseSectionSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+    const sectionName = getAndRemoveOneFromArray(tokens, 0);
+    if (!sectionName) {
+        return hyperlinkSuggestion;
+    }
+    const organizationName = hyperlinkSuggestion.organization?.name as string;
+    const suggestions = getOrganizationByName(organizationName).sections.
+        filter(({name}) => name.includes(sectionName)).
+        map(({id, name}) => ({
+            id,
+            text: name,
+        }));
+    const section = hyperlinkSuggestion.organization?.sections.filter((s) => s.name === sectionName)[0];
+    return {...hyperlinkSuggestion, section, suggestions: {suggestions}};
 };
 
 export const parseMatchToTokens = (match: string): string[] => {
@@ -101,15 +172,15 @@ const extractReferenceFromMatch = (match: string): string | null => {
     return match.substring(getSymbol().length + 1, match.length - 1);
 };
 
-const withTokensLengthCheck = async (
-    hyperlinkReference: HyperlinkReference,
+const withTokensLengthCheck = async <T>(
+    obj: T,
     tokens: string[],
-    parse: (hyperlinkReference: HyperlinkReference, tokens: string[]) => Promise<HyperlinkReference>,
-): Promise<HyperlinkReference> => {
+    parse: (obj: T, tokens: string[]) => Promise<T>,
+): Promise<T> => {
     if (tokens.length < 1) {
         throw new NoMoreTokensError('No more tokens to parse');
     }
-    return parse(hyperlinkReference, tokens);
+    return parse(obj, tokens);
 };
 
 const parseOrganization = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
@@ -160,6 +231,14 @@ const parseWidgetHash = async (hyperlinkReference: HyperlinkReference, tokens: s
         return hyperlinkReference;
     }
     let widget = hyperlinkReference.section?.widgets.filter(({name}) => name === widgetName)[0];
+    if (!widget && hyperlinkReference.organization?.isEcosystem) {
+        // If the organization is the ecosystem, check for reference to the default widget
+        widget = {
+            name: formatStringToCapitalize(ecosystemElementsWidget),
+            type: WidgetType.PaginatedTable,
+            url: `${hyperlinkReference.section?.url}/${OBJECT_ID_TOKEN}`,
+        };
+    }
     if (!widget) {
         // If the section is not found, check whether it is a reference to a object's widget
         widget = hyperlinkReference.organization?.widgets.filter(({name}) => name === widgetName)[0];
@@ -167,6 +246,7 @@ const parseWidgetHash = async (hyperlinkReference: HyperlinkReference, tokens: s
             return hyperlinkReference;
         }
     }
+    console.log('Widget: ' + JSON.stringify(widget));
     const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget);
     if (Object.keys(widgetHash).some((key) => !key)) {
         return hyperlinkReference;
