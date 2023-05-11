@@ -4,6 +4,7 @@ import qs from 'qs';
 
 import {
     buildQuery,
+    formatStringToCapitalize,
     useForceDocumentTitle,
     useNavHighlighting,
     useScrollIntoView,
@@ -14,6 +15,7 @@ import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/
 import {getSiteUrl} from 'src/clients';
 import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
 import EcosystemPaginatedTableWrapper from 'src/components/backstage/widgets/paginated_table/wrappers/ecosystem_wrapper';
+import {ecosystemElementsWidget} from 'src/constants';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 
@@ -46,7 +48,7 @@ const SectionDetails = () => {
                 childrenBottom={false}
             >
                 <EcosystemPaginatedTableWrapper
-                    name={`${sectionInfo.name} Elements`}
+                    name={formatStringToCapitalize(ecosystemElementsWidget)}
                     elements={sectionInfo.elements}
                 />
             </SectionsWidgetsContainer> :

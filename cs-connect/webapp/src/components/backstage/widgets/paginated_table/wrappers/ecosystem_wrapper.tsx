@@ -6,6 +6,7 @@ import {
     buildQuery,
     formatName,
     formatSectionPath,
+    formatStringToCapitalize,
     formatStringToLowerCase,
     getSection,
     removeSectionNameFromPath,
@@ -14,7 +15,7 @@ import {
 import {StepValue} from 'src/types/steps_modal';
 import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';
-import {PARENT_ID_PARAM, ecosystemDefaultFields} from 'src/constants';
+import {PARENT_ID_PARAM, ecosystemDefaultFields, ecosystemElementsWidget} from 'src/constants';
 import PaginatedTable, {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table';
 
 type Props = {
@@ -23,7 +24,7 @@ type Props = {
 };
 
 const EcosystemPaginatedTableWrapper = ({
-    name = 'Issue Elements',
+    name = formatStringToCapitalize(ecosystemElementsWidget),
     elements = [],
 }: Props) => {
     const {path, url, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
