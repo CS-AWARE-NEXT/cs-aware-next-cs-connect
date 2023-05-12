@@ -10,23 +10,12 @@ import {
     RHS_PARAM_VALUE,
     ROOT,
 } from 'src/components/rhs/rhs';
-import {hideOptions, useUserAdded} from 'src/hooks';
 
 export const RHSIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
     const {hash: urlHash, search} = useLocation();
     const history = useHistory();
-
-    useUserAdded();
-
-    useEffect(() => {
-        const timeouts = hideOptions();
-        return () => {
-            timeouts[0].forEach((timeout) => clearTimeout(timeout));
-            timeouts[1].forEach((interval) => clearInterval(interval));
-        };
-    });
 
     useEffect(() => {
         const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
