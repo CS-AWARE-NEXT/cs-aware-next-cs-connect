@@ -5,8 +5,11 @@ export const InfoIcon = () => (
     <i className='icon fa fa-info-circle'/>
 );
 
-export const PlugIcon = () => (
-    <i className='icon fa fa-plug'/>
+export const HiddenIcon = () => (
+    <i
+        id='hidden-icon'
+        className='icon fa fa-ban'
+    />
 );
 
 export const LoadingIcon = (
