@@ -3,6 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 import qs from 'qs';
 import {useSelector} from 'react-redux';
+import styled from 'styled-components';
 
 import {
     RHS_OPEN,
@@ -47,11 +48,16 @@ export const RHSIcon = () => {
     });
 
     return (
-        <i
+        <Icon
             className='icon fa fa-plug'
-            style={{fontSize: '15px', position: 'relative', top: '-1px'}}
             id={'open-product-rhs'}
             ref={icon}
         />
     );
 };
+
+const Icon = styled.i`
+    font-size: 15px;
+    position: relative;
+    top: -1px;
+`;
