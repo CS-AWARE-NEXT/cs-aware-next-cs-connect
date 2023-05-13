@@ -2,7 +2,8 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {formatUrlWithId, useTextBoxData} from 'src/hooks';
+import {useTextBoxData} from 'src/hooks';
+import {formatUrlWithId} from 'src/helpers';
 import {SectionContext} from 'src/components/rhs/rhs';
 import TextBox from 'src/components/backstage/widgets/text_box/text_box';
 

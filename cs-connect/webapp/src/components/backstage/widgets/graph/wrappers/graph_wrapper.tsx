@@ -3,7 +3,8 @@ import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
-import {formatUrlWithId, useGraphData} from 'src/hooks';
+import {useGraphData} from 'src/hooks';
+import {formatUrlWithId} from 'src/helpers';
 import Graph from 'src/components/backstage/widgets/graph/graph';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 

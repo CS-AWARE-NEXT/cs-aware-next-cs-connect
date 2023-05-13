@@ -13,12 +13,12 @@ import {CreateChannel} from 'src/components/backstage/widgets/channels/controls'
 import {Section} from 'src/components/backstage/widgets/channels/styles';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {
-    formatName,
     useChannelsList,
     useOrganization,
     useSection,
     useSectionInfo,
 } from 'src/hooks';
+import {formatName} from 'src/helpers';
 
 import {CreateSingleChannel} from './single_channel_creation';
 

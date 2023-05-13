@@ -1,4 +1,4 @@
-import {formatName} from 'src/hooks';
+import {formatName} from 'src/helpers';
 import {Widget} from 'src/types/organization';
 import {HyperlinkReference, WidgetHash} from 'src/types/parser';
 

@@ -12,8 +12,12 @@ export const buildMap = <T>(entries: MapEntry<T>[]): Map<string, T> => {
 };
 
 export const getAndRemoveOneFromArray = <T>(array: T[], index: number): T | undefined => {
-    if (!array || array.length < index) {
+    if (!array || array.length < 1 || array.length < index) {
         return undefined;
     }
     return array.splice(index, 1)[0];
+};
+
+export const isAnyPropertyMissingFromObject = <T extends {}>(obj: T) => {
+    return Object.keys(obj).some((key) => !key);
 };

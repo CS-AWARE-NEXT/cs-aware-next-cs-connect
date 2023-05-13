@@ -2,16 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
+import {buildQuery, getSection, useSection} from 'src/hooks';
 import {
-    buildQuery,
     formatName,
     formatSectionPath,
     formatStringToCapitalize,
     formatStringToLowerCase,
-    getSection,
     removeSectionNameFromPath,
-    useSection,
-} from 'src/hooks';
+} from 'src/helpers';
 import {StepValue} from 'src/types/steps_modal';
 import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';

@@ -6,7 +6,8 @@ import {SECTION_ID_PARAM} from 'src/constants';
 import {Section} from 'src/types/organization';
 import SectionDetails from 'src/components/backstage/sections/section_details';
 import SectionList from 'src/components/backstage/sections/section_list';
-import {formatStringToLowerCase, isUrlEqualWithoutQueryParams} from 'src/hooks';
+import {isUrlEqualWithoutQueryParams} from 'src/hooks';
+import {formatStringToLowerCase} from 'src/helpers';
 import {getSiteUrl} from 'src/clients';
 
 type Props = {

@@ -1,7 +1,8 @@
 import React, {createContext} from 'react';
 import styled from 'styled-components';
 
-import {formatName, useNavHighlighting, useSectionData} from 'src/hooks';
+import {useNavHighlighting, useSectionData} from 'src/hooks';
+import {formatName} from 'src/helpers';
 import PaginatedTable from 'src/components/backstage/widgets/paginated_table/paginated_table';
 import {Section} from 'src/types/organization';
 import Loading from 'src/components/commons/loading';

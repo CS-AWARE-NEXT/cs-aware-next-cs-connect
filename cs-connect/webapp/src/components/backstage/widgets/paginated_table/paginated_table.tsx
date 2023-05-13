@@ -12,11 +12,9 @@ import {
     buildQuery,
     buildTo,
     buildToForCopy,
-    formatSectionPath,
-    formatStringToCapitalize,
-    formatStringToLowerCase,
     isReferencedByUrlHash,
 } from 'src/hooks';
+import {formatSectionPath, formatStringToCapitalize, formatStringToLowerCase} from 'src/helpers';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {navigateToUrl} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';

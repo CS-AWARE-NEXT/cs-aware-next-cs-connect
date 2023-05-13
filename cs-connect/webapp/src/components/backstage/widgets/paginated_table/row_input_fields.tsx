@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import React, {ChangeEvent, useCallback, useState} from 'react';
 
 import {PaddedErrorMessage} from 'src/components/commons/messages';
-import {formatStringToCapitalize} from 'src/hooks';
+import {formatStringToCapitalize} from 'src/helpers';
 import {PaginatedTableColumn, PaginatedTableRow} from 'src/types/paginated_table';
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 

@@ -12,7 +12,7 @@ import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
 import {GraphSectionOptions} from 'src/types/graph';
-import {buildMap} from 'src/hooks';
+import {buildMap} from 'src/helpers';
 
 export const edgeType = 'step';
 export const nodeType = 'graphNodeType';

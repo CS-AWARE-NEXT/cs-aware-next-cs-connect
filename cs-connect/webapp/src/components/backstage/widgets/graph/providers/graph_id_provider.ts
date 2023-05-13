@@ -1,5 +1,5 @@
 import {fetchGraphData} from 'src/clients';
-import {formatName, formatUrlWithId} from 'src/hooks';
+import {formatName, formatUrlWithId} from 'src/helpers';
 import {Widget} from 'src/types/organization';
 import {HyperlinkReference, WidgetHash} from 'src/types/parser';
 

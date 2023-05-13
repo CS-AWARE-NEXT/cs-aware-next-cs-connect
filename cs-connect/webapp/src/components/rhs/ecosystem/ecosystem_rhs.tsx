@@ -10,7 +10,7 @@ import {
 import {NameHeader} from 'src/components/backstage/header/header';
 import Accordion from 'src/components/backstage/widgets/accordion/accordion';
 import {SectionInfo} from 'src/types/organization';
-import {formatStringToCapitalize} from 'src/hooks';
+import {formatStringToCapitalize} from 'src/helpers';
 import {ecosystemElementsWidget} from 'src/constants';
 
 import EcosystemAccordionChild from './ecosystem_accordion_child';
