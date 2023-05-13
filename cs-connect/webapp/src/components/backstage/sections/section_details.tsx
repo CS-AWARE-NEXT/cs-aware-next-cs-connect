@@ -4,13 +4,13 @@ import qs from 'qs';
 
 import {
     buildQuery,
-    formatStringToCapitalize,
     useForceDocumentTitle,
     useNavHighlighting,
     useScrollIntoView,
     useSection,
     useSectionInfo,
 } from 'src/hooks';
+import {formatStringToCapitalize} from 'src/helpers';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
 import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
