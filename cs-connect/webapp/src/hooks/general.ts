@@ -53,8 +53,7 @@ import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {ListData} from 'src/types/list';
 import {TimelineData} from 'src/types/timeline';
-
-import {formatSectionPath, formatStringToLowerCase} from './format';
+import {formatSectionPath, formatStringToLowerCase} from 'src/helpers';
 
 type FetchParams = FetchOrganizationsParams;
 

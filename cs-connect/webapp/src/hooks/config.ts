@@ -4,7 +4,7 @@ import {Section} from 'src/types/organization';
 import {getOrganizations} from 'src/config/config';
 import {estimatedOptionsLoadTime} from 'src/constants';
 
-import {formatStringToLowerCase} from './format';
+import {formatStringToLowerCase} from 'src/helpers';
 
 export const useHideOptions = () => {
     useEffect(() => {
