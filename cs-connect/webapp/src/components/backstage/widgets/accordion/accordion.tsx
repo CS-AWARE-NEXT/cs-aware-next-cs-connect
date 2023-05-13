@@ -7,7 +7,8 @@ import {AccordionData} from 'src/types/accordion';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
-import {buildQuery, formatName} from 'src/hooks';
+import {buildQuery} from 'src/hooks';
+import {formatName} from 'src/helpers';
 
 const {Panel} = Collapse;
 

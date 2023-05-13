@@ -11,9 +11,9 @@ import {
     buildQuery,
     buildTo,
     buildToForCopy,
-    formatName,
     isReferencedByUrlHash,
 } from 'src/hooks';
+import {formatName} from 'src/helpers';
 import {ListData} from 'src/types/list';
 
 const {Item} = List;

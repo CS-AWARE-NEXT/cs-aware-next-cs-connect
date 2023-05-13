@@ -25,7 +25,8 @@ import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
-import {buildQuery, formatName} from 'src/hooks';
+import {buildQuery} from 'src/hooks';
+import {formatName} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 import GraphNodeType from './graph_node_type';

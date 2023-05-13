@@ -5,7 +5,8 @@ import {useIntl} from 'react-intl';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import MarkdownEdit from 'src/components/commons/markdown_edit';
-import {buildQuery, formatName} from 'src/hooks';
+import {buildQuery} from 'src/hooks';
+import {formatName} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
 export type TextBoxStyle = {

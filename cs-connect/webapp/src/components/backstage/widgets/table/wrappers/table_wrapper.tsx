@@ -2,7 +2,8 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {formatName, formatUrlWithId, useTableData} from 'src/hooks';
+import {useTableData} from 'src/hooks';
+import {formatName, formatUrlWithId} from 'src/helpers';
 import {SectionContext} from 'src/components/rhs/rhs';
 import Table from 'src/components/backstage/widgets/table/table';
 

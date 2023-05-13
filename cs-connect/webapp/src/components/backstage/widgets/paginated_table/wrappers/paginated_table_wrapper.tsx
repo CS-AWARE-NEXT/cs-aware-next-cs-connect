@@ -2,12 +2,8 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {
-    buildQuery,
-    formatName,
-    formatUrlWithId,
-    usePaginatedTableData,
-} from 'src/hooks';
+import {buildQuery, usePaginatedTableData} from 'src/hooks';
+import {formatName, formatUrlWithId} from 'src/helpers';
 import {SectionContext} from 'src/components/rhs/rhs';
 import PaginatedTable from 'src/components/backstage/widgets/paginated_table/paginated_table';
 

@@ -3,12 +3,8 @@ import {Timeline} from 'antd';
 import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
-import {
-    buildIdForUrlHashReference,
-    buildQuery,
-    formatName,
-    isReferencedByUrlHash,
-} from 'src/hooks';
+import {buildIdForUrlHashReference, buildQuery, isReferencedByUrlHash} from 'src/hooks';
+import {formatName} from 'src/helpers';
 import {TimelineData, TimelineDataItem} from 'src/types/timeline';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
