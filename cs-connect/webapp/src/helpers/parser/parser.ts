@@ -65,7 +65,7 @@ export const parseTokensToSuggestions = async (tokens: string[], reference: stri
     return hyperlinkSuggestion.suggestions;
 };
 
-// TODO: implement this function properly
+// TODO: implement this function properly, and refactor later
 const updateIfEndsWithTokenSeparator = async (hyperlinkSuggestion: HyperlinkSuggestion, reference: string): Promise<HyperlinkSuggestion> => {
     if (reference === '') {
         return {...hyperlinkSuggestion, suggestions: getOrganizationsSuggestions()};
@@ -88,6 +88,16 @@ const updateIfEndsWithTokenSeparator = async (hyperlinkSuggestion: HyperlinkSugg
             return {...hyperlinkSuggestion, suggestions: getDefaultSuggestions()};
         }
         const suggestions = data.rows.map(({id, name}) => ({id, text: name}));
+        return {...hyperlinkSuggestion, suggestions: {suggestions}};
+    }
+    if (!hyperlinkSuggestion.widget) {
+        const widgets = hyperlinkSuggestion.section?.widgets;
+        if (!widgets || widgets.length < 1) {
+            return hyperlinkSuggestion;
+        }
+        const suggestions = widgets.
+            filter(({name}) => name && name !== '').
+            map(({name, type}) => ({id: `${name}-${type}`, text: name as string}));
         return {...hyperlinkSuggestion, suggestions: {suggestions}};
     }
     return hyperlinkSuggestion;
@@ -141,15 +151,12 @@ const parseObjectSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, 
 };
 
 const parseWidgetSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
-    console.log('parseWidgetSuggestions');
     const widgetName = getAndRemoveOneFromArray(tokens, 0);
     if (!widgetName) {
-        console.log('no widgetName');
         return hyperlinkSuggestion;
     }
     const widgets = hyperlinkSuggestion.section?.widgets;
     if (!widgets || widgets.length < 1) {
-        console.log('no widgets');
         return hyperlinkSuggestion;
     }
     const suggestions = widgets.
