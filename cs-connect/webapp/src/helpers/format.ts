@@ -1,4 +1,4 @@
-import {ORGANIZATIONS_PATH, ORGANIZATION_ID_PARAM} from 'src/constants';
+import {OBJECT_ID_TOKEN, ORGANIZATIONS_PATH, ORGANIZATION_ID_PARAM} from 'src/constants';
 
 export const formatName = (name: string): string => {
     return name.replace(/\s/g, '-').toLowerCase();
@@ -13,7 +13,7 @@ export const formatStringToCapitalize = (s: string): string => {
 };
 
 export const formatUrlWithId = (url: string, id: string): string => {
-    return url.replace(':id', id);
+    return url.replace(OBJECT_ID_TOKEN, id);
 };
 
 export const formatSectionPath = (path: string, organizatioId: string): string => {
