@@ -12,9 +12,16 @@ import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {buildTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/providers/text_box_id_provider';
 import {buildTableWidgetId} from 'src/components/backstage/widgets/table/providers/table_id_provider';
 import {buildGraphWidgetId} from 'src/components/backstage/widgets/graph/providers/graph_id_provider';
-import {formatStringToCapitalize, getAndRemoveOneFromArray, isSectionByName} from 'src/hooks';
+import {
+    formatStringToCapitalize,
+    getAndRemoveOneFromArray,
+    getDefaultSuggestions,
+    getOrganizationsSuggestions,
+    isAnyPropertyMissingFromObject,
+} from 'src/helpers';
+import {isSectionByName} from 'src/hooks';
 import {OBJECT_ID_TOKEN, TOKEN_SEPARATOR, ecosystemElementsWidget} from 'src/constants';
-import {SuggestionData, SuggestionsData} from 'src/types/suggestions';
+import {SuggestionsData} from 'src/types/suggestions';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
@@ -39,49 +46,55 @@ export const parseTextToTokens = (text: string, start: number): string[] => {
     return tokens.filter((token) => token !== '');
 };
 
-export const parseTokensToSuggestions = async (tokens: string[]): Promise<SuggestionsData> => {
-    // if there's no string
-    // --- return all organizations
-    // search for organization and build suggestions
-    // if there's no string
-    // --- return the current suggestions
-    // search for section and build suggestions
-    // if there's no string
-    // --- return the current suggestions
-    // search for object and build suggestions
-    // if there's no string
-    // --- return the current suggestions
-    // search for widget and build suggestions
-    // if there's no string
-    // --- return the current suggestions
-    // search for widget' data and build suggestions (this has to be done based on widget type)
+export const parseTokensToSuggestions = async (tokens: string[], reference: string): Promise<SuggestionsData> => {
     let hyperlinkSuggestion: HyperlinkSuggestion = {suggestions: {suggestions: []}};
     try {
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseOrganizationSuggestions);
 
-        // TODO: think about adding support for organizations' widgets
-        // if (!isSectionByName(tokens[0])) {
-        //     hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetSuggestion);
-        //     return hyperlinkSuggestion.suggestions;
-        // }
+        // TODO: think about adding support for organizations' widgets suggestions
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseSectionSuggestions);
-
-        // hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseObject);
-        // hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetHash);
+        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseObjectSuggestions);
+        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetSuggestions);
     } catch (error: any) {
         if (error instanceof NoMoreTokensError) {
-            return hyperlinkSuggestion.suggestions;
+            hyperlinkSuggestion = await updateIfEndsWithTokenSeparator(hyperlinkSuggestion, reference);
         }
         return hyperlinkSuggestion.suggestions;
     }
+    hyperlinkSuggestion = await updateIfEndsWithTokenSeparator(hyperlinkSuggestion, reference);
     return hyperlinkSuggestion.suggestions;
 };
 
+// TODO: implement this function properly
+const updateIfEndsWithTokenSeparator = async (hyperlinkSuggestion: HyperlinkSuggestion, reference: string): Promise<HyperlinkSuggestion> => {
+    if (reference === '') {
+        return {...hyperlinkSuggestion, suggestions: getOrganizationsSuggestions()};
+    }
+    if (!reference.endsWith(TOKEN_SEPARATOR)) {
+        return hyperlinkSuggestion;
+    }
+    if (!hyperlinkSuggestion.organization) {
+        return {...hyperlinkSuggestion, suggestions: getOrganizationsSuggestions()};
+    }
+    if (!hyperlinkSuggestion.section) {
+        const suggestions = getOrganizationByName(hyperlinkSuggestion.organization?.name as string).
+            sections.map(({id, name}) => ({id, text: name}));
+        return {...hyperlinkSuggestion, suggestions: {suggestions}};
+    }
+    if (!hyperlinkSuggestion.object) {
+        const url = hyperlinkSuggestion.section?.url as string;
+        const data = await fetchPaginatedTableData(url);
+        if (!data) {
+            return {...hyperlinkSuggestion, suggestions: getDefaultSuggestions()};
+        }
+        const suggestions = data.rows.map(({id, name}) => ({id, text: name}));
+        return {...hyperlinkSuggestion, suggestions: {suggestions}};
+    }
+    return hyperlinkSuggestion;
+};
+
 const parseNoOrganizationSuggestions = async (): Promise<SuggestionsData> => {
-    const suggestions = getOrganizations().map<SuggestionData>(({id, name}) => ({
-        id,
-        text: name,
-    }));
+    const suggestions = getOrganizations().map(({id, name}) => ({id, text: name}));
     return {suggestions};
 };
 
@@ -90,13 +103,10 @@ const parseOrganizationSuggestions = async (hyperlinkSuggestion: HyperlinkSugges
     if (!organizationName) {
         return {...hyperlinkSuggestion, suggestions: await parseNoOrganizationSuggestions()};
     }
+    const organization = getOrganizationByName(organizationName);
     const suggestions = getOrganizations().
         filter(({name}) => name.includes(organizationName)).
-        map(({id, name}) => ({
-            id,
-            text: name,
-        }));
-    const organization = getOrganizationByName(organizationName);
+        map(({id, name}) => ({id, text: name}));
     return {...hyperlinkSuggestion, organization, suggestions: {suggestions}};
 };
 
@@ -106,14 +116,88 @@ const parseSectionSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion,
         return hyperlinkSuggestion;
     }
     const organizationName = hyperlinkSuggestion.organization?.name as string;
+    const section = hyperlinkSuggestion.organization?.sections.filter((s) => s.name === sectionName)[0];
     const suggestions = getOrganizationByName(organizationName).sections.
         filter(({name}) => name.includes(sectionName)).
-        map(({id, name}) => ({
-            id,
-            text: name,
-        }));
-    const section = hyperlinkSuggestion.organization?.sections.filter((s) => s.name === sectionName)[0];
+        map(({id, name}) => ({id, text: name}));
     return {...hyperlinkSuggestion, section, suggestions: {suggestions}};
+};
+
+const parseObjectSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+    const objectName = getAndRemoveOneFromArray(tokens, 0);
+    if (!objectName) {
+        return hyperlinkSuggestion;
+    }
+    const url = hyperlinkSuggestion.section?.url as string;
+    const data = await fetchPaginatedTableData(url);
+    if (!data) {
+        throw new ParseError(`Cannot get data for object named ${objectName}`);
+    }
+    const object = data.rows.filter((row) => row.name === objectName)[0];
+    const suggestions = data.rows.
+        filter(({name}) => name.includes(objectName)).
+        map(({id, name}) => ({id, text: name}));
+    return {...hyperlinkSuggestion, object, suggestions: {suggestions}};
+};
+
+const parseWidgetSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+    console.log('parseWidgetSuggestions');
+    const widgetName = getAndRemoveOneFromArray(tokens, 0);
+    if (!widgetName) {
+        console.log('no widgetName');
+        return hyperlinkSuggestion;
+    }
+    const widgets = hyperlinkSuggestion.section?.widgets;
+    if (!widgets || widgets.length < 1) {
+        console.log('no widgets');
+        return hyperlinkSuggestion;
+    }
+    const suggestions = widgets.
+        filter(({name}) => name?.includes(widgetName)).
+        map(({name, type}) => ({id: `${name}-${type}`, text: name as string}));
+    console.log('widget suggestions: ', JSON.stringify(suggestions, null, 2));
+
+    // if (!widget && hyperlinkSuggestion.organization?.isEcosystem) {
+    //     // If the organization is the ecosystem, check for reference to the default widget
+    //     widget = {
+    //         name: formatStringToCapitalize(ecosystemElementsWidget),
+    //         type: WidgetType.PaginatedTable,
+    //         url: `${hyperlinkSuggestion.section?.url}/${OBJECT_ID_TOKEN}`,
+    //     };
+    // }
+    // if (!widget) {
+    //     // If the section is not found, check whether it is a reference to a object's widget
+    //     widget = hyperlinkSuggestion.organization?.widgets.filter(({name}) => name === widgetName)[0];
+    //     if (!widget) {
+    //         return hyperlinkSuggestion;
+    //     }
+    // }
+    // console.log('Widget for suggestions: ' + JSON.stringify(widget));
+    // const suggestions = await parseWidgetSuggestionsByType(hyperlinkSuggestion, tokens, widget);
+    return {...hyperlinkSuggestion, suggestions: {suggestions}};
+};
+
+const parseWidgetSuggestionsByType = (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    tokens: string[],
+    widget: Widget,
+): SuggestionsData | Promise<SuggestionsData> => {
+    switch (widget.type) {
+    case WidgetType.Graph:
+        return {suggestions: []};
+    case WidgetType.PaginatedTable:
+        return {suggestions: []};
+    case WidgetType.List:
+        return {suggestions: []};
+    case WidgetType.Table:
+        return {suggestions: []};
+    case WidgetType.TextBox:
+        return {suggestions: []};
+    case WidgetType.Timeline:
+        return {suggestions: []};
+    default:
+        return {suggestions: []};
+    }
 };
 
 export const parseMatchToTokens = (match: string): string[] => {
@@ -218,7 +302,7 @@ const parseWidgetHash = async (hyperlinkReference: HyperlinkReference, tokens: s
     }
     console.log('Widget: ' + JSON.stringify(widget));
     const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget);
-    if (Object.keys(widgetHash).some((key) => !key)) {
+    if (isAnyPropertyMissingFromObject(widgetHash)) {
         return hyperlinkReference;
     }
     return {...hyperlinkReference, widgetHash};
