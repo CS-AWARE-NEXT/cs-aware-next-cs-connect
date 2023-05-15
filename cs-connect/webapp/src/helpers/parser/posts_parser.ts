@@ -15,7 +15,9 @@ import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
 
 // TODO: Add support for the issues' elements default section
-export const parseTokensToHyperlinkReference = async (tokens: string[]): Promise<HyperlinkReference | null> => {
+export const parseTokensToHyperlinkReference = async (
+    tokens: string[],
+): Promise<HyperlinkReference | null> => {
     let hyperlinkReference: HyperlinkReference = {};
     try {
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseOrganization);
@@ -35,7 +37,10 @@ export const parseTokensToHyperlinkReference = async (tokens: string[]): Promise
     return hyperlinkReference;
 };
 
-const parseOrganization = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
+const parseOrganization = async (
+    hyperlinkReference: HyperlinkReference,
+    tokens: string[],
+): Promise<HyperlinkReference> => {
     const organizationName = getAndRemoveOneFromArray(tokens, 0);
     if (!organizationName) {
         throw new ParseError('Cannot get organization\'s name');
@@ -48,7 +53,10 @@ const parseOrganization = async (hyperlinkReference: HyperlinkReference, tokens:
 };
 
 // TODO: Add handling for section hash (use the # character)
-const parseSection = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
+const parseSection = async (
+    hyperlinkReference: HyperlinkReference,
+    tokens: string[],
+): Promise<HyperlinkReference> => {
     const sectionName = getAndRemoveOneFromArray(tokens, 0);
     if (!sectionName) {
         return hyperlinkReference;
@@ -60,7 +68,10 @@ const parseSection = async (hyperlinkReference: HyperlinkReference, tokens: stri
     return {...hyperlinkReference, section};
 };
 
-const parseObject = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
+const parseObject = async (
+    hyperlinkReference: HyperlinkReference,
+    tokens: string[],
+): Promise<HyperlinkReference> => {
     const objectName = getAndRemoveOneFromArray(tokens, 0);
     if (!objectName) {
         return hyperlinkReference;
@@ -77,7 +88,10 @@ const parseObject = async (hyperlinkReference: HyperlinkReference, tokens: strin
     return {...hyperlinkReference, object};
 };
 
-const parseWidgetHash = async (hyperlinkReference: HyperlinkReference, tokens: string[]): Promise<HyperlinkReference> => {
+const parseWidgetHash = async (
+    hyperlinkReference: HyperlinkReference,
+    tokens: string[],
+): Promise<HyperlinkReference> => {
     const widgetName = getAndRemoveOneFromArray(tokens, 0);
     if (!widgetName) {
         return hyperlinkReference;
