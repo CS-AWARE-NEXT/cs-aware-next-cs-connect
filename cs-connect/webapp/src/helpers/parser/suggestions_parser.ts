@@ -11,7 +11,10 @@ import {withTokensLengthCheck} from './parser';
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
 
-export const parseTokensToSuggestions = async (tokens: string[], reference: string): Promise<SuggestionsData> => {
+export const parseTokensToSuggestions = async (
+    tokens: string[],
+    reference: string,
+): Promise<SuggestionsData> => {
     let hyperlinkSuggestion: HyperlinkSuggestion = {suggestions: {suggestions: []}};
     try {
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseOrganizationSuggestions);
@@ -32,10 +35,14 @@ export const parseTokensToSuggestions = async (tokens: string[], reference: stri
 
 // TODO: implement this function properly, and refactor later
 // Separate into two functions: one for reference === '' and the other for references ending with the dot
-const updateIfEndsWithTokenSeparator = async (hyperlinkSuggestion: HyperlinkSuggestion, reference: string): Promise<HyperlinkSuggestion> => {
-    if (reference === '') {
-        return {...hyperlinkSuggestion, suggestions: getOrganizationsSuggestions()};
-    }
+const updateIfEndsWithTokenSeparator = async (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    reference: string,
+): Promise<HyperlinkSuggestion> => {
+    // TODO: this may not be needed, since it is managed in the input handler of the textarea
+    // if (reference === '') {
+    //     return {...hyperlinkSuggestion, suggestions: getOrganizationsSuggestions()};
+    // }
     if (!reference.endsWith(TOKEN_SEPARATOR)) {
         return hyperlinkSuggestion;
     }
@@ -44,7 +51,10 @@ const updateIfEndsWithTokenSeparator = async (hyperlinkSuggestion: HyperlinkSugg
     }
     if (!hyperlinkSuggestion.section) {
         const suggestions = getOrganizationByName(hyperlinkSuggestion.organization?.name as string).
-            sections.map(({id, name}) => ({id, text: name}));
+            sections.map(({id, name}) => ({
+                id,
+                text: name,
+            }));
         return {...hyperlinkSuggestion, suggestions: {suggestions}};
     }
     if (!hyperlinkSuggestion.object) {
@@ -53,7 +63,10 @@ const updateIfEndsWithTokenSeparator = async (hyperlinkSuggestion: HyperlinkSugg
         if (!data) {
             return {...hyperlinkSuggestion, suggestions: getDefaultSuggestions()};
         }
-        const suggestions = data.rows.map(({id, name}) => ({id, text: name}));
+        const suggestions = data.rows.map(({id, name}) => ({
+            id,
+            text: name,
+        }));
         return {...hyperlinkSuggestion, suggestions: {suggestions}};
     }
     if (!hyperlinkSuggestion.widget) {
@@ -63,7 +76,10 @@ const updateIfEndsWithTokenSeparator = async (hyperlinkSuggestion: HyperlinkSugg
         }
         const suggestions = widgets.
             filter(({name}) => name && name !== '').
-            map(({name, type}) => ({id: `${name}-${type}`, text: name as string}));
+            map(({name, type}) => ({
+                id: `${name}-${type}`,
+                text: name as string,
+            }));
         return {...hyperlinkSuggestion, suggestions: {suggestions}};
     }
     return hyperlinkSuggestion;
@@ -74,7 +90,10 @@ const parseNoOrganizationSuggestions = async (): Promise<SuggestionsData> => {
     return {suggestions};
 };
 
-const parseOrganizationSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+const parseOrganizationSuggestions = async (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    tokens: string[],
+): Promise<HyperlinkSuggestion> => {
     const organizationName = getAndRemoveOneFromArray(tokens, 0);
     if (!organizationName) {
         return {...hyperlinkSuggestion, suggestions: await parseNoOrganizationSuggestions()};
@@ -82,11 +101,17 @@ const parseOrganizationSuggestions = async (hyperlinkSuggestion: HyperlinkSugges
     const organization = getOrganizationByName(organizationName);
     const suggestions = getOrganizations().
         filter(({name}) => name.includes(organizationName)).
-        map(({id, name}) => ({id, text: name}));
+        map(({id, name}) => ({
+            id,
+            text: name,
+        }));
     return {...hyperlinkSuggestion, organization, suggestions: {suggestions}};
 };
 
-const parseSectionSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+const parseSectionSuggestions = async (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    tokens: string[],
+): Promise<HyperlinkSuggestion> => {
     const sectionName = getAndRemoveOneFromArray(tokens, 0);
     if (!sectionName) {
         return hyperlinkSuggestion;
@@ -95,11 +120,17 @@ const parseSectionSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion,
     const section = hyperlinkSuggestion.organization?.sections.filter((s) => s.name === sectionName)[0];
     const suggestions = getOrganizationByName(organizationName).sections.
         filter(({name}) => name.includes(sectionName)).
-        map(({id, name}) => ({id, text: name}));
+        map(({id, name}) => ({
+            id,
+            text: name,
+        }));
     return {...hyperlinkSuggestion, section, suggestions: {suggestions}};
 };
 
-const parseObjectSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+const parseObjectSuggestions = async (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    tokens: string[],
+): Promise<HyperlinkSuggestion> => {
     const objectName = getAndRemoveOneFromArray(tokens, 0);
     if (!objectName) {
         return hyperlinkSuggestion;
@@ -112,11 +143,17 @@ const parseObjectSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, 
     const object = data.rows.filter((row) => row.name === objectName)[0];
     const suggestions = data.rows.
         filter(({name}) => name.includes(objectName)).
-        map(({id, name}) => ({id, text: name}));
+        map(({id, name}) => ({
+            id,
+            text: name,
+        }));
     return {...hyperlinkSuggestion, object, suggestions: {suggestions}};
 };
 
-const parseWidgetSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, tokens: string[]): Promise<HyperlinkSuggestion> => {
+const parseWidgetSuggestions = async (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    tokens: string[],
+): Promise<HyperlinkSuggestion> => {
     const widgetName = getAndRemoveOneFromArray(tokens, 0);
     if (!widgetName) {
         return hyperlinkSuggestion;
@@ -128,8 +165,10 @@ const parseWidgetSuggestions = async (hyperlinkSuggestion: HyperlinkSuggestion, 
     const widget = widgets.filter(({name}) => name === widgetName)[0];
     const suggestions = widgets.
         filter(({name}) => name?.includes(widgetName)).
-        map(({name, type}) => ({id: `${name}-${type}`, text: name as string}));
-    console.log('widget suggestions: ', JSON.stringify(suggestions, null, 2));
+        map(({name, type}) => ({
+            id: `${name}-${type}`,
+            text: name as string,
+        }));
 
     // TODO: implement the function with the following logic to get suggestions for widgets' elements
     // if (!widget && hyperlinkSuggestion.organization?.isEcosystem) {
