@@ -4,3 +4,4 @@ export * from './parser/parser';
 export * from './parser/posts_parser';
 export * from './parser/suggestions_parser';
 export * from './posts';
+export * from './suggestions';
