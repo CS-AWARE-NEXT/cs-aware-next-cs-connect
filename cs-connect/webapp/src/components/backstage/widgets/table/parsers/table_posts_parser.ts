@@ -8,7 +8,7 @@ type RowPair = Pick<TableRowData, 'id'> & {text: string};
 
 // TableReference example: #observed-data-2ce53d5c-4bd4-4f02-89cc-d5b8f551770c-3-widget
 // RowReference example: #table-row-18621aed-cbff-44ab-a161-a14b6ad2845e
-export const buildTableWidgetId = async (
+export const parseTableWidgetId = async (
     {section, object}: HyperlinkReference,
     tokens: string[],
     {name, url}: Widget,
@@ -25,14 +25,14 @@ export const buildTableWidgetId = async (
     if (object) {
         widgetUrl = formatUrlWithId(widgetUrl, object.id);
     }
-    const rowPair = await buildRowPair(tokens, widgetUrl);
+    const rowPair = await parseRowPair(tokens, widgetUrl);
     return rowPair ? {
         hash: rowPair.id,
         text: rowPair.text,
     } : tableWidgetHash;
 };
 
-const buildRowPair = async (tokens: string[], url: string): Promise<RowPair | null> => {
+const parseRowPair = async (tokens: string[], url: string): Promise<RowPair | null> => {
     const notEnoughTokensForRowReference = tokens.length < 2;
     if (notEnoughTokensForRowReference) {
         return null;
