@@ -15,7 +15,7 @@ export const isMessageToHyperlink = ({message}: Post): boolean => {
 export const hyperlinkPost = async (post: Post): Promise<Post> => {
     const {message} = post;
     const map = await buildHyperlinksMap(message);
-    if (map === null) {
+    if (!map) {
         return post;
     }
     return {...post, message: buildHyperlinkedMessage(message, map)};
@@ -24,10 +24,16 @@ export const hyperlinkPost = async (post: Post): Promise<Post> => {
 const buildHyperlinksMap = async (message: string): Promise<Map<string, string> | null> => {
     const map = new Map();
     const matches = message.match(getPattern());
-    if (matches === null) {
+    if (!matches) {
         return null;
     }
     for (const match of matches) {
+        // TODO: if the patterns ends with ) and the user types between the (), the suggested text may not be considered by Mattermost
+        // E.g. the user types hood(), then they type hood(Org) and press on the Organization X suggestion.
+        // At this point in the textarea appears hood(Organization X) but if the users press Enter before typing anything,
+        // Mattermost sends hood(Org) as a message.
+        // This may be deu to the fact that there is another textare other than the one we are using,
+        // you can see this in the browser's console by inspecting the textare with id post_textbox and find the textarea with id post_textbox-reference
         const hyperlink = await buildHyperlinkFromMatch(match);
         map.set(match, hyperlink);
     }
@@ -40,7 +46,8 @@ const buildHyperlinkFromMatch = async (match: string): Promise<string> => {
     if (!hyperlinkReference) {
         return match;
     }
-    console.log('Hyperlink reference: ' + JSON.stringify(hyperlinkReference, null, 2));
+
+    // console.log('Hyperlink reference: ' + JSON.stringify(hyperlinkReference, null, 2));
     return buildHyperlinkFromReference(hyperlinkReference);
 };
 
