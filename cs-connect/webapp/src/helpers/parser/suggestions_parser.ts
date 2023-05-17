@@ -1,10 +1,11 @@
 import {HyperlinkSuggestion, SuggestionsData} from 'src/types/parser';
-import {getAndRemoveOneFromArray, getDefaultSuggestions, getOrganizationsSuggestions} from 'src/helpers';
+import {getAndRemoveOneFromArray, getEmptySuggestions, getOrganizationsSuggestions} from 'src/helpers';
 import {TOKEN_SEPARATOR} from 'src/constants';
 import {getOrganizationByName, getOrganizations} from 'src/config/config';
 import {fetchPaginatedTableData} from 'src/clients';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {Widget} from 'src/types/organization';
+import {parseTableWidgetSuggestions} from 'src/components/backstage/widgets/table/parsers/table_suggestions_parser';
 
 import {withTokensLengthCheck} from './parser';
 import NoMoreTokensError from './errors/noMoreTokensError';
@@ -22,6 +23,7 @@ export const parseTokensToSuggestions = async (
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseSectionSuggestions);
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseObjectSuggestions);
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetSuggestions);
+        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetElementSuggestions);
     } catch (error: any) {
         if (error instanceof NoMoreTokensError) {
             hyperlinkSuggestion = await updateIfEndsWithTokenSeparator(hyperlinkSuggestion, reference);
@@ -60,7 +62,7 @@ const updateIfEndsWithTokenSeparator = async (
         const url = hyperlinkSuggestion.section?.url as string;
         const data = await fetchPaginatedTableData(url);
         if (!data) {
-            return {...hyperlinkSuggestion, suggestions: getDefaultSuggestions()};
+            return {...hyperlinkSuggestion, suggestions: getEmptySuggestions()};
         }
         const suggestions = data.rows.map(({id, name}) => ({
             id,
@@ -107,6 +109,7 @@ const parseOrganizationSuggestions = async (
     return {...hyperlinkSuggestion, organization, suggestions: {suggestions}};
 };
 
+// TODO: add support for issues' elements default section
 const parseSectionSuggestions = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
     tokens: string[],
@@ -168,29 +171,19 @@ const parseWidgetSuggestions = async (
             id: `${name}-${type}`,
             text: name as string,
         }));
-
-    // TODO: implement the function with the following logic to get suggestions for widgets' elements
-    // if (!widget && hyperlinkSuggestion.organization?.isEcosystem) {
-    //     // If the organization is the ecosystem, check for reference to the default widget
-    //     widget = {
-    //         name: formatStringToCapitalize(ecosystemElementsWidget),
-    //         type: WidgetType.PaginatedTable,
-    //         url: `${hyperlinkSuggestion.section?.url}/${OBJECT_ID_TOKEN}`,
-    //     };
-    // }
-    // if (!widget) {
-    //     // If the section is not found, check whether it is a reference to a object's widget
-    //     widget = hyperlinkSuggestion.organization?.widgets.filter(({name}) => name === widgetName)[0];
-    //     if (!widget) {
-    //         return hyperlinkSuggestion;
-    //     }
-    // }
-    // console.log('Widget for suggestions: ' + JSON.stringify(widget));
-    // const suggestions = await parseWidgetSuggestionsByType(hyperlinkSuggestion, tokens, widget);
     return {...hyperlinkSuggestion, widget, suggestions: {suggestions}};
 };
 
-const parseWidgetSuggestionsByType = (
+const parseWidgetElementSuggestions = async (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    tokens: string[],
+): Promise<HyperlinkSuggestion> => {
+    const widget = hyperlinkSuggestion.widget as Widget;
+    const suggestions = await parseWidgetElementSuggestionsByType(hyperlinkSuggestion, tokens, widget);
+    return {...hyperlinkSuggestion, suggestions};
+};
+
+const parseWidgetElementSuggestionsByType = (
     hyperlinkSuggestion: HyperlinkSuggestion,
     tokens: string[],
     widget: Widget,
@@ -203,7 +196,7 @@ const parseWidgetSuggestionsByType = (
     case WidgetType.List:
         return {suggestions: []};
     case WidgetType.Table:
-        return {suggestions: []};
+        return parseTableWidgetSuggestions(hyperlinkSuggestion, tokens, widget);
     case WidgetType.TextBox:
         return {suggestions: []};
     case WidgetType.Timeline:
