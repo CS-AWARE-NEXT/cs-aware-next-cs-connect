@@ -1,9 +1,8 @@
-import {HyperlinkSuggestion} from 'src/types/parser';
+import {HyperlinkSuggestion, SuggestionsData} from 'src/types/parser';
 import {getAndRemoveOneFromArray, getDefaultSuggestions, getOrganizationsSuggestions} from 'src/helpers';
 import {TOKEN_SEPARATOR} from 'src/constants';
 import {getOrganizationByName, getOrganizations} from 'src/config/config';
 import {fetchPaginatedTableData} from 'src/clients';
-import {SuggestionsData} from 'src/types/suggestions';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {Widget} from 'src/types/organization';
 
