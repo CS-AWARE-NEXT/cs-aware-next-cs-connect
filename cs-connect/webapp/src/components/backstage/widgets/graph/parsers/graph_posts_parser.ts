@@ -14,7 +14,7 @@ type GraphTriple = {
 // GrapheReference example: #system-2ce53d5c-4bd4-4f02-89cc-d5b8f551770c-3-widget
 // GraphDescription reference: #description-2ce53d5c-4bd4-4f02-89cc-d5b8f551770c-3-widget
 // NodeReference example: #server-1-2ce53d5c-4bd4-4f02-89cc-d5b8f551770c-3
-export const buildGraphWidgetId = async (
+export const parseGraphWidgetId = async (
     {section, object}: HyperlinkReference,
     tokens: string[],
     {name, url}: Widget,
@@ -31,7 +31,7 @@ export const buildGraphWidgetId = async (
     if (object) {
         widgetUrl = formatUrlWithId(widgetUrl, object.id);
     }
-    const graphTriple = await buildGraphPair(tokens, widgetUrl);
+    const graphTriple = await parseGraphPair(tokens, widgetUrl);
     if (!graphTriple) {
         return graphWidgetHash;
     }
@@ -41,7 +41,7 @@ export const buildGraphWidgetId = async (
     return {hash, text};
 };
 
-const buildGraphPair = async (tokens: string[], url: string): Promise<GraphTriple | null> => {
+const parseGraphPair = async (tokens: string[], url: string): Promise<GraphTriple | null> => {
     const descriptionOrNodeName = tokens.splice(0, 1)[0];
     const data = await fetchGraphData(url);
     if (!data) {
