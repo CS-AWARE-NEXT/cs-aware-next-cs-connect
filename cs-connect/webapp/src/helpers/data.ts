@@ -21,3 +21,16 @@ export const getAndRemoveOneFromArray = <T>(array: T[], index: number): T | unde
 export const isAnyPropertyMissingFromObject = <T extends {}>(obj: T) => {
     return Object.keys(obj).some((key) => !key);
 };
+
+export const replaceAt = (
+    input: string,
+    search: string,
+    replace: string,
+    start: number,
+    end: number,
+): string => {
+    const startString = input.slice(0, start);
+    const middleString = input.slice(start, end).replace(search, replace);
+    const endString = input.slice(end);
+    return `${startString}${middleString}${endString}`;
+};
