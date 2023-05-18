@@ -2,9 +2,7 @@ import {fetchTableData} from 'src/clients';
 import {formatName, formatUrlWithId} from 'src/helpers';
 import {Widget} from 'src/types/organization';
 import {HyperlinkReference, WidgetHash} from 'src/types/parser';
-import {TableRowData} from 'src/types/table';
-
-type RowPair = Pick<TableRowData, 'id'> & {text: string};
+import {RowPair, TableRowData} from 'src/types/table';
 
 // TableReference example: #observed-data-2ce53d5c-4bd4-4f02-89cc-d5b8f551770c-3-widget
 // RowReference example: #table-row-18621aed-cbff-44ab-a161-a14b6ad2845e

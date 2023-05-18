@@ -1,10 +1,67 @@
 import {fetchTableData} from 'src/clients';
+import {TOKEN_SEPARATOR} from 'src/constants';
 import {formatUrlWithId, getAndRemoveOneFromArray} from 'src/helpers';
 import {Widget} from 'src/types/organization';
 import {HyperlinkSuggestion, SuggestionsData} from 'src/types/parser';
 import {RowPair, TableData, TableRowData} from 'src/types/table';
 
 const emptySuggestions = {suggestions: []};
+
+export const parseTableWidgetSuggestions = async (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    reference: string,
+    widget: Widget,
+): Promise<SuggestionsData> => {
+    const headerOrRowName = parseHeaderOrRowName(reference);
+    const data = await getTableData(hyperlinkSuggestion, widget);
+    if (!data) {
+        return emptySuggestions;
+    }
+    const {headers, rows} = data;
+    const isHeaderNameGiven = headers.some(({name}) => name === headerOrRowName);
+    if (isHeaderNameGiven) {
+        const suggestions = await parseRowSuggestions(headerOrRowName, data);
+        return suggestions;
+    }
+    const isRowNameGiven = rows.some(({name}) => name === headerOrRowName);
+    if (isRowNameGiven) {
+        return emptySuggestions;
+    }
+    const suggestions = await parseHeaderSuggestions(data);
+    return suggestions;
+};
+
+const parseHeaderSuggestions = async (data: TableData): Promise<SuggestionsData> => {
+    const suggestions = data.headers.
+        map(({name}) => ({
+            id: name,
+            text: name,
+        }));
+    return {suggestions};
+};
+
+const parseRowSuggestions = async (
+    headerName: string,
+    data: TableData,
+): Promise<SuggestionsData> => {
+    const {headers, rows} = data;
+    const index = headers.findIndex(({name}) => name === headerName);
+    if (index === -1) {
+        return emptySuggestions;
+    }
+    const suggestions = rows.map(({id, values}) => ({
+        id,
+        text: values[index].value,
+    }));
+    return {suggestions};
+};
+
+const parseHeaderOrRowName = (reference: string): string => {
+    const tokens = reference.
+        split(TOKEN_SEPARATOR).
+        filter((token) => token !== '');
+    return tokens[tokens.length - 1];
+};
 
 export const parseTableWidgetSuggestionsWithHint = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
