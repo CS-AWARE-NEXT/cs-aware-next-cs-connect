@@ -1,7 +1,47 @@
-import {END_SYMBOL, getStartSymbol, getSymbol} from 'src/config/config';
+import {
+    END_SYMBOL,
+    getOrganizationBySectionName,
+    getStartSymbol,
+    getSymbol,
+} from 'src/config/config';
 import {TOKEN_SEPARATOR} from 'src/constants';
+import {fetchChannelById, fetchSectionInfo} from 'src/clients';
+import {getSection} from 'src/hooks';
+import {SectionInfo} from 'src/types/organization';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
+
+// TODO: study how to add support for ecosystem
+export const parseRhsReference = async (tokens: string[])
+: Promise<[
+    string[],
+    boolean,
+    SectionInfo | undefined,
+]> => {
+    const channelId = localStorage.getItem('channelId');
+    const {channel} = await fetchChannelById(channelId as string);
+
+    const {name: sectionName, url} = getSection(channel.parentId);
+    const {name: organizationName} = getOrganizationBySectionName(sectionName);
+    const object = await fetchSectionInfo(channel.sectionId, url);
+    const {name: objectName} = object;
+
+    const referenceToken = tokens[0];
+    const isRhsReference = referenceToken === objectName;
+    if (isRhsReference) {
+        return [
+            [organizationName, sectionName, ...tokens],
+            isRhsReference,
+            undefined,
+        ];
+    }
+    const isPartialRhsReference = objectName.includes(referenceToken);
+    return [
+        tokens,
+        isRhsReference,
+        isPartialRhsReference ? object : undefined,
+    ];
+};
 
 export const parseTextToReference = (text: string, start: number): string => {
     const symbolStartIndex = text.lastIndexOf(getStartSymbol(), start);
