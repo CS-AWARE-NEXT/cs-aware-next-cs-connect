@@ -4,9 +4,9 @@ import {getOrganizationByName} from 'src/config/config';
 import {fetchPaginatedTableData} from 'src/clients';
 import {OBJECT_ID_TOKEN, ecosystemElementsWidget} from 'src/constants';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
-import {buildTableWidgetId} from 'src/components/backstage/widgets/table/providers/table_id_provider';
-import {buildTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/providers/text_box_id_provider';
-import {buildGraphWidgetId} from 'src/components/backstage/widgets/graph/providers/graph_id_provider';
+import {parseTableWidgetId} from 'src/components/backstage/widgets/table/parsers/table_posts_parser';
+import {parseTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/parsers/text_box_posts_parser';
+import {parseGraphWidgetId} from 'src/components/backstage/widgets/graph/parsers/graph_posts_parser';
 import {Widget} from 'src/types/organization';
 import {isSectionByName} from 'src/hooks';
 
@@ -127,15 +127,15 @@ const parseWidgetHashByType = (
 ): WidgetHash | Promise<WidgetHash> => {
     switch (widget.type) {
     case WidgetType.Graph:
-        return buildGraphWidgetId(hyperlinkReference, tokens, widget);
+        return parseGraphWidgetId(hyperlinkReference, tokens, widget);
     case WidgetType.PaginatedTable:
         return {hash: '', text: ''};
     case WidgetType.List:
         return {hash: '', text: ''};
     case WidgetType.Table:
-        return buildTableWidgetId(hyperlinkReference, tokens, widget);
+        return parseTableWidgetId(hyperlinkReference, tokens, widget);
     case WidgetType.TextBox:
-        return buildTextBoxWidgetId(hyperlinkReference, widget);
+        return parseTextBoxWidgetId(hyperlinkReference, widget);
     case WidgetType.Timeline:
         return {hash: '', text: ''};
     default:

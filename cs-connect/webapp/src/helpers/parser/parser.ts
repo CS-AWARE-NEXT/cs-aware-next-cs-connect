@@ -25,7 +25,7 @@ export const parseTextToTokens = (text: string, start: number): string[] => {
 
 export const parseMatchToTokens = (match: string): string[] => {
     const reference = extractReferenceFromMatch(match);
-    if (reference === null) {
+    if (!reference) {
         return [];
     }
     const tokens = reference.split(TOKEN_SEPARATOR);
