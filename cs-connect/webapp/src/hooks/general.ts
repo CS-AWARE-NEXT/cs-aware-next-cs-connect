@@ -436,9 +436,11 @@ export const useAllUsersOptions = (): UserOption[] => {
         async function fetchAllUsersAsync() {
             const result = await fetchAllUsers(teamId);
             if (!isCanceled) {
+                // This may be useful in future if the user is is needed
+                // value: user.userId,
                 const userOptions = result.users.map((user) => ({
-                    value: user.userId,
-                    label: `${user.firstName} ${user.lastName} (${user.username})`,
+                    value: `${user.firstName} ${user.lastName} (${user.username})`.trim(),
+                    label: `${user.firstName} ${user.lastName} (${user.username})`.trim(),
                 }));
                 setUsers(userOptions);
             }
