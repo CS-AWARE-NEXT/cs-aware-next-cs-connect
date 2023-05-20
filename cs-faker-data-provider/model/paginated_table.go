@@ -14,3 +14,15 @@ type PaginatedTableRow struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
+
+// TODO: refactor with composition
+type IssuePaginatedTableData struct {
+	Columns []PaginatedTableColumn   `json:"columns"`
+	Rows    []IssuePaginatedTableRow `json:"rows"`
+}
+
+type IssuePaginatedTableRow struct {
+	ID                        string `json:"id"`
+	Name                      string `json:"name"`
+	ObjectivesAndResearchArea string `json:"objectives_and_research_area"`
+}

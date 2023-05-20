@@ -11,15 +11,15 @@ import (
 )
 
 func GetIssues(c *fiber.Ctx) error {
-	rows := []model.PaginatedTableRow{}
+	rows := []model.IssuePaginatedTableRow{}
 	for _, issue := range issues {
-		rows = append(rows, model.PaginatedTableRow{
-			ID:          issue.ID,
-			Name:        issue.Name,
-			Description: issue.Description,
+		rows = append(rows, model.IssuePaginatedTableRow{
+			ID:                        issue.ID,
+			Name:                      issue.Name,
+			ObjectivesAndResearchArea: issue.ObjectivesAndResearchArea,
 		})
 	}
-	return c.JSON(model.PaginatedTableData{
+	return c.JSON(model.IssuePaginatedTableData{
 		Columns: columns,
 		Rows:    rows,
 	})
@@ -49,12 +49,39 @@ func SaveIssue(c *fiber.Ctx) error {
 			"error": fmt.Sprintf("Issues with name %s already exists", issue.Name),
 		})
 	}
-	issue.ID = util.GenerateUUID()
-	issues = append(issues, issue)
+	filledIssue := fillIssue(issue)
+	issues = append(issues, filledIssue)
 	return c.JSON(fiber.Map{
-		"id":   issue.ID,
-		"name": issue.Name,
+		"id":   filledIssue.ID,
+		"name": filledIssue.Name,
 	})
+}
+
+func fillIssue(issue model.Issue) model.Issue {
+	issue.ID = util.GenerateUUID()
+
+	outcomes := []model.IssueOutcome{}
+	for _, outcome := range issue.Outcomes {
+		outcome.ID = util.GenerateUUID()
+		outcomes = append(outcomes, outcome) 
+	}
+	issue.Outcomes = outcomes
+
+	attachments := []model.IssueAttachment{}
+	for _, attachment := range issue.Attachments {
+		attachment.ID = util.GenerateUUID()
+		attachments = append(attachments, attachment) 
+	}
+	issue.Attachments = attachments
+
+	roles := []model.IssueRole{}
+	for _, role := range issue.Roles {
+		role.ID = util.GenerateUUID()
+		roles = append(roles, role) 
+	}
+	issue.Roles = roles
+
+	return issue
 }
 
 func getIssueByID(id string) (model.Issue, error) {
@@ -82,6 +109,6 @@ var columns = []model.PaginatedTableColumn{
 		Title: "Name",
 	},
 	{
-		Title: "Description",
+		Title: "Objectives And Research Area",
 	},
 }
