@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import {cloneDeep} from 'lodash';
 import {FormattedMessage} from 'react-intl';
 
+import {Attachment} from 'src/types/scenario_wizard';
+
 import {TextInput} from './objectives_step';
 
 type Props = {
@@ -12,7 +14,11 @@ type Props = {
     setWizardData: Dispatch<SetStateAction<any>>,
 };
 
-const AttachementsStep = ({data, setWizardData}: Props) => {
+export const fillAttachments = (attachments: string[]): Attachment[] => {
+    return attachments.map((attachment) => ({attachment}));
+};
+
+const AttachmentsStep = ({data, setWizardData}: Props) => {
     const [attachements, setAttachements] = useState<string[]>(data);
 
     return (
@@ -51,7 +57,7 @@ const AttachementsStep = ({data, setWizardData}: Props) => {
                                 const currentAttachements = cloneDeep(attachements);
                                 currentAttachements[index] = e.target.value;
                                 setAttachements(currentAttachements);
-                                setWizardData((prev: any) => ({...prev, attachements: currentAttachements}));
+                                setWizardData((prev: any) => ({...prev, attachments: currentAttachements}));
                             }}
                         />
                     </List.Item>
@@ -67,4 +73,4 @@ const Container = styled.div`
     margin-top: 24px;
 `;
 
-export default AttachementsStep;
+export default AttachmentsStep;
