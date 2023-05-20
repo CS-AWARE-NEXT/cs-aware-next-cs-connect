@@ -87,7 +87,7 @@ const RolesStep = ({data, setWizardData}: Props) => {
                                     placeholder='Add a role'
                                     onChange={(value) => {
                                         const currentRoles = cloneDeep(roles);
-                                        currentRoles[index].rules = value;
+                                        currentRoles[index].roles = value;
                                         setRoles(currentRoles);
                                         setWizardData((prev: any) => ({...prev, roles: currentRoles}));
                                     }}
