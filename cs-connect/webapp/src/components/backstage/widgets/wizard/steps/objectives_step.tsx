@@ -2,6 +2,8 @@ import {Input} from 'antd';
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import styled from 'styled-components';
 
+const {TextArea} = Input;
+
 type Props = {
     data: any;
     setWizardData: Dispatch<SetStateAction<any>>;
@@ -10,6 +12,7 @@ type Props = {
 const ObjectivesStep = ({data, setWizardData}: Props) => {
     const [name, setName] = useState(data.name);
     const [objectives, setObjectives] = useState(data.objectives);
+
     return (
         <Container>
             <Text>{'Name'}</Text>
@@ -30,7 +33,7 @@ const ObjectivesStep = ({data, setWizardData}: Props) => {
                 {errors[key]}
             </PaddedErrorMessage> */}
             <Text>{'Objectives And Research Area'}</Text>
-            <Input.TextArea
+            <TextArea
                 style={{minHeight: '20vh'}}
                 key={'objectives'}
                 placeholder={'Insert objectives and research area'}

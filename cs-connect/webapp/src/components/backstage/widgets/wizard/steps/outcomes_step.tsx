@@ -22,7 +22,7 @@ const OutcomesStep = ({data, setWizardData}: Props) => {
             <PrimaryButtonLarger
                 onClick={() => setOutcomes((prev) => ([...prev, '']))}
             >
-                <FormattedMessage defaultMessage='Add a new outcome'/>
+                <FormattedMessage defaultMessage='Add an outcome'/>
             </PrimaryButtonLarger>
             <List
                 style={{padding: '16px'}}
@@ -34,8 +34,8 @@ const OutcomesStep = ({data, setWizardData}: Props) => {
                             avatar={<Avatar icon={<UnorderedListOutlined/>}/>}
                         />
                         <TextInput
-                            key={'outcome'}
-                            placeholder={'Insert a new outcome'}
+                            key={`outcome-${index}`}
+                            placeholder={'Insert an outcome'}
                             value={outcome}
                             onChange={(e) => {
                                 const currentOutcomes = cloneDeep(outcomes);

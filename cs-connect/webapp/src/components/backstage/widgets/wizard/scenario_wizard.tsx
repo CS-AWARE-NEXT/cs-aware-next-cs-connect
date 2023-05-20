@@ -18,9 +18,9 @@ import {OrganizationIdContext} from 'src/components/backstage/organizations/orga
 
 import ObjectivesStep from './steps/objectives_step';
 import OutcomesStep from './steps/outcomes_step';
-import RulesStep from './steps/rules_step';
+import RolesStep from './steps/roles_step';
 import TechnologyStep from './steps/technology_step';
-import AttachedsStep from './steps/attacheds_step';
+import AttachementsStep from './steps/attachements_step';
 
 type Props = {
     organizationsData: StepData[];
@@ -42,9 +42,9 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
         name: '',
         objectives: '',
         outcomes: [],
-        rules: [],
+        roles: [],
         elements: {},
-        attacheds: [],
+        attachements: [],
     });
 
     const cleanModal = useCallback(() => {
@@ -101,8 +101,8 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
         {
             title: 'Participants And Roles',
             content: (
-                <RulesStep
-                    data={wizardData.rules}
+                <RolesStep
+                    data={wizardData.roles}
                     setWizardData={setWizardData}
                 />),
         },
@@ -119,17 +119,14 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
         {
             title: 'Preparation And Planning',
             content: (
-                <AttachedsStep
-                    data={wizardData.attacheds}
+                <AttachementsStep
+                    data={wizardData.attachements}
                     setWizardData={setWizardData}
                 />),
         },
     ];
 
-    const items = steps.map((item) => ({
-        key: item.title,
-        title: item.title,
-    }));
+    const items = steps.map(({title}) => ({key: title, title}));
 
     return (
         <Container>
@@ -161,10 +158,10 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
                         <FormattedMessage defaultMessage='Next'/>
                     </Button>,
                     <Button
-                        disabled={current !== steps.length - 1}
                         key='submit'
                         type='primary'
                         onClick={handleOk}
+                        disabled={current !== steps.length - 1}
                     >
                         <FormattedMessage defaultMessage='Create'/>
                     </Button>,
@@ -183,11 +180,6 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
     );
 };
 
-const modalBodyStyle = {
-    height: '80vh',
-    width: '80vw',
-};
-
 const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -199,7 +191,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ModalBody = styled.div`
-    max-height: 500px;
+    max-height: 80vh;
     overflow-y: auto;
     padding: 8px;
 `;
