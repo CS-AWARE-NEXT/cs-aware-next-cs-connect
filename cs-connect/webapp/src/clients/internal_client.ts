@@ -18,6 +18,7 @@ import {
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
 import {UserAddedParams} from 'src/types/events';
+import {UserResult} from 'src/types/users';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
 
@@ -63,6 +64,14 @@ export const loadPlatformConfig = async (
 
     // await putCacheResponse(PLATFORM_CONFIG_CACHE_NAME, url, config);
     setConfig(config);
+};
+
+export const fetchAllUsers = async (teamId: string): Promise<UserResult> => {
+    let data = await doGet(`${apiUrl}/users?team_id=${teamId}`);
+    if (!data) {
+        data = {users: []} as UserResult;
+    }
+    return data as UserResult;
 };
 
 export const fetchChannels = async (params: FetchChannelsParams): Promise<FetchChannelsResult> => {
