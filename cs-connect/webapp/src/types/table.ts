@@ -19,3 +19,5 @@ interface TableValue {
     dim: 2 | 4 | 6 | 8 | 12;
     value: string;
 }
+
+export type RowPair = Pick<TableRowData, 'id'> & {text: string};
