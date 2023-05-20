@@ -69,8 +69,10 @@ export const Main = styled.main`
     padding: 0 20px 60px;
     display: grid;
     overflow-y: auto;
-    place-content: start center;
-    grid-auto-columns: min(780px, 100%);
+    /* Removed to make the main body span all the available blank space
+        place-content: start center;
+        grid-auto-columns: min(780px, 100%);
+    */
 `;
 
 export const Body = styled(RowContainer)``;
