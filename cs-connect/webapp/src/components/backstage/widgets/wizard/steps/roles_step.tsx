@@ -20,8 +20,8 @@ type Props = {
     setWizardData: Dispatch<SetStateAction<any>>;
 };
 
-const RulesStep = ({data, setWizardData}: Props) => {
-    const [rules, setRules] = useState<any[]>(data);
+const RolesStep = ({data, setWizardData}: Props) => {
+    const [roles, setRoles] = useState<any[]>(data);
     const [users, setUsers] = useState<any[]>([]);
     const teamId = useSelector(getCurrentTeamId);
 
@@ -49,16 +49,16 @@ const RulesStep = ({data, setWizardData}: Props) => {
     return (
         <Container>
             <PrimaryButtonLarger
-                onClick={() => setRules((prev) => ([...prev, {user: '', rules: []}]))}
+                onClick={() => setRoles((prev) => ([...prev, {user: '', roles: []}]))}
             >
-                <FormattedMessage defaultMessage='Add a new rule'/>
+                <FormattedMessage defaultMessage='Add a role'/>
             </PrimaryButtonLarger>
             {users.length &&
                 <List
                     style={{padding: '16px'}}
                     itemLayout='horizontal'
-                    dataSource={rules}
-                    renderItem={(rule, index) => (
+                    dataSource={roles}
+                    renderItem={(role, index) => (
                         <List.Item>
                             <List.Item.Meta
                                 avatar={<Avatar icon={<UserOutlined/>}/>}
@@ -66,30 +66,30 @@ const RulesStep = ({data, setWizardData}: Props) => {
                             <div style={{width: '50%'}}>
                                 <Text>{'User'}</Text>
                                 <Select
-                                    value={rule.user}
-                                    style={{width: '80%'}}
+                                    style={{width: '85%'}}
+                                    value={role.user}
                                     options={users}
                                     placeholder='Select a user'
                                     onChange={(value) => {
-                                        const currentRules = cloneDeep(rules);
-                                        currentRules[index].user = value;
-                                        setRules(currentRules);
-                                        setWizardData((prev: any) => ({...prev, rules: currentRules}));
+                                        const currentRoles = cloneDeep(roles);
+                                        currentRoles[index].user = value;
+                                        setRoles(currentRoles);
+                                        setWizardData((prev: any) => ({...prev, roles: currentRoles}));
                                     }}
                                 />
                             </div>
                             <div style={{width: '50%'}}>
-                                <Text>{'Rules'}</Text>
+                                <Text>{'Roles'}</Text>
                                 <Select
-                                    value={rule.rules}
+                                    style={{width: '85%'}}
+                                    value={role.roles}
                                     mode='tags'
-                                    style={{width: '80%'}}
-                                    placeholder='Add a rule'
+                                    placeholder='Add a role'
                                     onChange={(value) => {
-                                        const currentRules = cloneDeep(rules);
-                                        currentRules[index].rules = value;
-                                        setRules(currentRules);
-                                        setWizardData((prev: any) => ({...prev, rules: currentRules}));
+                                        const currentRoles = cloneDeep(roles);
+                                        currentRoles[index].rules = value;
+                                        setRoles(currentRoles);
+                                        setWizardData((prev: any) => ({...prev, roles: currentRoles}));
                                     }}
                                 />
                             </div>
@@ -110,4 +110,4 @@ const Text = styled.div`
     text-align: left;
 `;
 
-export default RulesStep;
+export default RolesStep;
