@@ -37,6 +37,10 @@ export const PARENT_ID_PARAM = 'parentId';
 export const SECTION_ID_PARAM = 'sectionId';
 export const OBJECT_ID_TOKEN = ':id';
 
-// TODO: those should be obtained using an API call, or another dynamic way
-export const ecosystemDefaultFields = ['name', 'description'];
+export const ecosystemObjectivesWidget = 'objectives and research area';
+export const ecosystemOutcomesWidget = 'outcomes';
 export const ecosystemElementsWidget = 'elements';
+export const ecosystemElementsFields = ['name', 'description'];
+export const ecosystemRolesWidget = 'participants and roles';
+export const ecosystemRolesFields = ['user', 'roles'];
+export const ecosystemAttachmentsWidget = 'attachments';
