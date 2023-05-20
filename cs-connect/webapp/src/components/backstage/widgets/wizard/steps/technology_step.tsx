@@ -17,7 +17,6 @@ const TechnologyStep = ({data, organizationsData, setWizardData}: Props) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [stepValues, setStepValues] = useState<any>(data);
 
-    console.log({organizationsData});
     const steps = organizationsData.map((step) => {
         const title = step.title;
         return {

@@ -1,4 +1,9 @@
-import React, {useCallback, useContext, useState} from 'react';
+import React, {
+    useCallback,
+    useContext,
+    useMemo,
+    useState,
+} from 'react';
 import {Button, Modal, Steps} from 'antd';
 import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -15,6 +20,8 @@ import {formatName, formatSectionPath, formatStringToLowerCase} from 'src/helper
 import {PARENT_ID_PARAM} from 'src/constants';
 import {useOrganization} from 'src/hooks';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {HorizontalSpacer} from 'src/components/backstage/grid';
+import {ErrorMessage} from 'src/components/commons/messages';
 
 import ObjectivesStep from './steps/objectives_step';
 import OutcomesStep from './steps/outcomes_step';
@@ -36,20 +43,25 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
 
-    const [current, setCurrent] = useState(0);
-    const [visible, setVisible] = useState(false);
-    const [wizardData, setWizardData] = useState({
+    const emptyWizardData = useMemo(() => ({
         name: '',
         objectives: '',
         outcomes: [],
         roles: [],
         elements: {},
         attachements: [],
-    });
+    }), []);
+
+    const [errorMessage, setErrorMessage] = useState('');
+    const [current, setCurrent] = useState(0);
+    const [visible, setVisible] = useState(false);
+    const [wizardData, setWizardData] = useState(emptyWizardData);
 
     const cleanModal = useCallback(() => {
         setVisible(false);
         setCurrent(0);
+        setWizardData(emptyWizardData);
+        setErrorMessage('');
     }, []);
 
     const handleOk = async () => {
@@ -73,7 +85,8 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
                     });
             }).
             catch((err: ClientError) => {
-                // TODO: handle errors
+                const message = JSON.parse(err.message);
+                setErrorMessage(message.error);
             });
     };
 
@@ -175,6 +188,10 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
                     />
                     {steps[current].content}
                 </ModalBody>
+                <HorizontalSpacer size={1}/>
+                <ErrorMessage display={errorMessage !== ''}>
+                    {errorMessage}
+                </ErrorMessage>
             </Modal>
         </Container>
     );
