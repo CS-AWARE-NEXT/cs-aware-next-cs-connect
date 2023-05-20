@@ -1,6 +1,10 @@
 package app
 
-type UserRule struct {
+type UserResult struct {
+	Users []User `json:"users"`
+}
+
+type User struct {
 	UserID    string `json:"userId"`
 	Username  string `json:"username"`
 	FirstName string `json:"firstName"`

@@ -15,21 +15,23 @@ func NewUserService(api plugin.API) *UserService {
 	}
 }
 
-func (s *UserService) GetAllUsers(teamID string) ([]UserRule, error) {
+func (s *UserService) GetAllUsers(teamID string) (UserResult, error) {
 	users, err := s.api.GetUsersInTeam(teamID, 0, 200)
 	if err != nil {
-		return nil, err
+		return UserResult{}, err
 	}
-	userRules := []UserRule{}
+	result := []User{}
 	for _, user := range users {
-		userRules = append(userRules, UserRule{
+		result = append(result, User{
 			UserID:    user.Id,
 			Username:  user.Username,
 			FirstName: user.FirstName,
 			LastName:  user.LastName,
 		})
 	}
-	return userRules, nil
+	return UserResult{
+		Users: result,
+	}, nil
 }
 
 func GetUserIDByUserRequestID(api plugin.API, id string) (string, error) {
