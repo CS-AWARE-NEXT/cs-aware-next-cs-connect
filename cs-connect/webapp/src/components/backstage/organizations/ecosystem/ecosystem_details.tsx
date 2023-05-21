@@ -86,9 +86,9 @@ const EcosystemDetails = () => {
                 >
                     <ScenarioWizard
                         organizationsData={stepData}
-                        targetUrl={ecosystem.sections[currentSection].url}
                         name={ecosystem.sections[currentSection].name}
                         parentId={ecosystem.sections[currentSection].id}
+                        targetUrl={ecosystem.sections[currentSection].url}
                     />
                     {/* {stepData.length > 0 &&
                         <StepsModal
