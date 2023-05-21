@@ -13,7 +13,7 @@ import {
 import {StepValue} from 'src/types/steps_modal';
 import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';
-import {PARENT_ID_PARAM, ecosystemDefaultFields, ecosystemElementsWidget} from 'src/constants';
+import {PARENT_ID_PARAM, ecosystemElementsFields, ecosystemElementsWidget} from 'src/constants';
 import PaginatedTable, {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table';
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
     elements?: StepValue[];
 };
 
-const EcosystemPaginatedTableWrapper = ({
+const EcosystemElementsWrapper = ({
     name = formatStringToCapitalize(ecosystemElementsWidget),
     elements = [],
 }: Props) => {
@@ -47,7 +47,7 @@ const EcosystemPaginatedTableWrapper = ({
                 onClick: () => navigateToUrl(`${basePath}/${element.id}?${PARENT_ID_PARAM}=${element.parentId}`),
             };
         });
-        const columns = ecosystemDefaultFields.map((field) => {
+        const columns = ecosystemElementsFields.map((field) => {
             return fillColumn(field);
         });
         setData({columns, rows});
@@ -69,4 +69,4 @@ const EcosystemPaginatedTableWrapper = ({
     );
 };
 
-export default EcosystemPaginatedTableWrapper;
+export default EcosystemElementsWrapper;
