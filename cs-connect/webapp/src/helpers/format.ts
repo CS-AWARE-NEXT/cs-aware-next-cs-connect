@@ -1,7 +1,13 @@
+import {camelCase, startCase} from 'lodash';
+
 import {OBJECT_ID_TOKEN, ORGANIZATIONS_PATH, ORGANIZATION_ID_PARAM} from 'src/constants';
 
 export const formatName = (name: string): string => {
     return name.replace(/\s/g, '-').toLowerCase();
+};
+
+export const formatPropertyName = (name: string): string => {
+    return name.replace(/\s/g, '_').toLowerCase();
 };
 
 export const formatStringToLowerCase = (s: string): string => {
@@ -9,7 +15,7 @@ export const formatStringToLowerCase = (s: string): string => {
 };
 
 export const formatStringToCapitalize = (s: string): string => {
-    return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+    return startCase(camelCase(s));
 };
 
 export const formatUrlWithId = (url: string, id: string): string => {
