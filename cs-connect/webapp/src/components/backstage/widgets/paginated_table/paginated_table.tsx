@@ -14,7 +14,12 @@ import {
     buildToForCopy,
     isReferencedByUrlHash,
 } from 'src/hooks';
-import {formatSectionPath, formatStringToCapitalize, formatStringToLowerCase} from 'src/helpers';
+import {
+    formatPropertyName,
+    formatSectionPath,
+    formatStringToCapitalize,
+    formatStringToLowerCase,
+} from 'src/helpers';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {navigateToUrl} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
@@ -56,11 +61,11 @@ const iconColumn: PaginatedTableColumn = {
 };
 
 export const fillColumn = (title: string): PaginatedTableColumn => {
-    const lowerCaseTitle = formatStringToLowerCase(title);
+    const formattedTitle = formatPropertyName(title);
     return {
         title,
-        dataIndex: lowerCaseTitle,
-        key: lowerCaseTitle,
+        dataIndex: formattedTitle,
+        key: formattedTitle,
     };
 };
 
