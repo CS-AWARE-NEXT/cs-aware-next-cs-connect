@@ -6,8 +6,7 @@ import {cloneDeep} from 'lodash';
 import {FormattedMessage} from 'react-intl';
 
 import {Attachment} from 'src/types/scenario_wizard';
-
-import {TextInput} from './objectives_step';
+import {TextInput} from 'src/components/backstage/widgets/shared';
 
 type Props = {
     data: string[],
