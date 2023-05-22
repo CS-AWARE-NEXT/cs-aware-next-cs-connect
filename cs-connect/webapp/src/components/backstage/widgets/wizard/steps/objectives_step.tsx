@@ -2,6 +2,8 @@ import {Input} from 'antd';
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import styled from 'styled-components';
 
+import {TextInput} from 'src/components/backstage/widgets/shared';
+
 const {TextArea} = Input;
 
 type Props = {
@@ -51,10 +53,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 24px;
-`;
-
-export const TextInput = styled(Input)`
-    margin-bottom: 12px;
 `;
 
 const Text = styled.div`

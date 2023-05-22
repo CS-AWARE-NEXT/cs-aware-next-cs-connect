@@ -5,13 +5,16 @@ import styled from 'styled-components';
 import {cloneDeep} from 'lodash';
 import {FormattedMessage} from 'react-intl';
 
-import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
-
-import {TextInput} from './objectives_step';
+import {PrimaryButtonLarger, TextInput} from 'src/components/backstage/widgets/shared';
+import {Outcome} from 'src/types/scenario_wizard';
 
 type Props = {
     data: string[],
     setWizardData: Dispatch<SetStateAction<any>>,
+};
+
+export const fillOutcomes = (outcomes: string[]): Outcome[] => {
+    return outcomes.map((outcome) => ({outcome}));
 };
 
 const OutcomesStep = ({data, setWizardData}: Props) => {
