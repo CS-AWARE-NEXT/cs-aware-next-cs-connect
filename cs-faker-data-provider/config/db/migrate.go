@@ -45,11 +45,11 @@ func (db *DB) runMigrationsLegacy(originalSchemaVersion semver.Version) error {
 }
 
 func (db *DB) migrate(migration Migration) (err error) {
-	tx, err := db.db.Beginx()
+	tx, err := db.DB.Beginx()
 	if err != nil {
 		return errors.Wrap(err, "could not begin transaction")
 	}
-	defer db.finalizeTransaction(tx)
+	defer db.FinalizeTransaction(tx)
 
 	if err := migration.migrationFunc(tx, db); err != nil {
 		return errors.Wrapf(err, "error executing migration from version %s to version %s", migration.fromVersion.String(), migration.toVersion.String())

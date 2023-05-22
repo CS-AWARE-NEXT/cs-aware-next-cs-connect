@@ -17,8 +17,8 @@ import (
 const maxJSONLength = 256 * 1024 // 256KB
 
 type DB struct {
-	db      *sqlx.DB
-	builder sq.StatementBuilderType
+	DB      *sqlx.DB
+	Builder sq.StatementBuilderType
 }
 
 // New constructs a new instance of DB.
@@ -57,13 +57,13 @@ type builder interface {
 //
 // Use this to simplify querying for a single row or column. Dest may be a pointer to a simple
 // type, or a struct with fields to be populated from the returned columns.
-func (db *DB) getBuilder(q sqlx.Queryer, dest interface{}, b builder) error {
+func (db *DB) GetBuilder(q sqlx.Queryer, dest interface{}, b builder) error {
 	sqlString, args, err := b.ToSql()
 	if err != nil {
 		return errors.Wrap(err, "failed to build sql")
 	}
 
-	sqlString = db.db.Rebind(sqlString)
+	sqlString = db.DB.Rebind(sqlString)
 
 	return sqlx.Get(q, dest, sqlString, args...)
 }
@@ -72,13 +72,13 @@ func (db *DB) getBuilder(q sqlx.Queryer, dest interface{}, b builder) error {
 //
 // Use this to simplify querying for multiple rows (and possibly columns). Dest may be a slice of
 // a simple, or a slice of a struct with fields to be populated from the returned columns.
-func (db *DB) selectBuilder(q sqlx.Queryer, dest interface{}, b builder) error {
+func (db *DB) SelectBuilder(q sqlx.Queryer, dest interface{}, b builder) error {
 	sqlString, args, err := b.ToSql()
 	if err != nil {
 		return errors.Wrap(err, "failed to build sql")
 	}
 
-	sqlString = db.db.Rebind(sqlString)
+	sqlString = db.DB.Rebind(sqlString)
 
 	return sqlx.Select(q, dest, sqlString, args...)
 }
@@ -97,23 +97,23 @@ type queryExecer interface {
 }
 
 // exec executes the given query using positional arguments, automatically rebinding for the db.
-func (db *DB) exec(e execer, sqlString string, args ...interface{}) (sql.Result, error) {
-	sqlString = db.db.Rebind(sqlString)
+func (db *DB) Exec(e execer, sqlString string, args ...interface{}) (sql.Result, error) {
+	sqlString = db.DB.Rebind(sqlString)
 	return e.Exec(sqlString, args...)
 }
 
 // exec executes the given query, building the necessary sql.
-func (db *DB) execBuilder(e execer, b builder) (sql.Result, error) {
+func (db *DB) ExecBuilder(e execer, b builder) (sql.Result, error) {
 	sqlString, args, err := b.ToSql()
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to build sql")
 	}
 
-	return db.exec(e, sqlString, args...)
+	return db.Exec(e, sqlString, args...)
 }
 
 // finalizeTransaction ensures a transaction is closed after use, rolling back if not already committed.
-func (db *DB) finalizeTransaction(tx *sqlx.Tx) {
+func (db *DB) FinalizeTransaction(tx *sqlx.Tx) {
 	// Rollback returns sql.ErrTxDone if the transaction was already closed.
 	if err := tx.Rollback(); err != nil && err != sql.ErrTxDone {
 		log.Printf("Failed to rollback transaction due to %s", err.Error())

@@ -12,7 +12,7 @@ func LatestVersion() semver.Version {
 }
 
 func (db *DB) GetCurrentVersion() (semver.Version, error) {
-	currentVersionStr, err := db.getSystemValue(db.db, systemDatabaseVersionKey)
+	currentVersionStr, err := db.getSystemValue(db.DB, systemDatabaseVersionKey)
 
 	if currentVersionStr == "" {
 		return semver.Version{}, nil
