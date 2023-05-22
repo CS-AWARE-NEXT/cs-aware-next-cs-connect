@@ -1,59 +1,30 @@
 import {Avatar, List, Select} from 'antd';
 import {UserOutlined} from '@ant-design/icons';
-import React, {
-    Dispatch,
-    SetStateAction,
-    useEffect,
-    useState,
-} from 'react';
+import React, {Dispatch, SetStateAction, useState} from 'react';
 import styled from 'styled-components';
 import {cloneDeep} from 'lodash';
-import {useSelector} from 'react-redux';
-import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
 import {FormattedMessage} from 'react-intl';
 
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
-import {fetchAllUsers} from 'src/clients';
+import {StepRole} from 'src/types/scenario_wizard';
+import {useAllUsersOptions} from 'src/hooks';
 
 type Props = {
-    data: any[];
+    data: StepRole[];
     setWizardData: Dispatch<SetStateAction<any>>;
 };
 
 const RolesStep = ({data, setWizardData}: Props) => {
-    const [roles, setRoles] = useState<any[]>(data);
-    const [users, setUsers] = useState<any[]>([]);
-    const teamId = useSelector(getCurrentTeamId);
-
-    useEffect(() => {
-        let isCanceled = false;
-        async function fetchAllUsersAsync() {
-            const result = await fetchAllUsers(teamId);
-            console.log({result});
-            if (!isCanceled) {
-                const userRules = result.users.map((user) => ({
-                    value: user.userId,
-                    label: `${user.firstName} ${user.lastName} (${user.username})`,
-                }));
-                setUsers(userRules);
-            }
-        }
-
-        fetchAllUsersAsync();
-
-        return () => {
-            isCanceled = true;
-        };
-    }, []);
-
+    const [roles, setRoles] = useState(data);
+    const usersOptions = useAllUsersOptions();
     return (
         <Container>
             <PrimaryButtonLarger
-                onClick={() => setRoles((prev) => ([...prev, {user: '', roles: []}]))}
+                onClick={() => setRoles((prev) => ([...prev, {userId: '', roles: []}]))}
             >
                 <FormattedMessage defaultMessage='Add a role'/>
             </PrimaryButtonLarger>
-            {users.length &&
+            {usersOptions.length &&
                 <List
                     style={{padding: '16px'}}
                     itemLayout='horizontal'
@@ -66,13 +37,13 @@ const RolesStep = ({data, setWizardData}: Props) => {
                             <div style={{width: '50%'}}>
                                 <Text>{'User'}</Text>
                                 <Select
-                                    style={{width: '85%'}}
-                                    value={role.user}
-                                    options={users}
+                                    style={{width: '90%'}}
+                                    value={role.userId}
+                                    options={usersOptions}
                                     placeholder='Select a user'
                                     onChange={(value) => {
                                         const currentRoles = cloneDeep(roles);
-                                        currentRoles[index].user = value;
+                                        currentRoles[index].userId = value;
                                         setRoles(currentRoles);
                                         setWizardData((prev: any) => ({...prev, roles: currentRoles}));
                                     }}
@@ -81,7 +52,7 @@ const RolesStep = ({data, setWizardData}: Props) => {
                             <div style={{width: '50%'}}>
                                 <Text>{'Roles'}</Text>
                                 <Select
-                                    style={{width: '85%'}}
+                                    style={{width: '90%'}}
                                     value={role.roles}
                                     mode='tags'
                                     placeholder='Add a role'
