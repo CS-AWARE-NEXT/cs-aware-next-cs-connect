@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import {ArrowLeftOutlined, ArrowRightOutlined} from '@ant-design/icons';
 
 import {StepData} from 'src/types/steps_modal';
+import {getOrganizationsNoEcosystem} from 'src/config/config';
 
 const {Step} = Steps;
 
@@ -18,6 +19,16 @@ const TechnologyStep = ({data, organizationsData, setWizardData}: Props) => {
     const [stepValues, setStepValues] = useState<any>(data);
 
     const steps = organizationsData.map((step) => {
+        const organizations = getOrganizationsNoEcosystem();
+        const indexes = organizations.map((organization) => {
+            const organizationIds = step.options.map((option) => option.organizationId);
+            return organizationIds.indexOf(organization.id);
+        });
+        const map: Map<number, string> = new Map<number, string>();
+        for (let i = 0; i < organizations.length; i++) {
+            map.set(indexes[i], organizations[i].name);
+        }
+
         const title = step.title;
         return {
             title,
@@ -30,13 +41,16 @@ const TechnologyStep = ({data, organizationsData, setWizardData}: Props) => {
                     value={stepValues[title]}
                 >
                     {step.options.map((option, index) => (
-                        <OptionsCheckbox
-                            key={`${option.name}-${index}`}
-                            value={option}
-                        >
-                            <div>{option.name}</div>
-                            <OptionDescription>{option.description}</OptionDescription>
-                        </OptionsCheckbox>))}
+                        <>
+                            {map.has(index) && <Text>{map.get(index)}</Text>}
+                            <OptionsCheckbox
+                                key={`${option.name}-${index}`}
+                                value={option}
+                            >
+                                <div>{option.name}</div>
+                                <OptionDescription>{option.description}</OptionDescription>
+                            </OptionsCheckbox>
+                        </>))}
                 </CheckboxGroup>
             ),
         };
@@ -113,6 +127,12 @@ const OptionDescription = styled.div`
     font-size: 12px;
     color: rgba(var(--center-channel-color-rgb), 0.72);
     margin-top: 2px;
+`;
+
+const Text = styled.div`
+    text-align: left;
+    font-size: 16px;
+    font-weight: bolder;
 `;
 
 export default TechnologyStep;
