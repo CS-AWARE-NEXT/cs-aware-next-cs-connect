@@ -39,7 +39,7 @@ export const OBJECT_ID_TOKEN = ':id';
 
 export const ecosystemObjectivesWidget = 'objectives and research area';
 export const ecosystemOutcomesWidget = 'outcomes';
-export const ecosystemElementsWidget = 'elements';
+export const ecosystemElementsWidget = 'support technology moderation manuals';
 export const ecosystemElementsFields = ['name', 'description'];
 export const ecosystemRolesWidget = 'participants and roles';
 export const ecosystemRolesFields = ['user', 'roles'];
