@@ -16,40 +16,59 @@ import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 import {StepData} from 'src/types/steps_modal';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
-import {formatName, formatSectionPath, formatStringToLowerCase} from 'src/helpers';
-import {PARENT_ID_PARAM} from 'src/constants';
+import {
+    formatName,
+    formatSectionPath,
+    formatStringToCapitalize,
+    formatStringToLowerCase,
+} from 'src/helpers';
+import {
+    PARENT_ID_PARAM,
+    ecosystemAttachmentsWidget,
+    ecosystemElementsWidget,
+    ecosystemObjectivesWidget,
+    ecosystemOutcomesWidget,
+    ecosystemRolesWidget,
+} from 'src/constants';
 import {useOrganization} from 'src/hooks';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {HorizontalSpacer} from 'src/components/backstage/grid';
 import {ErrorMessage} from 'src/components/commons/messages';
+import {SectionInfo} from 'src/types/organization';
 
 import ObjectivesStep from './steps/objectives_step';
-import OutcomesStep from './steps/outcomes_step';
+import OutcomesStep, {fillOutcomes} from './steps/outcomes_step';
 import RolesStep from './steps/roles_step';
 import TechnologyStep from './steps/technology_step';
-import AttachementsStep from './steps/attachements_step';
+import AttachmentsStep, {fillAttachments} from './steps/attachments_step';
 
 type Props = {
     organizationsData: StepData[];
-    targetUrl: string;
     name: string;
     parentId: string;
+    targetUrl: string;
 };
 
-const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) => {
+const ScenarioWizard = ({
+    organizationsData,
+    name,
+    parentId,
+    targetUrl,
+}: Props) => {
     const {formatMessage} = useIntl();
     const {path} = useRouteMatch();
     const teamId = useSelector(getCurrentTeamId);
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
 
+    // TODO: define a type for wizard data
     const emptyWizardData = useMemo(() => ({
         name: '',
         objectives: '',
         outcomes: [],
         roles: [],
         elements: {},
-        attachements: [],
+        attachments: [],
     }), []);
 
     const [errorMessage, setErrorMessage] = useState('');
@@ -65,11 +84,16 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
     }, []);
 
     const handleOk = async () => {
-        saveSectionInfo({
+        const issue: SectionInfo = {
+            id: '',
             name: wizardData.name,
-            description: wizardData.objectives,
+            objectives_and_research_area: wizardData.objectives,
+            outcomes: fillOutcomes(wizardData.outcomes),
             elements: Object.values(wizardData.elements).flat(),
-        }, targetUrl).
+            roles: wizardData.roles,
+            attachments: fillAttachments(wizardData.attachments),
+        };
+        saveSectionInfo(issue, targetUrl).
             then((savedSectionInfo) => {
                 addChannel({
                     channelName: formatName(`${organization.name}-${savedSectionInfo.name}`),
@@ -96,7 +120,7 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
 
     const steps = [
         {
-            title: 'Objectives And Research Area',
+            title: formatStringToCapitalize(ecosystemObjectivesWidget),
             content: (
                 <ObjectivesStep
                     data={{name: wizardData.name, objectives: wizardData.objectives}}
@@ -104,7 +128,7 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
                 />),
         },
         {
-            title: 'Outcomes',
+            title: formatStringToCapitalize(ecosystemOutcomesWidget),
             content: (
                 <OutcomesStep
                     data={wizardData.outcomes}
@@ -112,7 +136,7 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
                 />),
         },
         {
-            title: 'Participants And Roles',
+            title: formatStringToCapitalize(ecosystemRolesWidget),
             content: (
                 <RolesStep
                     data={wizardData.roles}
@@ -120,7 +144,7 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
                 />),
         },
         {
-            title: 'Support Technology Moderation Manuals',
+            title: formatStringToCapitalize(ecosystemElementsWidget),
             content: (
                 <TechnologyStep
                     data={wizardData.elements}
@@ -130,10 +154,10 @@ const ScenarioWizard = ({organizationsData, targetUrl, name, parentId}: Props) =
             ),
         },
         {
-            title: 'Preparation And Planning',
+            title: formatStringToCapitalize(ecosystemAttachmentsWidget),
             content: (
-                <AttachementsStep
-                    data={wizardData.attachements}
+                <AttachmentsStep
+                    data={wizardData.attachments}
                     setWizardData={setWizardData}
                 />),
         },
