@@ -48,6 +48,7 @@ const SectionDetails = () => {
         return null;
     }
 
+    // TODO: refactor to a EcosystemSectionsWidgetsContainer
     return (
         isEcosystem ?
             <SectionsWidgetsContainer
