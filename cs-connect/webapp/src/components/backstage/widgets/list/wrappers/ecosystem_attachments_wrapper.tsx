@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
+import {Avatar} from 'antd';
+import {TagsOutlined} from '@ant-design/icons';
 
 import {formatStringToCapitalize} from 'src/helpers';
 import {SectionContext} from 'src/components/rhs/rhs';
@@ -27,10 +29,10 @@ const EcosystemAttachmentsWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    const items = attachments.map(({id, attachment}) => ({
+    const items = attachments ? attachments.map(({id, attachment}) => ({
         id: id as string,
         text: attachment,
-    }));
+    })) : [];
 
     return (
         <ItemsList
@@ -38,6 +40,7 @@ const EcosystemAttachmentsWrapper = ({
             name={name}
             sectionId={sectionIdForUrl}
             parentId={parentId}
+            Avatar={<Avatar icon={<TagsOutlined/>}/>}
         />
     );
 };
