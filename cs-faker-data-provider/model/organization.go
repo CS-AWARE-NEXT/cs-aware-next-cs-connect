@@ -19,6 +19,7 @@ type Issue struct {
 type IssueOutcome struct {
 	ID      string `json:"id"`
 	Outcome string `json:"outcome"`
+	IssueID string `json:"-"`
 }
 
 type IssueElement struct {
@@ -27,17 +28,27 @@ type IssueElement struct {
 	Description    string `json:"description"`
 	OrganizationID string `json:"organizationId"`
 	ParentID       string `json:"parentId"`
+	IssueID        string `json:"-"`
 }
 
 type IssueRole struct {
-	ID string `json:"id"`
-	UserID string `json:"userId"`
-	Roles []string `json:"roles"`
+	ID      string   `json:"id"`
+	UserID  string   `json:"userId"`
+	Roles   []string `json:"roles"`
+	IssueID string   `json:"-"`
 }
 
 type IssueAttachment struct {
-	ID          string `json:"id"`
+	ID         string `json:"id"`
 	Attachment string `json:"attachment"`
+	IssueID    string `json:"-"`
+}
+
+type IssueRoleEntity struct {
+	ID      string `json:"id"`
+	UserID  string `json:"userId"`
+	Roles   string `json:"roles"`
+	IssueID string `json:"-"`
 }
 
 type Incident struct {
