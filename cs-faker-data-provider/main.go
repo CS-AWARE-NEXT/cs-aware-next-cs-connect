@@ -12,6 +12,7 @@ import (
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config/db"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/route"
 )
 
@@ -45,9 +46,12 @@ func main() {
 		log.Fatalf("Failed to run migrations due to %s", err)
 	}
 
+	repositoriesMap := map[string]interface{}{
+		"issues": repository.NewIssueRepository(db),
+	}
 	app := fiber.New()
 	app.Use(cors.New())
-	route.UseRoutes(app)
+	route.UseRoutes(app, config.NewContext(repositoriesMap))
 	config.Shutdown(app)
 
 	port := os.Getenv("PORT")
