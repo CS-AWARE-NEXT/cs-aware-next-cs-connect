@@ -10,22 +10,10 @@ import {
     useSection,
     useSectionInfo,
 } from 'src/hooks';
-import {formatStringToCapitalize} from 'src/helpers';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import EcosystemSectionsWidgetsContainer from 'src/components/backstage//sections_widgets/ecosystem_sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
 import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
-import EcosystemElementsWrapper from 'src/components/backstage/widgets/paginated_table/wrappers/ecosystem_elements_wrapper';
-import EcosystemOutcomesWrapper from 'src/components/backstage/widgets/list/wrappers/ecosystem_outcomes_wrapper';
-import EcosystemAttachmentsWrapper from 'src/components/backstage/widgets/list/wrappers/ecosystem_attachments_wrapper';
-import EcosystemObjectivesWrapper from 'src/components/backstage/widgets/text_box/wrappers/ecosystem_objectives_wrapper';
-import EcosystemRolesWrapper from 'src/components/backstage/widgets/paginated_table/wrappers/ecosystem_roles_wrapper';
-import {
-    ecosystemAttachmentsWidget,
-    ecosystemElementsWidget,
-    ecosystemObjectivesWidget,
-    ecosystemOutcomesWidget,
-    ecosystemRolesWidget,
-} from 'src/constants';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 
@@ -48,37 +36,12 @@ const SectionDetails = () => {
         return null;
     }
 
-    // TODO: refactor to a EcosystemSectionsWidgetsContainer
     return (
         isEcosystem ?
-            <SectionsWidgetsContainer
-                headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
+            <EcosystemSectionsWidgetsContainer
+                section={section}
                 sectionInfo={sectionInfo}
-                url={url}
-                widgets={section.widgets}
-                childrenBottom={false}
-            >
-                <EcosystemObjectivesWrapper
-                    name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                    objectives={sectionInfo.objectives_and_research_area}
-                />
-                <EcosystemOutcomesWrapper
-                    name={formatStringToCapitalize(ecosystemOutcomesWidget)}
-                    outcomes={sectionInfo.outcomes}
-                />
-                <EcosystemRolesWrapper
-                    name={formatStringToCapitalize(ecosystemRolesWidget)}
-                    roles={sectionInfo.roles}
-                />
-                <EcosystemElementsWrapper
-                    name={formatStringToCapitalize(ecosystemElementsWidget)}
-                    elements={sectionInfo.elements}
-                />
-                <EcosystemAttachmentsWrapper
-                    name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
-                    attachments={sectionInfo.attachments}
-                />
-            </SectionsWidgetsContainer> :
+            /> :
             <SectionsWidgetsContainer
                 headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
                 sectionInfo={sectionInfo}
