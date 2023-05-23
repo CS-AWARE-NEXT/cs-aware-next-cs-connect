@@ -13,7 +13,7 @@ type Props = {
 };
 
 const PaginatedTableWrapper = ({
-    name = 'default',
+    name = '',
     url = '',
 }: Props) => {
     const sectionContextOptions = useContext(SectionContext);
