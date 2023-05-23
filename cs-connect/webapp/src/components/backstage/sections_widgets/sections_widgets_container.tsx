@@ -33,7 +33,7 @@ type Props = {
 const SectionsWidgetsContainer = ({
     headerPath,
     isRhs = false,
-    name = 'default',
+    name = '',
     sectionInfo,
     sectionPath,
     sections,
