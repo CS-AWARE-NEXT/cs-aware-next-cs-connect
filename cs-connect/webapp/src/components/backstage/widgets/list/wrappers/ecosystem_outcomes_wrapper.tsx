@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
+import {Avatar} from 'antd';
+import {UnorderedListOutlined} from '@ant-design/icons';
 
 import {formatStringToCapitalize} from 'src/helpers';
 import {SectionContext} from 'src/components/rhs/rhs';
@@ -27,10 +29,10 @@ const EcosystemOutcomesWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    const items = outcomes.map(({id, outcome}) => ({
+    const items = outcomes ? outcomes.map(({id, outcome}) => ({
         id: id as string,
         text: outcome,
-    }));
+    })) : [];
 
     return (
         <ItemsList
@@ -38,6 +40,7 @@ const EcosystemOutcomesWrapper = ({
             name={name}
             sectionId={sectionIdForUrl}
             parentId={parentId}
+            Avatar={<Avatar icon={<UnorderedListOutlined/>}/>}
         />
     );
 };
