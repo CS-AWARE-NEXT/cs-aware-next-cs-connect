@@ -2,16 +2,33 @@ package controller
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetIssues(c *fiber.Ctx) error {
+type IssueController struct {
+	issueRepository *repository.IssueRepository
+}
+
+func NewIssueController(issueRepository *repository.IssueRepository) *IssueController {
+	return &IssueController{
+		issueRepository: issueRepository,
+	}
+}
+
+func (ic *IssueController) GetIssues(c *fiber.Ctx) error {
 	rows := []model.IssuePaginatedTableRow{}
+	issues, err := ic.issueRepository.GetIssues()
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"error": "Could not get issues",
+		})
+	}
 	for _, issue := range issues {
 		rows = append(rows, model.IssuePaginatedTableRow{
 			ID:                        issue.ID,
@@ -25,15 +42,15 @@ func GetIssues(c *fiber.Ctx) error {
 	})
 }
 
-func GetIssue(c *fiber.Ctx) error {
+func (ic *IssueController) GetIssue(c *fiber.Ctx) error {
 	id := c.Params("issueId")
-	if issue, err := getIssueByID(id); err == nil {
+	if issue, err := ic.issueRepository.GetIssueByID(id); err == nil {
 		return c.JSON(issue)
 	}
 	return c.JSON(model.Issue{})
 }
 
-func SaveIssue(c *fiber.Ctx) error {
+func (ic *IssueController) SaveIssue(c *fiber.Ctx) error {
 	var issue model.Issue
 	err := json.Unmarshal(c.Body(), &issue)
 	if err != nil {
@@ -49,11 +66,16 @@ func SaveIssue(c *fiber.Ctx) error {
 			"error": fmt.Sprintf("Issues with name %s already exists", issue.Name),
 		})
 	}
-	filledIssue := fillIssue(issue)
-	issues = append(issues, filledIssue)
+	savedIssue, err := ic.issueRepository.SaveIssue(fillIssue(issue))
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"error": fmt.Sprintf("Could not save issue due to %s", err.Error()),
+		})
+	}
 	return c.JSON(fiber.Map{
-		"id":   filledIssue.ID,
-		"name": filledIssue.Name,
+		"id":   savedIssue.ID,
+		"name": savedIssue.Name,
 	})
 }
 
@@ -63,46 +85,35 @@ func fillIssue(issue model.Issue) model.Issue {
 	outcomes := []model.IssueOutcome{}
 	for _, outcome := range issue.Outcomes {
 		outcome.ID = util.GenerateUUID()
-		outcomes = append(outcomes, outcome) 
+		outcomes = append(outcomes, outcome)
 	}
 	issue.Outcomes = outcomes
 
 	attachments := []model.IssueAttachment{}
 	for _, attachment := range issue.Attachments {
 		attachment.ID = util.GenerateUUID()
-		attachments = append(attachments, attachment) 
+		attachments = append(attachments, attachment)
 	}
 	issue.Attachments = attachments
 
 	roles := []model.IssueRole{}
 	for _, role := range issue.Roles {
 		role.ID = util.GenerateUUID()
-		roles = append(roles, role) 
+		roles = append(roles, role)
 	}
 	issue.Roles = roles
 
 	return issue
 }
 
-func getIssueByID(id string) (model.Issue, error) {
-	for _, issue := range issues {
-		if issue.ID == id {
-			return issue, nil
-		}
-	}
-	return model.Issue{}, errors.New("not found")
-}
-
 func exists(name string) bool {
-	for _, issue := range issues {
-		if issue.Name == name {
-			return true
-		}
-	}
+	// for _, issue := range issues {
+	// 	if issue.Name == name {
+	// 		return true
+	// 	}
+	// }
 	return false
 }
-
-var issues = []model.Issue{}
 
 var columns = []model.PaginatedTableColumn{
 	{
