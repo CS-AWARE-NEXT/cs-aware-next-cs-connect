@@ -35,7 +35,7 @@ const EcosystemRolesWrapper = ({
     const [data, setData] = useState<PaginatedTableData>({columns: [], rows: []});
 
     useEffect(() => {
-        const rows = roles.map((role) => {
+        const rows = roles ? roles.map((role) => {
             // const user = await Client4.getUser(role.userId);
             const row: PaginatedTableRow = {
                 id: role.id,
@@ -46,7 +46,7 @@ const EcosystemRolesWrapper = ({
             const query = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
             const rowUrl = fullUrl || url;
             return fillRow(row, '', rowUrl, query);
-        });
+        }) : [];
         const columns = ecosystemRolesFields.map((field) => {
             const column = fillColumn(field);
             if (column.key !== 'roles') {

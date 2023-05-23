@@ -33,7 +33,7 @@ const EcosystemElementsWrapper = ({
     const section = useSection(parentId);
     const [data, setData] = useState<PaginatedTableData>({columns: [], rows: []});
     useEffect(() => {
-        const rows = elements.map((element) => {
+        const rows = elements ? elements.map((element) => {
             const parentSection = getSection(element.parentId);
             const pathWithoutSectionName = removeSectionNameFromPath(path, section.name);
             const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatStringToLowerCase(parentSection.name)}`;
@@ -46,7 +46,7 @@ const EcosystemElementsWrapper = ({
                 ...fillRow(row, '', url, buildQuery(parentId, sectionId)),
                 onClick: () => navigateToUrl(`${basePath}/${element.id}?${PARENT_ID_PARAM}=${element.parentId}`),
             };
-        });
+        }) : [];
         const columns = ecosystemElementsFields.map((field) => {
             return fillColumn(field);
         });
