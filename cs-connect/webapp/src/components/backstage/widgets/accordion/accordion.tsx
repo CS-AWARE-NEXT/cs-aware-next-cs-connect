@@ -1,5 +1,5 @@
 import React, {ElementType, useContext, useEffect} from 'react';
-import {Collapse} from 'antd';
+import {Collapse, Empty} from 'antd';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
@@ -89,16 +89,16 @@ const Accordion = ({
                     title={name}
                 />
             </Header>
-            {elements && elements.length > 0 &&
-                <Collapse
-                    accordion={true}
-                    defaultActiveKey={`${elements[0].id}-panel-key`}
-                >
+            {elements && elements.length > 0 ?
+
+                // If you want one of the element to be opened by default, you can do as follows
+                // defaultActiveKey={`${elements[0].id}-panel-key`}
+                <Collapse accordion={true}>
                     {elements.map((element) => (
                         <>
                             <Panel
                                 key={`${element.id}-panel-key`}
-                                header={element.name}
+                                header={element.header}
                                 id={`${element.id}-panel-key`}
                                 forceRender={true}
                             >
@@ -109,7 +109,8 @@ const Accordion = ({
                             </Panel>
                         </>
                     ))}
-                </Collapse>}
+                </Collapse> :
+                <Empty/>}
         </Container>
     );
 };

@@ -22,6 +22,7 @@ import {
     ecosystemOutcomesWidget,
     ecosystemRolesWidget,
 } from 'src/constants';
+import {getOrganizationById} from 'src/config/config';
 
 import EcosystemAccordionChild from './ecosystem_accordion_child';
 
@@ -37,45 +38,52 @@ const EcosystemRhs = ({
     parentId,
     sectionId,
     sectionInfo,
-}: Props) => (
-    <Container>
-        <MainWrapper>
-            <Header>
-                <NameHeader
-                    id={sectionInfo.id}
-                    path={headerPath}
-                    name={sectionInfo.name}
-                />
-            </Header>
-            <Main>
-                <Body>
-                    <EcosystemObjectivesWrapper
-                        name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                        objectives={sectionInfo.objectives_and_research_area}
+}: Props) => {
+    const elements = (sectionInfo && sectionInfo.elements) ? sectionInfo.elements.map((element: any) => ({
+        ...element,
+        header: `${getOrganizationById(element.organizationId).name} - ${element.name}`,
+    })) : [];
+
+    return (
+        <Container>
+            <MainWrapper>
+                <Header>
+                    <NameHeader
+                        id={sectionInfo.id}
+                        path={headerPath}
+                        name={sectionInfo.name}
                     />
-                    <EcosystemOutcomesWrapper
-                        name={formatStringToCapitalize(ecosystemOutcomesWidget)}
-                        outcomes={sectionInfo.outcomes}
-                    />
-                    <EcosystemRolesWrapper
-                        name={formatStringToCapitalize(ecosystemRolesWidget)}
-                        roles={sectionInfo.roles}
-                    />
-                    <Accordion
-                        name={formatStringToCapitalize(ecosystemElementsWidget)}
-                        childComponent={EcosystemAccordionChild}
-                        elements={sectionInfo.elements}
-                        parentId={parentId}
-                        sectionId={sectionId}
-                    />
-                    <EcosystemAttachmentsWrapper
-                        name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
-                        attachments={sectionInfo.attachments}
-                    />
-                </Body>
-            </Main>
-        </MainWrapper>
-    </Container>
-);
+                </Header>
+                <Main>
+                    <Body>
+                        <EcosystemObjectivesWrapper
+                            name={formatStringToCapitalize(ecosystemObjectivesWidget)}
+                            objectives={sectionInfo.objectives_and_research_area}
+                        />
+                        <EcosystemOutcomesWrapper
+                            name={formatStringToCapitalize(ecosystemOutcomesWidget)}
+                            outcomes={sectionInfo.outcomes}
+                        />
+                        <EcosystemRolesWrapper
+                            name={formatStringToCapitalize(ecosystemRolesWidget)}
+                            roles={sectionInfo.roles}
+                        />
+                        <Accordion
+                            name={formatStringToCapitalize(ecosystemElementsWidget)}
+                            childComponent={EcosystemAccordionChild}
+                            elements={elements}
+                            parentId={parentId}
+                            sectionId={sectionId}
+                        />
+                        <EcosystemAttachmentsWrapper
+                            name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
+                            attachments={sectionInfo.attachments}
+                        />
+                    </Body>
+                </Main>
+            </MainWrapper>
+        </Container>
+    );
+};
 
 export default EcosystemRhs;
