@@ -6,7 +6,7 @@ import {DEFAULT_PATH, ORGANIZATIONS_PATH, PARENT_ID_PARAM} from 'src/constants';
 import {HyperlinkReference} from 'src/types/parser';
 import {Organization} from 'src/types/organization';
 
-import {parseMatchToTokens, parseTokensToHyperlinkReference} from 'src/helpers';
+import {parseMatchToTokens, parseRhsReference, parseTokensToHyperlinkReference} from 'src/helpers';
 
 export const isMessageToHyperlink = ({message}: Post): boolean => {
     return getPattern().test(message);
@@ -41,18 +41,43 @@ const buildHyperlinksMap = async (message: string): Promise<Map<string, string> 
 };
 
 const buildHyperlinkFromMatch = async (match: string): Promise<string> => {
-    const tokens = parseMatchToTokens(match);
+    const tokensFromMatch = parseMatchToTokens(match);
+    const [tokens, isRhsReference] = await parseRhsReference(tokensFromMatch);
     const hyperlinkReference = await parseTokensToHyperlinkReference(tokens);
     if (!hyperlinkReference) {
         return match;
     }
 
     // console.log('Hyperlink reference: ' + JSON.stringify(hyperlinkReference, null, 2));
-    return buildHyperlinkFromReference(hyperlinkReference);
+    return buildHyperlinkFromReference(hyperlinkReference, isRhsReference);
 };
 
-// `[${text}](${siteUrl}/${defaultPath}/${organizationsPath}/${organizationId}/${sectionName}/${objectId}?parentId=${sectionId})`;
-const buildHyperlinkFromReference = (hyperlinkReference: HyperlinkReference): string => {
+// [${text}](${siteUrl}/${teamName}/channels/${channelName}#${hash})
+// [${text}](${siteUrl}/${defaultPath}/${organizationsPath}/${organizationId}/${sectionName}/${objectId}?parentId=${sectionId})
+const buildHyperlinkFromReference = (
+    hyperlinkReference: HyperlinkReference,
+    isRhsReferemce: boolean,
+): string => {
+    if (isRhsReferemce) {
+        return buildHyperlinkFromRhsReference(hyperlinkReference);
+    }
+    return buildHyperlinkFromObjectPageReference(hyperlinkReference);
+};
+
+const buildHyperlinkFromRhsReference = (hyperlinkReference: HyperlinkReference): string => {
+    const teamName = localStorage.getItem('teamName');
+    const channelName = localStorage.getItem('channelName');
+    const {object, widgetHash} = hyperlinkReference;
+    let hyperlink = `${getSiteUrl()}/${teamName}/channels/${channelName}#`;
+    if (!widgetHash) {
+        hyperlink = `${hyperlink}_${object.id}`;
+        return convertHyperlinkToMarkdown(hyperlink, object.name);
+    }
+    hyperlink = `${hyperlink}${widgetHash.hash}`;
+    return convertHyperlinkToMarkdown(hyperlink, widgetHash.text);
+};
+
+const buildHyperlinkFromObjectPageReference = (hyperlinkReference: HyperlinkReference): string => {
     const {organization, section, object, widgetHash} = hyperlinkReference;
     let hyperlink = `${getSiteUrl()}/${DEFAULT_PATH}/${ORGANIZATIONS_PATH}`;
     hyperlink = `${hyperlink}/${organization?.id}`;
