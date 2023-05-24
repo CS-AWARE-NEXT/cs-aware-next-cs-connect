@@ -15,6 +15,7 @@ import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';
 import {PARENT_ID_PARAM, ecosystemElementsFields, ecosystemElementsWidget} from 'src/constants';
 import PaginatedTable, {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table';
+import {getOrganizationById} from 'src/config/config';
 
 type Props = {
     name?: string;
@@ -39,6 +40,7 @@ const EcosystemElementsWrapper = ({
             const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatStringToLowerCase(parentSection.name)}`;
             const row: PaginatedTableRow = {
                 id: element.id,
+                organization: getOrganizationById(element.organizationId).name,
                 name: element.name,
                 description: element.description,
             };
