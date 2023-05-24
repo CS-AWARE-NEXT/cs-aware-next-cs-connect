@@ -9,6 +9,9 @@ import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 import {StepRole} from 'src/types/scenario_wizard';
 import {useAllUsersOptions} from 'src/hooks';
 
+const {Item} = List;
+const {Meta} = Item;
+
 type Props = {
     data: StepRole[];
     setWizardData: Dispatch<SetStateAction<any>>;
@@ -30,8 +33,8 @@ const RolesStep = ({data, setWizardData}: Props) => {
                     itemLayout='horizontal'
                     dataSource={roles}
                     renderItem={(role, index) => (
-                        <List.Item>
-                            <List.Item.Meta
+                        <Item>
+                            <Meta
                                 avatar={<Avatar icon={<UserOutlined/>}/>}
                             />
                             <div style={{width: '50%'}}>
@@ -64,7 +67,7 @@ const RolesStep = ({data, setWizardData}: Props) => {
                                     }}
                                 />
                             </div>
-                        </List.Item>
+                        </Item>
                     )}
                 />}
         </Container>
