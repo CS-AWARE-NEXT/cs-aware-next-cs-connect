@@ -1,4 +1,4 @@
-import {HyperlinkReference, WidgetHash} from 'src/types/parser';
+import {HyperlinkReference, ParseOptions, WidgetHash} from 'src/types/parser';
 import {formatStringToCapitalize, getAndRemoveOneFromArray, isAnyPropertyMissingFromObject} from 'src/helpers';
 import {getOrganizationByName} from 'src/config/config';
 import {fetchPaginatedTableData} from 'src/clients';
@@ -17,17 +17,18 @@ import ParseError from './errors/parseError';
 // TODO: Add support for the issues' elements default section
 export const parseTokensToHyperlinkReference = async (
     tokens: string[],
+    options?: ParseOptions,
 ): Promise<HyperlinkReference | null> => {
     let hyperlinkReference: HyperlinkReference = {};
     try {
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseOrganization);
         if (!isSectionByName(tokens[0])) {
-            hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseWidgetHash);
+            hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseWidgetHash, options);
             return hyperlinkReference;
         }
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseSection);
         hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseObject);
-        hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseWidgetHash);
+        hyperlinkReference = await withTokensLengthCheck(hyperlinkReference, tokens, parseWidgetHash, options);
     } catch (error: any) {
         if (error instanceof NoMoreTokensError) {
             return hyperlinkReference;
@@ -91,6 +92,7 @@ const parseObject = async (
 const parseWidgetHash = async (
     hyperlinkReference: HyperlinkReference,
     tokens: string[],
+    options?: ParseOptions,
 ): Promise<HyperlinkReference> => {
     const widgetName = getAndRemoveOneFromArray(tokens, 0);
     if (!widgetName) {
@@ -98,6 +100,8 @@ const parseWidgetHash = async (
     }
     let widget = hyperlinkReference.section?.widgets.filter(({name}) => name === widgetName)[0];
     if (!widget && hyperlinkReference.organization?.isEcosystem) {
+        // TODO: understand if you need to check that widgetName === 'Elements'
+        // TODO: do as in suggestions parser to add all of the ecosystem's widget
         // If the organization is the ecosystem, check for reference to the default widget
         widget = {
             name: formatStringToCapitalize(ecosystemElementsWidget),
@@ -112,8 +116,7 @@ const parseWidgetHash = async (
             return hyperlinkReference;
         }
     }
-    console.log('Widget: ' + JSON.stringify(widget));
-    const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget);
+    const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget, options);
     if (isAnyPropertyMissingFromObject(widgetHash)) {
         return hyperlinkReference;
     }
@@ -124,6 +127,7 @@ const parseWidgetHashByType = (
     hyperlinkReference: HyperlinkReference,
     tokens: string[],
     widget: Widget,
+    options?: ParseOptions,
 ): WidgetHash | Promise<WidgetHash> => {
     switch (widget.type) {
     case WidgetType.Graph:
@@ -135,7 +139,7 @@ const parseWidgetHashByType = (
     case WidgetType.Table:
         return parseTableWidgetId(hyperlinkReference, tokens, widget);
     case WidgetType.TextBox:
-        return parseTextBoxWidgetId(hyperlinkReference, widget);
+        return parseTextBoxWidgetId(hyperlinkReference, widget, options);
     case WidgetType.Timeline:
         return {hash: '', text: ''};
     default:

@@ -15,6 +15,7 @@ export type HyperlinkReference = {
 export type WidgetHash = {
     hash: string;
     text: string;
+    value?: string;
 };
 
 export type HyperlinkSuggestion = Omit<HyperlinkReference, 'widgetHash'> & {
@@ -35,3 +36,10 @@ export type WidgetSuggestionsOptions = Partial<{
     withHint: boolean;
     reference: string;
 }>;
+
+export type ParseOptions = {
+    match: string;
+    parseMatch: string;
+    isValueNeeded?: boolean;
+    valueReference?: string;
+};

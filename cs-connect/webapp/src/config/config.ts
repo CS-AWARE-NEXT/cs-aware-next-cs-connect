@@ -8,7 +8,7 @@ export const START_SYMBOL = '(';
 const PATTERN_SYMBOL = ':symbol';
 
 // Match text in form of PATTERN_SYMBOL(...)
-const PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\(.+?\\)`;
+const PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\(.+?\\)(.\\S+)?`;
 
 // Match text after PATTERN_SYMBOL( up until the ), if present
 const SUGGESTION_PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\((?!.*\\)).*$`;
@@ -84,6 +84,6 @@ export const getSymbol = (): string => {
 // TODO: Read symbol from configuration
 const checkAndSetSymbol = () => {
     if (symbol === '') {
-        symbol = 'hood';
+        symbol = '&';
     }
 };
