@@ -1,13 +1,25 @@
 import {
     END_SYMBOL,
+    START_SYMBOL,
     getOrganizationBySectionName,
     getStartSymbol,
     getSymbol,
 } from 'src/config/config';
-import {TOKEN_SEPARATOR} from 'src/constants';
 import {fetchChannelById, fetchSectionInfo} from 'src/clients';
 import {getSection} from 'src/hooks';
-import {SectionInfo} from 'src/types/organization';
+import {Section, SectionInfo, Widget} from 'src/types/organization';
+import {WidgetType} from 'src/components/backstage/widgets/widget_types';
+import {
+    OBJECT_ID_TOKEN,
+    TOKEN_SEPARATOR,
+    ecosystemAttachmentsWidget,
+    ecosystemElementsWidget,
+    ecosystemObjectivesWidget,
+    ecosystemOutcomesWidget,
+    ecosystemRolesWidget,
+} from 'src/constants';
+import {formatStringToCapitalize} from 'src/helpers';
+import {ParseOptions} from 'src/types/parser';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
 
@@ -72,9 +84,39 @@ export const parseMatchToTokens = (match: string): string[] => {
     return tokens.filter((token) => token !== '');
 };
 
+export const parseOptionsForMatch = (match: string): ParseOptions => {
+    const options: ParseOptions = {match, parseMatch: match};
+    const matchTokens = match.split(END_SYMBOL).filter((token) => token !== '');
+    console.log('matchTokens', matchTokens);
+    if (matchTokens.length < 2) {
+        return options;
+    }
+    const option = matchTokens[matchTokens.length - 1];
+    if (option.startsWith('.value')) {
+        return {
+            ...options,
+            isValueNeeded: true,
+            valueReference: option,
+            parseMatch: `${matchTokens[0]}${END_SYMBOL}`,
+        };
+    }
+    return options;
+};
+
+export const parseMatchToReference = (match: string): string => {
+    let reference = extractReferenceFromMatch(match) || '(?)';
+    if (reference.endsWith(TOKEN_SEPARATOR)) {
+        reference = reference.substring(0, reference.lastIndexOf(TOKEN_SEPARATOR));
+    }
+    return reference;
+};
+
 const extractReferenceFromMatch = (match: string): string | null => {
-    if (match === `${getSymbol()}()`) {
+    if (match === `${getSymbol()}${START_SYMBOL}${END_SYMBOL}`) {
         return null;
+    }
+    if (!match.endsWith(END_SYMBOL)) {
+        return match.substring(getSymbol().length + 1);
     }
     return match.substring(getSymbol().length + 1, match.length - 1);
 };
@@ -82,10 +124,41 @@ const extractReferenceFromMatch = (match: string): string | null => {
 export const withTokensLengthCheck = async <T>(
     obj: T,
     tokens: string[],
-    parse: (obj: T, tokens: string[]) => Promise<T>,
+    parse: (obj: T, tokens: string[], options?: ParseOptions) => Promise<T>,
+    options?: ParseOptions,
 ): Promise<T> => {
     if (tokens.length < 1) {
         throw new NoMoreTokensError('No more tokens to parse');
     }
-    return parse(obj, tokens);
+    return parse(obj, tokens, options);
+};
+
+export const getDefaultsWidgets = (section: Section | undefined): Widget[] => {
+    const url = `${section?.url}/${OBJECT_ID_TOKEN}`;
+    const objectivesWidget = {
+        name: formatStringToCapitalize(ecosystemObjectivesWidget),
+        type: WidgetType.TextBox,
+        url,
+    };
+    const outcomesWidget = {
+        name: formatStringToCapitalize(ecosystemOutcomesWidget),
+        type: WidgetType.List,
+        url,
+    };
+    const rolesWidget = {
+        name: formatStringToCapitalize(ecosystemRolesWidget),
+        type: WidgetType.PaginatedTable,
+        url,
+    };
+    const elementsWidget = {
+        name: formatStringToCapitalize(ecosystemElementsWidget),
+        type: WidgetType.PaginatedTable,
+        url,
+    };
+    const attachmentsWidget = {
+        name: formatStringToCapitalize(ecosystemAttachmentsWidget),
+        type: WidgetType.List,
+        url,
+    };
+    return [objectivesWidget, outcomesWidget, rolesWidget, elementsWidget, attachmentsWidget];
 };
