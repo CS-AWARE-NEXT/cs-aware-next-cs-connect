@@ -41,6 +41,7 @@ type Plugin struct {
 	platformService *config.PlatformService
 	channelService  *app.ChannelService
 	eventService    *app.EventService
+	userService     *app.UserService
 }
 
 func (p *Plugin) OnActivate() error {
@@ -67,6 +68,7 @@ func (p *Plugin) OnActivate() error {
 	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
 	p.channelService = app.NewChannelService(p.API, channelStore)
 	p.eventService = app.NewEventService(p.API)
+	p.userService = app.NewUserService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
 	if err != nil {
@@ -91,6 +93,10 @@ func (p *Plugin) OnActivate() error {
 	api.NewEventHandler(
 		p.handler.APIRouter,
 		p.eventService,
+	)
+	api.NewUserHandler(
+		p.handler.APIRouter,
+		p.userService,
 	)
 
 	// if err := p.registerCommands(); err != nil {

@@ -13,6 +13,7 @@ import Sections from 'src/components/backstage/sections/sections';
 import Widgets from 'src/components/backstage/widgets/widgets';
 import {isUrlEqualWithoutQueryParams} from 'src/hooks';
 import {getSiteUrl} from 'src/clients';
+import {formatStringToLowerCase} from 'src/helpers';
 
 export const IsRhsContext = createContext(false);
 
@@ -32,7 +33,7 @@ type Props = {
 const SectionsWidgetsContainer = ({
     headerPath,
     isRhs = false,
-    name = 'default',
+    name = '',
     sectionInfo,
     sectionPath,
     sections,
@@ -41,7 +42,13 @@ const SectionsWidgetsContainer = ({
     children = [],
     childrenBottom = true,
 }: Props) => {
-    const showChildren = isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}`);
+    // This currently suppose that the children are shown for issues,
+    // that are placed always as the first section in the ecosystem organization.
+    // Maybe it's needed to add a flag to indicate which is the issues section in the configuration file,
+    // the reason is that the section may not be called issues or it may not be the first one
+    const showChildren = isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}`) ||
+        isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}/${sections ? sections[0]?.name : ''}`) ||
+        isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}/${sections ? formatStringToLowerCase(sections[0]?.name) : ''}`);
     return (
         <IsRhsContext.Provider value={isRhs}>
             <Container>

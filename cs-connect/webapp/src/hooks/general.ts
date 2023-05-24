@@ -23,6 +23,7 @@ import {
     SectionInfo,
 } from 'src/types/organization';
 import {
+    fetchAllUsers,
     fetchChannelById,
     fetchChannels,
     fetchGraphData,
@@ -54,6 +55,7 @@ import {OrganizationIdContext} from 'src/components/backstage/organizations/orga
 import {ListData} from 'src/types/list';
 import {TimelineData} from 'src/types/timeline';
 import {formatSectionPath, formatStringToLowerCase} from 'src/helpers';
+import {UserOption} from 'src/types/users';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -423,6 +425,34 @@ export const useChannelById = (channelId: string): WidgetChannel => {
     }, [channelId]);
 
     return channel as WidgetChannel;
+};
+
+export const useAllUsersOptions = (): UserOption[] => {
+    const [users, setUsers] = useState<UserOption[]>([]);
+    const teamId = useSelector(getCurrentTeamId);
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchAllUsersAsync() {
+            const result = await fetchAllUsers(teamId);
+            if (!isCanceled) {
+                // This may be useful in future if the user is is needed
+                // value: user.userId,
+                const userOptions = result.users.map((user) => ({
+                    value: `${user.firstName} ${user.lastName} (${user.username})`.trim(),
+                    label: `${user.firstName} ${user.lastName} (${user.username})`.trim(),
+                }));
+                setUsers(userOptions);
+            }
+        }
+
+        fetchAllUsersAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, []);
+    return users;
 };
 
 // Update the query string when the fetchParams change

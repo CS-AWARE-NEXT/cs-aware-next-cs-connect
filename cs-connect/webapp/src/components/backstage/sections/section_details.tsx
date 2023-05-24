@@ -10,12 +10,10 @@ import {
     useSection,
     useSectionInfo,
 } from 'src/hooks';
-import {formatStringToCapitalize} from 'src/helpers';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import EcosystemSectionsWidgetsContainer from 'src/components/backstage//sections_widgets/ecosystem_sections_widgets_container';
 import {getSiteUrl} from 'src/clients';
 import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
-import EcosystemPaginatedTableWrapper from 'src/components/backstage/widgets/paginated_table/wrappers/ecosystem_wrapper';
-import {ecosystemElementsWidget} from 'src/constants';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 
@@ -40,18 +38,10 @@ const SectionDetails = () => {
 
     return (
         isEcosystem ?
-            <SectionsWidgetsContainer
-                headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
+            <EcosystemSectionsWidgetsContainer
+                section={section}
                 sectionInfo={sectionInfo}
-                url={url}
-                widgets={section.widgets}
-                childrenBottom={false}
-            >
-                <EcosystemPaginatedTableWrapper
-                    name={formatStringToCapitalize(ecosystemElementsWidget)}
-                    elements={sectionInfo.elements}
-                />
-            </SectionsWidgetsContainer> :
+            /> :
             <SectionsWidgetsContainer
                 headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
                 sectionInfo={sectionInfo}

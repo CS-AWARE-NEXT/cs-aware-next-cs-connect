@@ -11,6 +11,8 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config/db"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/route"
 )
 
@@ -35,9 +37,21 @@ func main() {
 	// Used to generalize session management to any type
 	gob.Register(map[string]interface{}{})
 
+	// Init DB and run migrations
+	db, err := db.New(os.Getenv("DATA_SOURCE"), os.Getenv("DRIVER_NAME"))
+	if err != nil {
+		log.Fatalf("Cannot connect to DB due to %s", err)
+	}
+	if err = db.RunMigrations(); err != nil {
+		log.Fatalf("Failed to run migrations due to %s", err)
+	}
+
+	repositoriesMap := map[string]interface{}{
+		"issues": repository.NewIssueRepository(db),
+	}
 	app := fiber.New()
 	app.Use(cors.New())
-	route.UseRoutes(app)
+	route.UseRoutes(app, config.NewContext(repositoriesMap))
 	config.Shutdown(app)
 
 	port := os.Getenv("PORT")

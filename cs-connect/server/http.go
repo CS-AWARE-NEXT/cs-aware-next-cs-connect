@@ -7,8 +7,8 @@ import (
 
 	"github.com/mattermost/mattermost-server/v6/model"
 
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/app"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/command"
-	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/user"
 )
 
 func (p *Plugin) handleGetOrganizationURL(w http.ResponseWriter, r *http.Request) {
@@ -63,7 +63,7 @@ func (p *Plugin) getDialogRequestFromBody(r *http.Request) (*model.SubmitDialogR
 
 func (p *Plugin) getUserIDByUserRequestID(request *model.SubmitDialogRequest) (string, error) {
 	p.API.LogInfo("Getting user id from request", "requestUserId", request.UserId)
-	userID, err := user.GetUserIDByUserRequestID(p.API, request.UserId)
+	userID, err := app.GetUserIDByUserRequestID(p.API, request.UserId)
 	if err != nil {
 		return "", err
 	}

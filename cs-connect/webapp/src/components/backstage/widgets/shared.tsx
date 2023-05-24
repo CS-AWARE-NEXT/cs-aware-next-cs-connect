@@ -4,6 +4,7 @@
 import styled, {css} from 'styled-components';
 import React from 'react';
 import {useRouteMatch} from 'react-router-dom';
+import {Input} from 'antd';
 
 import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 import {BaseInput} from 'src/components/assets/inputs';
@@ -143,4 +144,8 @@ const buttonCommon = css`
 
 export const PrimaryButtonLarger = styled(PrimaryButton)`
     ${buttonCommon};
+`;
+
+export const TextInput = styled(Input)`
+    margin-bottom: 12px;
 `;
