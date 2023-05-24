@@ -36,7 +36,7 @@ const buildHyperlinksMap = async (message: string): Promise<Map<string, string> 
     }
     for (const match of matches) {
         const options = parseOptionsForMatch(match);
-        console.log('options', {options});
+        console.log('options', {options}, 'matches', matches);
 
         // TODO: if the patterns ends with ) and the user types between the (), the suggested text may not be considered by Mattermost
         // E.g. the user types hood(), then they type hood(Org) and press on the Organization X suggestion.
@@ -128,13 +128,15 @@ const convertHyperlinkToMarkdown = (hyperlink: string, text: string): string => 
 };
 
 const buildHyperlinkedMessage = (message: string, hyperlinksMap: Map<string, string>): string => {
-    // return message.replace(getPattern(), (match) => {
-    //     const hyperlink = hyperlinksMap.get(match);
-    //     return hyperlink === undefined ? match : hyperlink;
-    // });
-    let hyperlinkedMessage = message;
-    hyperlinksMap.forEach((value, key) => {
-        hyperlinkedMessage = hyperlinkedMessage.replace(key, value);
+    return message.replace(getPattern(), (match) => {
+        const hyperlink = hyperlinksMap.get(match);
+        return hyperlink === undefined ? match : hyperlink;
     });
-    return hyperlinkedMessage;
+
+    // console.log('hyperlinksMap', {hyperlinksMap});
+    // let hyperlinkedMessage = message;
+    // hyperlinksMap.forEach((value, key) => {
+    //     hyperlinkedMessage = hyperlinkedMessage.replaceAll(key, value);
+    // });
+    // return hyperlinkedMessage;
 };

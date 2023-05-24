@@ -84,6 +84,7 @@ export const parseMatchToTokens = (match: string): string[] => {
     return tokens.filter((token) => token !== '');
 };
 
+// TODO: define options enum
 export const parseOptionsForMatch = (match: string): ParseOptions => {
     const options: ParseOptions = {match, parseMatch: match};
     const matchTokens = match.split(END_SYMBOL).filter((token) => token !== '');

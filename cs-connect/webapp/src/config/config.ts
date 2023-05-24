@@ -7,8 +7,8 @@ export const END_SYMBOL = ')';
 export const START_SYMBOL = '(';
 const PATTERN_SYMBOL = ':symbol';
 
-// Match text in form of PATTERN_SYMBOL(...)
-const PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\(.+?\\)(.\\S+)?`;
+// Match text in form of PATTERN_SYMBOL(...) or PATTERN_SYMBOL(...).OPTION
+const PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\(.+?\\)(?:\\.\\S+)?`;
 
 // Match text after PATTERN_SYMBOL( up until the ), if present
 const SUGGESTION_PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\((?!.*\\)).*$`;
