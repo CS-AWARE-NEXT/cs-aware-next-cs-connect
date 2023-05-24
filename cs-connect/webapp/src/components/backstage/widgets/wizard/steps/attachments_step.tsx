@@ -8,6 +8,9 @@ import {FormattedMessage} from 'react-intl';
 import {Attachment} from 'src/types/scenario_wizard';
 import {TextInput} from 'src/components/backstage/widgets/shared';
 
+const {Item} = List;
+const {Meta} = Item;
+
 type Props = {
     data: string[],
     setWizardData: Dispatch<SetStateAction<any>>,
@@ -26,7 +29,7 @@ const AttachmentsStep = ({data, setWizardData}: Props) => {
                 <Button
                     type='primary'
                     icon={<LinkOutlined/>}
-                    style={{width: '48%', margin: '2%'}}
+                    style={{width: '48%', marginLeft: '1%', marginRight: '1%'}}
                     onClick={() => setAttachements((prev) => ([...prev, '']))}
                 >
                     <FormattedMessage defaultMessage='Add a link'/>
@@ -44,22 +47,23 @@ const AttachmentsStep = ({data, setWizardData}: Props) => {
                 itemLayout='horizontal'
                 dataSource={attachements}
                 renderItem={(attachement, index) => (
-                    <List.Item>
-                        <List.Item.Meta
+                    <Item>
+                        <Meta
                             avatar={<Avatar icon={<TagsOutlined/>}/>}
+                            title={(
+                                <TextInput
+                                    key={`attachment-${index}`}
+                                    placeholder={'Insert an attachment'}
+                                    value={attachement}
+                                    onChange={(e) => {
+                                        const currentAttachements = cloneDeep(attachements);
+                                        currentAttachements[index] = e.target.value;
+                                        setAttachements(currentAttachements);
+                                        setWizardData((prev: any) => ({...prev, attachments: currentAttachements}));
+                                    }}
+                                />)}
                         />
-                        <TextInput
-                            key={`attachment-${index}`}
-                            placeholder={'Insert an attachment'}
-                            value={attachement}
-                            onChange={(e) => {
-                                const currentAttachements = cloneDeep(attachements);
-                                currentAttachements[index] = e.target.value;
-                                setAttachements(currentAttachements);
-                                setWizardData((prev: any) => ({...prev, attachments: currentAttachements}));
-                            }}
-                        />
-                    </List.Item>
+                    </Item>
                 )}
             />
         </Container>
