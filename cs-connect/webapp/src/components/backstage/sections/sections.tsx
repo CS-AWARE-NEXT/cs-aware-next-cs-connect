@@ -7,7 +7,7 @@ import {Section} from 'src/types/organization';
 import SectionDetails from 'src/components/backstage/sections/section_details';
 import SectionList from 'src/components/backstage/sections/section_list';
 import {isUrlEqualWithoutQueryParams} from 'src/hooks';
-import {formatStringToLowerCase} from 'src/helpers';
+import {formatName} from 'src/helpers';
 import {getSiteUrl} from 'src/clients';
 
 type Props = {
@@ -35,10 +35,12 @@ const Sections = ({
         <>
             <NavBar>
                 {safeSections.map((section, index) => {
-                    let toUrl = `${url}/${formatStringToLowerCase(section.name)}`;
+                    let toUrl = `${url}/${formatName(section.name)}`;
+                    console.log('toUrl 1', toUrl);
                     if (index === DEFAULT_SECTION) {
                         toUrl = url;
                     }
+                    console.log('toUrl 2', toUrl);
                     return (
                         <NavItem
                             key={`nav-item-${section.id}`}
@@ -64,7 +66,7 @@ const Sections = ({
                 {safeSections.map((section) => (
                     <Route
                         key={`route-${section.id}`}
-                        path={`${path}/${formatStringToLowerCase(section.name)}`}
+                        path={`${path}/${formatName(section.name)}`}
                         exact={true}
                     >
                         <SectionList section={section}/>
@@ -74,7 +76,7 @@ const Sections = ({
                     return (
                         <Route
                             key={`route-single-${section.id}`}
-                            path={`${path}/${formatStringToLowerCase(section.name)}/:${SECTION_ID_PARAM}`}
+                            path={`${path}/${formatName(section.name)}/:${SECTION_ID_PARAM}`}
                             exact={true}
                         >
                             <SectionDetails/>
