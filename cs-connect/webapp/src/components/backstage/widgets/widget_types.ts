@@ -1,4 +1,5 @@
 export enum WidgetType {
+    Accordion = 'accordion',
     Channels = 'channels',
     Graph = 'graph',
     PaginatedTable = 'paginated-table',

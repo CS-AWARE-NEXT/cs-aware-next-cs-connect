@@ -1,3 +1,5 @@
+import {StepData, StepValue} from './steps_modal';
+
 export type Outcome = {
     id?: string;
     outcome: string;
@@ -15,3 +17,6 @@ export type Attachment = {
     id?: string;
     attachment: string;
 };
+
+export type ElementData = StepData;
+export type Element = StepValue;
