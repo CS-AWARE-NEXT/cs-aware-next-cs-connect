@@ -439,8 +439,8 @@ export const useAllUsersOptions = (): UserOption[] => {
                 // This may be useful in future if the user is is needed
                 // value: user.userId,
                 const userOptions = result.users.map((user) => ({
-                    value: `${user.firstName} ${user.lastName} (${user.username})`.trim(),
-                    label: `${user.firstName} ${user.lastName} (${user.username})`.trim(),
+                    value: `${user.firstName} ${user.lastName} [${user.username}]`.trim(),
+                    label: `${user.firstName} ${user.lastName} [${user.username}]`.trim(),
                 }));
                 setUsers(userOptions);
             }
