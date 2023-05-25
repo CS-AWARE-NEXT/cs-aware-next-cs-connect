@@ -37,9 +37,11 @@ export type WidgetSuggestionsOptions = Partial<{
     reference: string;
 }>;
 
-export type ParseOptions = {
+export type ParseOptions = Partial<{
     match: string;
     parseMatch: string;
-    isValueNeeded?: boolean;
-    valueReference?: string;
-};
+    isValueNeeded: boolean;
+    valueReference: string;
+    isIssues: boolean;
+    isRhsReference: boolean;
+}>;
