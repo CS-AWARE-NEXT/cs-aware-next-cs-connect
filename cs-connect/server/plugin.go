@@ -122,6 +122,21 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	}
 }
 
+func (p *Plugin) MessageWillBeUpdated(c *plugin.Context, newPost, oldPost *model.Post) (*model.Post, string) {
+	// p.API.LogInfo("MessageWillBeUpdated hook", "OldPost", oldPost, "NewPost", newPost)
+	return newPost, ""
+}
+
+func (p *Plugin) MessageHasBeenPosted(c *plugin.Context, post *model.Post) {
+	// p.API.LogInfo("MessageHasBeenPosted", "post", post)
+	// retrievedPost, err := p.API.GetPost(post.Id)
+	// if err != nil {
+	// 	p.API.LogError("Cannot get post", "postId", post.Id)
+	// 	return
+	// }
+	// p.API.LogInfo("Retrieved post", "post", retrievedPost)
+}
+
 func (p *Plugin) getPluginIDFromManifest() string {
 	return manifest.Id
 }
