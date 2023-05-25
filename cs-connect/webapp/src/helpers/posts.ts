@@ -7,6 +7,7 @@ import {HyperlinkReference, ParseOptions} from 'src/types/parser';
 import {Organization} from 'src/types/organization';
 
 import {
+    formatName,
     parseMatchToReference,
     parseMatchToTokens,
     parseOptionsForMatch,
@@ -44,8 +45,8 @@ const buildHyperlinksMap = async (message: string): Promise<Map<string, string> 
         // Mattermost sends hood(Org) as a message.
         // This may be deu to the fact that there is another textare other than the one we are using,
         // you can see this in the browser's console by inspecting the textare with id post_textbox and find the textarea with id post_textbox-reference
-        const hyperlink = await buildHyperlinkFromMatch(options.parseMatch, options);
-        map.set(options.match, hyperlink);
+        const hyperlink = await buildHyperlinkFromMatch(options.parseMatch as string, options);
+        map.set(options.match as string, hyperlink);
     }
     return map;
 };
@@ -53,7 +54,7 @@ const buildHyperlinksMap = async (message: string): Promise<Map<string, string> 
 const buildHyperlinkFromMatch = async (match: string, options: ParseOptions): Promise<string> => {
     const tokensFromMatch = parseMatchToTokens(match);
     const [tokens, isRhsReference] = await parseRhsReference(tokensFromMatch);
-    const hyperlinkReference = await parseTokensToHyperlinkReference(tokens, options);
+    const hyperlinkReference = await parseTokensToHyperlinkReference(tokens, {...options, isRhsReference});
     if (!hyperlinkReference) {
         return match;
     }
@@ -109,7 +110,7 @@ const buildHyperlinkFromObjectPageReference = (
         hyperlink = `${hyperlink}#${widgetHash.hash}`;
         return convertHyperlinkToMarkdown(hyperlink, widgetHash.value || reference);
     }
-    hyperlink = `${hyperlink}/${section.name}`;
+    hyperlink = `${hyperlink}/${formatName(section.name)}`;
     if (!object) {
         return convertHyperlinkToMarkdown(hyperlink, reference);
     }
