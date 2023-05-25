@@ -54,7 +54,7 @@ import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {ListData} from 'src/types/list';
 import {TimelineData} from 'src/types/timeline';
-import {formatSectionPath, formatStringToLowerCase} from 'src/helpers';
+import {formatName, formatSectionPath} from 'src/helpers';
 import {UserOption} from 'src/types/users';
 
 type FetchParams = FetchOrganizationsParams;
@@ -205,7 +205,7 @@ export const useSectionData = ({id, name, url}: Section): PaginatedTableData => 
     const [sectionData, setSectionData] = useState<PaginatedTableData>({columns: [], rows: []});
     const {path, url: routeUrl} = useRouteMatch();
     const organizationId = useContext(OrganizationIdContext);
-    const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
+    const basePath = `${formatSectionPath(path, organizationId)}/${formatName(name)}`;
 
     useEffect(() => {
         let isCanceled = false;
