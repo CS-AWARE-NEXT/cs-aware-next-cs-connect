@@ -3,14 +3,14 @@ import React, {Dispatch, SetStateAction, useState} from 'react';
 import styled from 'styled-components';
 import {ArrowLeftOutlined, ArrowRightOutlined} from '@ant-design/icons';
 
-import {StepData} from 'src/types/steps_modal';
 import {getOrganizationsNoEcosystem} from 'src/config/config';
+import {ElementData} from 'src/types/scenario_wizard';
 
 const {Step} = Steps;
 
 type Props = {
     data: any;
-    organizationsData: StepData[];
+    organizationsData: ElementData[];
     setWizardData: Dispatch<SetStateAction<any>>;
 };
 

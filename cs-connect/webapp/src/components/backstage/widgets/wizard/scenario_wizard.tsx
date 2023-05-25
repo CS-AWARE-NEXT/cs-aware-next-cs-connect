@@ -13,7 +13,6 @@ import {useSelector} from 'react-redux';
 import {useRouteMatch} from 'react-router-dom';
 
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
-import {StepData} from 'src/types/steps_modal';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
 import {formatName, formatSectionPath, formatStringToCapitalize} from 'src/helpers';
@@ -30,6 +29,7 @@ import {OrganizationIdContext} from 'src/components/backstage/organizations/orga
 import {HorizontalSpacer} from 'src/components/backstage/grid';
 import {ErrorMessage} from 'src/components/commons/messages';
 import {SectionInfo} from 'src/types/organization';
+import {ElementData} from 'src/types/scenario_wizard';
 
 import ObjectivesStep from './steps/objectives_step';
 import OutcomesStep, {fillOutcomes} from './steps/outcomes_step';
@@ -38,7 +38,7 @@ import TechnologyStep from './steps/technology_step';
 import AttachmentsStep, {fillAttachments} from './steps/attachments_step';
 
 type Props = {
-    organizationsData: StepData[];
+    organizationsData: ElementData[];
     name: string;
     parentId: string;
     targetUrl: string;
