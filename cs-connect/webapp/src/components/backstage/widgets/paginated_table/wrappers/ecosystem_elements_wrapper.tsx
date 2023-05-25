@@ -7,7 +7,6 @@ import {
     formatName,
     formatSectionPath,
     formatStringToCapitalize,
-    formatStringToLowerCase,
     removeSectionNameFromPath,
 } from 'src/helpers';
 import {StepValue} from 'src/types/steps_modal';
@@ -36,8 +35,8 @@ const EcosystemElementsWrapper = ({
     useEffect(() => {
         const rows = elements ? elements.map((element) => {
             const parentSection = getSection(element.parentId);
-            const pathWithoutSectionName = removeSectionNameFromPath(path, section.name);
-            const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatStringToLowerCase(parentSection.name)}`;
+            const pathWithoutSectionName = removeSectionNameFromPath(path, formatName(section.name));
+            const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatName(parentSection.name)}`;
             const row: PaginatedTableRow = {
                 id: element.id,
                 organization: getOrganizationById(element.organizationId).name,
