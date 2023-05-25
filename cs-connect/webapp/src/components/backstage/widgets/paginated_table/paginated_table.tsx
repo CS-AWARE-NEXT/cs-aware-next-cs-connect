@@ -15,6 +15,7 @@ import {
     isReferencedByUrlHash,
 } from 'src/hooks';
 import {
+    formatName,
     formatPropertyName,
     formatSectionPath,
     formatStringToCapitalize,
@@ -121,7 +122,7 @@ const PaginatedTable = ({
     const handleCreateRow = (row: PaginatedTableRow) => {
         saveSectionInfo(row, sectionUrl).
             then((result) => {
-                const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
+                const basePath = `${formatSectionPath(path, organizationId)}/${formatName(name)}`;
                 navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
             }).
             catch(() => {

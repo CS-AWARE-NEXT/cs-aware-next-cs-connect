@@ -16,12 +16,7 @@ import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 import {StepData} from 'src/types/steps_modal';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
-import {
-    formatName,
-    formatSectionPath,
-    formatStringToCapitalize,
-    formatStringToLowerCase,
-} from 'src/helpers';
+import {formatName, formatSectionPath, formatStringToCapitalize} from 'src/helpers';
 import {
     PARENT_ID_PARAM,
     ecosystemAttachmentsWidget,
@@ -104,7 +99,7 @@ const ScenarioWizard = ({
                 }).
                     then(() => {
                         cleanModal();
-                        const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
+                        const basePath = `${formatSectionPath(path, organizationId)}/${formatName(name)}`;
                         navigateToUrl(`${basePath}/${savedSectionInfo.id}?${PARENT_ID_PARAM}=${parentId}`);
                     });
             }).

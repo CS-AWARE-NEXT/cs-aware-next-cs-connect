@@ -36,11 +36,9 @@ const Sections = ({
             <NavBar>
                 {safeSections.map((section, index) => {
                     let toUrl = `${url}/${formatName(section.name)}`;
-                    console.log('toUrl 1', toUrl);
                     if (index === DEFAULT_SECTION) {
                         toUrl = url;
                     }
-                    console.log('toUrl 2', toUrl);
                     return (
                         <NavItem
                             key={`nav-item-${section.id}`}
