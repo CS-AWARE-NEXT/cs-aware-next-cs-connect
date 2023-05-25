@@ -18,3 +18,7 @@ export const messageWillBePosted = async (post: Post) => {
 export const messageWillBeUpdated = async (post: Post) => {
     return messageWillBePosted(post);
 };
+
+export const messageWillFormat = (post: Post, message: string) => {
+    return message;
+};

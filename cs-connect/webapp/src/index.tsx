@@ -113,6 +113,8 @@ export default class Plugin {
         registry.registerSlashCommandWillBePostedHook(slashCommandWillBePosted);
         registry.registerMessageWillBePostedHook(messageWillBePosted);
         registry.registerMessageWillBeUpdatedHook(messageWillBeUpdated);
+
+        // registry.registerMessageWillFormatHook(messageWillFormat);
     }
 
     public initialize(registry: any, store: Store<GlobalState>): void {
