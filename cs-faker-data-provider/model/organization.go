@@ -9,7 +9,7 @@ type Organization struct {
 type Issue struct {
 	ID                        string            `json:"id"`
 	Name                      string            `json:"name"`
-	ObjectivesAndResearchArea string            `json:"objectives_and_research_area"`
+	ObjectivesAndResearchArea string            `json:"objectivesAndResearchArea"`
 	Outcomes                  []IssueOutcome    `json:"outcomes"`
 	Elements                  []IssueElement    `json:"elements"`
 	Roles                     []IssueRole       `json:"roles"`
@@ -55,6 +55,20 @@ type Incident struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+}
+
+// TODO: refactor with composition
+type ExtendedIncident struct {
+	State         string `json:"state"`
+	ClosedAt      string `json:"closedAt"`
+	FirstObserved string `json:"firstObserved"`
+	ID            string `json:"id"`
+	Type          string `json:"type"`
+	Group         string `json:"group"`
+	AssignedTo    string `json:"assignedTo"`
+	Where         string `json:"where"`
+	Name          string `json:"name"`
+	Description   string `json:"description"`
 }
 
 type Policy struct {
