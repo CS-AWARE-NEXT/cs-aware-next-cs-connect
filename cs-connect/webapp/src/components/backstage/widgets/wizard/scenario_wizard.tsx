@@ -82,7 +82,7 @@ const ScenarioWizard = ({
         const issue: SectionInfo = {
             id: '',
             name: wizardData.name,
-            objectives_and_research_area: wizardData.objectives,
+            objectivesAndResearchArea: wizardData.objectives,
             outcomes: fillOutcomes(wizardData.outcomes),
             elements: Object.values(wizardData.elements).flat(),
             roles: wizardData.roles,
