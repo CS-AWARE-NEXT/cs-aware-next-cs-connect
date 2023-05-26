@@ -7,6 +7,29 @@ import (
 
 func GetIncidents(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
+
+	// TODO: maybe this will become the new default
+	if organizationId == "4" {
+		extendedTableData := model.ExtendedPaginatedTableData{
+			Columns: extendedIncidentsPaginatedTableData.Columns,
+			Rows:    []model.ExtendedPaginatedTableRow{},
+		}
+		for _, incident := range extendedIncidentsMap[organizationId] {
+			extendedTableData.Rows = append(extendedTableData.Rows, model.ExtendedPaginatedTableRow{
+				State:         incident.State,
+				ClosedAt:      incident.ClosedAt,
+				FirstObserved: incident.FirstObserved,
+				ID:            incident.ID,
+				Type:          incident.Type,
+				Group:         incident.Group,
+				AssignedTo:    incident.AssignedTo,
+				Where:         incident.Where,
+				Name:          incident.Name,
+				Description:   incident.Description,
+			})
+		}
+		return c.JSON(extendedTableData)
+	}
 	tableData := model.PaginatedTableData{
 		Columns: incidentsPaginatedTableData.Columns,
 		Rows:    []model.PaginatedTableRow{},
@@ -84,6 +107,119 @@ var incidentsMap = map[string][]model.Incident{
 			ID:          "7defe83a-acbf-4784-9bc2-eb3447a0a545",
 			Name:        "Brute-force attack 5",
 			Description: "In this attack, some asset (information, functionality, identity, etc.) is protected...",
+		},
+	},
+}
+
+var extendedIncidentsMap = map[string][]model.ExtendedIncident{
+	"4": {
+		{
+			State:         "Ignored",
+			ClosedAt:      "22/05/2023, 12:58",
+			FirstObserved: "22/05/2023, 12:58",
+			ID:            "some-1659864426508369921",
+			Type:          "Unknown",
+			Group:         "Malware",
+			AssignedTo:    "kim.gammelgaard@cs-aware.com",
+			Where:         "Internet, X-Board",
+			Name:          "Phishing Kit Collecting Victim's IP Address https://t.co/Ehp1KZJnQ8 https://t.co/v1xcymlhsS",
+			Description:   "Phishing Kit Collecting Victim's IP Address...",
+		},
+		{
+			State:         "Ignored",
+			ClosedAt:      "22/05/2023, 12:58",
+			FirstObserved: "26/04/2023, 15:05",
+			ID:            "some-1651183105397366787",
+			Type:          "Unknown",
+			Group:         "Network threats",
+			AssignedTo:    "admin@cs-aware.com",
+			Where:         "Internet, X-Board",
+			Name:          "Google TAG Warns of Russian Hackers Conducting Phishing Attacks in Ukraine https://t.co/tm9DKCXAq1",
+			Description:   "Google TAG Warns of Russian Hackers...",
+		},
+		{
+			State:         "Ignored",
+			ClosedAt:      "22/05/2023, 12:57",
+			FirstObserved: "06/02/2019, 13:10",
+			ID:            "sighting--28c5631d-696f-4b46-b7ae-e3b2731f331e",
+			Type:          "Attack Pattern",
+			Group:         "Network threats",
+			AssignedTo:    "",
+			Where:         "WAN-switch",
+			Name:          "DoS attack 2",
+			Description:   "Port Scanning: An adversary uses a combination of techniques to determine the...",
+		},
+		{
+			State:         "Resolved",
+			ClosedAt:      "22/05/2023, 12:57",
+			FirstObserved: "10/05/2023, 14:17",
+			ID:            "some-1655890426048438274",
+			Type:          "Unknown",
+			Group:         "Malware",
+			AssignedTo:    "kim.gammelgaard@cs-aware.com",
+			Where:         "Webpage (Wordpress)",
+			Name:          "CVE-2023-23664 Auth. (contributor+) Stored Cross-Site Scripting (XSS) vulnerability in ConvertBox ConvertBox Auto Embed WordPress plugin &lt;= 1.0.19 versions. https://t.co/UHRjgwyNLn",
+			Description:   "CVE-2023-23664 Auth. (contributor+) Stored...",
+		},
+		{
+			State:         "Ignored",
+			ClosedAt:      "22/05/2023, 12:56",
+			FirstObserved: "22/05/2023, 12:55",
+			ID:            "some-1660449723898277888",
+			Type:          "Unknown",
+			Group:         "Malware",
+			AssignedTo:    "kim.gammelgaard@cs-aware.com",
+			Where:         "Internet, X-Board",
+			Name:          "Weekly update is up! The ABC Data Mosaic Powered by Have I Been Pwned; The .zip TLD and Phishing; The Massive Luxottica Data Breach https://t.co/s5kjTY1qt1",
+			Description:   "Weekly update is up! The ABC Data Mosaic Powered...",
+		},
+		{
+			State:         "Ignored",
+			ClosedAt:      "22/05/2023, 12:40",
+			FirstObserved: "22/05/2023, 12:39",
+			ID:            "some-1659895501766926337",
+			Type:          "Unknown",
+			Group:         "Malware",
+			AssignedTo:    "kim.gammelgaard@cs-aware.com",
+			Where:         "Webpage (Wordpress)",
+			Name:          "Hackers target vulnerable Wordpress Elementor plugin after PoC released https://t.co/h8yvWg9tDp",
+			Description:   "Hackers target vulnerable Wordpress Elementor...",
+		},
+		{
+			State:         "Resolved",
+			ClosedAt:      "30/03/2023, 14:38",
+			FirstObserved: "06/02/2019, 13:10",
+			ID:            "sighting--d841f515-49da-431e-9f87-74f6611d0d21",
+			Type:          "Attack Pattern",
+			Group:         "Network Threat",
+			AssignedTo:    "",
+			Where:         "VPN-Router",
+			Name:          "DoS attack 3",
+			Description:   "An attacker performs flooding at the HTTP leve...",
+		},
+		{
+			State:         "Ignored",
+			ClosedAt:      "08/03/2023, 14:39",
+			FirstObserved: "08/03/2023, 14:36",
+			ID:            "TODO",
+			Type:          "Unknown",
+			Group:         "",
+			AssignedTo:    "",
+			Where:         "",
+			Name:          "unknown",
+			Description:   "Not received from Data Analysis",
+		},
+		{
+			State:         "Resolved",
+			ClosedAt:      "08/03/2023, 13:22",
+			FirstObserved: "06/02/2019, 13:10",
+			ID:            "sighting--a6a07879-a89a-467b-9bee-65450207dc74",
+			Type:          "Attack Pattern",
+			Group:         "OS Threat",
+			AssignedTo:    "",
+			Where:         "Salary-handling",
+			Name:          "Brute-force attack 4",
+			Description:   "In this attack, some asset (information, functionality,...",
 		},
 	},
 }
@@ -332,6 +468,42 @@ var incidentsTableRowsMap = map[string][]model.TableRow{
 
 var incidentsPaginatedTableData = model.PaginatedTableData{
 	Columns: []model.PaginatedTableColumn{
+		{
+			Title: "Name",
+		},
+		{
+			Title: "Description",
+		},
+	},
+	Rows: []model.PaginatedTableRow{},
+}
+
+var extendedIncidentsPaginatedTableData = model.PaginatedTableData{
+	Columns: []model.PaginatedTableColumn{
+		{
+			Title: "State",
+		},
+		{
+			Title: "Closed at",
+		},
+		{
+			Title: "First Observed",
+		},
+		{
+			Title: "Id",
+		},
+		{
+			Title: "Type",
+		},
+		{
+			Title: "Group",
+		},
+		{
+			Title: "Assigned to",
+		},
+		{
+			Title: "Where",
+		},
 		{
 			Title: "Name",
 		},
