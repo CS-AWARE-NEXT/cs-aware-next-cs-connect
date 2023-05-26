@@ -60,7 +60,6 @@ const EcosystemElementsWrapper = ({
                 <PaginatedTable
                     data={data}
                     id={formatName(name)}
-                    isSection={true}
                     name={name}
                     sectionId={sectionId}
                     parentId={parentId}
