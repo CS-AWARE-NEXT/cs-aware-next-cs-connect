@@ -5,7 +5,7 @@ organizations:
     description: This organization is for the whole ecosystem
     isEcosystem: true
     sections:
-      - name: Issues
+      - name: Ecosystem Issues
         id: "0"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/issues
         widgets:
