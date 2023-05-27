@@ -1,19 +1,27 @@
-import {HyperlinkSuggestion, SuggestionsData} from 'src/types/parser';
+import {
+    HyperlinkSuggestion,
+    ParseOptions,
+    SuggestionsData,
+    WidgetSuggestionsOptions,
+} from 'src/types/parser';
 import {getAndRemoveOneFromArray, getEmptySuggestions, getOrganizationsSuggestions} from 'src/helpers';
 import {TOKEN_SEPARATOR} from 'src/constants';
 import {getOrganizationByName, getOrganizations} from 'src/config/config';
 import {fetchPaginatedTableData} from 'src/clients';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {Widget} from 'src/types/organization';
-import {parseTableWidgetSuggestions} from 'src/components/backstage/widgets/table/parsers/table_suggestions_parser';
+import {parseTableWidgetSuggestions, parseTableWidgetSuggestionsWithHint} from 'src/components/backstage/widgets/table/parsers/table_suggestions_parser';
+import {parseTextBoxWidgetSuggestions} from 'src/components/backstage/widgets/text_box/parsers/text_box_suggestions_parser';
+import {parseListWidgetSuggestions, parseListWidgetSuggestionsWithHint} from 'src/components/backstage/widgets/list/parsers/list_suggestions_parser';
 
-import {withTokensLengthCheck} from './parser';
+import {getDefaultsWidgets, withTokensLengthCheck} from './parser';
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
 
 export const parseTokensToSuggestions = async (
     tokens: string[],
     reference: string,
+    options?: ParseOptions,
 ): Promise<SuggestionsData> => {
     let hyperlinkSuggestion: HyperlinkSuggestion = {suggestions: {suggestions: []}};
     try {
@@ -22,15 +30,15 @@ export const parseTokensToSuggestions = async (
         // TODO: think about adding support for organizations' widgets suggestions
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseSectionSuggestions);
         hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseObjectSuggestions);
-        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetSuggestions);
-        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetElementSuggestions);
+        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetSuggestions, options);
+        hyperlinkSuggestion = await withTokensLengthCheck(hyperlinkSuggestion, tokens, parseWidgetElementSuggestionsWithHint);
     } catch (error: any) {
         if (error instanceof NoMoreTokensError) {
-            hyperlinkSuggestion = await updateIfEndsWithTokenSeparator(hyperlinkSuggestion, reference);
+            hyperlinkSuggestion = await updateIfEndsWithTokenSeparator(hyperlinkSuggestion, tokens, reference, options);
         }
         return hyperlinkSuggestion.suggestions;
     }
-    hyperlinkSuggestion = await updateIfEndsWithTokenSeparator(hyperlinkSuggestion, reference);
+    hyperlinkSuggestion = await updateIfEndsWithTokenSeparator(hyperlinkSuggestion, tokens, reference, options);
     return hyperlinkSuggestion.suggestions;
 };
 
@@ -38,7 +46,9 @@ export const parseTokensToSuggestions = async (
 // Separate into two functions: one for reference === '' and the other for references ending with the dot
 const updateIfEndsWithTokenSeparator = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
+    tokens: string[],
     reference: string,
+    options?: ParseOptions,
 ): Promise<HyperlinkSuggestion> => {
     // TODO: this may not be needed, since it is managed in the input handler of the textarea
     // if (reference === '') {
@@ -71,7 +81,7 @@ const updateIfEndsWithTokenSeparator = async (
         return {...hyperlinkSuggestion, suggestions: {suggestions}};
     }
     if (!hyperlinkSuggestion.widget) {
-        const widgets = hyperlinkSuggestion.section?.widgets;
+        const widgets = buildWidgets(hyperlinkSuggestion, options);
         if (!widgets || widgets.length < 1) {
             return hyperlinkSuggestion;
         }
@@ -83,7 +93,9 @@ const updateIfEndsWithTokenSeparator = async (
             }));
         return {...hyperlinkSuggestion, suggestions: {suggestions}};
     }
-    return hyperlinkSuggestion;
+    const widget = hyperlinkSuggestion.widget as Widget;
+    const suggestions = await parseWidgetElementSuggestionsByType(hyperlinkSuggestion, tokens, widget, {reference});
+    return {...hyperlinkSuggestion, suggestions};
 };
 
 const parseNoOrganizationSuggestions = async (): Promise<SuggestionsData> => {
@@ -155,12 +167,13 @@ const parseObjectSuggestions = async (
 const parseWidgetSuggestions = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
     tokens: string[],
+    options?: ParseOptions,
 ): Promise<HyperlinkSuggestion> => {
     const widgetName = getAndRemoveOneFromArray(tokens, 0);
     if (!widgetName) {
         return hyperlinkSuggestion;
     }
-    const widgets = hyperlinkSuggestion.section?.widgets;
+    const widgets = buildWidgets(hyperlinkSuggestion, options);
     if (!widgets || widgets.length < 1) {
         return hyperlinkSuggestion;
     }
@@ -174,12 +187,12 @@ const parseWidgetSuggestions = async (
     return {...hyperlinkSuggestion, widget, suggestions: {suggestions}};
 };
 
-const parseWidgetElementSuggestions = async (
+const parseWidgetElementSuggestionsWithHint = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
     tokens: string[],
 ): Promise<HyperlinkSuggestion> => {
     const widget = hyperlinkSuggestion.widget as Widget;
-    const suggestions = await parseWidgetElementSuggestionsByType(hyperlinkSuggestion, tokens, widget);
+    const suggestions = await parseWidgetElementSuggestionsByType(hyperlinkSuggestion, tokens, widget, {withHint: true});
     return {...hyperlinkSuggestion, suggestions};
 };
 
@@ -187,21 +200,41 @@ const parseWidgetElementSuggestionsByType = (
     hyperlinkSuggestion: HyperlinkSuggestion,
     tokens: string[],
     widget: Widget,
+    options?: WidgetSuggestionsOptions,
 ): SuggestionsData | Promise<SuggestionsData> => {
+    const isHintGiven = options?.withHint || false;
     switch (widget.type) {
     case WidgetType.Graph:
         return {suggestions: []};
     case WidgetType.PaginatedTable:
         return {suggestions: []};
     case WidgetType.List:
-        return {suggestions: []};
+        if (isHintGiven) {
+            return parseListWidgetSuggestionsWithHint(hyperlinkSuggestion, tokens, widget);
+        }
+        return parseListWidgetSuggestions(hyperlinkSuggestion, widget);
     case WidgetType.Table:
-        return parseTableWidgetSuggestions(hyperlinkSuggestion, tokens, widget);
+        if (isHintGiven) {
+            return parseTableWidgetSuggestionsWithHint(hyperlinkSuggestion, tokens, widget);
+        }
+        return parseTableWidgetSuggestions(hyperlinkSuggestion, options?.reference as string, widget);
     case WidgetType.TextBox:
-        return {suggestions: []};
+        return parseTextBoxWidgetSuggestions();
     case WidgetType.Timeline:
         return {suggestions: []};
     default:
         return {suggestions: []};
     }
+};
+
+const buildWidgets = (
+    hyperlinkSuggestion: HyperlinkSuggestion,
+    options?: ParseOptions,
+): Widget[] => {
+    const configWidgets = hyperlinkSuggestion.section?.widgets;
+    if (!hyperlinkSuggestion.organization?.isEcosystem) {
+        return configWidgets || [];
+    }
+    const defaultWidgets = getDefaultsWidgets(hyperlinkSuggestion.section, options?.isRhsReference);
+    return configWidgets ? [...defaultWidgets, ...configWidgets] : defaultWidgets;
 };
