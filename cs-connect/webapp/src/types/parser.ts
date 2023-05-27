@@ -18,6 +18,11 @@ export type WidgetHash = {
     value?: string;
 };
 
+export type WidgetHashOrObjectForward = Partial<{
+    widgetHash: WidgetHash,
+    objectForward: Object;
+}>;
+
 export type HyperlinkSuggestion = Omit<HyperlinkReference, 'widgetHash'> & {
     widget?: Widget;
     suggestions: SuggestionsData,
@@ -32,11 +37,6 @@ export type SuggestionData = {
     text: string;
 };
 
-export type WidgetSuggestionsOptions = Partial<{
-    withHint: boolean;
-    reference: string;
-}>;
-
 export type ParseOptions = Partial<{
     match: string;
     parseMatch: string;
@@ -44,4 +44,6 @@ export type ParseOptions = Partial<{
     valueReference: string;
     isIssues: boolean;
     isRhsReference: boolean;
+    withHint: boolean;
+    reference: string;
 }>;
