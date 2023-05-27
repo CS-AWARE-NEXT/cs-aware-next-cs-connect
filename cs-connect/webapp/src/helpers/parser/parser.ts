@@ -12,13 +12,14 @@ import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {
     OBJECT_ID_TOKEN,
     TOKEN_SEPARATOR,
+    UNKNOWN,
     ecosystemAttachmentsWidget,
     ecosystemElementsWidget,
     ecosystemObjectivesWidget,
     ecosystemOutcomesWidget,
     ecosystemRolesWidget,
 } from 'src/constants';
-import {formatStringToCapitalize} from 'src/helpers';
+import {formatStringToCapitalize, formatStringToLowerCase} from 'src/helpers';
 import {ParseOptions} from 'src/types/parser';
 
 import NoMoreTokensError from './errors/noMoreTokensError';
@@ -88,7 +89,6 @@ export const parseMatchToTokens = (match: string): string[] => {
 export const parseOptionsForMatch = (match: string): ParseOptions => {
     const options: ParseOptions = {match, parseMatch: match};
     const matchTokens = match.split(END_SYMBOL).filter((token) => token !== '');
-    console.log('matchTokens', matchTokens);
     if (matchTokens.length < 2) {
         return options;
     }
@@ -105,14 +105,14 @@ export const parseOptionsForMatch = (match: string): ParseOptions => {
 };
 
 export const parseMatchToReference = (match: string): string => {
-    let reference = extractReferenceFromMatch(match) || '(?)';
+    let reference = extractReferenceFromMatch(match) || UNKNOWN;
     if (reference.endsWith(TOKEN_SEPARATOR)) {
         reference = reference.substring(0, reference.lastIndexOf(TOKEN_SEPARATOR));
     }
     return reference;
 };
 
-const extractReferenceFromMatch = (match: string): string | null => {
+export const extractReferenceFromMatch = (match: string): string | null => {
     if (match === `${getSymbol()}${START_SYMBOL}${END_SYMBOL}`) {
         return null;
     }
@@ -134,7 +134,11 @@ export const withTokensLengthCheck = async <T>(
     return parse(obj, tokens, options);
 };
 
-export const getDefaultsWidgets = (section: Section | undefined): Widget[] => {
+export const getDefaultsWidgets = (
+    section: Section | undefined,
+    isRhsReference?: boolean,
+): Widget[] => {
+    const isRhs = isRhsReference || false;
     const url = `${section?.url}/${OBJECT_ID_TOKEN}`;
     const objectivesWidget = {
         name: formatStringToCapitalize(ecosystemObjectivesWidget),
@@ -153,7 +157,7 @@ export const getDefaultsWidgets = (section: Section | undefined): Widget[] => {
     };
     const elementsWidget = {
         name: formatStringToCapitalize(ecosystemElementsWidget),
-        type: WidgetType.PaginatedTable,
+        type: isRhs ? WidgetType.Accordion : WidgetType.PaginatedTable,
         url,
     };
     const attachmentsWidget = {
@@ -162,4 +166,47 @@ export const getDefaultsWidgets = (section: Section | undefined): Widget[] => {
         url,
     };
     return [objectivesWidget, outcomesWidget, rolesWidget, elementsWidget, attachmentsWidget];
+};
+
+export const getDefaultWidgetByName = (
+    section: Section | undefined,
+    widgetName: string,
+    isRhsReference?: boolean,
+): Widget | undefined => {
+    const isRhs = isRhsReference || false;
+    const url = `${section?.url}/${OBJECT_ID_TOKEN}`;
+    switch (formatStringToLowerCase(widgetName)) {
+    case ecosystemObjectivesWidget:
+        return {
+            name: formatStringToCapitalize(ecosystemObjectivesWidget),
+            type: WidgetType.TextBox,
+            url,
+        };
+    case ecosystemOutcomesWidget:
+        return {
+            name: formatStringToCapitalize(ecosystemOutcomesWidget),
+            type: WidgetType.List,
+            url,
+        };
+    case ecosystemRolesWidget:
+        return {
+            name: formatStringToCapitalize(ecosystemRolesWidget),
+            type: WidgetType.PaginatedTable,
+            url,
+        };
+    case ecosystemElementsWidget:
+        return {
+            name: formatStringToCapitalize(ecosystemElementsWidget),
+            type: isRhs ? WidgetType.Accordion : WidgetType.PaginatedTable,
+            url,
+        };
+    case ecosystemAttachmentsWidget:
+        return {
+            name: formatStringToCapitalize(ecosystemAttachmentsWidget),
+            type: WidgetType.List,
+            url,
+        };
+    default:
+        return undefined;
+    }
 };
