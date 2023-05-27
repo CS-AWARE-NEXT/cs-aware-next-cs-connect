@@ -18,8 +18,8 @@ export const getAndRemoveOneFromArray = <T>(array: T[], index: number): T | unde
     return array.splice(index, 1)[0];
 };
 
-export const isAnyPropertyMissingFromObject = <T extends {}>(obj: T) => {
-    return Object.keys(obj).some((key) => !key);
+export const isAnyPropertyMissingFromObject = <T extends {}>(obj: T | undefined) => {
+    return !obj || Object.keys(obj).some((key) => !key);
 };
 
 export const replaceAt = (
