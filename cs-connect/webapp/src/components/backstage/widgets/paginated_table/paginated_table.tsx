@@ -184,19 +184,19 @@ const PaginatedTable = ({
                         rowKey='key'
                         size='middle'
                     />
-                    {internal &&
-                        <Collapse>
-                            <TablePanel
-                                header={formatMessage({defaultMessage: 'Create New'})}
-                                key='add-new-row'
-                            >
-                                <RowInputFields
-                                    columns={data.columns}
-                                    createRow={handleCreateRow}
-                                />
-                            </TablePanel>
-                        </Collapse>}
                 </>}
+            {internal &&
+                <Collapse>
+                    <TablePanel
+                        header={formatMessage({defaultMessage: 'Create New'})}
+                        key='add-new-row'
+                    >
+                        <RowInputFields
+                            columns={data.columns}
+                            createRow={handleCreateRow}
+                        />
+                    </TablePanel>
+                </Collapse>}
         </Container>
     );
 };
