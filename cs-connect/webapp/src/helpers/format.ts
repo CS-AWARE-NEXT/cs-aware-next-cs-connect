@@ -14,7 +14,7 @@ export const formatNameNoLowerCase = (name: string): string => {
 };
 
 export const formatPropertyName = (name: string): string => {
-    return name.replace(/\s/g, '_').toLowerCase();
+    return camelCase(name);
 };
 
 export const formatStringToLowerCase = (s: string): string => {
