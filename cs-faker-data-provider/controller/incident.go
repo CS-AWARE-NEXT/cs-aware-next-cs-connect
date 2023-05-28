@@ -45,6 +45,10 @@ func GetIncidents(c *fiber.Ctx) error {
 }
 
 func GetIncident(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	if organizationId == "4" {
+		return c.JSON(getExtendedIncidentByID(c))
+	}
 	return c.JSON(getIncidentByID(c))
 }
 
@@ -75,6 +79,17 @@ func getIncidentByID(c *fiber.Ctx) model.Incident {
 		}
 	}
 	return model.Incident{}
+}
+
+func getExtendedIncidentByID(c *fiber.Ctx) model.ExtendedIncident {
+	organizationId := c.Params("organizationId")
+	incidentId := c.Params("incidentId")
+	for _, incident := range extendedIncidentsMap[organizationId] {
+		if incident.ID == incidentId {
+			return incident
+		}
+	}
+	return model.ExtendedIncident{}
 }
 
 var incidentsMap = map[string][]model.Incident{
@@ -254,6 +269,38 @@ var incidentsTextBoxDataMap = map[string]string{
 	"ac1b2a79-69ce-4e83-a6cf-203fe7af194d": `An attacker performs flooding at the HTTP level to bring down only a particular web application rather than anything listening on a TCP/IP connection. This denial of service attack requires substantially fewer packets to be sent which makes DoS harder to detect. This is an equivalent of SYN flood in HTTP. The idea is to keep the HTTP session alive indefinitely and then repeat that hundreds of times. This attack targets resource depletion weaknesses in web server software. ,,
 	The web server will wait to attacker's responses on the initiated HTTP sessions while the connection threads are being exhausted.`,
 	"7defe83a-acbf-4784-9bc2-eb3447a0a545": `In this attack, some asset (information, functionality, identity, etc.) is protected by a finite secret value. The attacker attempts to gain access to this asset by using trial-and-error to exhaustively explore all the possible secret values in the hope of finding the secret (or a value that is functionally equivalent) that will unlock the asset. Examples of secrets can include, but are not limited to, passwords, encryption keys, database lookup keys, and initial values to one-way functions. The key factor in this attack is the attackers' ability to explore the possible secret space rapidly. This, in turn, is a function of the size of the secret space and the computational power the attacker is able to bring to bear on the problem. If the attacker has modest resources and the secret space is large, the challenge facing the attacker is intractable. While the defender cannot control the resources available to an attacker, they can control the size of the secret space. Creating a large secret space involves selecting one's secret from as large a field of equally likely alternative secrets as possible and ensuring that an attacker is unable to reduce the size of this field using available clues or cryptanalysis. Doing this is more difficult than it sounds since elimination of patterns (which, in turn, would provide an attacker clues that would help them reduce the space of potential secrets) is difficult to do using deterministic machines, such as computers. Assuming a finite secret space, a brute force attack will eventually succeed. The defender must rely on making sure that the time and resources necessary to do so will exceed the value of the information. For example, a secret space that will likely take hundreds of years to explore is likely safe from raw-brute force attacks.`,
+	"some-1659864426508369921":             "Phishing Kit Collecting Victim's IP Address https://t.co/Ehp1KZJnQ8 https://t.co/v1xcymlhsS",
+	"some-1651183105397366787":             "Google TAG Warns of Russian Hackers Conducting Phishing Attacks in Ukraine https://t.co/tm9DKCXAq1",
+	"sighting--28c5631d-696f-4b46-b7ae-e3b2731f331e": `Port Scanning:
+	An adversary uses a combination of techniques to determine the state of the ports on a remote target. 
+	Any service or application available for TCP or UDP networking will have a port open for communications over the network. 
+	Although common services have assigned port numbers, services and applications can run on arbitrary ports. 
+	Additionally, port scanning is complicated by the potential for any machine to have up to 65535 possible UDP or TCP services. 
+	The goal of port scanning is often broader than identifying open ports, but also give the adversary information concerning the firewall configuration. 
+	Depending upon the method of scanning that is used, the process can be stealthy or more obtrusive, the latter being more easily detectable due to the volume of packets involved, anomalous packet traits, or system logging. 
+	Typical port scanning activity involves sending probes to a range of ports and observing the responses. 
+	There are four types of port status that this type of attack aims to identify: 
+	1) Open Port: The port is open and a firewall does not block access to the port, 
+	2) Closed Port: The port is closed (i.e. no service resides there) and a firewall does not block access to the port, 
+	3) Filtered Port: A firewall or ACL rule is blocking access to the port in some manner, although the presence of a listening service on the port cannot be verified, and 
+	4) Unfiltered Port: A firewall or ACL rule is not blocking access to the port, although the presence of a listening service on the port cannot be verified. 
+	For strategic purposes it is useful for an adversary to distinguish between an open port that is protected by a filter vs. a closed port that is not protected by a filter. 
+	Making these fine grained distinctions is impossible with certain scan types. 
+	A TCP connect scan, for instance, cannot distinguish a blocked port with an active service from a closed port that is not firewalled. 
+	Other scan types can only detect closed ports, while others cannot detect port state at all, only the presence or absence of filters. Collecting this type of information tells the adversary which ports can be attacked directly, which must be attacked with filter evasion techniques like fragmentation, source port scans, and which ports are unprotected (i.e. not firewalled) but aren't hosting a network service. 
+	An adversary often combines various techniques in order to gain a more complete picture of the firewall filtering mechanisms in place for a host.
+	Network Topology Mapping:
+	An adversary engages in scanning activities to map network nodes, hosts, devices, and routes. Adversaries usually perform this type of network reconnaissance during the early stages of attack against an external network. Many types of scanning utilities are typically employed, including ICMP tools, network mappers, port scanners, and route testing utilities such as traceroute.`,
+	"some-1655890426048438274": "CVE-2023-23664 Auth. (contributor+) Stored Cross-Site Scripting (XSS) vulnerability in ConvertBox ConvertBox Auto Embed WordPress plugin <= 1.0.19 versions. https://t.co/UHRjgwyNLn",
+	"some-1660449723898277888": "Weekly update is up! The ABC Data Mosaic Powered by Have I Been Pwned; The .zip TLD and Phishing; The Massive Luxottica Data Breach https://t.co/s5kjTY1qt1",
+	"some-1659895501766926337": "Hackers target vulnerable Wordpress Elementor plugin after PoC released https://t.co/h8yvWg9tDp",
+	"sighting--d841f515-49da-431e-9f87-74f6611d0d21": `An attacker performs flooding at the HTTP level to bring down only a particular web application rather than anything listening on a TCP/IP connection.
+	This denial of service attack requires substantially fewer packets to be sent which makes DoS harder to detect.
+	This is an equivalent of SYN flood in HTTP. The idea is to keep the HTTP session alive indefinitely and then repeat that hundreds of times.
+	This attack targets resource depletion weaknesses in web server software.
+	The web server will wait to attacker's responses on the initiated HTTP sessions while the connection threads are being exhausted.`,
+	"TODO": "Not received from Data Analysis",
+	"sighting--a6a07879-a89a-467b-9bee-65450207dc74": `In this attack, some asset (information, functionality, identity, etc.) is protected by a finite secret value. The attacker attempts to gain access to this asset by using trial-and-error to exhaustively explore all the possible secret values in the hope of finding the secret (or a value that is functionally equivalent) that will unlock the asset. Examples of secrets can include, but are not limited to, passwords, encryption keys, database lookup keys, and initial values to one-way functions. The key factor in this attack is the attackers' ability to explore the possible secret space rapidly. This, in turn, is a function of the size of the secret space and the computational power the attacker is able to bring to bear on the problem. If the attacker has modest resources and the secret space is large, the challenge facing the attacker is intractable. While the defender cannot control the resources available to an attacker, they can control the size of the secret space. Creating a large secret space involves selecting one's secret from as large a field of equally likely alternative secrets as possible and ensuring that an attacker is unable to reduce the size of this field using available clues or cryptanalysis. Doing this is more difficult than it sounds since elimination of patterns (which, in turn, would provide an attacker clues that would help them reduce the space of potential secrets) is difficult to do using deterministic machines, such as computers. Assuming a finite secret space, a brute force attack will eventually succeed. The defender must rely on making sure that the time and resources necessary to do so will exceed the value of the information. For example, a secret space that will likely take hundreds of years to explore is likely safe from raw-brute force attacks.`,
 }
 
 var incidentsTableData = model.TableData{
