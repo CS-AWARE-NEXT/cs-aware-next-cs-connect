@@ -137,7 +137,7 @@ var extendedIncidentsMap = map[string][]model.ExtendedIncident{
 			Group:         "Malware",
 			AssignedTo:    "kim.gammelgaard@cs-aware.com",
 			Where:         "Internet, X-Board",
-			Name:          "Phishing Kit Collecting Victim's IP Address https://t.co/Ehp1KZJnQ8 https://t.co/v1xcymlhsS",
+			Name:          "Phishing Kit Collecting Victim's IP Address",
 			Description:   "Phishing Kit Collecting Victim's IP Address...",
 		},
 		{
@@ -149,7 +149,7 @@ var extendedIncidentsMap = map[string][]model.ExtendedIncident{
 			Group:         "Network threats",
 			AssignedTo:    "admin@cs-aware.com",
 			Where:         "Internet, X-Board",
-			Name:          "Google TAG Warns of Russian Hackers Conducting Phishing Attacks in Ukraine https://t.co/tm9DKCXAq1",
+			Name:          "Google TAG Warns of Russian Hackers Conducting Phishing Attacks in Ukraine",
 			Description:   "Google TAG Warns of Russian Hackers...",
 		},
 		{
@@ -173,7 +173,7 @@ var extendedIncidentsMap = map[string][]model.ExtendedIncident{
 			Group:         "Malware",
 			AssignedTo:    "kim.gammelgaard@cs-aware.com",
 			Where:         "Webpage (Wordpress)",
-			Name:          "CVE-2023-23664 Auth. (contributor+) Stored Cross-Site Scripting (XSS) vulnerability in ConvertBox ConvertBox Auto Embed WordPress plugin &lt;= 1.0.19 versions. https://t.co/UHRjgwyNLn",
+			Name:          "CVE-2023-23664 Auth contributor Stored Cross-Site Scripting XSS vulnerability in ConvertBox ConvertBox Auto Embed WordPress plugin versions",
 			Description:   "CVE-2023-23664 Auth. (contributor+) Stored...",
 		},
 		{
@@ -185,7 +185,7 @@ var extendedIncidentsMap = map[string][]model.ExtendedIncident{
 			Group:         "Malware",
 			AssignedTo:    "kim.gammelgaard@cs-aware.com",
 			Where:         "Internet, X-Board",
-			Name:          "Weekly update is up! The ABC Data Mosaic Powered by Have I Been Pwned; The .zip TLD and Phishing; The Massive Luxottica Data Breach https://t.co/s5kjTY1qt1",
+			Name:          "Weekly update is up The ABC Data Mosaic Powered by Have I Been Pwned The zip TLD and Phishing The Massive Luxottica Data Breach",
 			Description:   "Weekly update is up! The ABC Data Mosaic Powered...",
 		},
 		{
@@ -197,7 +197,7 @@ var extendedIncidentsMap = map[string][]model.ExtendedIncident{
 			Group:         "Malware",
 			AssignedTo:    "kim.gammelgaard@cs-aware.com",
 			Where:         "Webpage (Wordpress)",
-			Name:          "Hackers target vulnerable Wordpress Elementor plugin after PoC released https://t.co/h8yvWg9tDp",
+			Name:          "Hackers target vulnerable Wordpress Elementor plugin after PoC released",
 			Description:   "Hackers target vulnerable Wordpress Elementor...",
 		},
 		{
