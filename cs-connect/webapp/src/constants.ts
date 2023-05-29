@@ -19,6 +19,8 @@ export const DateTimeFormats = {
 
 export const estimatedOptionsLoadTime = 150;
 
+export const MATTERMOST_CHANNEL_NAME_LENGTH = 64;
+
 export const UNKNOWN = '(?)';
 export const TOKEN_SEPARATOR = '.';
 
