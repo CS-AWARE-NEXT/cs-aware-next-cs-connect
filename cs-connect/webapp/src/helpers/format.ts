@@ -53,6 +53,16 @@ export const isChannelNameCorrect = (name: string): string => {
     return '';
 };
 
+export const isNameCorrect = (name: string): string => {
+    if (name.length < 1) {
+        return 'Name cannot be empty.';
+    }
+    if (name.includes('(') || name.includes(')') || name.includes('.') || name.includes('[') || name.includes(']')) {
+        return 'Name can only be made of letters, numbers, and \'-\'.';
+    }
+    return '';
+};
+
 export const formatUrlWithId = (url: string, id: string): string => {
     return url.replace(OBJECT_ID_TOKEN, id);
 };
