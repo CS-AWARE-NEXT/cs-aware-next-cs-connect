@@ -1,9 +1,26 @@
-import React, {MouseEvent} from 'react';
+import React, {Dispatch, SetStateAction, useMemo} from 'react';
+import {useIntl} from 'react-intl';
 
-const Suggestions = () => {
-    const onClick = (e: MouseEvent) => {
-        e.preventDefault();
-        alert('Received click event!');
+import {getEmptySuggestions, getSuggestedText} from 'src/helpers';
+import {useSuggestionsData} from 'src/hooks';
+
+import 'src/styles/hyperlink_token_suggestion.scss';
+
+type Props = {
+    setIsVisible: Dispatch<SetStateAction<boolean>>;
+};
+
+const Suggestions = ({setIsVisible}: Props) => {
+    const {formatMessage} = useIntl();
+
+    const defaultData = useMemo(getEmptySuggestions, []);
+    const {suggestions} = useSuggestionsData(defaultData);
+
+    const onClick = (suggestion: string) => {
+        const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
+        textarea.value = getSuggestedText(textarea, suggestion);
+        setIsVisible(false);
+        textarea.focus();
     };
 
     return (
@@ -21,42 +38,36 @@ const Suggestions = () => {
                         <span>{'Suggestions'}</span>
                     </span>
                 </div>
-                <div
-                    className='hyperlink-token'
-                    role='button'
-                    onClick={(e) => onClick(e)}
-                >
-                    <div className='hyperlink-token__icon'>
-                        <span>{'#'}</span>
+                {suggestions.length > 0 ?
+                    suggestions.map(({id, text}) => (
+                        <div
+                            key={id}
+                            className='hyperlink-token'
+                            role='button'
+                            onClick={() => onClick(text)}
+                        >
+                            <div className='hyperlink-token__icon'>
+                                <span>{'#'}</span>
+                            </div>
+                            <div className='hyperlink-token__info'>
+                                <div className='hyperlink-token__title'>{text}</div>
+                            </div>
+                        </div>
+                    )) :
+                    <div className='hyperlink-token'>
+                        <div className='hyperlink-token__icon'>
+                            <span>{'?'}</span>
+                        </div>
+                        <div className='hyperlink-token__info'>
+                            <div className='hyperlink-token__title-no-content'>
+                                {formatMessage({defaultMessage: 'No suggestions available'})}
+                            </div>
+                            <div className='hyperlink-token__desc'>
+                                {formatMessage({defaultMessage: 'Please type or delete characters'})}
+                            </div>
+                        </div>
                     </div>
-                    <div className='hyperlink-token__info'>
-                        <div className='hyperlink-token__title'>{'Organization X'}</div>
-                    </div>
-                </div>
-                <div
-                    className='hyperlink-token'
-                    role='button'
-                    onClick={(e) => onClick(e)}
-                >
-                    <div className='hyperlink-token__icon'>
-                        <span>{'#'}</span>
-                    </div>
-                    <div className='hyperlink-token__info'>
-                        <div className='hyperlink-token__title'>{'Organization Y'}</div>
-                    </div>
-                </div>
-                <div
-                    className='hyperlink-token'
-                    role='button'
-                    onClick={(e) => onClick(e)}
-                >
-                    <div className='hyperlink-token__icon'>
-                        <span>{'#'}</span>
-                    </div>
-                    <div className='hyperlink-token__info'>
-                        <div className='hyperlink-token__title'>{'Organization Z'}</div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     );

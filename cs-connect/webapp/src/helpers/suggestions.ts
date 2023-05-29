@@ -1,12 +1,15 @@
+import {fetchChannelById, fetchSectionInfo} from 'src/clients';
 import {END_SYMBOL, getOrganizations, getStartSymbol} from 'src/config/config';
 import {TOKEN_SEPARATOR} from 'src/constants';
 import {
+    parseRhsReference,
     parseTextToReference,
     parseTextToTokens,
     parseTokensToSuggestions,
     replaceAt,
 } from 'src/helpers';
-import {SuggestionsData} from 'src/types/parser';
+import {getSection} from 'src/hooks';
+import {SuggestionData, SuggestionsData} from 'src/types/parser';
 
 export const getTextAndCursorPositions = (textarea: HTMLTextAreaElement): [string, number, number] => {
     const text = textarea.value;
@@ -75,24 +78,47 @@ export const getSuggestionsTokens = (textarea: HTMLTextAreaElement): string[] =>
 };
 
 export const getSuggestions = async (tokens: string[], reference: string): Promise<SuggestionsData> => {
-    const suggestions = await parseTokensToSuggestions(tokens, reference);
+    const [updatedTokens, isRhsReference, object] = await parseRhsReference(tokens);
+    const objectSuggestion: SuggestionData | undefined = object ? {
+        id: object.id,
+        text: object.name,
+    } : undefined;
+
+    const suggestions = await parseTokensToSuggestions(updatedTokens, reference, {isRhsReference});
     if (!suggestions) {
-        return {suggestions: []};
+        return {suggestions: objectSuggestion ? [objectSuggestion] : []};
     }
 
     // console.log('Suggestions: ' + JSON.stringify(suggestions, null, 2));
-    return suggestions;
+    return objectSuggestion ? {suggestions: [...suggestions.suggestions, objectSuggestion]} : suggestions;
 };
 
-export const getDefaultSuggestions = (): SuggestionsData => {
+export const getEmptySuggestions = (): SuggestionsData => {
     return {suggestions: []};
 };
 
-export const getOrganizationsSuggestions = () => {
+export const getOrganizationsSuggestions = (): SuggestionsData => {
     const suggestions = getOrganizations().
         map(({id, name}) => ({
             id,
             text: name,
         }));
     return {suggestions};
+};
+
+export const getAllSuggestionsForNoHint = async (): Promise<SuggestionsData> => {
+    const {suggestions} = getOrganizationsSuggestions();
+    const channelId = localStorage.getItem('channelId');
+    const {channel} = await fetchChannelById(channelId as string);
+
+    const {url} = getSection(channel.parentId);
+    const {id, name} = await fetchSectionInfo(channel.sectionId, url);
+
+    return {suggestions: [
+        {
+            id,
+            text: name,
+        },
+        ...suggestions,
+    ]};
 };
