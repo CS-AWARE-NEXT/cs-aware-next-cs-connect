@@ -1,9 +1,4 @@
-import React, {
-    useCallback,
-    useContext,
-    useMemo,
-    useState,
-} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button, Modal, Steps} from 'antd';
 import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
@@ -15,7 +10,12 @@ import {useRouteMatch} from 'react-router-dom';
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
-import {formatName, formatSectionPath, formatStringToCapitalize} from 'src/helpers';
+import {
+    formatName,
+    formatSectionPath,
+    formatStringToCapitalize,
+    isNameCorrect,
+} from 'src/helpers';
 import {
     PARENT_ID_PARAM,
     ecosystemAttachmentsWidget,
@@ -56,29 +56,49 @@ const ScenarioWizard = ({
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
 
-    // TODO: define a type for wizard data
-    const emptyWizardData = useMemo(() => ({
+    // TODO: define a type for wizard data and for wizard data errors
+    const emptyWizardData = {
         name: '',
         objectives: '',
         outcomes: [],
         roles: [],
         elements: {},
         attachments: [],
-    }), []);
+    };
+
+    const emptyWizardDataError = {
+        nameError: '',
+    };
 
     const [errorMessage, setErrorMessage] = useState('');
     const [current, setCurrent] = useState(0);
     const [visible, setVisible] = useState(false);
     const [wizardData, setWizardData] = useState(emptyWizardData);
+    const [wizardDataError, setWizardDataError] = useState(emptyWizardDataError);
 
-    const cleanModal = useCallback(() => {
+    const cleanModal = () => {
         setVisible(false);
         setCurrent(0);
         setWizardData(emptyWizardData);
+        setWizardDataError(emptyWizardDataError);
         setErrorMessage('');
-    }, []);
+    };
+
+    const isOk = (): boolean => {
+        const nameError = isNameCorrect(wizardData.name);
+        if (nameError !== '') {
+            setWizardDataError((prev: any) => ({...prev, nameError}));
+            setCurrent(0);
+            return false;
+        }
+        return true;
+    };
 
     const handleOk = async () => {
+        if (!isOk()) {
+            return;
+        }
+
         const issue: SectionInfo = {
             id: '',
             name: wizardData.name,
@@ -120,6 +140,8 @@ const ScenarioWizard = ({
                 <ObjectivesStep
                     data={{name: wizardData.name, objectives: wizardData.objectives}}
                     setWizardData={setWizardData}
+                    errorData={{nameError: wizardDataError.nameError}}
+                    setWizardDataError={setWizardDataError}
                 />),
         },
         {

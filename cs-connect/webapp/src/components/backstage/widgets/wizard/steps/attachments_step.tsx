@@ -17,7 +17,9 @@ type Props = {
 };
 
 export const fillAttachments = (attachments: string[]): Attachment[] => {
-    return attachments.map((attachment) => ({attachment}));
+    return attachments.
+        filter((attachment) => attachment !== '').
+        map((attachment) => ({attachment}));
 };
 
 const AttachmentsStep = ({data, setWizardData}: Props) => {

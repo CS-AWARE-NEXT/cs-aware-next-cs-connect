@@ -17,7 +17,9 @@ type Props = {
 };
 
 export const fillOutcomes = (outcomes: string[]): Outcome[] => {
-    return outcomes.map((outcome) => ({outcome}));
+    return outcomes.
+        filter((outcome) => outcome !== '').
+        map((outcome) => ({outcome}));
 };
 
 const OutcomesStep = ({data, setWizardData}: Props) => {
