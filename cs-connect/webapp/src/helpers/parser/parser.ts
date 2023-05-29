@@ -1,7 +1,7 @@
 import {
     END_SYMBOL,
     START_SYMBOL,
-    getOrganizationBySectionName,
+    getOrganizationBySectionId,
     getStartSymbol,
     getSymbol,
 } from 'src/config/config';
@@ -34,8 +34,8 @@ export const parseRhsReference = async (tokens: string[])
     const channelId = localStorage.getItem('channelId');
     const {channel} = await fetchChannelById(channelId as string);
 
-    const {name: sectionName, url} = getSection(channel.parentId);
-    const {name: organizationName} = getOrganizationBySectionName(sectionName);
+    const {id, name: sectionName, url} = getSection(channel.parentId);
+    const {name: organizationName} = getOrganizationBySectionId(id);
     const object = await fetchSectionInfo(channel.sectionId, url);
     const {name: objectName} = object;
 
