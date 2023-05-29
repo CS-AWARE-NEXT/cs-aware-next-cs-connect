@@ -56,6 +56,10 @@ export const getOrganizationBySectionName = (name: string): Organization => {
     return getOrganizations().filter((o) => o.sections.some((s) => s.name === name))[0];
 };
 
+export const getOrganizationBySectionId = (id: string): Organization => {
+    return getOrganizations().filter((o) => o.sections.some((s) => s.id === id))[0];
+};
+
 export const getStartSymbol = (): string => {
     checkAndSetSymbol();
     return `${symbol}${START_SYMBOL}`;
