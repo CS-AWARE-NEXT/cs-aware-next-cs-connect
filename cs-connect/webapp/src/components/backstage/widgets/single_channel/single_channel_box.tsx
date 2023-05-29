@@ -18,7 +18,7 @@ import {
     useSection,
     useSectionInfo,
 } from 'src/hooks';
-import {formatName} from 'src/helpers';
+import {formatChannelName} from 'src/helpers';
 
 import {CreateSingleChannel} from './single_channel_creation';
 
@@ -50,7 +50,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
     useEffect(() => {
         dispatchChannelCreation(channelCreationAction({
             ...channelCreation,
-            channelName: formatName(`${organization.name}-${sectionInfo.name}`),
+            channelName: formatChannelName(`${organization.name}-${sectionInfo.name}`),
         }));
     }, [sectionInfo]);
 
