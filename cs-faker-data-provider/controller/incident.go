@@ -57,7 +57,15 @@ func GetIncidentGraph(c *fiber.Ctx) error {
 }
 
 func GetIncidentTable(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
 	incidentId := c.Params("incidentId")
+	if organizationId == "4" {
+		return c.JSON(model.TableData{
+			Caption: extendedIncidentsTableData.Caption,
+			Headers: extendedIncidentsTableData.Headers,
+			Rows:    extendedIncidentsTableRowsMap[incidentId],
+		})
+	}
 	return c.JSON(model.TableData{
 		Caption: incidentsTableData.Caption,
 		Headers: incidentsTableData.Headers,
@@ -507,6 +515,666 @@ var incidentsTableRowsMap = map[string][]model.TableRow{
 				{
 					Dim:   8,
 					Value: `pid: 314 name: SamS extensions: {windows-service-ext={start_type=SERVICE_AUTO_START, display_name=Security Accounts Manager, service_name=SamS, service_type=SERVICE_WIN32_SHARE_PROCESS , service_status=SERVICE_RUNNING}}`,
+				},
+			},
+		},
+	},
+}
+
+var extendedIncidentsTableData = model.TableData{
+	Caption: "History",
+	Headers: []model.TableHeader{
+		{
+			Dim:  3,
+			Name: "Time",
+		},
+		{
+			Dim:  2,
+			Name: "State",
+		},
+		{
+			Dim:  5,
+			Name: "Who",
+		},
+		{
+			Dim:  2,
+			Name: "Comment",
+		},
+	},
+	Rows: []model.TableRow{},
+}
+
+var extendedIncidentsTableRowsMap = map[string][]model.TableRow{
+	"some-1659864426508369921": {
+		{
+			ID:   "90a16b01-03de-4590-a6b3-7e4805146f93",
+			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:58",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:58",
+				},
+				{
+					Dim:   2,
+					Value: "Ignored",
+				},
+				{
+					Dim:   5,
+					Value: "kim.gammelgaard@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "hkjh",
+				},
+			},
+		},
+		{
+			ID:   "a5eb6b93-ec97-4c6b-a641-b4c993731612",
+			Name: "CS-Aware 22/05/2023, 12:58",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:58",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+	},
+	"some-1651183105397366787": {
+		{
+			ID:   "1007dd95-19d4-40bb-8e3d-5521929e308e",
+			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:58",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:58",
+				},
+				{
+					Dim:   2,
+					Value: "Ignored",
+				},
+				{
+					Dim:   5,
+					Value: "kim.gammelgaard@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "hkjh",
+				},
+			},
+		},
+		{
+			ID:   "7772464c-507b-4ed6-8bf5-3b81bbd5b99a",
+			Name: "CS-Aware 26/04/2023, 15:05",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "26/04/2023, 15:05",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+	},
+	"sighting--28c5631d-696f-4b46-b7ae-e3b2731f331e": {
+		{
+			ID:   "21843301-9896-405f-8e20-ec488fa9b950",
+			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:57",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:57",
+				},
+				{
+					Dim:   2,
+					Value: "Ignored",
+				},
+				{
+					Dim:   5,
+					Value: "kim.gammelgaard@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "hjkhgkj",
+				},
+			},
+		},
+		{
+			ID:   "d7ef632d-cc9f-40e3-9e60-31ec6d397d47",
+			Name: "viewer@cs-aware.com 16/05/2023, 10:24",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "16/05/2023, 10:24",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "uio",
+				},
+			},
+		},
+		{
+			ID:   "6215d2f0-d095-45ad-af9c-9bfcca86d9f6",
+			Name: "viewer@cs-aware.com 08/03/2023, 13:24",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 13:24",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "efrs",
+				},
+			},
+		},
+		{
+			ID: "857849e9-27ad-4d93-b91d-55b3ce9bc623",
+			Name: "CS-Aware	23/02/2023, 13:45",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "23/02/2023, 13:45",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "efrs",
+				},
+			},
+		},
+	},
+	"some-1655890426048438274": {
+		{
+			ID:   "a6c04865-05e5-4945-a103-000da5ace5e7",
+			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:57",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:57",
+				},
+				{
+					Dim:   2,
+					Value: "Resolved",
+				},
+				{
+					Dim:   5,
+					Value: "kim.gammelgaard@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "treyugjhg",
+				},
+			},
+		},
+		{
+			ID:   "6528dc38-7b3d-4389-ad90-209602bf3b89",
+			Name: "CS-Aware 10/05/2023, 14:17",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "10/05/2023, 14:17",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "is our home page affected?",
+				},
+			},
+		},
+	},
+	"some-1660449723898277888": {
+		{
+			ID:   "e7736b76-aff3-4f74-a414-aeb5c7601e15",
+			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:58",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:58",
+				},
+				{
+					Dim:   2,
+					Value: "Ignored",
+				},
+				{
+					Dim:   5,
+					Value: "kim.gammelgaard@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "test",
+				},
+			},
+		},
+		{
+			ID:   "ea0bb60c-4915-44c4-a7b4-63c04cc510d5",
+			Name: "CS-Aware 22/05/2023, 12:55",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:55",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+	},
+	"some-1659895501766926337": {
+		{
+			ID:   "998cbc48-5e7d-4e0a-bc6f-e9223ea591d1",
+			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:40",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:40",
+				},
+				{
+					Dim:   2,
+					Value: "Ignored",
+				},
+				{
+					Dim:   5,
+					Value: "kim.gammelgaard@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "not using it",
+				},
+			},
+		},
+		{
+			ID:   "4bff8f89-5165-4b9f-8395-0a27de7e519b",
+			Name: "CS-Aware 22/05/2023, 12:39",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "22/05/2023, 12:39",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+	},
+	"sighting--d841f515-49da-431e-9f87-74f6611d0d21": {
+		{
+			ID:   "33048d2a-feb6-4c51-95fb-077cb5e2dda4",
+			Name: "kim.gammelgaard@cs-aware.com 30/03/2023, 14:38",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "30/03/2023, 14:38",
+				},
+				{
+					Dim:   2,
+					Value: "Resolved",
+				},
+				{
+					Dim:   5,
+					Value: "kim.gammelgaard@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "hkjhjh",
+				},
+			},
+		},
+		{
+			ID:   "5ac54af0-e1fb-4d9c-9a33-235f8c810428",
+			Name: "CS-Aware 08/03/2023, 14:35",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:35",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+	},
+	"TODO": {
+		{
+			ID:   "1746362a-d37c-444d-b7fd-430ee2672ef2",
+			Name: "viewer@cs-aware.com 08/03/2023, 14:39",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:39",
+				},
+				{
+					Dim:   2,
+					Value: "Ignored",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "guyghkj",
+				},
+			},
+		},
+		{
+			ID:   "4d6f0309-92cc-4263-af80-31598fa2d879",
+			Name: "viewer@cs-aware.com 08/03/2023, 14:39",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:39",
+				},
+				{
+					Dim:   2,
+					Value: "Self Healing decline",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+		{
+			ID:   "4d6f0309-92cc-4263-af80-31598fa2d879",
+			Name: "viewer@cs-aware.com 08/03/2023, 14:39",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:39",
+				},
+				{
+					Dim:   2,
+					Value: "Self Healing needs descision",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+		{
+			ID:   "5bdcee9a-b3dd-4cf9-b644-40453d4e196e",
+			Name: "CS-Aware Self Healing 08/03/2023, 14:38",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:38",
+				},
+				{
+					Dim:   2,
+					Value: "Self Healing needs descision",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware Self Healing",
+				},
+				{
+					Dim:   2,
+					Value: "CS-AWARE SIMULATION: Download and apply the update packages found in the following link: https://access.redhat.com/errata/RHSA-2015:1462",
+				},
+			},
+		},
+		{
+			ID:   "d21208a3-86f9-4763-a87a-cbd1a4a4fea2",
+			Name: "viewer@cs-aware.com 08/03/2023, 14:37",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:37",
+				},
+				{
+					Dim:   2,
+					Value: "Self Healing accept",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+		{
+			ID:   "4d5e2e9e-79b5-4c27-b7ba-91b50548a424",
+			Name: "CS-Aware Self Healing 08/03/2023, 14:37",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:37",
+				},
+				{
+					Dim:   2,
+					Value: "Self Healing needs descision",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware Self Healing",
+				},
+				{
+					Dim:   2,
+					Value: "CS-AWARE SIMULATION: Download and apply the update packages found in the following link: https://access.redhat.com/errata/RHSA-2015:1462",
+				},
+			},
+		},
+		{
+			ID:   "9c50962d-bb88-49e1-aed0-2a4992cfdf2d",
+			Name: "CS-Aware Self Healing 08/03/2023, 14:37",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:37",
+				},
+				{
+					Dim:   2,
+					Value: "Self Healing needs descision",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware Self Healing",
+				},
+				{
+					Dim:   2,
+					Value: "CS-AWARE SIMULATION: Download and apply the update packages found in the following link: https://access.redhat.com/errata/RHSA-2015:1462",
+				},
+			},
+		},
+		{
+			ID:   "0595cebf-338f-4481-9bdf-acfeaab57b61",
+			Name: "CS-Aware Self Healing 08/03/2023, 14:36",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:36",
+				},
+				{
+					Dim:   2,
+					Value: "Self Healing needs descision",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware Self Healing",
+				},
+				{
+					Dim:   2,
+					Value: "CS-AWARE SIMULATION: Download and apply the update packages found in the following link: https://access.redhat.com/errata/RHSA-2015:1462",
+				},
+			},
+		},
+		{
+			ID:   "800e8b47-5d04-48fc-8727-67429ec7427e",
+			Name: "CS-Aware 08/03/2023, 14:36",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 14:36",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "initial",
+				},
+			},
+		},
+	},
+	"sighting--a6a07879-a89a-467b-9bee-65450207dc74": {
+		{
+			ID:   "93fc4c04-b40b-4625-bf01-e46733578d5a",
+			Name: "viewer@cs-aware.com 08/03/2023, 13:22",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 13:22",
+				},
+				{
+					Dim:   2,
+					Value: "Resolved",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "segsrgrs",
+				},
+			},
+		},
+		{
+			ID:   "d4b621e8-0a38-43fc-aef6-1a44d69bcfde",
+			Name: "viewer@cs-aware.com 08/03/2023, 13:21",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "08/03/2023, 13:21",
+				},
+				{
+					Dim:   2,
+					Value: "Resolved",
+				},
+				{
+					Dim:   5,
+					Value: "viewer@cs-aware.com",
+				},
+				{
+					Dim:   2,
+					Value: "lkrngapoergnak",
+				},
+			},
+		},
+		{
+			ID: "5ac63acd-6b66-4abb-a242-f60a899a65ed",
+			Name: "CS-Aware	23/02/2023, 13:48",
+			Values: []model.TableValue{
+				{
+					Dim:   3,
+					Value: "23/02/2023, 13:48",
+				},
+				{
+					Dim:   2,
+					Value: "Active",
+				},
+				{
+					Dim:   5,
+					Value: "CS-Aware",
+				},
+				{
+					Dim:   2,
+					Value: "efrs",
 				},
 			},
 		},
