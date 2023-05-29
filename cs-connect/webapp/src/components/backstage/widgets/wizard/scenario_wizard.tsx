@@ -125,7 +125,8 @@ const ScenarioWizard = ({
             }).
             catch((err: ClientError) => {
                 const message = JSON.parse(err.message);
-                setErrorMessage(message.error);
+                setErrorMessage(`${message.error}.`);
+                setCurrent(0);
             });
     };
 
