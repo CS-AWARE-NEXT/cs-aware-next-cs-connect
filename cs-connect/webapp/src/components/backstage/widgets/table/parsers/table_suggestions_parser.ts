@@ -56,6 +56,7 @@ const parseRowSuggestions = async (
     return {suggestions};
 };
 
+// Needed to understand if to provide all suggestions for the header or for the row
 const parseHeaderOrRowName = (reference: string): string => {
     const tokens = reference.
         split(TOKEN_SEPARATOR).
