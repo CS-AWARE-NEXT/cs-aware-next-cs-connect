@@ -71,6 +71,7 @@ const nodeKindMap = buildMap([
     {key: 'switch', value: '5px'},
     {key: 'server', value: '10px'},
     {key: 'vpn-server', value: '0px'},
+    {key: 'customer', value: '50%'},
 ]);
 
 // These can be alternatives to nodes color
@@ -106,7 +107,7 @@ const GraphNodeType = ({id, data}: NodeProps) => {
 const NodeContainer = styled.div<{isUrlHashed: boolean, kind: string}>`
     background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.8);
-    border-radius: ${(props) => nodeKindMap.get(props.kind)};;
+    border-radius: ${(props) => nodeKindMap.get(props.kind)};
 `;
 
 export default GraphNodeType;
