@@ -18,10 +18,12 @@ export const useHideOptions = () => {
 
 const hideOptions = (): NodeJS.Timeout[][] => {
     (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
-    const hiddenIconBox = document.getElementById('hidden-icon')?.parentElement?.parentElement;
-    if (hiddenIconBox) {
-        hiddenIconBox.style.display = 'none';
-    }
+
+    // TODO: discuss why this causes an error in Mozilla
+    // const hiddenIconBox = document.getElementById('hidden-icon')?.parentElement?.parentElement;
+    // if (hiddenIconBox) {
+    //     hiddenIconBox.style.display = 'none';
+    // }
 
     const interval = setInterval(() => {
         const indicator = document.getElementById('unreadIndicatorTop');
