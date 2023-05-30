@@ -105,7 +105,7 @@ const GraphNodeType = ({id, data}: NodeProps) => {
 };
 
 const NodeContainer = styled.div<{isUrlHashed: boolean, kind: string}>`
-    background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
+    background: ${(props) => (props.isUrlHashed ? 'rgb(255, 255, 51)' : 'var(--center-channel-bg)')};
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.8);
     border-radius: ${(props) => nodeKindMap.get(props.kind)};
 `;
