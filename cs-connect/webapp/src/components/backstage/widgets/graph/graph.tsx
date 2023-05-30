@@ -50,7 +50,7 @@ const DESCRIPTION_ID_PREFIX = 'graph-';
 const defaultGraphStyle: GraphStyle = {
     containerDirection: 'row',
     graphWidth: '75%',
-    graphHeight: '60vh',
+    graphHeight: '40vh',
     textBoxStyle: {
         height: '5vh',
         marginTop: '0px',
