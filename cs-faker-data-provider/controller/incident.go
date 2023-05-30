@@ -548,11 +548,11 @@ var extendedIncidentsTableRowsMap = map[string][]model.TableRow{
 	"some-1659864426508369921": {
 		{
 			ID:   "90a16b01-03de-4590-a6b3-7e4805146f93",
-			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:58",
+			Name: "kim.gammelgaard@cs-aware.com 22/05/2023, 12:59",
 			Values: []model.TableValue{
 				{
 					Dim:   3,
-					Value: "22/05/2023, 12:58",
+					Value: "22/05/2023, 12:59",
 				},
 				{
 					Dim:   2,
