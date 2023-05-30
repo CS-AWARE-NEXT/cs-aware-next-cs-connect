@@ -957,7 +957,7 @@ var extendedIncidentsTableRowsMap = map[string][]model.TableRow{
 			},
 		},
 		{
-			ID:   "4d6f0309-92cc-4263-af80-31598fa2d879",
+			ID:   "467bdce7-caa3-425f-9016-a3a8e61b83b0",
 			Name: "viewer@cs-aware.com 08/03/2023, 14:39",
 			Values: []model.TableValue{
 				{
