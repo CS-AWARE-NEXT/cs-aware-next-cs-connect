@@ -10,6 +10,44 @@ organizations:
         url: http://localhost:3000/cs-data-provider/issues
         widgets:
           - type: channel
+  - name: Demo CS-AWARE EU
+    id: "4"
+    description: The organization at https://demo.cs-aware.eu/index.html
+    sections:
+      - name: Incidents
+        id: "13"
+        url: http://localhost:3000/cs-data-provider/organizations/4/incidents
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://localhost:3000/cs-data-provider/organizations/4/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/4/incidents/:id/graph
+          - name: History
+            type: table
+            url: http://localhost:3000/cs-data-provider/organizations/4/incidents/:id/table
+          - type: channel
+      - name: Policies
+        id: "14"
+        url: http://localhost:3000/cs-data-provider/organizations/4/policies
+        widgets:
+          - name: Dos
+            type: list
+            url: http://localhost:3000/cs-data-provider/organizations/4/policies/:id/dos
+          - name: Don'ts
+            type: list
+            url: http://localhost:3000/cs-data-provider/organizations/4/policies/:id/donts
+          - type: channel
+      - name: Stories
+        id: "15"
+        internal: true
+        url: http://localhost:3000/cs-data-provider/organizations/4/stories
+        widgets:
+          - name: Events
+            type: timeline
+            url: http://localhost:3000/cs-data-provider/organizations/4/stories/:id/timeline
+          - type: channel
   - name: Organization X
     id: "1"
     description: This is the X organization

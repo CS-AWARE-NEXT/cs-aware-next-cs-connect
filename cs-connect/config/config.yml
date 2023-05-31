@@ -10,6 +10,44 @@ organizations:
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/issues
         widgets:
           - type: channel
+  - name: Demo CS-AWARE EU
+    id: "4"
+    description: The organization at httpss://demo.cs-aware.eu/index.html
+    sections:
+      - name: Incidents
+        id: "13"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents
+        widgets:
+          - name: Description
+            type: text-box
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/graph
+          - name: History
+            type: table
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/table
+          - type: channel
+      - name: Policies
+        id: "14"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies
+        widgets:
+          - name: Dos
+            type: list
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies/:id/dos
+          - name: Don'ts
+            type: list
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies/:id/donts
+          - type: channel
+      - name: Stories
+        id: "15"
+        internal: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/stories
+        widgets:
+          - name: Events
+            type: timeline
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/stories/:id/timeline
+          - type: channel
   - name: Organization X
     id: "1"
     description: This is the X organization
