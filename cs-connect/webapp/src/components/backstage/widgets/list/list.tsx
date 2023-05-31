@@ -76,7 +76,7 @@ const ItemsList = ({
                                 />,
                             ]}
                             style={{
-                                backgroundColor: isReferencedByUrlHash(urlHash, itemId) ? 'rgb(255, 255, 51)' : 'var(--center-channel-bg)',
+                                backgroundColor: isReferencedByUrlHash(urlHash, itemId) ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)',
                             }}
                         >
                             {Avatar ?

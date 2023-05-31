@@ -64,7 +64,7 @@ const RowItem = styled.div<{isUrlHashed?: boolean, pointer?: boolean}>`
     padding-bottom: 8px;
     align-items: center;
     margin: 0;
-    background: ${(props) => (props.isUrlHashed ? 'rgb(255, 255, 51)' : 'var(--center-channel-bg)')};
+    background: ${(props) => (props.isUrlHashed ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)')};
     border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
     cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
     ${CopyLink} {
