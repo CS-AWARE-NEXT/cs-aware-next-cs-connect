@@ -1,4 +1,5 @@
 import {fetchSectionInfo} from 'src/clients';
+import {getOrganizationById} from 'src/config/config';
 import {
     ecosystemElementsFields,
     ecosystemElementsWidget,
@@ -114,6 +115,11 @@ const getElementAndText = (
 ): [Element | undefined, string] => {
     let element: Element | undefined;
     let text = '';
+    if (formatStringToLowerCase(columnName) === ecosystemElementsFields[0]) {
+        element = elements.find(({organizationId}) => getOrganizationById(organizationId).name === rowValue);
+        text = getOrganizationById(element?.organizationId as string).name;
+    }
+
     if (formatStringToLowerCase(columnName) === ecosystemElementsFields[1]) {
         element = elements.find(({name}) => name === rowValue);
         text = element?.name as string;
