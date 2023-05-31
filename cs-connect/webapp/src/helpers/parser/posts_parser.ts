@@ -1,4 +1,9 @@
-import {HyperlinkReference, ParseOptions, WidgetHash} from 'src/types/parser';
+import {
+    HyperlinkReference,
+    ParseOptions,
+    WidgetHash,
+    WidgetHashOrObjectForward,
+} from 'src/types/parser';
 import {getAndRemoveOneFromArray, isAnyPropertyMissingFromObject} from 'src/helpers';
 import {getOrganizationByName} from 'src/config/config';
 import {fetchPaginatedTableData} from 'src/clients';
@@ -10,6 +15,7 @@ import {Widget} from 'src/types/organization';
 import {isSectionByName} from 'src/hooks';
 import {parseListWidgetId} from 'src/components/backstage/widgets/list/parsers/list_posts_parser';
 import {parsePaginatedTableWidgetId} from 'src/components/backstage/widgets/paginated_table/parsers/paginated_table_posts_parser';
+import {parseAccordionWidgetId} from 'src/components/backstage/widgets/accordion/parsers/accordion_posts_parser';
 
 import {getDefaultWidgetByName, withTokensLengthCheck} from './parser';
 import NoMoreTokensError from './errors/noMoreTokensError';
@@ -34,7 +40,7 @@ export const parseTokensToHyperlinkReference = async (
         if (error instanceof NoMoreTokensError) {
             return hyperlinkReference;
         }
-        return null;
+        return hyperlinkReference.organization ? hyperlinkReference : null;
     }
     return hyperlinkReference;
 };
@@ -113,33 +119,44 @@ export const parseWidgetHash = async (
             return hyperlinkReference;
         }
     }
-    const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget, {...options, isIssues});
+    const {widgetHash, objectForward} = await parseWidgetHashByType(hyperlinkReference, tokens, widget, {...options, isIssues});
+    if (objectForward) {
+        return {...hyperlinkReference, object: objectForward};
+    }
     if (isAnyPropertyMissingFromObject(widgetHash)) {
         return hyperlinkReference;
     }
     return {...hyperlinkReference, widgetHash};
 };
 
-const parseWidgetHashByType = (
+const parseWidgetHashByType = async (
     hyperlinkReference: HyperlinkReference,
     tokens: string[],
     widget: Widget,
     options?: ParseOptions,
-): WidgetHash | Promise<WidgetHash> => {
+): Promise<WidgetHashOrObjectForward> => {
+    let widgetHash: WidgetHash | undefined;
     switch (widget.type) {
+    case WidgetType.Accordion:
+        return parseAccordionWidgetId(hyperlinkReference, tokens, widget, options);
     case WidgetType.Graph:
-        return parseGraphWidgetId(hyperlinkReference, tokens, widget);
+        widgetHash = await parseGraphWidgetId(hyperlinkReference, tokens, widget);
+        return {widgetHash};
     case WidgetType.PaginatedTable:
-        return parsePaginatedTableWidgetId(hyperlinkReference, tokens, widget, options);
+        widgetHash = await parsePaginatedTableWidgetId(hyperlinkReference, tokens, widget, options);
+        return {widgetHash};
     case WidgetType.List:
-        return parseListWidgetId(hyperlinkReference, tokens, widget, options);
+        widgetHash = await parseListWidgetId(hyperlinkReference, tokens, widget, options);
+        return {widgetHash};
     case WidgetType.Table:
-        return parseTableWidgetId(hyperlinkReference, tokens, widget);
+        widgetHash = await parseTableWidgetId(hyperlinkReference, tokens, widget);
+        return {widgetHash};
     case WidgetType.TextBox:
-        return parseTextBoxWidgetId(hyperlinkReference, widget, options);
+        widgetHash = await parseTextBoxWidgetId(hyperlinkReference, widget, options);
+        return {widgetHash};
     case WidgetType.Timeline:
-        return {hash: '', text: ''};
+        return {widgetHash};
     default:
-        return {hash: '', text: ''};
+        return {widgetHash};
     }
 };
