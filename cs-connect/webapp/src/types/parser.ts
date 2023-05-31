@@ -40,10 +40,16 @@ export type SuggestionData = {
 export type ParseOptions = Partial<{
     match: string;
     parseMatch: string;
-    isValueNeeded: boolean;
-    valueReference: string;
+    clonedTokens: string[];
+
     isIssues: boolean;
     isRhsReference: boolean;
     withHint: boolean;
+
+    // For text-box widget
+    isValueNeeded: boolean;
+    valueReference: string;
+
+    // For table and paginated-table widget
     reference: string;
 }>;
