@@ -38,6 +38,12 @@ const Accordion = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
 
+    // We could need to override default scroll
+    // because we need to give the browser the time for content to be rendered.
+    // However this can lead to problem with components usign the default scroll,
+    // so we increased the time for the default scroll
+    // useScrollIntoViewWithCustomTime(urlHash, 500);
+
     useEffect(() => {
         if (urlHash) {
             const panels = document.getElementsByClassName('ant-collapse-item') as HTMLCollectionOf<HTMLElement>;
