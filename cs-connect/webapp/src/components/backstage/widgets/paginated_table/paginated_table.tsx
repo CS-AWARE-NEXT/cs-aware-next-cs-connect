@@ -184,19 +184,19 @@ const PaginatedTable = ({
                         rowKey='key'
                         size='middle'
                     />
-                    {internal &&
-                        <Collapse>
-                            <TablePanel
-                                header={formatMessage({defaultMessage: 'Create New'})}
-                                key='add-new-row'
-                            >
-                                <RowInputFields
-                                    columns={data.columns}
-                                    createRow={handleCreateRow}
-                                />
-                            </TablePanel>
-                        </Collapse>}
                 </>}
+            {internal &&
+                <Collapse>
+                    <TablePanel
+                        header={formatMessage({defaultMessage: 'Create New'})}
+                        key='add-new-row'
+                    >
+                        <RowInputFields
+                            columns={data.columns}
+                            createRow={handleCreateRow}
+                        />
+                    </TablePanel>
+                </Collapse>}
         </Container>
     );
 };
@@ -230,7 +230,7 @@ const TableRow = (props: any) => {
 const TableRowItem = styled.tr<{isUrlHashed?: boolean, pointer: boolean}>`
     cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
     color: rgba(var(--center-channel-color-rgb), 0.90);
-    background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
+    background: ${(props) => (props.isUrlHashed ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)')};
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.04) !important;
     }

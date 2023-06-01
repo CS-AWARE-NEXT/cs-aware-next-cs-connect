@@ -1,19 +1,38 @@
 import {Input} from 'antd';
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, {
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useState,
+} from 'react';
 import styled from 'styled-components';
 
 import {TextInput} from 'src/components/backstage/widgets/shared';
+import {PaddedErrorMessage} from 'src/components/commons/messages';
 
 const {TextArea} = Input;
 
 type Props = {
     data: any;
     setWizardData: Dispatch<SetStateAction<any>>;
+    errorData: any;
+    setWizardDataError: Dispatch<SetStateAction<any>>;
 };
 
-const ObjectivesStep = ({data, setWizardData}: Props) => {
+const ObjectivesStep = ({
+    data,
+    setWizardData,
+    errorData,
+    setWizardDataError,
+}: Props) => {
     const [name, setName] = useState(data.name);
     const [objectives, setObjectives] = useState(data.objectives);
+
+    useEffect(() => {
+        // Force re-rendering to be sure modal is cleaned after being closed
+        setName(data.name);
+        setObjectives(data.objectives);
+    }, [data.name, data.objectives]);
 
     return (
         <Container>
@@ -25,15 +44,16 @@ const ObjectivesStep = ({data, setWizardData}: Props) => {
                 onChange={(e) => {
                     setName(e.target.value);
                     setWizardData((prev: any) => ({...prev, name: e.target.value}));
+                    setWizardDataError((prev: any) => ({...prev, nameError: ''}));
                 }}
             />
-            {/* <PaddedErrorMessage
-                display={errors[key] && errors[key] !== ''}
+            <PaddedErrorMessage
+                display={errorData.nameError && errorData.nameError !== ''}
                 marginBottom={'12px'}
                 marginLeft={'0px'}
             >
-                {errors[key]}
-            </PaddedErrorMessage> */}
+                {errorData.nameError}
+            </PaddedErrorMessage>
             <Text>{'Objectives And Research Area'}</Text>
             <TextArea
                 style={{minHeight: '20vh'}}

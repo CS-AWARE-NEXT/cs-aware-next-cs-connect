@@ -8,8 +8,7 @@ import {
 import {END_SYMBOL, getStartSymbol} from 'src/config/config';
 
 import {
-    getDefaultSuggestions,
-    getOrganizationsSuggestions,
+    getAllSuggestionsForNoHint,
     getSuggestions,
     getSuggestionsReference,
     getSuggestionsTokens,
@@ -120,29 +119,23 @@ const useHandleSuggestionsVisibility = (): [boolean, Dispatch<SetStateAction<boo
     return [isVisible, setIsVisible];
 };
 
-export const useSuggestionsData = (): SuggestionsData => {
-    // TODO: move to useMemo in suggestions component
-    const defaultData = getDefaultSuggestions();
-    const organizationsData = getOrganizationsSuggestions();
+export const useSuggestionsData = (defaultData: SuggestionsData): SuggestionsData => {
     const [data, setData] = useState<SuggestionsData>(defaultData);
 
     useEffect(() => {
-        console.log('useData');
         const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
 
         const handleInput = async () => {
-            console.log('useData.handleInput');
             const tokens = getSuggestionsTokens(textarea);
             if (!tokens) {
                 return;
             }
             const reference = getSuggestionsReference(textarea);
             if (reference === '') {
-                setData(organizationsData);
+                const allSuggestions = await getAllSuggestionsForNoHint();
+                setData(allSuggestions);
                 return;
             }
-
-            console.log('tokens', tokens, 'reference', reference);
             const suggestions = await getSuggestions(tokens, reference);
             setData(suggestions);
         };

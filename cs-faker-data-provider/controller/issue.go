@@ -59,11 +59,11 @@ func (ic *IssueController) SaveIssue(c *fiber.Ctx) error {
 			"error": "Not a valid issue provided",
 		})
 	}
-	exists := exists(issue.Name)
+	exists := ic.ExistsIssueByName(issue.Name)
 	if exists {
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
-			"error": fmt.Sprintf("Issues with name %s already exists", issue.Name),
+			"error": fmt.Sprintf("Issue with name '%s' already exists", issue.Name),
 		})
 	}
 	savedIssue, err := ic.issueRepository.SaveIssue(fillIssue(issue))
@@ -77,6 +77,10 @@ func (ic *IssueController) SaveIssue(c *fiber.Ctx) error {
 		"id":   savedIssue.ID,
 		"name": savedIssue.Name,
 	})
+}
+
+func (ic *IssueController) ExistsIssueByName(name string) bool {
+	return ic.issueRepository.ExistsIssueByName(name)
 }
 
 func fillIssue(issue model.Issue) model.Issue {
@@ -104,15 +108,6 @@ func fillIssue(issue model.Issue) model.Issue {
 	issue.Roles = roles
 
 	return issue
-}
-
-func exists(name string) bool {
-	// for _, issue := range issues {
-	// 	if issue.Name == name {
-	// 		return true
-	// 	}
-	// }
-	return false
 }
 
 var columns = []model.PaginatedTableColumn{

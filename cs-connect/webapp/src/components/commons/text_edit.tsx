@@ -59,6 +59,7 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     border-radius: var(--markdown-textbox-radius, 4px);
+    padding-bottom: 1%;
 
     ${HoverMenuContainer} {
         opacity: 0

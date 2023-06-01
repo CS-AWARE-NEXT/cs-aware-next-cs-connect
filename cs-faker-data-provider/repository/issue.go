@@ -50,11 +50,11 @@ func (r *IssueRepository) GetIssues() ([]model.Issue, error) {
 	return issues, nil
 }
 
-func (r *IssueRepository) GetIssueByID(issueID string) (model.Issue, error) {
+func (r *IssueRepository) GetIssueByID(id string) (model.Issue, error) {
 	issueByIDSelect := r.queryBuilder.
 		Select("*").
 		From("CSFDP_Issue").
-		Where(sq.Eq{"ID": issueID})
+		Where(sq.Eq{"ID": id})
 	var issue model.Issue
 	err := r.db.GetBuilder(r.db.DB, &issue, issueByIDSelect)
 	if err == sql.ErrNoRows {
@@ -69,6 +69,19 @@ func (r *IssueRepository) GetIssueByID(issueID string) (model.Issue, error) {
 	r.getIssueWithAttachments(&issue)
 
 	return issue, nil
+}
+
+func (r *IssueRepository) ExistsIssueByName(name string) bool {
+	issueByNameSelect := r.queryBuilder.
+		Select("*").
+		From("CSFDP_Issue").
+		Where(sq.Eq{"Name": name})
+	var issues []model.Issue = []model.Issue{}
+	err := r.db.SelectBuilder(r.db.DB, &issues, issueByNameSelect)
+	if err != nil {
+		return true
+	}
+	return len(issues) > 0
 }
 
 func (r *IssueRepository) getIssueWithOutcomes(issue *model.Issue) error {

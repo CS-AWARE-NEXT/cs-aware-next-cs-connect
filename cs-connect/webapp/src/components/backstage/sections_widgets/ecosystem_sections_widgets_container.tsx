@@ -36,7 +36,7 @@ const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
         >
             <EcosystemObjectivesWrapper
                 name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                objectives={sectionInfo.objectives_and_research_area}
+                objectives={sectionInfo.objectivesAndResearchArea}
             />
             <EcosystemOutcomesWrapper
                 name={formatStringToCapitalize(ecosystemOutcomesWidget)}

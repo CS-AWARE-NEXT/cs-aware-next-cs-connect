@@ -1,16 +1,24 @@
-import {HyperlinkReference, ParseOptions, WidgetHash} from 'src/types/parser';
-import {formatStringToCapitalize, getAndRemoveOneFromArray, isAnyPropertyMissingFromObject} from 'src/helpers';
+import {
+    HyperlinkReference,
+    ParseOptions,
+    WidgetHash,
+    WidgetHashOrObjectForward,
+} from 'src/types/parser';
+import {getAndRemoveOneFromArray, isAnyPropertyMissingFromObject} from 'src/helpers';
 import {getOrganizationByName} from 'src/config/config';
 import {fetchPaginatedTableData} from 'src/clients';
-import {OBJECT_ID_TOKEN, ecosystemElementsWidget} from 'src/constants';
 import {WidgetType} from 'src/components/backstage/widgets/widget_types';
 import {parseTableWidgetId} from 'src/components/backstage/widgets/table/parsers/table_posts_parser';
 import {parseTextBoxWidgetId} from 'src/components/backstage/widgets/text_box/parsers/text_box_posts_parser';
 import {parseGraphWidgetId} from 'src/components/backstage/widgets/graph/parsers/graph_posts_parser';
 import {Widget} from 'src/types/organization';
 import {isSectionByName} from 'src/hooks';
+import {parseListWidgetId} from 'src/components/backstage/widgets/list/parsers/list_posts_parser';
+import {parsePaginatedTableWidgetId} from 'src/components/backstage/widgets/paginated_table/parsers/paginated_table_posts_parser';
+import {parseAccordionWidgetId} from 'src/components/backstage/widgets/accordion/parsers/accordion_posts_parser';
+import {parseTimelineWidgetId} from 'src/components/backstage/widgets/timeline/parsers/timeline_posts_parser';
 
-import {withTokensLengthCheck} from './parser';
+import {getDefaultWidgetByName, withTokensLengthCheck} from './parser';
 import NoMoreTokensError from './errors/noMoreTokensError';
 import ParseError from './errors/parseError';
 
@@ -33,7 +41,7 @@ export const parseTokensToHyperlinkReference = async (
         if (error instanceof NoMoreTokensError) {
             return hyperlinkReference;
         }
-        return null;
+        return hyperlinkReference.organization ? hyperlinkReference : null;
     }
     return hyperlinkReference;
 };
@@ -89,25 +97,21 @@ const parseObject = async (
     return {...hyperlinkReference, object};
 };
 
-const parseWidgetHash = async (
+export const parseWidgetHash = async (
     hyperlinkReference: HyperlinkReference,
     tokens: string[],
     options?: ParseOptions,
 ): Promise<HyperlinkReference> => {
+    let isIssues = false;
     const widgetName = getAndRemoveOneFromArray(tokens, 0);
     if (!widgetName) {
         return hyperlinkReference;
     }
     let widget = hyperlinkReference.section?.widgets.filter(({name}) => name === widgetName)[0];
     if (!widget && hyperlinkReference.organization?.isEcosystem) {
-        // TODO: understand if you need to check that widgetName === 'Elements'
-        // TODO: do as in suggestions parser to add all of the ecosystem's widget
-        // If the organization is the ecosystem, check for reference to the default widget
-        widget = {
-            name: formatStringToCapitalize(ecosystemElementsWidget),
-            type: WidgetType.PaginatedTable,
-            url: `${hyperlinkReference.section?.url}/${OBJECT_ID_TOKEN}`,
-        };
+        // If the section is not found, check whether it is a reference to a issue's widget
+        widget = getDefaultWidgetByName(hyperlinkReference?.section, widgetName, options?.isRhsReference);
+        isIssues = true;
     }
     if (!widget) {
         // If the section is not found, check whether it is a reference to a object's widget
@@ -116,33 +120,45 @@ const parseWidgetHash = async (
             return hyperlinkReference;
         }
     }
-    const widgetHash = await parseWidgetHashByType(hyperlinkReference, tokens, widget, options);
+    const {widgetHash, objectForward} = await parseWidgetHashByType(hyperlinkReference, tokens, widget, {...options, isIssues});
+    if (objectForward) {
+        return {...hyperlinkReference, object: objectForward};
+    }
     if (isAnyPropertyMissingFromObject(widgetHash)) {
         return hyperlinkReference;
     }
     return {...hyperlinkReference, widgetHash};
 };
 
-const parseWidgetHashByType = (
+const parseWidgetHashByType = async (
     hyperlinkReference: HyperlinkReference,
     tokens: string[],
     widget: Widget,
     options?: ParseOptions,
-): WidgetHash | Promise<WidgetHash> => {
+): Promise<WidgetHashOrObjectForward> => {
+    let widgetHash: WidgetHash | undefined;
     switch (widget.type) {
+    case WidgetType.Accordion:
+        return parseAccordionWidgetId(hyperlinkReference, tokens, widget, options);
     case WidgetType.Graph:
-        return parseGraphWidgetId(hyperlinkReference, tokens, widget);
+        widgetHash = await parseGraphWidgetId(hyperlinkReference, tokens, widget);
+        return {widgetHash};
     case WidgetType.PaginatedTable:
-        return {hash: '', text: ''};
+        widgetHash = await parsePaginatedTableWidgetId(hyperlinkReference, tokens, widget, options);
+        return {widgetHash};
     case WidgetType.List:
-        return {hash: '', text: ''};
+        widgetHash = await parseListWidgetId(hyperlinkReference, tokens, widget, options);
+        return {widgetHash};
     case WidgetType.Table:
-        return parseTableWidgetId(hyperlinkReference, tokens, widget);
+        widgetHash = await parseTableWidgetId(hyperlinkReference, tokens, widget);
+        return {widgetHash};
     case WidgetType.TextBox:
-        return parseTextBoxWidgetId(hyperlinkReference, widget, options);
+        widgetHash = await parseTextBoxWidgetId(hyperlinkReference, widget, options);
+        return {widgetHash};
     case WidgetType.Timeline:
-        return {hash: '', text: ''};
+        widgetHash = await parseTimelineWidgetId(hyperlinkReference, tokens, widget);
+        return {widgetHash};
     default:
-        return {hash: '', text: ''};
+        return {widgetHash};
     }
 };

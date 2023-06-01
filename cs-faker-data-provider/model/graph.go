@@ -38,6 +38,7 @@ type GraphDescription struct {
 }
 
 const (
+	Customer  string = "customer"
 	Switch    string = "switch"
 	Server    string = "server"
 	VpnServer string = "vpn-server"

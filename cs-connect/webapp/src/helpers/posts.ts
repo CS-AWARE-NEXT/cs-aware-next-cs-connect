@@ -2,13 +2,18 @@ import {Post} from 'mattermost-webapp/packages/types/src/posts';
 
 import {getSiteUrl} from 'src/clients';
 import {getPattern} from 'src/config/config';
-import {DEFAULT_PATH, ORGANIZATIONS_PATH, PARENT_ID_PARAM} from 'src/constants';
+import {
+    DEFAULT_PATH,
+    ORGANIZATIONS_PATH,
+    PARENT_ID_PARAM,
+    UNKNOWN,
+} from 'src/constants';
 import {HyperlinkReference, ParseOptions} from 'src/types/parser';
 import {Organization} from 'src/types/organization';
 
 import {
+    extractReferenceFromMatch,
     formatName,
-    parseMatchToReference,
     parseMatchToTokens,
     parseOptionsForMatch,
     parseRhsReference,
@@ -20,7 +25,6 @@ export const isMessageToHyperlink = ({message}: Post): boolean => {
 };
 
 export const hyperlinkPost = async (post: Post): Promise<Post> => {
-    console.log('post', {post});
     const {message} = post;
     const map = await buildHyperlinksMap(message);
     if (!map) {
@@ -37,7 +41,7 @@ const buildHyperlinksMap = async (message: string): Promise<Map<string, string> 
     }
     for (const match of matches) {
         const options = parseOptionsForMatch(match);
-        console.log('options', {options}, 'matches', matches);
+        console.log('options', {options});
 
         // TODO: if the patterns ends with ) and the user types between the (), the suggested text may not be considered by Mattermost
         // E.g. the user types hood(), then they type hood(Org) and press on the Organization X suggestion.
@@ -73,7 +77,7 @@ const buildHyperlinkFromReference = (
     // TODO: check whether it may be a good idea to find the tokens for the fallback,
     // in case the user provides a wrong reference and the algoritms has to fallback to a previous element.
     // For example, if they reference a non existing column in a table and the algorithm reference the table widget
-    const reference = parseMatchToReference(match);
+    const reference = extractReferenceFromMatch(match) || UNKNOWN;
     if (isRhsReferemce) {
         return buildHyperlinkFromRhsReference(hyperlinkReference, reference);
     }

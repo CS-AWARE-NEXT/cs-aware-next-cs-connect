@@ -8,7 +8,17 @@ export const useScrollIntoView = (hash: string) => {
         if (hash !== '') {
             setTimeout(() => {
                 document.querySelector(hash)?.scrollIntoView({behavior: 'smooth'});
-            }, 300);
+            }, 400);
         }
     }, [hash]);
 };
+
+// export const useScrollIntoViewWithCustomTime = (hash: string, time: number) => {
+//     useEffect(() => {
+//         if (hash !== '') {
+//             setTimeout(() => {
+//                 document.querySelector(hash)?.scrollIntoView({behavior: 'smooth'});
+//             }, time);
+//         }
+//     }, [hash]);
+// };

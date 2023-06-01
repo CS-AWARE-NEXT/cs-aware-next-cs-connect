@@ -35,7 +35,7 @@ const ItemsTimeline = ({
     const items = useMemo<TimelineDataItem[]>(() => (data?.items?.map((item) => {
         const itemId = buildIdForUrlHashReference('timeline-item', item.id);
         return {
-            color: isReferencedByUrlHash(urlHash, itemId) ? 'green' : 'blue',
+            color: isReferencedByUrlHash(urlHash, itemId) ? 'rgb(244, 180, 0)' : 'blue',
             label: (
                 <CopyLinkTimelineItem
                     itemId={itemId}
