@@ -41,7 +41,6 @@ const buildHyperlinksMap = async (message: string): Promise<Map<string, string> 
     }
     for (const match of matches) {
         const options = parseOptionsForMatch(match);
-        console.log('options', {options});
 
         // TODO: if the patterns ends with ) and the user types between the (), the suggested text may not be considered by Mattermost
         // E.g. the user types hood(), then they type hood(Org) and press on the Organization X suggestion.
@@ -62,8 +61,6 @@ const buildHyperlinkFromMatch = async (match: string, options: ParseOptions): Pr
     if (!hyperlinkReference) {
         return match;
     }
-
-    // console.log('Hyperlink reference: ' + JSON.stringify(hyperlinkReference, null, 2));
     return buildHyperlinkFromReference(hyperlinkReference, isRhsReference, match);
 };
 
@@ -138,7 +135,6 @@ const buildHyperlinkedMessage = (message: string, hyperlinksMap: Map<string, str
         return hyperlink === undefined ? match : hyperlink;
     });
 
-    // console.log('hyperlinksMap', {hyperlinksMap});
     // let hyperlinkedMessage = message;
     // hyperlinksMap.forEach((value, key) => {
     //     hyperlinkedMessage = hyperlinkedMessage.replaceAll(key, value);
