@@ -134,6 +134,20 @@ export const withTokensLengthCheck = async <T>(
     return parse(obj, tokens, options);
 };
 
+export const getWidgetTokens = (
+    tokens: string[] | undefined,
+    {name}: Widget,
+): string[] => {
+    if (!tokens) {
+        return [];
+    }
+    const widgetNameIndex = tokens.findIndex((token) => token === name);
+    if (tokens.length === widgetNameIndex + 1) {
+        return [];
+    }
+    return tokens.slice(widgetNameIndex + 1);
+};
+
 export const getDefaultsWidgets = (
     section: Section | undefined,
     isRhsReference?: boolean,
