@@ -1,6 +1,11 @@
 import {fetchListData, fetchSectionInfo} from 'src/clients';
 import {ecosystemAttachmentsWidget, ecosystemOutcomesWidget} from 'src/constants';
-import {formatStringToLowerCase, formatUrlWithId, getAndRemoveOneFromArray} from 'src/helpers';
+import {
+    formatStringToLowerCase,
+    formatUrlWithId,
+    getAndRemoveOneFromArray,
+    getWidgetTokens,
+} from 'src/helpers';
 import {ListData} from 'src/types/list';
 import {Widget} from 'src/types/organization';
 import {
@@ -11,6 +16,7 @@ import {
 } from 'src/types/parser';
 import {Attachment, Outcome} from 'src/types/scenario_wizard';
 
+const MAX_NUMBER_OF_TOKENS = 1;
 const MAX_SUGGESTION_LENGTH = 94;
 
 const emptySuggestions = {suggestions: []};
@@ -20,6 +26,9 @@ export const parseListWidgetSuggestions = async (
     widget: Widget,
     options?: ParseOptions,
 ): Promise<SuggestionsData> => {
+    if (getWidgetTokens(options?.clonedTokens, widget).length >= MAX_NUMBER_OF_TOKENS) {
+        return emptySuggestions;
+    }
     if (options?.isIssues) {
         return parseIssuesWidgetSuggestions(hyperlinkSuggestion, widget);
     }
@@ -32,7 +41,7 @@ export const parseListWidgetSuggestionsWithHint = async (
     widget: Widget,
     options?: ParseOptions,
 ): Promise<SuggestionsData> => {
-    if (tokens.length < 1) {
+    if (tokens.length < 1 || tokens.length > MAX_NUMBER_OF_TOKENS) {
         return emptySuggestions;
     }
     const itemContent = getAndRemoveOneFromArray(tokens, 0);
