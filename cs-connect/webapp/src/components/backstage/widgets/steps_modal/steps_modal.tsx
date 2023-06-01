@@ -24,8 +24,8 @@ import {
     formatSectionPath,
     formatStringToCapitalize,
     formatStringToLowerCase,
-    useOrganization,
-} from 'src/hooks';
+} from 'src/helpers';
+import {useOrganization} from 'src/hooks';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
 import {PARENT_ID_PARAM} from 'src/constants';

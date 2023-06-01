@@ -11,9 +11,9 @@ import {
     buildQuery,
     buildTo,
     buildToForCopy,
-    formatName,
     isReferencedByUrlHash,
 } from 'src/hooks';
+import {formatName} from 'src/helpers';
 import {ListData} from 'src/types/list';
 
 const {Item} = List;
@@ -24,6 +24,7 @@ type Props = {
     name: string;
     parentId: string;
     sectionId: string;
+    Avatar?: JSX.Element;
 };
 
 const ItemsList = ({
@@ -31,6 +32,7 @@ const ItemsList = ({
     name = 'default',
     parentId,
     sectionId,
+    Avatar,
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
@@ -74,10 +76,15 @@ const ItemsList = ({
                                 />,
                             ]}
                             style={{
-                                backgroundColor: isReferencedByUrlHash(urlHash, itemId) ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)',
+                                backgroundColor: isReferencedByUrlHash(urlHash, itemId) ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)',
                             }}
                         >
-                            <Meta title={item.text}/>
+                            {Avatar ?
+                                <Meta
+                                    avatar={Avatar}
+                                    title={item.text}
+                                /> :
+                                <Meta title={item.text}/>}
                         </Item>
                     );
                 }}

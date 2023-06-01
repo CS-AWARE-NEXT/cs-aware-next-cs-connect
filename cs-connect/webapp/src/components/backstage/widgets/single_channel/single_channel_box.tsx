@@ -13,12 +13,12 @@ import {CreateChannel} from 'src/components/backstage/widgets/channels/controls'
 import {Section} from 'src/components/backstage/widgets/channels/styles';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {
-    formatName,
     useChannelsList,
     useOrganization,
     useSection,
     useSectionInfo,
 } from 'src/hooks';
+import {formatChannelName} from 'src/helpers';
 
 import {CreateSingleChannel} from './single_channel_creation';
 
@@ -50,7 +50,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
     useEffect(() => {
         dispatchChannelCreation(channelCreationAction({
             ...channelCreation,
-            channelName: formatName(`${organization.name}-${sectionInfo.name}`),
+            channelName: formatChannelName(`${organization.name}-${sectionInfo.name}`),
         }));
     }, [sectionInfo]);
 

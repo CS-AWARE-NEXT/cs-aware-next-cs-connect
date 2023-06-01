@@ -11,17 +11,7 @@ import SingleChannelWrapper from './single_channel/wrappers/single_channel_wrapp
 import TableWrapper from './table/wrappers/table_wrapper';
 import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
 import TimelineWrapper from './timeline/wrappers/timeline_wrappers';
-
-export enum WidgetType {
-    Channels = 'channels',
-    Graph = 'graph',
-    PaginatedTable = 'paginated-table',
-    List = 'list',
-    SingleChannel = 'channel',
-    Table = 'table',
-    TextBox = 'text-box',
-    Timeline = 'timeline',
-}
+import {WidgetType} from './widget_types';
 
 type Props = {
     widgets: Widget[];

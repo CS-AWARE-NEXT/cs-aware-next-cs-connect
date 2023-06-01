@@ -46,3 +46,5 @@ export interface FetchOrganizationsParams {
     sort?: string;
     team_id?: string;
 }
+
+export type Object = any;

@@ -1,5 +1,5 @@
 import React, {ElementType, useContext, useEffect} from 'react';
-import {Collapse} from 'antd';
+import {Collapse, Empty} from 'antd';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 
@@ -7,7 +7,8 @@ import {AccordionData} from 'src/types/accordion';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
-import {buildQuery, formatName} from 'src/hooks';
+import {buildQuery} from 'src/hooks';
+import {formatName} from 'src/helpers';
 
 const {Panel} = Collapse;
 
@@ -36,6 +37,12 @@ const Accordion = ({
     const {hash: urlHash} = useLocation();
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
+
+    // We could need to override default scroll
+    // because we need to give the browser the time for content to be rendered.
+    // However this can lead to problem with components usign the default scroll,
+    // so we increased the time for the default scroll
+    // useScrollIntoViewWithCustomTime(urlHash, 500);
 
     useEffect(() => {
         if (urlHash) {
@@ -88,16 +95,16 @@ const Accordion = ({
                     title={name}
                 />
             </Header>
-            {elements && elements.length > 0 &&
-                <Collapse
-                    accordion={true}
-                    defaultActiveKey={`${elements[0].id}-panel-key`}
-                >
+            {elements && elements.length > 0 ?
+
+                // If you want one of the element to be opened by default, you can do as follows
+                // defaultActiveKey={`${elements[0].id}-panel-key`}
+                <Collapse accordion={true}>
                     {elements.map((element) => (
                         <>
                             <Panel
                                 key={`${element.id}-panel-key`}
-                                header={element.name}
+                                header={element.header}
                                 id={`${element.id}-panel-key`}
                                 forceRender={true}
                             >
@@ -108,7 +115,8 @@ const Accordion = ({
                             </Panel>
                         </>
                     ))}
-                </Collapse>}
+                </Collapse> :
+                <Empty/>}
         </Container>
     );
 };

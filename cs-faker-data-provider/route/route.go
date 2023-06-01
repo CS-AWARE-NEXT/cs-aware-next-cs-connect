@@ -5,13 +5,15 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/controller"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
 )
 
-func UseRoutes(app *fiber.App) {
+func UseRoutes(app *fiber.App, context *config.Context) {
 	basePath := app.Group("/cs-data-provider")
 	useOrganizations(basePath)
-	useEcosystem(basePath)
+	useEcosystem(basePath, context)
 }
 
 func useOrganizations(basePath fiber.Router) {
@@ -100,18 +102,21 @@ func useOrganizationsStories(organizations fiber.Router) {
 	})
 }
 
-func useEcosystem(basePath fiber.Router) {
+func useEcosystem(basePath fiber.Router, context *config.Context) {
+	issueRepository := context.RepositoriesMap["issues"].(*repository.IssueRepository)
+	issueController := controller.NewIssueController(issueRepository)
+
 	ecosystem := basePath.Group("/issues")
 	ecosystem.Get("/", func(c *fiber.Ctx) error {
 		log.Printf("GET /issues called")
-		return controller.GetIssues(c)
+		return issueController.GetIssues(c)
 	})
 	ecosystem.Get("/:issueId", func(c *fiber.Ctx) error {
 		log.Printf("GET /issues/:issueId called")
-		return controller.GetIssue(c)
+		return issueController.GetIssue(c)
 	})
 	ecosystem.Post("/", func(c *fiber.Ctx) error {
 		log.Printf("POST /issues called")
-		return controller.SaveIssue(c)
+		return issueController.SaveIssue(c)
 	})
 }

@@ -48,7 +48,7 @@ const DocumentationPage = ({items}: Props) => {
             <Container>
                 <Wrapper>
                     <Spacer/>
-                    <Main>
+                    <MainBody>
                         <Body>
                             {items.map((item) => (
                                 <DocumentationItemView
@@ -57,7 +57,7 @@ const DocumentationPage = ({items}: Props) => {
                                 />
                             ))}
                         </Body>
-                    </Main>
+                    </MainBody>
                 </Wrapper>
             </Container>
         </OuterContainer>
@@ -70,6 +70,12 @@ const OuterContainer = styled.div`
 
 const Wrapper = styled(MainWrapper)`
     grid-template-rows: 16px 1fr;
+`;
+
+// TODO: maybe this has to be removed and the documentation page has to be redesigned
+const MainBody = styled(Main)`
+    place-content: start center;
+    grid-auto-columns: min(780px, 100%);    
 `;
 
 const Spacer = styled.div``;

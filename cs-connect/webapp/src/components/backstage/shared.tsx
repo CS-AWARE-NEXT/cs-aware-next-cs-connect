@@ -57,10 +57,10 @@ export const Container = styled.div`
 `;
 
 export const MainWrapper = styled.div`
-    display: grid;
-    grid-template-rows: 56px 1fr;
+    /* display: grid; */
+    /* grid-template-rows: 56px 1fr; */
     grid-auto-flow: row;
-    overflow-y: hidden;
+    overflow-y: scroll;
     grid-auto-columns: minmax(0, 1fr);
 `;
 
@@ -69,14 +69,17 @@ export const Main = styled.main`
     padding: 0 20px 60px;
     display: grid;
     overflow-y: auto;
-    place-content: start center;
-    grid-auto-columns: min(780px, 100%);
+    /* Removed to make the main body span all the available blank space
+        place-content: start center;
+        grid-auto-columns: min(780px, 100%);
+    */
 `;
 
 export const Body = styled(RowContainer)``;
 
 export const Header = styled.header`
-    height: 56px;
-    min-height: 56px;
+    /* height: 56px; */
+    padding-top: 1%;
+    min-height: fit-content;
     background-color: var(--center-channel-bg);
 `;

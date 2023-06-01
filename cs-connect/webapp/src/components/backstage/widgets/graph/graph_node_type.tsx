@@ -12,7 +12,7 @@ import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
 import {GraphSectionOptions} from 'src/types/graph';
-import {buildMap} from 'src/hooks';
+import {buildMap} from 'src/helpers';
 
 export const edgeType = 'step';
 export const nodeType = 'graphNodeType';
@@ -71,6 +71,7 @@ const nodeKindMap = buildMap([
     {key: 'switch', value: '5px'},
     {key: 'server', value: '10px'},
     {key: 'vpn-server', value: '0px'},
+    {key: 'customer', value: '50%'},
 ]);
 
 // These can be alternatives to nodes color
@@ -104,9 +105,9 @@ const GraphNodeType = ({id, data}: NodeProps) => {
 };
 
 const NodeContainer = styled.div<{isUrlHashed: boolean, kind: string}>`
-    background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
+    background: ${(props) => (props.isUrlHashed ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)')};
     border: 1px solid rgba(var(--center-channel-color-rgb), 0.8);
-    border-radius: ${(props) => nodeKindMap.get(props.kind)};;
+    border-radius: ${(props) => nodeKindMap.get(props.kind)};
 `;
 
 export default GraphNodeType;

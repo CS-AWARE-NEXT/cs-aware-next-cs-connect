@@ -7,7 +7,7 @@ import React, {
 import {useLocation, useRouteMatch} from 'react-router-dom';
 
 import {getSiteUrl} from 'src/clients';
-import {DEFAULT_PATH, ORGANIZATIONS_PATH, ecosystemDefaultFields} from 'src/constants';
+import {DEFAULT_PATH, ORGANIZATIONS_PATH} from 'src/constants';
 import {
     useForceDocumentTitle,
     useOrganization,
@@ -17,7 +17,9 @@ import {
 import {StepData} from 'src/types/steps_modal';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
-import StepsModal from 'src/components/backstage/widgets/steps_modal/steps_modal';
+import ScenarioWizard from 'src/components/backstage/widgets/wizard/scenario_wizard';
+
+//import StepsModal from 'src/components/backstage/widgets/steps_modal/steps_modal';
 
 export const IsEcosystemContext = createContext(false);
 
@@ -82,14 +84,20 @@ const EcosystemDetails = () => {
                     url={url}
                     widgets={ecosystem.widgets}
                 >
-                    {stepData.length > 0 &&
+                    <ScenarioWizard
+                        organizationsData={stepData}
+                        name={ecosystem.sections[currentSection].name}
+                        parentId={ecosystem.sections[currentSection].id}
+                        targetUrl={ecosystem.sections[currentSection].url}
+                    />
+                    {/* {stepData.length > 0 &&
                         <StepsModal
                             data={stepData}
                             fields={ecosystemDefaultFields}
                             name={ecosystem.sections[currentSection].name}
                             parentId={ecosystem.sections[currentSection].id}
                             targetUrl={ecosystem.sections[currentSection].url}
-                        />}
+                        />} */}
                 </SectionsWidgetsContainer>
             </IsEcosystemContext.Provider>
         </OrganizationIdContext.Provider>

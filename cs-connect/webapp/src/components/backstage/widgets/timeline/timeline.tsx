@@ -3,12 +3,8 @@ import {Timeline} from 'antd';
 import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
-import {
-    buildIdForUrlHashReference,
-    buildQuery,
-    formatName,
-    isReferencedByUrlHash,
-} from 'src/hooks';
+import {buildIdForUrlHashReference, buildQuery, isReferencedByUrlHash} from 'src/hooks';
+import {formatName} from 'src/helpers';
 import {TimelineData, TimelineDataItem} from 'src/types/timeline';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
@@ -39,7 +35,7 @@ const ItemsTimeline = ({
     const items = useMemo<TimelineDataItem[]>(() => (data?.items?.map((item) => {
         const itemId = buildIdForUrlHashReference('timeline-item', item.id);
         return {
-            color: isReferencedByUrlHash(urlHash, itemId) ? 'green' : 'blue',
+            color: isReferencedByUrlHash(urlHash, itemId) ? 'rgb(244, 180, 0)' : 'blue',
             label: (
                 <CopyLinkTimelineItem
                     itemId={itemId}

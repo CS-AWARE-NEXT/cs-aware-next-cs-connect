@@ -5,10 +5,48 @@ organizations:
     description: This organization is for the whole ecosystem
     isEcosystem: true
     sections:
-      - name: Issues
+      - name: Ecosystem Issues
         id: "0"
         url: http://172.16.15.1:3000/cs-data-provider/issues
         widgets:
+          - type: channel
+  - name: Demo CS-AWARE EU
+    id: "4"
+    description: The organization at https://demo.cs-aware.eu/index.html
+    sections:
+      - name: Incidents
+        id: "13"
+        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents/:id/graph
+          - name: History
+            type: table
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents/:id/table
+          - type: channel
+      - name: Policies
+        id: "14"
+        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/policies
+        widgets:
+          - name: Dos
+            type: list
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/policies/:id/dos
+          - name: Don'ts
+            type: list
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/policies/:id/donts
+          - type: channel
+      - name: Stories
+        id: "15"
+        internal: true
+        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/stories
+        widgets:
+          - name: Events
+            type: timeline
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/stories/:id/timeline
           - type: channel
   - name: Organization X
     id: "1"

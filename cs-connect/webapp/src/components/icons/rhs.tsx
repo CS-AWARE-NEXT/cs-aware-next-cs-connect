@@ -3,6 +3,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 import qs from 'qs';
 import {useSelector} from 'react-redux';
+import styled from 'styled-components';
 
 import {
     RHS_OPEN,
@@ -10,23 +11,12 @@ import {
     RHS_PARAM_VALUE,
     ROOT,
 } from 'src/components/rhs/rhs';
-import {hideOptions, useUserAdded} from 'src/hooks';
 
 export const RHSIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
     const {hash: urlHash, search} = useLocation();
     const history = useHistory();
-
-    useUserAdded();
-
-    useEffect(() => {
-        const timeouts = hideOptions();
-        return () => {
-            timeouts[0].forEach((timeout) => clearTimeout(timeout));
-            timeouts[1].forEach((interval) => clearInterval(interval));
-        };
-    });
 
     useEffect(() => {
         const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
@@ -58,11 +48,16 @@ export const RHSIcon = () => {
     });
 
     return (
-        <i
+        <Icon
             className='icon fa fa-plug'
-            style={{fontSize: '15px', position: 'relative', top: '-1px'}}
             id={'open-product-rhs'}
             ref={icon}
         />
     );
 };
+
+const Icon = styled.i`
+    font-size: 15px;
+    position: relative;
+    top: -1px;
+`;

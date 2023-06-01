@@ -2,28 +2,27 @@ import React, {useEffect, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
+import {buildQuery, getSection, useSection} from 'src/hooks';
 import {
-    buildQuery,
     formatName,
     formatSectionPath,
-    formatStringToLowerCase,
-    getSection,
+    formatStringToCapitalize,
     removeSectionNameFromPath,
-    useSection,
-} from 'src/hooks';
+} from 'src/helpers';
 import {StepValue} from 'src/types/steps_modal';
 import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';
-import {PARENT_ID_PARAM, ecosystemDefaultFields} from 'src/constants';
+import {PARENT_ID_PARAM, ecosystemElementsFields, ecosystemElementsWidget} from 'src/constants';
 import PaginatedTable, {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table';
+import {getOrganizationById} from 'src/config/config';
 
 type Props = {
     name?: string;
     elements?: StepValue[];
 };
 
-const EcosystemPaginatedTableWrapper = ({
-    name = 'Issue Elements',
+const EcosystemElementsWrapper = ({
+    name = formatStringToCapitalize(ecosystemElementsWidget),
     elements = [],
 }: Props) => {
     const {path, url, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
@@ -34,12 +33,13 @@ const EcosystemPaginatedTableWrapper = ({
     const section = useSection(parentId);
     const [data, setData] = useState<PaginatedTableData>({columns: [], rows: []});
     useEffect(() => {
-        const rows = elements.map((element) => {
+        const rows = elements ? elements.map((element) => {
             const parentSection = getSection(element.parentId);
-            const pathWithoutSectionName = removeSectionNameFromPath(path, section.name);
-            const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatStringToLowerCase(parentSection.name)}`;
+            const pathWithoutSectionName = removeSectionNameFromPath(path, formatName(section.name));
+            const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatName(parentSection.name)}`;
             const row: PaginatedTableRow = {
                 id: element.id,
+                organization: getOrganizationById(element.organizationId).name,
                 name: element.name,
                 description: element.description,
             };
@@ -47,8 +47,8 @@ const EcosystemPaginatedTableWrapper = ({
                 ...fillRow(row, '', url, buildQuery(parentId, sectionId)),
                 onClick: () => navigateToUrl(`${basePath}/${element.id}?${PARENT_ID_PARAM}=${element.parentId}`),
             };
-        });
-        const columns = ecosystemDefaultFields.map((field) => {
+        }) : [];
+        const columns = ecosystemElementsFields.map((field) => {
             return fillColumn(field);
         });
         setData({columns, rows});
@@ -60,7 +60,6 @@ const EcosystemPaginatedTableWrapper = ({
                 <PaginatedTable
                     data={data}
                     id={formatName(name)}
-                    isSection={true}
                     name={name}
                     sectionId={sectionId}
                     parentId={parentId}
@@ -70,4 +69,4 @@ const EcosystemPaginatedTableWrapper = ({
     );
 };
 
-export default EcosystemPaginatedTableWrapper;
+export default EcosystemElementsWrapper;

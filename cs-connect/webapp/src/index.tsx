@@ -14,12 +14,14 @@ import {
 import {DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig} from 'src/config/config';
 import {loadPlatformConfig, setSiteUrl} from 'src/clients';
 import Backstage from 'src/components/backstage/backstage';
-import {InfoIcon, RHSIcon} from 'src/components/icons';
+import {HiddenIcon, InfoIcon, RHSIcon} from 'src/components/icons';
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import RHSView from 'src/components/rhs/rhs';
 import {pluginId} from 'src/manifest';
 
+import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} from './hooks';
 import {navigateToPluginUrl} from './browser_routing';
+import withPlatformOperations from './components/hoc/with_platform_operations';
 
 type WindowObject = {
     location: {
@@ -105,6 +107,14 @@ export default class Plugin {
             PRODUCT_DOCUMENTATION,
             PRODUCT_DOCUMENTATION,
         );
+
+        registry.registerChannelHeaderButtonAction(withPlatformOperations(HiddenIcon), () => null, '', '');
+
+        registry.registerSlashCommandWillBePostedHook(slashCommandWillBePosted);
+        registry.registerMessageWillBePostedHook(messageWillBePosted);
+        registry.registerMessageWillBeUpdatedHook(messageWillBeUpdated);
+
+        // registry.registerMessageWillFormatHook(messageWillFormat);
     }
 
     public initialize(registry: any, store: Store<GlobalState>): void {

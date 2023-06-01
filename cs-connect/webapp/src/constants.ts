@@ -19,6 +19,11 @@ export const DateTimeFormats = {
 
 export const estimatedOptionsLoadTime = 150;
 
+export const MATTERMOST_CHANNEL_NAME_LENGTH = 64;
+
+export const UNKNOWN = '(?)';
+export const TOKEN_SEPARATOR = '.';
+
 export const PRODUCT_ICON = 'power-plug-outline';
 export const PRODUCT_NAME = pluginName;
 export const PRODUCT_DOCUMENTATION = 'Documentation';
@@ -33,6 +38,12 @@ export const DOCUMENTATION_PATH = 'documentation';
 export const ORGANIZATION_ID_PARAM = 'organizationId';
 export const PARENT_ID_PARAM = 'parentId';
 export const SECTION_ID_PARAM = 'sectionId';
+export const OBJECT_ID_TOKEN = ':id';
 
-// TODO: those should be obtained using an API call, or another dynamic way
-export const ecosystemDefaultFields = ['name', 'description'];
+export const ecosystemObjectivesWidget = 'objectives and research area';
+export const ecosystemOutcomesWidget = 'outcomes';
+export const ecosystemElementsWidget = 'support technology data';
+export const ecosystemElementsFields = ['organization', 'name', 'description'];
+export const ecosystemRolesWidget = 'participants and roles';
+export const ecosystemRolesFields = ['user', 'roles'];
+export const ecosystemAttachmentsWidget = 'attachments';

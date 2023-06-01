@@ -12,6 +12,7 @@ import {addChannel} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
 import {teamNameSelector} from 'src/selectors';
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
+import {isChannelNameCorrect} from 'src/helpers';
 
 type CreateChannelProps = {
     channelCreation: ChannelCreation;
@@ -50,6 +51,11 @@ const createChannel = (
     }
     if (createNewChannel && channelName === '') {
         dispatchNameErrorMessage(nameErrorMessageAction('Channel name cannot be empty.'));
+        return;
+    }
+    const errorMessage = isChannelNameCorrect(channelName);
+    if (errorMessage !== '') {
+        dispatchNameErrorMessage(nameErrorMessageAction(errorMessage));
         return;
     }
 

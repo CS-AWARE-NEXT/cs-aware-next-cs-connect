@@ -12,11 +12,15 @@ import {
     buildQuery,
     buildTo,
     buildToForCopy,
+    isReferencedByUrlHash,
+} from 'src/hooks';
+import {
+    formatName,
+    formatPropertyName,
     formatSectionPath,
     formatStringToCapitalize,
     formatStringToLowerCase,
-    isReferencedByUrlHash,
-} from 'src/hooks';
+} from 'src/helpers';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {navigateToUrl} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
@@ -58,11 +62,11 @@ const iconColumn: PaginatedTableColumn = {
 };
 
 export const fillColumn = (title: string): PaginatedTableColumn => {
-    const lowerCaseTitle = formatStringToLowerCase(title);
+    const formattedTitle = formatPropertyName(title);
     return {
         title,
-        dataIndex: lowerCaseTitle,
-        key: lowerCaseTitle,
+        dataIndex: formattedTitle,
+        key: formattedTitle,
     };
 };
 
@@ -118,7 +122,7 @@ const PaginatedTable = ({
     const handleCreateRow = (row: PaginatedTableRow) => {
         saveSectionInfo(row, sectionUrl).
             then((result) => {
-                const basePath = `${formatSectionPath(path, organizationId)}/${formatStringToLowerCase(name)}`;
+                const basePath = `${formatSectionPath(path, organizationId)}/${formatName(name)}`;
                 navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
             }).
             catch(() => {
@@ -180,19 +184,19 @@ const PaginatedTable = ({
                         rowKey='key'
                         size='middle'
                     />
-                    {internal &&
-                        <Collapse>
-                            <TablePanel
-                                header={formatMessage({defaultMessage: 'Create New'})}
-                                key='add-new-row'
-                            >
-                                <RowInputFields
-                                    columns={data.columns}
-                                    createRow={handleCreateRow}
-                                />
-                            </TablePanel>
-                        </Collapse>}
                 </>}
+            {internal &&
+                <Collapse>
+                    <TablePanel
+                        header={formatMessage({defaultMessage: 'Create New'})}
+                        key='add-new-row'
+                    >
+                        <RowInputFields
+                            columns={data.columns}
+                            createRow={handleCreateRow}
+                        />
+                    </TablePanel>
+                </Collapse>}
         </Container>
     );
 };
@@ -226,7 +230,7 @@ const TableRow = (props: any) => {
 const TableRowItem = styled.tr<{isUrlHashed?: boolean, pointer: boolean}>`
     cursor: ${(props) => (props.pointer ? 'pointer' : 'auto')};
     color: rgba(var(--center-channel-color-rgb), 0.90);
-    background: ${(props) => (props.isUrlHashed ? 'rgba(var(--center-channel-color-rgb), 0.08)' : 'var(--center-channel-bg)')};
+    background: ${(props) => (props.isUrlHashed ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)')};
     &:hover {
         background: rgba(var(--center-channel-color-rgb), 0.04) !important;
     }

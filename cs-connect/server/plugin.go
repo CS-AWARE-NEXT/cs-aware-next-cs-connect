@@ -41,6 +41,7 @@ type Plugin struct {
 	platformService *config.PlatformService
 	channelService  *app.ChannelService
 	eventService    *app.EventService
+	userService     *app.UserService
 }
 
 func (p *Plugin) OnActivate() error {
@@ -67,6 +68,7 @@ func (p *Plugin) OnActivate() error {
 	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
 	p.channelService = app.NewChannelService(p.API, channelStore)
 	p.eventService = app.NewEventService(p.API)
+	p.userService = app.NewUserService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
 	if err != nil {
@@ -92,6 +94,10 @@ func (p *Plugin) OnActivate() error {
 		p.handler.APIRouter,
 		p.eventService,
 	)
+	api.NewUserHandler(
+		p.handler.APIRouter,
+		p.userService,
+	)
 
 	// if err := p.registerCommands(); err != nil {
 	// 	return errors.Wrapf(err, "failed to register commands")
@@ -114,6 +120,21 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	default:
 		p.handler.ServeHTTP(w, r)
 	}
+}
+
+func (p *Plugin) MessageWillBeUpdated(c *plugin.Context, newPost, oldPost *model.Post) (*model.Post, string) {
+	// p.API.LogInfo("MessageWillBeUpdated hook", "OldPost", oldPost, "NewPost", newPost)
+	return newPost, ""
+}
+
+func (p *Plugin) MessageHasBeenPosted(c *plugin.Context, post *model.Post) {
+	// p.API.LogInfo("MessageHasBeenPosted", "post", post)
+	// retrievedPost, err := p.API.GetPost(post.Id)
+	// if err != nil {
+	// 	p.API.LogError("Cannot get post", "postId", post.Id)
+	// 	return
+	// }
+	// p.API.LogInfo("Retrieved post", "post", retrievedPost)
 }
 
 func (p *Plugin) getPluginIDFromManifest() string {
