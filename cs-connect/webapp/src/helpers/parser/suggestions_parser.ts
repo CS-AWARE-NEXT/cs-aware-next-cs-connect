@@ -13,6 +13,7 @@ import {parseListWidgetSuggestions, parseListWidgetSuggestionsWithHint} from 'sr
 import {parseGraphWidgetSuggestions, parseGraphWidgetSuggestionsWithHint} from 'src/components/backstage/widgets/graph/parsers/graph_suggestions_parser';
 import {parsePaginatedTableWidgetSuggestions, parsePaginatedTableWidgetSuggestionsWithHint} from 'src/components/backstage/widgets/paginated_table/parsers/paginated_table_suggestions_parser';
 import {parseAccordionWidgetSuggestions, parseAccordionWidgetSuggestionsWithHint} from 'src/components/backstage/widgets/accordion/parsers/accordion_suggestions_parser';
+import {parseTimelineWidgetSuggestions, parseTimelineWidgetSuggestionsWithHint} from 'src/components/backstage/widgets/timeline/parsers/timeline_suggestions_parser';
 
 import {getDefaultsWidgets, withTokensLengthCheck} from './parser';
 import NoMoreTokensError from './errors/noMoreTokensError';
@@ -232,12 +233,12 @@ export const parseWidgetElementSuggestionsByType = (
         if (isHintGiven) {
             return parseGraphWidgetSuggestionsWithHint(hyperlinkSuggestion, tokens, widget);
         }
-        return parseGraphWidgetSuggestions(hyperlinkSuggestion, widget);
+        return parseGraphWidgetSuggestions(hyperlinkSuggestion, widget, withIsIssuesOptions);
     case WidgetType.PaginatedTable:
         if (isHintGiven) {
             return parsePaginatedTableWidgetSuggestionsWithHint(hyperlinkSuggestion, tokens, widget, withIsIssuesOptions);
         }
-        return parsePaginatedTableWidgetSuggestions(hyperlinkSuggestion, options?.reference as string, widget, withIsIssuesOptions);
+        return parsePaginatedTableWidgetSuggestions(hyperlinkSuggestion, widget, withIsIssuesOptions);
     case WidgetType.List:
         if (isHintGiven) {
             return parseListWidgetSuggestionsWithHint(hyperlinkSuggestion, tokens, widget, withIsIssuesOptions);
@@ -247,11 +248,14 @@ export const parseWidgetElementSuggestionsByType = (
         if (isHintGiven) {
             return parseTableWidgetSuggestionsWithHint(hyperlinkSuggestion, tokens, widget);
         }
-        return parseTableWidgetSuggestions(hyperlinkSuggestion, options?.reference as string, widget);
+        return parseTableWidgetSuggestions(hyperlinkSuggestion, widget, withIsIssuesOptions);
     case WidgetType.TextBox:
         return parseTextBoxWidgetSuggestions();
     case WidgetType.Timeline:
-        return {suggestions: []};
+        if (isHintGiven) {
+            return parseTimelineWidgetSuggestionsWithHint(hyperlinkSuggestion, tokens, widget);
+        }
+        return parseTimelineWidgetSuggestions(hyperlinkSuggestion, widget, withIsIssuesOptions);
     default:
         return {suggestions: []};
     }
