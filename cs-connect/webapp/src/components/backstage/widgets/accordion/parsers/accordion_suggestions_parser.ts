@@ -1,6 +1,7 @@
 import {fetchSectionInfo} from 'src/clients';
 import {
     getAndRemoveOneFromArray,
+    getWidgetTokens,
     parseWidgetElementSuggestionsByType,
     parseWidgetElementSuggestionsWithHint,
     parseWidgetSuggestions,
@@ -21,7 +22,7 @@ export const parseAccordionWidgetSuggestions = async (
     options?: ParseOptions,
 ): Promise<SuggestionsData> => {
     if (options?.isIssues) {
-        const accordionTokens = getAccordionTokens(options?.clonedTokens, widget);
+        const accordionTokens = getWidgetTokens(options?.clonedTokens, widget);
         return parseIssuesWidgetSuggestions(hyperlinkSuggestion, accordionTokens, options);
     }
     return parseNoIssuesWidgetSuggestions(hyperlinkSuggestion, widget);
@@ -169,17 +170,6 @@ const parseIssuesWidgetSuggestionsWithHint = async (
     return hyperlinkSuggestion.suggestions;
 };
 
-const getAccordionTokens = (tokens: string[] | undefined, {name}: Widget): string[] => {
-    if (!tokens) {
-        return [];
-    }
-    const widgetNameIndex = tokens.findIndex((token) => token === name);
-    if (tokens.length === widgetNameIndex + 1) {
-        return [];
-    }
-    return tokens.slice(widgetNameIndex + 1);
-};
-
 export const getElementByName = (sectionInfo: SectionInfo, name: string): Element | null => {
     const element = sectionInfo.elements.find((e: Element) => e.name === name);
     if (!element) {
@@ -190,8 +180,11 @@ export const getElementByName = (sectionInfo: SectionInfo, name: string): Elemen
 
 const buildOptions = (options?: ParseOptions): ParseOptions => {
     return {
+        clonedTokens: options?.clonedTokens,
+
         isValueNeeded: options?.isValueNeeded,
         valueReference: options?.valueReference,
+
         reference: options?.reference,
     };
 };

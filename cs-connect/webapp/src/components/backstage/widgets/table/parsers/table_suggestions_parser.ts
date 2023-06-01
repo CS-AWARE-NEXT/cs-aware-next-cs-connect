@@ -1,18 +1,24 @@
 import {fetchTableData} from 'src/clients';
 import {TOKEN_SEPARATOR} from 'src/constants';
-import {formatUrlWithId, getAndRemoveOneFromArray} from 'src/helpers';
+import {formatUrlWithId, getAndRemoveOneFromArray, getWidgetTokens} from 'src/helpers';
 import {Widget} from 'src/types/organization';
-import {HyperlinkSuggestion, SuggestionsData} from 'src/types/parser';
+import {HyperlinkSuggestion, ParseOptions, SuggestionsData} from 'src/types/parser';
 import {RowPair, TableData, TableRowData} from 'src/types/table';
+
+const MAX_NUMBER_OF_TOKENS = 2;
 
 const emptySuggestions = {suggestions: []};
 
 export const parseTableWidgetSuggestions = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
-    reference: string,
     widget: Widget,
+    options?: ParseOptions,
 ): Promise<SuggestionsData> => {
-    const headerOrRowName = parseHeaderOrRowName(reference);
+    if (getWidgetTokens(options?.clonedTokens, widget).length >= MAX_NUMBER_OF_TOKENS) {
+        return emptySuggestions;
+    }
+
+    const headerOrRowName = parseHeaderOrRowName(options?.reference as string);
     const data = await getTableData(hyperlinkSuggestion, widget);
     if (!data) {
         return emptySuggestions;
@@ -69,7 +75,7 @@ export const parseTableWidgetSuggestionsWithHint = async (
     tokens: string[],
     widget: Widget,
 ): Promise<SuggestionsData> => {
-    if (tokens.length < 1) {
+    if (tokens.length < 1 || tokens.length > MAX_NUMBER_OF_TOKENS) {
         return emptySuggestions;
     }
     const data = await getTableData(hyperlinkSuggestion, widget);

@@ -1,15 +1,22 @@
 import {fetchGraphData} from 'src/clients';
-import {formatUrlWithId, getAndRemoveOneFromArray} from 'src/helpers';
+import {formatUrlWithId, getAndRemoveOneFromArray, getWidgetTokens} from 'src/helpers';
 import {GraphData} from 'src/types/graph';
 import {Widget} from 'src/types/organization';
-import {HyperlinkSuggestion, SuggestionsData} from 'src/types/parser';
+import {HyperlinkSuggestion, ParseOptions, SuggestionsData} from 'src/types/parser';
+
+const MAX_NUMBER_OF_TOKENS = 1;
 
 const emptySuggestions = {suggestions: []};
 
 export const parseGraphWidgetSuggestions = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
     widget: Widget,
+    options?: ParseOptions,
 ): Promise<SuggestionsData> => {
+    if (getWidgetTokens(options?.clonedTokens, widget).length >= MAX_NUMBER_OF_TOKENS) {
+        return emptySuggestions;
+    }
+
     const data = await getGraphData(hyperlinkSuggestion, widget);
     if (!data) {
         return emptySuggestions;
@@ -34,7 +41,7 @@ export const parseGraphWidgetSuggestionsWithHint = async (
     tokens: string[],
     widget: Widget,
 ): Promise<SuggestionsData> => {
-    if (tokens.length < 1) {
+    if (tokens.length < 1 || tokens.length > MAX_NUMBER_OF_TOKENS) {
         return emptySuggestions;
     }
     const data = await getGraphData(hyperlinkSuggestion, widget);

@@ -7,7 +7,12 @@ import {
     ecosystemRolesFields,
     ecosystemRolesWidget,
 } from 'src/constants';
-import {formatStringToCapitalize, formatStringToLowerCase, getAndRemoveOneFromArray} from 'src/helpers';
+import {
+    formatStringToCapitalize,
+    formatStringToLowerCase,
+    getAndRemoveOneFromArray,
+    getWidgetTokens,
+} from 'src/helpers';
 import {Widget} from 'src/types/organization';
 import {
     HyperlinkSuggestion,
@@ -17,15 +22,19 @@ import {
 } from 'src/types/parser';
 import {Element, Role} from 'src/types/scenario_wizard';
 
+const MAX_NUMBER_OF_TOKENS = 2;
+
 const emptySuggestions = {suggestions: []};
 
 export const parsePaginatedTableWidgetSuggestions = async (
     hyperlinkSuggestion: HyperlinkSuggestion,
-    reference: string,
     widget: Widget,
     options?: ParseOptions,
 ): Promise<SuggestionsData> => {
-    const columnOrRowName = parseColumnOrRowName(reference);
+    if (getWidgetTokens(options?.clonedTokens, widget).length >= MAX_NUMBER_OF_TOKENS) {
+        return emptySuggestions;
+    }
+    const columnOrRowName = parseColumnOrRowName(options?.reference as string);
     if (!options?.isIssues) {
         // TODO: add here logic for classic widget, not only ecosystem
         return emptySuggestions;
@@ -100,7 +109,6 @@ const parseElementsWidgetSuggestions = async (
     const columns = ecosystemElementsFields;
     const isColumnNameGiven = columns.some((column) => column === columnOrRowName);
     if (isColumnNameGiven) {
-        console.log('column given', columnOrRowName);
         const suggestions = await parseElementsRowSuggestions(columnOrRowName, elements);
         return suggestions;
     }
@@ -163,6 +171,9 @@ const parseIssuesWidgetSuggestionsWithHint = async (
     {name}: Widget,
     tokens: string[],
 ): Promise<SuggestionsData | null> => {
+    if (tokens.length > MAX_NUMBER_OF_TOKENS) {
+        return emptySuggestions;
+    }
     let columnName = getAndRemoveOneFromArray(tokens, 0);
     if (!columnName) {
         return emptySuggestions;
@@ -286,12 +297,10 @@ const parseColumnSuggestions = async (
     columnName?: string,
 ): Promise<SuggestionsData> => {
     const filteredColumns = columnName ? columns.filter((column) => column.includes(columnName)) : columns;
-    console.log('column', columnName, 'columns', filteredColumns);
     const suggestions = filteredColumns.map((column) => ({
         id: column,
         text: formatStringToCapitalize(column),
     }));
-    console.log('suggestions', suggestions);
     return {suggestions};
 };
 
