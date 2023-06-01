@@ -1,5 +1,10 @@
 import {Input} from 'antd';
-import React, {Dispatch, SetStateAction, useState} from 'react';
+import React, {
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useState,
+} from 'react';
 import styled from 'styled-components';
 
 import {TextInput} from 'src/components/backstage/widgets/shared';
@@ -22,6 +27,12 @@ const ObjectivesStep = ({
 }: Props) => {
     const [name, setName] = useState(data.name);
     const [objectives, setObjectives] = useState(data.objectives);
+
+    useEffect(() => {
+        // Force re-rendering to be sure modal is cleaned after being closed
+        setName(data.name);
+        setObjectives(data.objectives);
+    }, [data.name, data.objectives]);
 
     return (
         <Container>
