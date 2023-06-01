@@ -16,6 +16,7 @@ import {isSectionByName} from 'src/hooks';
 import {parseListWidgetId} from 'src/components/backstage/widgets/list/parsers/list_posts_parser';
 import {parsePaginatedTableWidgetId} from 'src/components/backstage/widgets/paginated_table/parsers/paginated_table_posts_parser';
 import {parseAccordionWidgetId} from 'src/components/backstage/widgets/accordion/parsers/accordion_posts_parser';
+import {parseTimelineWidgetId} from 'src/components/backstage/widgets/timeline/parsers/timeline_posts_parser';
 
 import {getDefaultWidgetByName, withTokensLengthCheck} from './parser';
 import NoMoreTokensError from './errors/noMoreTokensError';
@@ -155,6 +156,7 @@ const parseWidgetHashByType = async (
         widgetHash = await parseTextBoxWidgetId(hyperlinkReference, widget, options);
         return {widgetHash};
     case WidgetType.Timeline:
+        widgetHash = await parseTimelineWidgetId(hyperlinkReference, tokens, widget);
         return {widgetHash};
     default:
         return {widgetHash};
