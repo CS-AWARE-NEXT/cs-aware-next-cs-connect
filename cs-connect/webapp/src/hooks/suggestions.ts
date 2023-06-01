@@ -49,7 +49,6 @@ const useHandleSuggestionsVisibility = (): [boolean, Dispatch<SetStateAction<boo
         const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
 
         const handleKeyDown = (event: KeyboardEvent) => {
-            // console.log('Key pressed:', event.key);
             if (event.key === 'Enter') {
                 // event.preventDefault();
                 setIsVisible(false);

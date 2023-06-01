@@ -203,7 +203,6 @@ export const parseWidgetElementSuggestionsWithHint = async (
     options?: ParseOptions,
 ): Promise<HyperlinkSuggestion> => {
     const widget = hyperlinkSuggestion.widget as Widget;
-    console.log('widget', {widget});
     const suggestions = await parseWidgetElementSuggestionsByType(
         hyperlinkSuggestion,
         tokens,

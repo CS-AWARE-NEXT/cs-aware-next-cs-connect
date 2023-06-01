@@ -20,7 +20,6 @@ export const getTextAndCursorPositions = (textarea: HTMLTextAreaElement): [strin
 
 export const getSuggestedText = (textarea: HTMLTextAreaElement, suggestion: string): string => {
     const tokens = getTokens(textarea, suggestion);
-    console.log('tokens', tokens, 'suggestion', suggestion);
 
     const startSymbol = getStartSymbol();
     const suggestedReference = `${startSymbol}${tokens.join(TOKEN_SEPARATOR)}`;
@@ -29,7 +28,6 @@ export const getSuggestedText = (textarea: HTMLTextAreaElement, suggestion: stri
     const [text, cursorStartPosition] = getTextAndCursorPositions(textarea);
     const [start, end] = calcReplaceStartAndEnd(text, reference, cursorStartPosition);
     const value = replaceAt(text, reference, suggestedReference, start, end);
-    console.log('value', value, 'reference', reference, 'suggestedReference', suggestedReference);
     return value;
 };
 
@@ -88,8 +86,6 @@ export const getSuggestions = async (tokens: string[], reference: string): Promi
     if (!suggestions) {
         return {suggestions: objectSuggestion ? [objectSuggestion] : []};
     }
-
-    // console.log('Suggestions: ' + JSON.stringify(suggestions, null, 2));
     return objectSuggestion ? {suggestions: [...suggestions.suggestions, objectSuggestion]} : suggestions;
 };
 
