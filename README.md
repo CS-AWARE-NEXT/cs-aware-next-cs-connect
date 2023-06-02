@@ -1,4 +1,4 @@
-# cs-ware-next-cs-connect
+# cs-aware-next-cs-connect
 
 1. [cs-connect](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/tree/main/cs-connect) which enables the object-oriented collaboration mechanism with support for the hyper-linking system.
 1. [cs-faker-data-provider](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/tree/main/cs-faker-data-provider) a web server that provides fake data using the RESTful protocol.
