@@ -1,0 +1,92 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    volumes:
+      - ./Config/nginx/conf/:/etc/nginx/conf.d/:ro
+      - ./Config/certbot/www:/var/www/certbot/:ro
+      - ./Config/certbot/conf/:/etc/nginx/ssl/:ro
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    volumes:
+      - ./Config/certbot/www/:/var/www/certbot/:rw
+      - ./Config/certbot/conf/:/etc/letsencrypt/:rw
+
+  postgres:
+    image: postgres:13-alpine
+    container_name: postgres
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 100
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+    volumes:
+      - ./Data/mattermostpostgresql:/var/lib/postgresql/data
+    environment:
+      # timezone inside container
+      - TZ=CET
+
+      # necessary Postgres options/variables
+      - POSTGRES_USER=mattermost
+      - POSTGRES_PASSWORD=FYywSBzUFRkjfpWcyYhaJmj1cYlA6zh7guswKcKamaZVwyhZZX6Jsv3smvXHjCuR
+      - POSTGRES_DB=mattermost
+
+  cs-data-provider:
+    depends_on:
+      - postgres
+    image: csconnect/cs-data-provider:0.2
+    container_name: cs-data-provider
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 200
+    read_only: 'false'
+
+  cs-connect:
+    depends_on:
+      - postgres
+      - cs-data-provider
+    image: csconnect/mattermost:0.2
+    container_name: cs-connect
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 200
+    read_only: 'false'
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./Config/mattermost/config:/mattermost/config:rw
+      - ./Data/mattermost:/mattermost/data:rw
+      - ./Config/mattermost/logs:/mattermost/logs:rw
+      - ./Config/mattermost/plugins:/mattermost/plugins:rw
+      - ./Config/mattermost/client/plugins:/mattermost/client/plugins:rw
+      - ./Config/mattermost/bleve-indexes:/mattermost/bleve-indexes:rw
+      # When you want to use SSO with GitLab, you have to add the cert pki chain of GitLab inside Alpine
+      # to avoid Token request failed: certificate signed by unknown authority
+      # (link: https://github.com/mattermost/mattermost-server/issues/13059 and https://github.com/mattermost/docker/issues/34)
+      # - ${GITLAB_PKI_CHAIN_PATH}:/etc/ssl/certs/pki_chain.pem:ro
+    environment:
+      # timezone inside container
+      - TZ=CET
+
+      # necessary Mattermost options/variables (see env.example)
+      - MM_SQLSETTINGS_DRIVERNAME=postgres
+      - MM_SQLSETTINGS_DATASOURCE=postgres://mattermost:FYywSBzUFRkjfpWcyYhaJmj1cYlA6zh7guswKcKamaZVwyhZZX6Jsv3smvXHjCuR@postgres:5432/mattermost?sslmode=disable&connect_timeout=10
+
+      # necessary for bleve
+      - MM_BLEVESETTINGS_INDEXDIR=/mattermost/bleve-indexes
+
+      # additional settings
+      - MM_SERVICESETTINGS_SITEURL=https://cs-connect-demo.cs-aware.eu
