@@ -24,13 +24,14 @@ export const isMessageToHyperlink = ({message}: Post): boolean => {
     return getPattern().test(message);
 };
 
+// messageSource is used for backlinking
 export const hyperlinkPost = async (post: Post): Promise<Post> => {
     const {message} = post;
     const map = await buildHyperlinksMap(message);
     if (!map) {
         return post;
     }
-    return {...post, message: buildHyperlinkedMessage(message, map)};
+    return {...post, message: buildHyperlinkedMessage(message, map), message_source: message};
 };
 
 const buildHyperlinksMap = async (message: string): Promise<Map<string, string> | null> => {
