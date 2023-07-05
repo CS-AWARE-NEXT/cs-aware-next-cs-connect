@@ -14,6 +14,7 @@ import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';
 import {PARENT_ID_PARAM, ecosystemElementsFields, ecosystemElementsWidget} from 'src/constants';
 import PaginatedTable, {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table';
+import Empty from 'src/components/backstage/widgets/empty/empty';
 import {getOrganizationById} from 'src/config/config';
 
 type Props = {
@@ -56,7 +57,7 @@ const EcosystemElementsWrapper = ({
 
     return (
         <>
-            {(data.columns.length > 0 && data.rows.length > 0) &&
+            {(data.columns.length > 0 && data.rows.length > 0) ?
                 <PaginatedTable
                     data={data}
                     id={formatName(name)}
@@ -64,6 +65,11 @@ const EcosystemElementsWrapper = ({
                     sectionId={sectionId}
                     parentId={parentId}
                     pointer={true}
+                /> :
+                <Empty
+                    name={name}
+                    sectionId={sectionId}
+                    parentId={parentId}
                 />}
         </>
     );

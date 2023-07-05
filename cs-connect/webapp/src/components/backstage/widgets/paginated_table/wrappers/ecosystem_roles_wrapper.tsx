@@ -5,6 +5,7 @@ import {Tag} from 'antd';
 
 // import {Client4} from 'mattermost-webapp/packages/mattermost-redux/src/client';
 
+import Empty from 'src/components/backstage/widgets/empty/empty';
 import {buildQuery} from 'src/hooks';
 import {formatName, formatStringToCapitalize} from 'src/helpers';
 import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
@@ -78,10 +79,15 @@ const EcosystemRolesWrapper = ({
 
     return (
         <>
-            {(data.columns.length > 0 && data.rows.length > 0) &&
+            {(data.columns.length > 0 && data.rows.length > 0) ?
                 <PaginatedTable
                     data={data}
                     id={formatName(name)}
+                    name={name}
+                    sectionId={sectionIdForUrl}
+                    parentId={parentId}
+                /> :
+                <Empty
                     name={name}
                     sectionId={sectionIdForUrl}
                     parentId={parentId}

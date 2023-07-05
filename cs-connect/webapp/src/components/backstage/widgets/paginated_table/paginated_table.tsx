@@ -1,8 +1,13 @@
 import {Collapse, Input, Table} from 'antd';
-import React, {useCallback, useContext, useState} from 'react';
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
-import {useLocation, useRouteMatch} from 'react-router-dom';
+import {useRouteMatch} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import CopyLink from 'src/components/commons/copy_link';
@@ -13,6 +18,7 @@ import {
     buildTo,
     buildToForCopy,
     isReferencedByUrlHash,
+    useUrlHash,
 } from 'src/hooks';
 import {
     formatName,
@@ -104,6 +110,10 @@ const PaginatedTable = ({
 
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
+
+    useEffect(() => {
+        setFilteredRows(data.rows || []);
+    }, [data.rows]);
 
     const formatColumnNames = useCallback(() => {
         return data.columns.map((column) => ({...column, title: formatStringToCapitalize(column.title)}));
@@ -213,7 +223,7 @@ const TablePanel = styled(Panel)`
 `;
 
 const TableRow = (props: any) => {
-    const {hash: urlHash} = useLocation();
+    const urlHash = useUrlHash();
     const {pointer, record} = props;
     return (
         <TableRowItem
