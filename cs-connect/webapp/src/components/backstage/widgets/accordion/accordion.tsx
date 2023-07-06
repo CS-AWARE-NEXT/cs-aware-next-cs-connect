@@ -1,13 +1,12 @@
 import React, {ElementType, useContext, useEffect} from 'react';
 import {Collapse, Empty} from 'antd';
 import styled from 'styled-components';
-import {useLocation} from 'react-router-dom';
 
 import {AccordionData} from 'src/types/accordion';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
-import {buildQuery} from 'src/hooks';
+import {buildQuery, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 
 const {Panel} = Collapse;
@@ -34,7 +33,7 @@ const Accordion = ({
     childComponent: ChildComponent,
     ...props
 }: Props) => {
-    const {hash: urlHash} = useLocation();
+    const urlHash = useUrlHash();
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
 
@@ -44,6 +43,9 @@ const Accordion = ({
     // so we increased the time for the default scroll
     // useScrollIntoViewWithCustomTime(urlHash, 500);
 
+    // TODO: With the urlHash as a dependency for the useEffect, the accordion won't open after being closed
+    // when clicking on the same item. By removing it, it works. However, even sending a message
+    // will open the panel related to the last clicked element.
     useEffect(() => {
         if (urlHash) {
             const panels = document.getElementsByClassName('ant-collapse-item') as HTMLCollectionOf<HTMLElement>;

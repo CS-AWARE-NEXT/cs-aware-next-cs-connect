@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {useTableData} from 'src/hooks';
+import {useTableData, useUrlHash} from 'src/hooks';
 import {formatName, formatUrlWithId} from 'src/helpers';
 import {SectionContext} from 'src/components/rhs/rhs';
 import Table from 'src/components/backstage/widgets/table/table';
@@ -18,7 +18,10 @@ const TableWrapper = ({
 }: Props) => {
     const sectionContextOptions = useContext(SectionContext);
     const {params: {sectionId}} = useRouteMatch<{sectionId: string}>();
-    const {hash: urlHash, search} = useLocation();
+    const {search} = useLocation();
+
+    // TODO: move to widget
+    const urlHash = useUrlHash();
 
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;

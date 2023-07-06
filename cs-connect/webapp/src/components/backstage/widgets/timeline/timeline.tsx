@@ -1,9 +1,13 @@
 import React, {useContext, useMemo} from 'react';
 import {Timeline} from 'antd';
-import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 
-import {buildIdForUrlHashReference, buildQuery, isReferencedByUrlHash} from 'src/hooks';
+import {
+    buildIdForUrlHashReference,
+    buildQuery,
+    isReferencedByUrlHash,
+    useUrlHash,
+} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {TimelineData, TimelineDataItem} from 'src/types/timeline';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
@@ -27,8 +31,8 @@ const ItemsTimeline = ({
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const urlHash = useUrlHash();
 
-    const {hash: urlHash} = useLocation();
     const query = buildQuery(parentId, sectionId);
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 

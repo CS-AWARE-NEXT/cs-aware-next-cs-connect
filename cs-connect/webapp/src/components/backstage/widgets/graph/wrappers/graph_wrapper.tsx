@@ -3,7 +3,7 @@ import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
-import {useGraphData} from 'src/hooks';
+import {useGraphData, useUrlHash} from 'src/hooks';
 import {formatUrlWithId} from 'src/helpers';
 import Graph from 'src/components/backstage/widgets/graph/graph';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
@@ -22,7 +22,8 @@ const GraphWrapper = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
 
     const {url: routeUrl, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
-    const {hash: urlHash, search} = useLocation();
+    const {search} = useLocation();
+    const urlHash = useUrlHash();
 
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
