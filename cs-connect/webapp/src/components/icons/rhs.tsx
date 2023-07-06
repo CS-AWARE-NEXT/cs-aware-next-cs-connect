@@ -11,11 +11,13 @@ import {
     RHS_PARAM_VALUE,
     ROOT,
 } from 'src/components/rhs/rhs';
+import {useUrlHash} from 'src/hooks';
 
 export const RHSIcon = () => {
     const channelId = useSelector(getCurrentChannelId);
     const icon = useRef<HTMLElement>(null);
-    const {hash: urlHash, search} = useLocation();
+    const {search} = useLocation();
+    const urlHash = useUrlHash();
     const history = useHistory();
 
     useEffect(() => {

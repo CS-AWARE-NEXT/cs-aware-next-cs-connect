@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {List} from 'antd';
 import styled from 'styled-components';
-import {useLocation, useRouteMatch} from 'react-router-dom';
+import {useRouteMatch} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
@@ -12,6 +12,7 @@ import {
     buildTo,
     buildToForCopy,
     isReferencedByUrlHash,
+    useUrlHash,
 } from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {ListData} from 'src/types/list';
@@ -37,7 +38,7 @@ const ItemsList = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
     const {url} = useRouteMatch();
-    const {hash: urlHash} = useLocation();
+    const urlHash = useUrlHash();
 
     const {items} = data;
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;

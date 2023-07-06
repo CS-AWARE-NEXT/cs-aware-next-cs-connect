@@ -49,7 +49,7 @@ export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
     );
 };
 
-const LinkTitle = styled.h3`
+export const LinkTitle = styled.h3`
     font-family: Metropolis, sans-serif;
     font-size: 16px;
     font-weight: 600;
