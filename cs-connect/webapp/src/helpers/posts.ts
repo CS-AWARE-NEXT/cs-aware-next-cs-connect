@@ -25,12 +25,16 @@ export const isMessageToHyperlink = ({message}: Post): boolean => {
 };
 
 // messageSource is used for backlinking
+// Pay attention that the message_source is what is shown
+// when a user tries to modify a message if it is populated
 export const hyperlinkPost = async (post: Post): Promise<Post> => {
     const {message} = post;
     const map = await buildHyperlinksMap(message);
     if (!map) {
         return post;
     }
+
+    // return {...post, message: buildHyperlinkedMessage(message, map)};
     return {...post, message: buildHyperlinkedMessage(message, map), message_source: message};
 };
 
