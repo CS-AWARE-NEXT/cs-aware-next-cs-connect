@@ -33,6 +33,7 @@ func useOrganizations(basePath fiber.Router) {
 	useOrganizationsIncidents(organizations)
 	useOrganizationsStories(organizations)
 	useOrganizationsPolicies(organizations)
+	useOrganizationsPlaybooks(organizations)
 }
 
 func useOrganizationsIncidents(organizations fiber.Router) {
@@ -99,6 +100,23 @@ func useOrganizationsStories(organizations fiber.Router) {
 	storiesWithId.Get("/timeline", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/stories/:storyId/timeline called")
 		return controller.GetStoryTimeline(c)
+	})
+}
+
+func useOrganizationsPlaybooks(organizations fiber.Router) {
+	playbooks := organizations.Group("/:organizationId/playbooks")
+	playbooks.Get("/", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/playbooks called")
+		return controller.GetPlaybooks(c)
+	})
+	playbooksWithId := playbooks.Group("/:playbookId")
+	playbooksWithId.Get("/", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/playbooks/:playbookId called")
+		return controller.GetPlaybook(c)
+	})
+	playbooksWithId.Get("/detail", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/playbooks/:playbookId/detail called")
+		return controller.GetPlaybook(c)
 	})
 }
 
