@@ -114,7 +114,7 @@ var playbooksMap = map[string][]model.Story{
 	"3": {},
 	"4": {
 		{
-			ID:          "1aee9d94-78f4-44e0-90c1-447ca25c4bae",
+			ID:          "playbook--f10ccbea-188b-40c2-ba49-5fef467b5888",
 			Name:        "Find Malware FuzzyPanda",
 			Description: "This playbook will look for FuzzyPanda on the network and in a SIEM.",
 		},
