@@ -8,14 +8,17 @@ import {
 } from 'src/constants';
 
 export const formatName = (name: string): string => {
-    return name.replace(/\s/g, '-').
-        replace('\'', '-').
+    return name.replaceAll(/\s/g, '-').
+        replaceAll('\'', '-').
         toLowerCase();
 };
 
 export const formatNameNoLowerCase = (name: string): string => {
-    return name.replace(/\s/g, '-').
-        replace('\'', '-');
+    return name.replaceAll(/\s/g, '-').replaceAll('\'', '-');
+};
+
+export const formatNameNoUnderscore = (name: string): string => {
+    return formatName(name).replaceAll('_', '-');
 };
 
 export const formatPropertyName = (name: string): string => {
