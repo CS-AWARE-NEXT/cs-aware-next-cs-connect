@@ -29,6 +29,7 @@ import {
     fetchGraphData,
     fetchListData,
     fetchPaginatedTableData,
+    fetchPlaybookData,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
@@ -381,6 +382,27 @@ export const useTimelineData = (url: string): TimelineData => {
         };
     }, [url]);
     return timelineData as TimelineData;
+};
+
+export const usePlaybookData = (url: string): any => {
+    const [playbookData, setPlaybookData] = useState<any | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchPlaybookDataAsync() {
+            const playbookDataResult = await fetchPlaybookData(url);
+            if (!isCanceled) {
+                setPlaybookData(playbookDataResult);
+            }
+        }
+
+        fetchPlaybookDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return playbookData as any;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {

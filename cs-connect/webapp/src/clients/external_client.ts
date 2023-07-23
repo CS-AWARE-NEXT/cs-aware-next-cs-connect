@@ -76,6 +76,14 @@ export const fetchTimelineData = async (url: string): Promise<TimelineData> => {
     return data;
 };
 
+export const fetchPlaybookData = async (url: string): Promise<any> => {
+    let data = await doGet<any>(url);
+    if (!data) {
+        data = {} as any;
+    }
+    return data;
+};
+
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});
     return data;
