@@ -12,6 +12,7 @@ import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 export type TextBoxStyle = {
     height?: string;
     marginTop?: string;
+    marginRight?: string;
     width?: string;
 };
 
@@ -32,6 +33,7 @@ const TextBox = ({
     text,
     style = {
         marginTop: '24px',
+        marginRight: '0px',
         width: '100%',
     },
 }: Props) => {
@@ -65,11 +67,12 @@ const TextBox = ({
 };
 
 const Container = styled.div<{style: TextBoxStyle}>`
-    width: ${(props) => props.style.width};
+    width: ${(props) => (props.style.width ? props.style.width : '100%')};
     height: ${(props) => (props.style.height ? props.style.height : 'auto')};
     display: flex;
     flex-direction: column;
-    margin-top: ${(props) => props.style.marginTop};
+    margin-top: ${(props) => (props.style.marginTop ? props.style.marginTop : '24px')};
+    margin-top: ${(props) => (props.style.marginRight ? props.style.marginRight : '0')};
 `;
 
 export default TextBox;

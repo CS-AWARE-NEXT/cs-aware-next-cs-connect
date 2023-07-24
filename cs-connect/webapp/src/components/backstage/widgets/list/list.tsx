@@ -26,6 +26,8 @@ type Props = {
     parentId: string;
     sectionId: string;
     Avatar?: JSX.Element;
+    flexGrow?: number;
+    marginRight?: string;
 };
 
 const ItemsList = ({
@@ -34,6 +36,8 @@ const ItemsList = ({
     parentId,
     sectionId,
     Avatar,
+    flexGrow = 1,
+    marginRight = '0',
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
@@ -49,7 +53,10 @@ const ItemsList = ({
             id={id}
             data-testid={id}
         >
-            <ListHeader>
+            <ListHeader
+                flexGrow={flexGrow}
+                marginRight={marginRight}
+            >
                 <AnchorLinkTitle
                     fullUrl={fullUrl}
                     id={id}
@@ -101,8 +108,10 @@ const Container = styled.div`
     margin-top: 24px;
 `;
 
-const ListHeader = styled(Header)`
+const ListHeader = styled(Header)<{flexGrow: number; marginRight: string}>`
     box-shadow: inset 0px -1px 0px rgba(var(--center-channel-color-rgb), 0.16);
+    flex-grow: ${(props) => props.flexGrow};
+    margin-right: ${(props) => props.marginRight};
 `;
 
 export default ItemsList;
