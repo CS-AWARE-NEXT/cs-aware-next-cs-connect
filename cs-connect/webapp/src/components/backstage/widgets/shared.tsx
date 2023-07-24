@@ -126,7 +126,9 @@ export const StyledInput = styled(BaseInput)<{error?: boolean}>`
 
 export const Header = styled.div`
     display: flex;
-    flex: 1;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0%;
     margin-bottom: 8px;
 `;
 
