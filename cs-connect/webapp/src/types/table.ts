@@ -5,7 +5,7 @@ export interface TableData {
 }
 
 export interface TableHeaderData {
-    dim: 2 | 4 | 6 | 8 | 12;
+    dim: 1 | 2 | 3 | 4 | 6 | 8 | 12;
     name: string;
 }
 
@@ -16,7 +16,7 @@ export interface TableRowData {
 }
 
 interface TableValue {
-    dim: 2 | 4 | 6 | 8 | 12;
+    dim: 1 | 2 | 3 | 4 | 6 | 8 | 12;
     value: string;
 }
 
