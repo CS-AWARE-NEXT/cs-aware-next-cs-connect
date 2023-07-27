@@ -1,5 +1,7 @@
 export enum WidgetType {
     Accordion = 'accordion',
+    CacaoPlaybook = 'cacao-playbook',
+
     Channels = 'channels',
     Graph = 'graph',
     PaginatedTable = 'paginated-table',
