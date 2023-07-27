@@ -11,6 +11,7 @@ import SingleChannelWrapper from './single_channel/wrappers/single_channel_wrapp
 import TableWrapper from './table/wrappers/table_wrapper';
 import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
 import TimelineWrapper from './timeline/wrappers/timeline_wrappers';
+import CacaoPlaybookWrapper from './cacao_playbook/wrappers/playbook_wrapper';
 import {WidgetType} from './widget_types';
 
 type Props = {
@@ -25,6 +26,8 @@ const buildWidgetByType = (
     const props = {key, name, url};
 
     switch (type) {
+    case WidgetType.CacaoPlaybook:
+        return <CacaoPlaybookWrapper {...props}/>;
     case WidgetType.Graph:
         return <GraphWrapper {...props}/>;
     case WidgetType.PaginatedTable:
