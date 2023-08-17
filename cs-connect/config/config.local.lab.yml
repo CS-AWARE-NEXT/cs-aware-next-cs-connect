@@ -48,6 +48,14 @@ organizations:
             type: timeline
             url: http://www.isislab.it:3000/cs-data-provider/organizations/4/stories/:id/timeline
           - type: channel
+      - name: Playbooks
+        id: "19"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/4/playbooks
+        widgets:
+          - name: Detail
+            type: cacao-playbook
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/4/playbooks/:id/detail
+          - type: channel
   - name: Organization X
     id: "1"
     description: This is the X organization

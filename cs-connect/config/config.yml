@@ -12,7 +12,7 @@ organizations:
           - type: channel
   - name: Demo CS-AWARE EU
     id: "4"
-    description: The organization at httpss://demo.cs-aware.eu/index.html
+    description: The organization at https://demo.cs-aware.eu/index.html
     sections:
       - name: Incidents
         id: "13"
@@ -47,6 +47,14 @@ organizations:
           - name: Events
             type: timeline
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/stories/:id/timeline
+          - type: channel
+      - name: Playbooks
+        id: "19"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks
+        widgets:
+          - name: Detail
+            type: cacao-playbook
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks/:id/detail
           - type: channel
   - name: Organization X
     id: "1"
