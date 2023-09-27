@@ -25,7 +25,7 @@ services:
       POSTGRES_DB: "mattermost_test"
       PGDATA: "/data/postgres"
     volumes:
-       - "postgres:/data/postgres"
+      - "postgres:/data/postgres"
     ports:
       - "5432:5432"
     networks:
@@ -42,7 +42,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "root"
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
-       - "pgadmin:/var/lib/pgadmin"
+      - "pgadmin:/var/lib/pgadmin"
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
