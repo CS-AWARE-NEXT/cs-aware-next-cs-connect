@@ -1,13 +1,53 @@
 package controller
 
 import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 )
 
 func GetGraph(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
+	if organizationId > "4" {
+		graphData, err := getGraphFromJson(organizationId)
+		if err != nil {
+			return c.JSON(model.GraphData{})
+		}
+		c.JSON(graphData)
+	}
 	return c.JSON(graphMap[organizationId])
+}
+
+func getGraphFromJson(organizationId string) (model.GraphData, error) {
+	organizationName := "larissa"
+	if organizationId == "6" {
+		organizationName = "deyal"
+	}
+	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
+	if err != nil {
+		return model.GraphData{}, err
+	}
+
+	// It can also be done directly this way
+	// content, err := data.Data.ReadFile(fmt.Sprintf("%s.json", organizationName))
+	content, err := data.Data.ReadFile(filePath)
+	if err != nil {
+		return model.GraphData{}, err
+	}
+	var csAwareGraphData model.CSAwareGraphData
+	err = json.Unmarshal(content, &csAwareGraphData)
+	if err != nil {
+		return model.GraphData{}, err
+	}
+	return fromCSAwareGraphData(csAwareGraphData), nil
+}
+
+func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphData {
+	return model.GraphData{}
 }
 
 var graphMap = map[string]model.GraphData{
@@ -76,6 +116,7 @@ var graphMap = map[string]model.GraphData{
 			},
 		},
 		Description: graphDescription,
+		Layouted:    true,
 	},
 	"2": {
 		Nodes: []model.GraphNode{
@@ -126,6 +167,7 @@ var graphMap = map[string]model.GraphData{
 			},
 		},
 		Description: graphDescription,
+		Layouted:    true,
 	},
 	"3": {
 		Nodes: []model.GraphNode{
@@ -176,6 +218,7 @@ var graphMap = map[string]model.GraphData{
 			},
 		},
 		Description: graphDescription,
+		Layouted:    true,
 	},
 	"4": {
 		Nodes: []model.GraphNode{
@@ -663,6 +706,7 @@ var graphMap = map[string]model.GraphData{
 			},
 		},
 		Description: graphDescription,
+		Layouted:    true,
 	},
 }
 
