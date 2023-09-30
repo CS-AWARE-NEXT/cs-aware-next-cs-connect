@@ -1,0 +1,658 @@
+{
+  "type": "region",
+  "id": "region--71befe93-df41-4175-a2b1-419e75f72b22",
+  "name": "Larissa",
+  "created": "2019-08-01T12:15:29.392Z",
+  "modified": "2019-08-05T10:00:00.387Z",
+  "version": "1.0",
+  "objects": [
+    {
+      "type": "node",
+      "id": "node--b44b18bc-ec0b-4ba8-b9e8-607c09f9c747",
+      "name": "MAN-vlan10",
+      "created": "2019-08-01T13:08:30.042Z",
+      "modified": "2019-08-01T13:08:30.042Z",
+      "description": "The MAN (Metropolitan Area Network) is a fibre optic network with some wireless interconnections. There are two main nodes, four distributors (two of them hosted in the same room with main nodes) and access nodes. In each access node there are end users such as a cultural centre or a municipality\u0027s secondary building. The MAN belongs to the municipality, although other services are using it (permissions are provided by our department) in order to connect their buildings or connect to their main service. So through the MAN the two hospitals of our city are connected, the fire department is connected with its main service and the police department is connected to other services. MAN nodes interact and depend on different services operated by the Municipality of Larissa. For example, from all the access nodes on the Municipal Area Network, nodes 2, 3, 5, 6 and 12 have connections to Genesis and here are therefore potential attack vectors. The nodes of the MAN network where the various departments of Larissa\u0027s municipality are providing services, and what services are provided are listed below. In access node 1 (ΚΠ1), a building that hosts a cultural center and provision services is connected in order to have only Internet access (through syzefxis router in the City Hall). In access node 2, the local community of Terpsithea is connected, in order to have Internet access and connection to the Genesis r710 server. In access node 3, the cemetery is connected, in order to have internet access and connection to the Genesis r710 server. In access node 5, a secondary building is connected, in order to have Internet access and connection to the Genesis and HRMS r710 server. In access node 6, the car depot is connected, in order to have internet access and connection to the Genesis r710 server. In access node 7, a secondary building is connected, in order to have Internet access. In access node 10, a building that hosts the municipality\u0027s radio station is connected, in order to have Internet access. In access node 12, green spaces department is connected, in order to have internet access, connection to the Genesis r710 server and connection to the ACE-ERP r530 server.",
+      "source": [
+        "node--f729b915-754e-49bf-b90c-25423652e8c5",
+        "node--41ce6154-f7ec-493f-82a2-220f26204d85"
+      ],
+      "x_infoflow": [
+        "External"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--281204c2-f954-4734-90b2-98eace560297",
+      "name": "HRMS-backend",
+      "created": "2019-08-01T13:04:45.000Z",
+      "modified": "2019-08-01T13:04:45.000Z",
+      "description": "HRMS SETUP (Human Resources Management System Setup) offers an additional tool, named “Audit” with the intention of keeping track of the changes that are made by the users. Users must apply criteria such as who (user) updated, what (table-record) and when (date range). In the result screen the user can see the updated records and the old and new values of the fields, and doesn’t have the ability to export the results. Administrators have additional access to the Oracle database (instance name: OTA_DB), its tables and views (schema: SHR) and can retrieve information by using tools like SQL Navigator.",
+      "source": [
+        "node--8629efcb-5ebe-4fe5-a860-79f83a132358",
+        "node--531d375a-18f0-41e3-b9d3-3fbe78d84cfc"
+      ],
+      "x_infoflow": [
+        "Payroll",
+        "HR",
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": [
+        "greek public sector personnel"
+      ]
+    },
+    {
+      "type": "node",
+      "id": "node--ec36d345-8b8e-4caf-a2fe-6462a0ef2813",
+      "name": "Commitee-decisions",
+      "created": "2019-08-01T12:18:37.478Z",
+      "modified": "2019-08-01T12:18:37.478Z",
+      "description": "Decisions of City Council and its committees (archives)",
+      "source": [
+        "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658"
+      ],
+      "x_infoflow": [
+        "Commitee"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--8629efcb-5ebe-4fe5-a860-79f83a132358",
+      "name": "DB",
+      "created": "2019-08-01T13:01:52.727Z",
+      "modified": "2019-08-01T13:01:52.727Z",
+      "description": "It hosts our main database, an Oracle database, version 11g. Oracle client (from version 8i to version 11g) is installed in most client PC’s. TCP/IP (Internet Protocol) is used to connect and to communicate with the database (Client and server communication). The default port for thisn communication is port 1521. The Listener is a named process that runs on the Oracle Server, awaiting requests from Clients to connect to the Instance (it “listens” port 1521). The Oracle database instance name is ΟTA_DB. There are two (2) schemas under OTA_DB: 1) (S92111) that includes the tables, indexes, views etc of our “Integrated System for Local Administrations” named GENESIS. It includes Accounting and Financial Services, Civil Registry etc. 2) (SHR), that includes the tables, indexes, views etc. of our “Human Resources” software named HRMS. These two software packages (Genesis and HRMS), are developed by Singulalogic S.A., a Greek software vendor. GENESIS client application connects to server port 920 (in server SR710) in order to communicate with Genesis’ Application Server (SAS server). GENESIS client application connects to server port 190 (in server SR710) in order to communicate with Genesis’ Client Object Server. Object server is responsible for Genesis client updates. The physical files of our database are .dbf files",
+      "source": [
+        "node--f4842ad2-407d-4d21-b315-004f86b2b177",
+        "node--281204c2-f954-4734-90b2-98eace560297"
+      ],
+      "x_infoflow": [
+        "Commitee",
+        "Document",
+        "Permit",
+        "Store",
+        "Finance",
+        "Revenues",
+        "External",
+        "Payroll",
+        "VPN-Genesis",
+        "HR",
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_csaware_node_type": "database",
+      "x_categories": [
+        "oracle 11 windows server 2008"
+      ]
+    },
+    {
+      "type": "node",
+      "id": "node--f8c153bb-315c-43fc-919a-4daf11e9af59",
+      "name": "Payroll-dpt",
+      "created": "2019-08-01T12:47:11.301Z",
+      "modified": "2019-08-01T12:47:11.301Z",
+      "description": "This is the city’s Human Resources Management System. This information system helps the city to manage their personnel. It handles employees’ personal information such as educational background, job contracts, leaves, salaries along with taxes and deductions. It also produces reports for all management levels as well as official financial statements. HRMS users are located at the municipality’s main building (ACCESS NODE: ΚΠ6). They are employees of the department of payroll and the department of human resources. There is no other way employees can have access to HRMS data. In case of the system’s non-availability, end users are unable to enter any kind of information about their employees and cannot calculate payroll, fees and taxes. There is also no access to financial data. Administration cannot also report with financial or statistical data as required by Central Government nor can it send data to insurance funds. Systems recovery should have taken place within the following business day. For the duration of no availability, the organization has no failover options and any transactions taking place must be logged in written and then entered to the HR.",
+      "source": [
+        "node--4dd04fb5-7e4b-458f-90ff-aff33580b402"
+      ],
+      "x_infoflow": [
+        "Payroll"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--726ebc7e-c5af-4dcf-af6c-9a1fe93fbdfe",
+      "name": "Server-3",
+      "created": "2019-08-01T12:51:00.141Z",
+      "modified": "2019-08-01T12:51:00.141Z",
+      "description": "R530 hosts the ACE-ERP, ECM and LAW applications",
+      "source": [
+        "node--93d08788-c52d-46c2-8762-76a2e7d808de"
+      ],
+      "x_infoflow": [],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--b6fd4ede-58ab-4787-9f78-6603b75a712f",
+      "name": "Finance-expenses",
+      "created": "2019-08-01T12:20:01.792Z",
+      "modified": "2019-08-01T12:20:01.792Z",
+      "description": "This is the city’s ERP to manage their revenues and expenses. It handles supplier and citizen information, tracks invoices and payments. It organizes tax and debt collection. It produces reports for all management levels as well as official financial statements. ERP operates on the server – client architecture and supports all major RDBMS solutions. ERP interacts with HR, WBS, Diavgeia, Central repository for financial data reporting. In case of the system’s non-availability, citizens and companies are unable to pay fees and taxes, suppliers are unable to get paid for the goods and services they have provided and end users have no access to financial data in any way whatsoever. Administration cannot also report with financial or statistical data as required by Central Government. Systems recovery should have taken place within the following business day. For the duration of no availability, the organization has no failover options and any transactions taking place must be logged in written and then entered to the ERP. End customer retains all recent binaries and executables and maintains automated daily backups of their database(s). Database backups are also maintained to a NAS Server for redundancy.",
+      "source": [
+        "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658"
+      ],
+      "x_infoflow": [
+        "Store",
+        "Finance"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--71d1cd1f-7c53-407b-a059-1896d1c5c44d",
+      "name": "Finance-revenues",
+      "created": "2019-08-01T12:16:56.275Z",
+      "modified": "2019-08-01T12:16:56.275Z",
+      "description": "This is the city’s ERP to manage their revenues and expenses. It handles supplier and citizen information, tracks invoices and payments. It organizes tax and debt collection. It produces reports for all management levels as well as official financial statements. ERP operates on the server – client architecture and supports all major RDBMS solutions. ERP interacts with HR, WBS, Diavgeia, Central repository for financial data reporting. In case of the system’s non-availability, citizens and companies are unable to pay fees and taxes, suppliers are unable to get paid for the goods and services they have provided and end users have no access to financial data in any way whatsoever. Administration cannot also report with financial or statistical data as required by Central Government. Systems recovery should have taken place within the following business day. For the duration of no availability, the organization has no failover options and any transactions taking place must be logged in written and then entered to the ERP. End customer retains all recent binaries and executables and maintains automated daily backups of their database(s). Database backups are also maintained to a NAS Server for redundancy.",
+      "source": [
+        "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658"
+      ],
+      "x_infoflow": [
+        "Revenues"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--e4c831a7-a55c-4ffd-9748-e036ff3e382a",
+      "name": "Permit-handling",
+      "created": "2019-08-01T12:20:55.063Z",
+      "modified": "2019-08-01T12:20:55.063Z",
+      "description": "Handling applications for a) opening a shop or a business in professional areas of health and hygiene and b) occupying public space (eg pavements) for a short period of time",
+      "source": [
+        "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658"
+      ],
+      "x_infoflow": [
+        "Permit"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--f729b915-754e-49bf-b90c-25423652e8c5",
+      "name": "KP-node",
+      "created": "2019-08-01T13:10:25.094Z",
+      "modified": "2019-08-01T13:10:25.094Z",
+      "description": "Access node of the MAN (Metropolitan Area Network)",
+      "source": [
+        "node--b44b18bc-ec0b-4ba8-b9e8-607c09f9c747"
+      ],
+      "x_infoflow": [
+        "External"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--e77ef86a-a675-4fb8-8b9e-7aab2334e80a",
+      "name": "Koilada-Syzefxis",
+      "created": "2019-08-01T13:24:20.313Z",
+      "modified": "2019-08-01T13:24:20.313Z",
+      "description": "Before 2011 Giannouli and Koilada were different municipalities, and had their own infrastructure Giannouli even has its own fibre optic MAN. After 2011, Kallikratis plan was applied, and Larissa consumed these smaller municipalities. Now, if a user from Giannouli wants internet access, then he is directed to Giannulli’s SYZEFXIS router; but if he wants to communicate with our server in Larissa\u0027s city hall then he is directed through his SYZEFXIS router to Larissa\u0027s SYZEFXIS router via a VPN network that is established between Larissa, Giannouli and Koilada in order to have this interconnection.",
+      "source": [
+        "node--d0950e53-0c25-4f2d-99af-26e00977379f"
+      ],
+      "x_infoflow": [],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--ab7be8be-023b-4872-b1ba-4bbb617a8e91",
+      "name": "Floor-switch",
+      "created": "2019-08-01T12:26:36.619Z",
+      "modified": "2019-08-01T12:26:36.619Z",
+      "description": "Each floor’s PCs are connected to a switch. All these switches are connected to a switch (Main switch) that is placed at the municipality’s computer room.",
+      "source": [
+        "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658",
+        "node--4dd04fb5-7e4b-458f-90ff-aff33580b402",
+        "node--93d08788-c52d-46c2-8762-76a2e7d808de"
+      ],
+      "x_infoflow": [
+        "HR",
+        "Payroll",
+        "Leave",
+        "Revenues",
+        "Commitee",
+        "Finance",
+        "Store",
+        "Permit",
+        "Document"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--38683562-2a45-4f27-b1f0-9c216f6b7bec",
+      "name": "Router-Gateway",
+      "created": "2019-08-01T12:58:03.626Z",
+      "modified": "2019-08-01T12:58:03.626Z",
+      "description": "Although now redundant, gateway router was still connected to the main Linksys switch and could be used as a monitoring point for network traffic. After further investigation it was established that almost all of the network traffic could be monitored through the gateway, and that most likely built-in monitoring mechanisms can be used to gather this data.",
+      "source": [
+        "node--93d08788-c52d-46c2-8762-76a2e7d808de"
+      ],
+      "x_infoflow": [
+        "Commitee",
+        "Document",
+        "Permit",
+        "Store",
+        "Finance",
+        "Revenues",
+        "External",
+        "Payroll",
+        "HR",
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": [
+        "cisco 4850"
+      ]
+    },
+    {
+      "type": "node",
+      "id": "node--453a082a-c441-4737-9d9a-2567428f6046",
+      "name": "HR-dpt",
+      "created": "2019-08-01T12:44:58.040Z",
+      "modified": "2019-08-01T12:44:58.040Z",
+      "description": "This is the city’s Human Resources Management System. This information system helps the city to manage their personnel. It handles employees’ personal information such as educational background, job contracts, leaves, salaries along with taxes and deductions. It also produces reports for all management levels as well as official financial statements. HRMS users are located at the municipality’s main building (ACCESS NODE: ΚΠ6). They are employees of the department of payroll and the department of human resources. There is no other way employees can have access to HRMS data. In case of the system’s non-availability, end users are unable to enter any kind of information about their employees and cannot calculate payroll, fees and taxes. There is also no access to financial data. Administration cannot also report with financial or statistical data as required by Central Government nor can it send data to insurance funds. Systems recovery should have taken place within the following business day. For the duration of no availability, the organization has no failover options and any transactions taking place must be logged in written and then entered to the HR.",
+      "source": [
+        "node--4dd04fb5-7e4b-458f-90ff-aff33580b402"
+      ],
+      "x_infoflow": [
+        "HR"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--df72a835-256c-491c-8273-f53082430e75",
+      "name": "Syzefxis",
+      "created": "2019-08-01T13:16:40.816Z",
+      "modified": "2019-08-01T13:16:40.816Z",
+      "description": "SYZEFXIS is a virtual private network that the Greek Government maintains and oversees. It connects all Greek public authorities. The Cities of Larissa, Elassona and Kileler all use a SYZEFXIS router, as does every other LPA in Greece. SYZEFXIS is connected to both the Metropolitan Area Network (MAN) and to the three servers located in the Town Hall. The City does not control the SYZEFXIS router and cannot monitor the traffic running through SYZEFXIS.",
+      "source": [
+        "node--93d08788-c52d-46c2-8762-76a2e7d808de",
+        "node--d0950e53-0c25-4f2d-99af-26e00977379f",
+        "node--4870b18e-9cc9-474f-85dc-e24a203e369f"
+      ],
+      "x_infoflow": [
+        "VPN-Genesis"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--d0950e53-0c25-4f2d-99af-26e00977379f",
+      "name": "VPN",
+      "created": "2019-08-01T13:22:22.089Z",
+      "modified": "2019-08-01T13:22:22.089Z",
+      "description": "SYZEFXIS router via a VPN network that is established between Larissa, Giannouli and Koilada in order to have this interconnection.",
+      "source": [
+        "node--25e171de-e571-46fc-b2cb-4b2e8937dbe3",
+        "node--e77ef86a-a675-4fb8-8b9e-7aab2334e80a",
+        "node--df72a835-256c-491c-8273-f53082430e75"
+      ],
+      "x_infoflow": [
+        "VPN-Genesis"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": [
+        "syzefxis vpn"
+      ]
+    },
+    {
+      "type": "node",
+      "id": "node--a5582234-b0b0-429a-86db-d91f66f9d5e2",
+      "name": "Leave-management",
+      "created": "2019-08-01T12:45:57.129Z",
+      "modified": "2019-08-01T12:45:57.129Z",
+      "description": "This is a part of Human Resources Management System. It handles employees’ leaves from the beginning to the end of their contract. ",
+      "source": [
+        "node--4dd04fb5-7e4b-458f-90ff-aff33580b402"
+      ],
+      "x_infoflow": [
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--f4842ad2-407d-4d21-b315-004f86b2b177",
+      "name": "Genesis-backend",
+      "created": "2019-08-01T13:03:54.208Z",
+      "modified": "2019-08-01T13:03:54.208Z",
+      "description": "In order to monitor users’ activity, an extra module has been developed, called “Modifications’ history”. Each Genesis module has its own “Modifications’ history” form. In this form, the user can “ask” the database in order to search the database about 3 types of actions: insert, delete and update. The result is a list of records that shows when (date) the action occurred and who (user) committed it. The user can also set these criteria (date range, user) so as to focus his search. Moreover, in the case of the “update” action, the user can see both the old value and the new value of the field that has been updated. “Modifications’ history” is a tool that allows simple Genesis users to execute queries and get results in an understandable way. In some Genesis modules, users can export these results as .xls or .csv files. Administrators, on the other hand, have additional access to the Oracle database (instance name: OTA_DB), its tables and views (schema: S92111) and can retrieve information by using tools like SQL Navigator.",
+      "source": [
+        "node--8629efcb-5ebe-4fe5-a860-79f83a132358",
+        "node--531d375a-18f0-41e3-b9d3-3fbe78d84cfc"
+      ],
+      "x_infoflow": [
+        "Commitee",
+        "Document",
+        "Permit",
+        "Finance",
+        "Revenues",
+        "External",
+        "VPN-Genesis"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_csaware_node_type": "network",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--93d08788-c52d-46c2-8762-76a2e7d808de",
+      "name": "Main-switch",
+      "created": "2019-08-01T12:49:38.974Z",
+      "modified": "2019-08-01T12:49:38.974Z",
+      "description": "The Main switch connects all the server racks and the intermediate switch inside the city hall. Before we establish the MAN network, we had not the fibre optic switch. We had a connecting cable from the Main switch directly to the SYZEFXIS router. A fibre optic switch connects the whole MAN network to the main Syzefxis router, and to our Main switch both. So if a user from outside the city hall (from a different MAN node) wants access to the Internet, then the only way is to reach node 4. The connection then is going through the fibre optic switch to the Main switch and then to the ONLY Gateway router. Users’ PCs are connected to the floor’s switch and through the Main switch to the R710 Server.",
+      "source": [
+        "node--41ce6154-f7ec-493f-82a2-220f26204d85",
+        "node--ab7be8be-023b-4872-b1ba-4bbb617a8e91",
+        "node--ec03e7b6-e711-4f02-ae87-2a1d91ec6708",
+        "node--38683562-2a45-4f27-b1f0-9c216f6b7bec",
+        "node--46db792d-c7a6-4d09-9a9b-6f7434e10629",
+        "node--726ebc7e-c5af-4dcf-af6c-9a1fe93fbdfe",
+        "node--df72a835-256c-491c-8273-f53082430e75"
+      ],
+      "x_infoflow": [
+        "Commitee",
+        "Document",
+        "Permit",
+        "Store",
+        "Finance",
+        "Revenues",
+        "External",
+        "Payroll",
+        "VPN-Genesis",
+        "HR",
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": [
+        "cisco 3560"
+      ]
+    },
+    {
+      "type": "node",
+      "id": "node--531d375a-18f0-41e3-b9d3-3fbe78d84cfc",
+      "name": "Endpoint-protection",
+      "created": "2019-08-05T10:00:00.387Z",
+      "modified": "2019-08-05T10:00:00.387Z",
+      "description": "All PC\u0027s and servers have up to date antivirus protection programs, purchased or free. Every year we pay for the renewal of the maintenance of the purchased antivirus software. All servers have Symantec Endpoint Protection (SEP) version 12.1.6 installed, including our main server SR710. PC‘s have either Symantec Endpoint Protection (SEP) version 12.1.6 or free antivirus software (mostly Avast) installed. Specific firewall rules have been configured in SR710 server’s SEP : 1) Allow all traffic from Larissa‘s Syzefxis VPN. This includes only the city of Larissa and allows traffic from IP’s [IP1] to [IP2], All Protocols. 2) Allow traffic from Giannouli’s Syzefxis VPN, only for protocol TCP and for specific server ports 1521, 920 and 190 (as explained in “L day 2 slide4”). This includes only the community of Giannouli and allows traffic from IP’s [IP1] to [IP2] only for the connections with Oracle database and Genesis software. 3) Allow traffic from Koilada’s Syzefxis VPN, only for protocol TCP and for specific server ports 1521, 920 and 190 (as explained in “L day 2 slide4”). This includes only the community of Koilada and allows traffic from IP’s [IP1] to [IP2] only for the connections with Oracle database and Genesis software. 4) Block traffic from all other IP’s, besides the aforementioned IP’s, in subnets [SUBNET1] and [SUBNET2]",
+      "source": [
+        "node--f4842ad2-407d-4d21-b315-004f86b2b177",
+        "node--281204c2-f954-4734-90b2-98eace560297",
+        "node--ec03e7b6-e711-4f02-ae87-2a1d91ec6708"
+      ],
+      "x_infoflow": [
+        "Commitee",
+        "Document",
+        "Permit",
+        "Store",
+        "Finance",
+        "Revenues",
+        "External",
+        "Payroll",
+        "VPN-Genesis",
+        "HR",
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "timestamp": "none",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": [
+        "SEP 12.1.6"
+      ]
+    },
+    {
+      "type": "node",
+      "id": "node--25e171de-e571-46fc-b2cb-4b2e8937dbe3",
+      "name": "Giannouli-Syzefxis",
+      "created": "2019-08-01T13:23:22.339Z",
+      "modified": "2019-08-01T13:23:22.339Z",
+      "description": "Before 2011 Giannouli and Koilada were different municipalities, and had their own infrastructure Giannouli even has its own fibre optic MAN. After 2011, Kallikratis plan was applied, and Larissa consumed these smaller municipalities. Now, if a user from Giannouli wants internet access, then he is directed to Giannulli’s SYZEFXIS router; but if he wants to communicate with our server in Larissa\u0027s city hall then he is directed through his SYZEFXIS router to Larissa\u0027s SYZEFXIS router via a VPN network that is established between Larissa, Giannouli and Koilada in order to have this interconnection.",
+      "source": [
+        "node--d0950e53-0c25-4f2d-99af-26e00977379f"
+      ],
+      "x_infoflow": [
+        "VPN-Genesis"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--c2ae6f09-20bd-4342-8407-35bef1812c18",
+      "name": "Document-archiving",
+      "created": "2019-08-01T12:21:58.804Z",
+      "modified": "2019-08-01T12:21:58.804Z",
+      "description": "Registration and achiving of inbound and outbound official documents.",
+      "source": [
+        "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658"
+      ],
+      "x_infoflow": [
+        "Document"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--4870b18e-9cc9-474f-85dc-e24a203e369f",
+      "name": "Internet",
+      "created": "2019-08-01T13:19:07.670Z",
+      "modified": "2019-08-01T13:19:07.670Z",
+      "description": "none",
+      "source": [
+        "node--0d88af3a-902d-4cd4-9032-96f4f9df4d7b",
+        "node--df72a835-256c-491c-8273-f53082430e75"
+      ],
+      "x_infoflow": [],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--41ce6154-f7ec-493f-82a2-220f26204d85",
+      "name": "End-user-MAN-switch",
+      "created": "2019-08-01T13:07:19.697Z",
+      "modified": "2019-08-01T13:07:19.697Z",
+      "description": "Now that the building is connected to the MAN, Larissa set up a F.O. switch in order to connect these two PC\u0027s and the fibre. All the traffic goes through that switch to the distributor and then through the F.O. switch in the City Hall and then via the router Syzefxis to the Internet. The old ADSL line is maintained in order to provide Wi-Fi Internet access to visitors. A fibre optic switch connects the whole MAN network to the main Syzefxis router, and to our Main switch both. So if a user from outside the city hall (from a different MAN node) wants access to the Internet, then the only way is to reach node 4. The connection then is going through the fibre optic switch to the Main switch and then to the ONLY Gateway router.",
+      "source": [
+        "node--93d08788-c52d-46c2-8762-76a2e7d808de",
+        "node--b44b18bc-ec0b-4ba8-b9e8-607c09f9c747"
+      ],
+      "x_infoflow": [
+        "External"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--4dd04fb5-7e4b-458f-90ff-aff33580b402",
+      "name": "HRMS",
+      "created": "2019-08-01T12:30:24.344Z",
+      "modified": "2019-08-01T12:30:24.344Z",
+      "description": "Payroll and Human Resources Management",
+      "source": [
+        "node--ab7be8be-023b-4872-b1ba-4bbb617a8e91",
+        "node--453a082a-c441-4737-9d9a-2567428f6046",
+        "node--a5582234-b0b0-429a-86db-d91f66f9d5e2",
+        "node--f8c153bb-315c-43fc-919a-4daf11e9af59"
+      ],
+      "x_infoflow": [
+        "Payroll",
+        "HR",
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--46db792d-c7a6-4d09-9a9b-6f7434e10629",
+      "name": "Server-2",
+      "created": "2019-08-01T12:52:53.227Z",
+      "modified": "2019-08-01T12:52:53.227Z",
+      "description": "2950G hosts the WebGIS. GIS oracle database is hosted to another server, the 2950L that runs on UNIX red hat. WebGIS GIS oracle Database Host -\u003e 2050L Unix red",
+      "source": [
+        "node--93d08788-c52d-46c2-8762-76a2e7d808de"
+      ],
+      "x_infoflow": [],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--0d88af3a-902d-4cd4-9032-96f4f9df4d7b",
+      "name": "ADSL-router",
+      "created": "2019-08-01T13:20:48.615Z",
+      "modified": "2019-08-01T13:20:48.615Z",
+      "description": "This router provides **Wifi** for _guests_ of the [municipality]( http://www.larissa.gov.gr).",
+      "source": [
+        "node--4870b18e-9cc9-474f-85dc-e24a203e369f"
+      ],
+      "x_infoflow": [],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658",
+      "name": "Genesis",
+      "created": "2019-08-01T12:24:53.620Z",
+      "modified": "2019-08-01T12:24:53.620Z",
+      "description": "none",
+      "source": [
+        "node--ec36d345-8b8e-4caf-a2fe-6462a0ef2813",
+        "node--c2ae6f09-20bd-4342-8407-35bef1812c18",
+        "node--b6fd4ede-58ab-4787-9f78-6603b75a712f",
+        "node--71d1cd1f-7c53-407b-a059-1896d1c5c44d",
+        "node--ab7be8be-023b-4872-b1ba-4bbb617a8e91",
+        "node--e4c831a7-a55c-4ffd-9748-e036ff3e382a",
+        "node--97ee40f9-f867-423f-b5da-e2a8efa4277f"
+      ],
+      "x_infoflow": [
+        "Commitee",
+        "Document",
+        "Permit",
+        "Store",
+        "Finance",
+        "Revenues"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    },
+    {
+      "type": "node",
+      "id": "node--ec03e7b6-e711-4f02-ae87-2a1d91ec6708",
+      "name": "Main-Server",
+      "created": "2019-08-01T12:59:25.786Z",
+      "modified": "2019-08-01T12:59:25.786Z",
+      "description": "The R710 hosts Genesis, (the City’s ERP system that is used to manage income and expenditure) Genesis handles information about both suppliers and citizens and tax and debt collection. This system is used for maintaining the civil registry, for the records of document signings and for the cash desk. Additionally the R710 hosts the Human Relations Management System (HRMS). Genesis and the HRMS run in an Oracle relational database. Dell Power Edge R710 server (Windows 2008 R2 SP1)",
+      "source": [
+        "node--531d375a-18f0-41e3-b9d3-3fbe78d84cfc",
+        "node--93d08788-c52d-46c2-8762-76a2e7d808de"
+      ],
+      "x_infoflow": [
+        "Commitee",
+        "Document",
+        "Permit",
+        "Store",
+        "Finance",
+        "Revenues",
+        "External",
+        "Payroll",
+        "VPN-Genesis",
+        "HR",
+        "Leave"
+      ],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "10.128.56.24",
+      "x_port_range": "1521",
+      "x_categories": [
+        "dell R710"
+      ]
+    },
+    {
+      "type": "node",
+      "id": "node--97ee40f9-f867-423f-b5da-e2a8efa4277f",
+      "name": "Statistics-for-ministry",
+      "created": "2019-08-01T12:15:29.392Z",
+      "modified": "2019-08-01T12:15:29.392Z",
+      "description": "Financial data reports (accounting, HR) uploaded to central government",
+      "source": [
+        "node--e631f5eb-d006-4d8c-bcaf-08c6717d6658"
+      ],
+      "x_infoflow": [],
+      "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
+      "x_ip_range": "0.0.0.0",
+      "x_port_range": "0000",
+      "x_categories": []
+    }
+  ]
+}
