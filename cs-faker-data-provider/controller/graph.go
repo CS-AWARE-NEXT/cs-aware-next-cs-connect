@@ -17,14 +17,14 @@ func GetGraph(c *fiber.Ctx) error {
 		if err != nil {
 			return c.JSON(model.GraphData{})
 		}
-		c.JSON(graphData)
+		return c.JSON(graphData)
 	}
 	return c.JSON(graphMap[organizationId])
 }
 
 func getGraphFromJson(organizationId string) (model.GraphData, error) {
 	organizationName := "larissa"
-	if organizationId == "6" {
+	if organizationId == "7" {
 		organizationName = "deyal"
 	}
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
@@ -47,7 +47,46 @@ func getGraphFromJson(organizationId string) (model.GraphData, error) {
 }
 
 func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphData {
-	return model.GraphData{}
+	nodes := []model.GraphNode{}
+	edges := []model.GraphEdge{}
+	for _, csAwareNode := range csAwareGraphData.Objects {
+		nodes = append(nodes, model.GraphNode{
+			Position: model.GraphNodePosition{X: 0, Y: 0},
+			ID:       csAwareNode.ID,
+			Data: model.GraphNodeData{
+				Label: csAwareNode.Name,
+				Kind:  model.Server,
+			},
+		})
+
+		for _, source := range csAwareNode.Source {
+			repeated := false
+			for _, edge := range edges {
+				leftID := fmt.Sprintf("%s-%s", csAwareNode.ID, source)
+				rigthID := fmt.Sprintf("%s-%s", source, csAwareNode.ID)
+				if edge.ID == leftID || edge.ID == rigthID {
+					repeated = true
+				}
+			}
+			if repeated {
+				continue
+			}
+			edges = append(edges, model.GraphEdge{
+				ID:     fmt.Sprintf("%s-%s", csAwareNode.ID, source),
+				Source: source,
+				Target: csAwareNode.ID,
+			})
+		}
+	}
+	return model.GraphData{
+		Description: model.GraphDescription{
+			Name: "Description",
+			Text: fmt.Sprintf("%s %s, version %s", csAwareGraphData.Name, csAwareGraphData.Type, csAwareGraphData.Version),
+		},
+		Nodes:    nodes,
+		Edges:    edges,
+		Layouted: false,
+	}
 }
 
 var graphMap = map[string]model.GraphData{
