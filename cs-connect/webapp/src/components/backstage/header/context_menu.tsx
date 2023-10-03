@@ -6,8 +6,7 @@ import styled from 'styled-components';
 
 import DotMenu, {TitleButton} from 'src/components/commons/dot_menu';
 import {SemiBoldHeading} from 'src/styles/headings';
-
-import {CopyLinkMenuItem} from './controls';
+import {CopyLinkMenuItem} from 'src/components/commons/copy_link';
 
 type Props = {
     name: string;
