@@ -16,6 +16,8 @@ func UseRoutes(app *fiber.App, context *config.Context) {
 	useEcosystem(basePath, context)
 }
 
+// TODO: /organizations base routes are not used since config file was introduced
+// They were used for the slash command
 func useOrganizations(basePath fiber.Router) {
 	organizations := basePath.Group("/organizations")
 	organizations.Get("/", func(c *fiber.Ctx) error {
@@ -34,6 +36,7 @@ func useOrganizations(basePath fiber.Router) {
 	useOrganizationsStories(organizations)
 	useOrganizationsPolicies(organizations)
 	useOrganizationsPlaybooks(organizations)
+	useOrganizationsSocialMedia(organizations)
 }
 
 func useOrganizationsIncidents(organizations fiber.Router) {
@@ -117,6 +120,19 @@ func useOrganizationsPlaybooks(organizations fiber.Router) {
 	playbooksWithId.Get("/detail", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/playbooks/:playbookId/detail called")
 		return controller.GetPlaybook(c)
+	})
+}
+
+func useOrganizationsSocialMedia(organizations fiber.Router) {
+	socialMedia := organizations.Group("/:organizationId/social_media")
+	socialMedia.Get("/", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/social_media called")
+		return controller.GetAllSocialMedia(c)
+	})
+	socialMediaWithId := socialMedia.Group("/:socialMediaId")
+	socialMediaWithId.Get("/", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/social_media/:socialMediaId called")
+		return controller.GetSocialMedia(c)
 	})
 }
 
