@@ -18,6 +18,7 @@ type GraphData struct {
 }
 
 type GraphNodeData struct {
+	Description string `json:"description"`
 	IsUrlHashed bool   `json:"isUrlHashed"`
 	Kind        string `json:"kind"`
 	Label       string `json:"label"`
