@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
@@ -23,12 +24,16 @@ func GetGraph(c *fiber.Ctx) error {
 }
 
 func getGraphFromJson(organizationId string) (model.GraphData, error) {
-	organizationName := "larissa"
+	organizationName := "foggia"
+	if organizationId == "6" {
+		organizationName = "larissa"
+	}
 	if organizationId == "7" {
 		organizationName = "deyal"
 	}
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
 	if err != nil {
+		log.Println(err.Error())
 		return model.GraphData{}, err
 	}
 
@@ -54,8 +59,9 @@ func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphDa
 			Position: model.GraphNodePosition{X: 0, Y: 0},
 			ID:       csAwareNode.ID,
 			Data: model.GraphNodeData{
-				Label: csAwareNode.Name,
-				Kind:  model.Server,
+				Label:       csAwareNode.Name,
+				Description: csAwareNode.Description,
+				Kind:        model.Server,
 			},
 		})
 
