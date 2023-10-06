@@ -134,6 +134,10 @@ func useOrganizationsSocialMedia(organizations fiber.Router) {
 		log.Printf("GET /:organizationId/social_media/:socialMediaId called")
 		return controller.GetSocialMedia(c)
 	})
+	socialMediaWithId.Get("/posts", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/social_media/:socialMediaId/posts called")
+		return controller.GetSocialMediaPosts(c)
+	})
 }
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {
