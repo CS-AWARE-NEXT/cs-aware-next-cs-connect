@@ -33,6 +33,10 @@ export const formatStringToCapitalize = (s: string): string => {
     return startCase(camelCase(s));
 };
 
+export const formatUrlAsMarkdown = (path: string, text: string) => {
+    return `[${text}](${path})`;
+};
+
 export const formatChannelName = (name: string): string => {
     let channelName = formatName(name);
     if (channelName.length < MATTERMOST_CHANNEL_NAME_LENGTH) {
@@ -92,4 +96,14 @@ export const removeSectionNameFromPath = (path: string, sectionName: string) => 
         return path;
     }
     return path.replace(sectionSegment, '');
+};
+
+export const getTextWidth = (text: string, font?: string): number => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) {
+        return 0;
+    }
+    context.font = font || getComputedStyle(document.body).font;
+    return context.measureText(text).width;
 };
