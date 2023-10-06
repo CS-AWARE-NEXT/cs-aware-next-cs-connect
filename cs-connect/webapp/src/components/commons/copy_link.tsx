@@ -22,6 +22,7 @@ type CopyLinkMenuItemProps = {
     showPlaceholder?: boolean;
     svgMarginRight?: string;
     text: string;
+    onContexMenu?: (e: React.MouseEvent) => void;
 };
 
 export const CopyLinkMenuItem: FC<CopyLinkMenuItemProps> = ({
@@ -31,6 +32,7 @@ export const CopyLinkMenuItem: FC<CopyLinkMenuItemProps> = ({
     showPlaceholder = true,
     svgMarginRight,
     text,
+    onContexMenu,
 }) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
@@ -43,6 +45,7 @@ export const CopyLinkMenuItem: FC<CopyLinkMenuItemProps> = ({
                 copyToClipboard(formatUrlAsMarkdown(path, text));
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
+            onContextMenu={onContexMenu}
         >
             {showIcon && <LinkVariantIcon size={16}/>}
             {showPlaceholder && placeholderText}

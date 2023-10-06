@@ -103,6 +103,7 @@ export const DropdownMenuItem = (props: {
     disabled?: boolean,
     disabledAltText?: string,
     onClick: () => void,
+    onContextMenu?: (e: React.MouseEvent) => void,
 }) => {
     const tooltipId = useUniqueId();
 
@@ -127,6 +128,7 @@ export const DropdownMenuItem = (props: {
             onClick={props.onClick}
             className={props.className}
             role={'button'}
+            onContextMenu={props.onContextMenu}
 
             // Prevent trigger icon (parent) from propagating title prop to options
             // Menu items use to be full text (not just icons) so don't need title
