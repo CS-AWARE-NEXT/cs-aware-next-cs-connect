@@ -11,3 +11,11 @@ dist
 .idea/
 
 node_modules
+
+docker/package/
+
+# Ignore all files in the docker directory
+docker/plugins/*
+
+# Except .tar.gz files
+!docker/plugins/*.tar.gz
