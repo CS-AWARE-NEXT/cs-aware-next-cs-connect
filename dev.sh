@@ -56,6 +56,27 @@ echo "Copying pluging from $CONTAINER_NAME:$CONTAINER_PLUGIN_DIR to $HOST_PLUGIN
 docker cp $CONTAINER_NAME:$CONTAINER_PLUGIN_DIR $HOST_PLUGIN_DIR
 echo "Copy completed."
 
+MATTERPOLL_NAME=com.github.matterpoll.matterpoll
+MATTERPOLL_DIR=./cs-connect/docker/plugins/$MATTERPOLL_NAME
+HOST_MATTERPOLL_DIR=./config/plugins/$MATTERPOLL_NAME
+MATTERPOLL_TAR_FILE=$MATTERPOLL_DIR.tar.gz
+
+if [ -e "$MATTERPOLL_DIR" ]; then
+    echo "Matterpoll plugin at $MATTERPOLL_TAR_FILE already untarred. Skipping extraction."
+else
+    echo "Untar Matterpoll pluging from $MATTERPOLL_DIR."
+    tar -xvf $MATTERPOLL_TAR_FILE -C ./cs-connect/docker/plugins/
+    echo "Untar completed."
+fi
+
+echo "Copying Matterpoll pluging from $MATTERPOLL_DIR to $HOST_MATTERPOLL_DIR."
+cp -r $MATTERPOLL_DIR $HOST_MATTERPOLL_DIR
+echo "Copy completed."
+
+echo "Cleaning unatarred files in $MATTERPOLL_DIR."
+rm -r $MATTERPOLL_DIR
+echo "Clean completed."
+
 echo "Starting containers..."
 docker compose -f dev.docker-compose.yml up -d
 echo "Containers started."
