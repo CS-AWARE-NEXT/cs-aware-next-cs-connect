@@ -7,6 +7,9 @@ const (
 	Switch    string = "switch"
 	Server    string = "server"
 	VpnServer string = "vpn-server"
+	Database  string = "database"
+	Network   string = "network"
+	Cloud     string = "cloud"
 )
 
 // Layouted indicates whether node positions are provided
