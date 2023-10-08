@@ -35,7 +35,7 @@
             "x_categories": []
         },
         {
-            "type": "node",
+            "type": "root",
             "id": "identity--701247cd-b4e9-4fb0-86da-df530a694453",
             "name": "Internet",
             "created": "2022-10-11T13:55:05.681Z",
