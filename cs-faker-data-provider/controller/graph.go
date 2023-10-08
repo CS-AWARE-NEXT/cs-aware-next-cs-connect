@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
@@ -35,7 +34,6 @@ func getGraphFromJson(organizationId string) (model.GraphData, error) {
 	}
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
 	if err != nil {
-		log.Println(err.Error())
 		return model.GraphData{}, err
 	}
 
@@ -50,7 +48,6 @@ func getGraphFromJson(organizationId string) (model.GraphData, error) {
 	if err != nil {
 		return model.GraphData{}, err
 	}
-	log.Println("Before from")
 	return fromCSAwareGraphData(csAwareGraphData), nil
 }
 
@@ -89,20 +86,14 @@ func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphDa
 		// 	})
 		// }
 	}
-	log.Println("before bfs")
 	nodeIndexes, nodeIDs, bfs := getBfs(csAwareGraphData.Objects)
-	log.Println(bfs.Order())
 	for _, node := range nodes {
-		log.Printf("nodeId: %s %s", node.ID, node.Data.Label)
 		path := bfs.Path(nodeIndexes[node.ID])
-		log.Printf("path for %s: %v", node.Data.Label, path)
 		if len(path) < 2 {
 			continue
 		}
 		index := path[len(path)-2]
-		log.Printf("index: %d, %v", index, path)
 		ID := nodeIDs[index]
-		log.Printf("id: %s", ID)
 		edges = append(edges, model.GraphEdge{
 			ID:     fmt.Sprintf("%s-%s", ID, node.ID),
 			Source: ID,
@@ -126,7 +117,6 @@ func getBfs(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string, *bf
 	if count < 0 {
 		return nil, nil, nil
 	}
-	log.Println("Before maps")
 	nodeIndexes, nodeIDs := nodesToMaps(nodes)
 	g := graph.New(count)
 	for index, node := range nodes {
@@ -139,9 +129,7 @@ func getBfs(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string, *bf
 
 func getRootAndCount(nodes []model.CSAwareGraphNode) (int, int) {
 	for index, node := range nodes {
-		log.Println("node" + node.ID + "-" + node.Type)
 		if node.Type == "root" {
-			log.Println("found root")
 			return index, len(nodes)
 		}
 	}
