@@ -4,10 +4,13 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import qs from 'qs';
 import {useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
+import {FormattedMessage} from 'react-intl';
+import styled from 'styled-components';
 
 import {channelNameSelector, teamNameSelector} from 'src/selectors';
 import {ToastProvider} from 'src/components/backstage/toast_banner';
 import {useChannelById} from 'src/hooks';
+import {notFoundWidgetChannel} from 'src/types/channels';
 
 import RHSWidgets from './rhs_widgets';
 
@@ -46,6 +49,9 @@ const RHSView = () => {
 
     const channelByID = useChannelById(channelId);
 
+    // Solves the problem of switching to an empty RHS after a non-empty one
+    const wasChannelFound = channelByID !== notFoundWidgetChannel;
+
     const sectionContextOptions: SectionContextOptions = {
         parentId: typeof parentIdParam === 'undefined' ? channelByID.parentId : parentIdParam,
         sectionId: typeof sectionIdParam === 'undefined' ? channelByID.sectionId : sectionIdParam,
@@ -83,19 +89,30 @@ const RHSView = () => {
     });
 
     return (
-        <FullUrlContext.Provider value={fullUrl}>
-            <IsRhsClosedContext.Provider value={closed}>
-                <SectionContext.Provider value={sectionContextOptions}>
-                    <ToastProvider>
-                        <RHSWidgets
-                            parentId={sectionContextOptions.parentId}
-                            sectionId={sectionContextOptions.sectionId}
-                        />
-                    </ToastProvider>
-                </SectionContext.Provider>
-            </IsRhsClosedContext.Provider>
-        </FullUrlContext.Provider>
+        <>
+            {wasChannelFound ?
+                <FullUrlContext.Provider value={fullUrl}>
+                    <IsRhsClosedContext.Provider value={closed}>
+                        <SectionContext.Provider value={sectionContextOptions}>
+                            <ToastProvider>
+                                <RHSWidgets
+                                    parentId={sectionContextOptions.parentId}
+                                    sectionId={sectionContextOptions.sectionId}
+                                />
+                            </ToastProvider>
+                        </SectionContext.Provider>
+                    </IsRhsClosedContext.Provider>
+                </FullUrlContext.Provider> :
+                <Container>
+                    <FormattedMessage defaultMessage='The channel is not related to any data.'/>
+                </Container>}
+        </>
     );
 };
+
+const Container = styled.div`
+    padding: 10px;
+    overflow-y: auto;
+`;
 
 export default RHSView;
