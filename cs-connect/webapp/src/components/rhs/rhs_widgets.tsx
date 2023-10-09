@@ -22,6 +22,7 @@ import {FullUrlContext} from './rhs';
 import EcosystemRhs from './ecosystem/ecosystem_rhs';
 
 export const IsEcosystemRhsContext = createContext(false);
+export const IsRhsScrollingContext = createContext(false);
 
 type Props = {
     parentId: string;
@@ -44,16 +45,23 @@ const RHSWidgets = (props: Props) => {
     const sectionInfo = useSectionInfo(sectionId, section?.url);
     const fullUrl = useContext(FullUrlContext);
 
+    const [isScrolling, setIsScrolling] = useState<boolean>(false);
+    const handleScroll = async () => {
+        // TODO: implement this properly
+    };
+
     return (
-        <Container>
+        <Container onScroll={handleScroll}>
             {(section && sectionInfo && isEcosystem) &&
                 <IsEcosystemRhsContext.Provider value={isEcosystem}>
-                    <EcosystemRhs
-                        headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
-                        parentId={parentId}
-                        sectionId={sectionId}
-                        sectionInfo={sectionInfo}
-                    />
+                    <IsRhsScrollingContext.Provider value={isScrolling}>
+                        <EcosystemRhs
+                            headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
+                            parentId={parentId}
+                            sectionId={sectionId}
+                            sectionInfo={sectionInfo}
+                        />
+                    </IsRhsScrollingContext.Provider>
                 </IsEcosystemRhsContext.Provider>}
             {(section && sectionInfo && !isEcosystem) &&
                 <RhsSectionsWidgetsContainer
