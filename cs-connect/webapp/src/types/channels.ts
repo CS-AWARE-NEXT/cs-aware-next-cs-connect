@@ -39,3 +39,9 @@ export interface AddChannelResult {
     parentId: string,
     sectionId: string;
 }
+
+export const notFoundWidgetChannel: WidgetChannel = {
+    channelId: 'not-found',
+    parentId: '',
+    sectionId: '',
+};
