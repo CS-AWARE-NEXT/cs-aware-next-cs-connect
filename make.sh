@@ -2,18 +2,23 @@
 CONFIG_FILE_NAME=config.local.lab.yml
 
 # Options
-SKIP_BUILD=false
+BUILD=false
 PRUNE_VOLUMES=false
+PRUNE_PLUGINS=false
 UNDEPLOY=false
 
 # Function to handle option parsing
 parse_options() {
     # Parse the command-line options
-    while getopts "spu" opt; do
+    while getopts "npu" opt; do
         case $opt in
-            s)
-                echo "Skip build option set."
-                SKIP_BUILD=true
+            b)
+                echo "Build option set."
+                BUILD=true
+                ;;
+            n)
+                echo "Prune plugins option set."
+                PRUNE_PLUGINS=true
                 ;;
             p)
                 echo "Prune volumes option set."
@@ -50,8 +55,12 @@ build_web_application() {
 # Function to start the development environment
 start_dev_environment() {
     echo "Starting dev environment..."
-    if [ "$PRUNE_VOLUMES" = true ]; then
+    if [ "$PRUNE_VOLUMES" = true ] && [ "$PRUNE_PLUGINS" = true ]; then
+        sh dev.sh -p -n
+    elif [ "$PRUNE_VOLUMES" = true ]; then
         sh dev.sh -p
+    elif [ "$PRUNE_PLUGINS" = true ]; then
+        sh dev.sh -n
     else
         sh dev.sh
     fi
@@ -77,7 +86,7 @@ if [ "$UNDEPLOY" = true ]; then
     stop_dev_environment
 fi
 
-if [ "$SKIP_BUILD" = false ]; then
+if [ "$BUILD" = true ]; then
     build_web_application
 fi
 

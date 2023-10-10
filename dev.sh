@@ -5,11 +5,16 @@ CONTAINER_NAME=cs-connect-base
 
 # Options
 PRUNE_VOLUMES=false
+PRUNE_PLUGINS=false
 UNDEPLOY=false
 
 # Parse the command-line options
-while getopts "pu" opt; do
+while getopts "npu" opt; do
     case $opt in
+        n)
+            echo "Prune plugins option set."
+            PRUNE_PLUGINS=true
+            ;;
         p)
             echo "Prune volumes option set."
             PRUNE_VOLUMES=true
@@ -73,9 +78,11 @@ echo "Copying Matterpoll pluging from $MATTERPOLL_DIR to $HOST_MATTERPOLL_DIR."
 cp -r $MATTERPOLL_DIR $HOST_MATTERPOLL_DIR
 echo "Copy completed."
 
-echo "Cleaning unatarred files in $MATTERPOLL_DIR."
-rm -r $MATTERPOLL_DIR
+if [ "$PRUNE_PLUGINS" = true ]; then
+    echo "Cleaning unatarred files in $MATTERPOLL_DIR."
+    rm -r $MATTERPOLL_DIR
 echo "Clean completed."
+fi
 
 echo "Starting containers..."
 docker compose -f dev.docker-compose.yml up -d
