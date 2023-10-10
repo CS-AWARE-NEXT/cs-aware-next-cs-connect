@@ -15,7 +15,7 @@ import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {useUpdateEffect} from 'react-use';
 
-import {FetchChannelsParams, WidgetChannel} from 'src/types/channels';
+import {FetchChannelsParams, WidgetChannel, notFoundWidgetChannel} from 'src/types/channels';
 import {
     FetchOrganizationsParams,
     Organization,
@@ -30,6 +30,7 @@ import {
     fetchListData,
     fetchPaginatedTableData,
     fetchPlaybookData,
+    fetchPostData,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
@@ -57,6 +58,7 @@ import {ListData} from 'src/types/list';
 import {TimelineData} from 'src/types/timeline';
 import {formatName, formatSectionPath} from 'src/helpers';
 import {UserOption} from 'src/types/users';
+import {PostData} from 'src/types/social_media';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -405,6 +407,27 @@ export const usePlaybookData = (url: string): any => {
     return playbookData as any;
 };
 
+export const usePostData = (url: string): PostData => {
+    const [postData, setPostData] = useState<PostData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchPostDataAsync() {
+            const postDataResult = await fetchPostData(url);
+            if (!isCanceled) {
+                setPostData(postDataResult);
+            }
+        }
+
+        fetchPostDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return postData as PostData;
+};
+
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {
     const [channels, setChannels] = useState<WidgetChannel[]>([]);
 
@@ -433,9 +456,13 @@ export const useChannelById = (channelId: string): WidgetChannel => {
     useEffect(() => {
         let isCanceled = false;
         async function fetchChannelsAsync() {
-            const channelReturn = await fetchChannelById(channelId);
-            if (!isCanceled) {
-                setChannel(channelReturn.channel);
+            try {
+                const channelReturn = await fetchChannelById(channelId);
+                if (!isCanceled) {
+                    setChannel(channelReturn.channel);
+                }
+            } catch (err: any) {
+                setChannel(notFoundWidgetChannel);
             }
         }
 
