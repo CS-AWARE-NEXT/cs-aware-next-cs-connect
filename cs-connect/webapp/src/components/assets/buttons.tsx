@@ -3,7 +3,7 @@
 
 import {KeyVariantCircleIcon} from '@mattermost/compass-icons/components';
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 export const Button = styled.button`
     display: inline-flex;
@@ -242,4 +242,20 @@ export const ButtonIcon = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+`;
+
+const buttonCommon = css`
+    padding: 0 16px;
+    height: 36px;
+    gap: 8px;
+
+    i::before {
+        margin-left: 0;
+        margin-right: 0;
+        font-size: 1.05em;
+    }
+`;
+
+export const SecondaryButtonLarger = styled(SecondaryButton)`
+    ${buttonCommon};
 `;
