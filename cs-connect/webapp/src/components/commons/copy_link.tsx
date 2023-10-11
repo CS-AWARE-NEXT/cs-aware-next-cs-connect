@@ -5,6 +5,7 @@ import React, {FC, HTMLAttributes, useState} from 'react';
 import styled, {css} from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {LinkVariantIcon} from '@mattermost/compass-icons/components';
+import {Property} from 'csstype';
 
 import {OVERLAY_DELAY} from 'src/constants';
 import Tooltip from 'src/components/commons/tooltip';
@@ -22,6 +23,13 @@ type CopyLinkMenuItemProps = {
     showPlaceholder?: boolean;
     svgMarginRight?: string;
     text: string;
+    textStyle?: {
+        color: string;
+        fontSize: string;
+        textAlign: Property.TextAlign | undefined;
+    };
+    hasHover?: boolean;
+    className?: string;
     onContexMenu?: (e: React.MouseEvent) => void;
 };
 
@@ -32,6 +40,13 @@ export const CopyLinkMenuItem: FC<CopyLinkMenuItemProps> = ({
     showPlaceholder = true,
     svgMarginRight,
     text,
+    textStyle = {
+        color: '',
+        fontSize: '',
+        textAlign: 'center',
+    },
+    hasHover = true,
+    className = '',
     onContexMenu,
 }) => {
     const {formatMessage} = useIntl();
@@ -40,15 +55,17 @@ export const CopyLinkMenuItem: FC<CopyLinkMenuItemProps> = ({
     const placeholderText = placeholder ? <span>{placeholder}</span> : <FormattedMessage defaultMessage='Copy link'/>;
     return (
         <StyledDropdownMenuItem
+            className={className}
             svgMarginRight={svgMarginRight}
             onClick={() => {
                 copyToClipboard(formatUrlAsMarkdown(path, text));
                 addToast({content: formatMessage({defaultMessage: 'Copied!'})});
             }}
             onContextMenu={onContexMenu}
+            hasHover={hasHover}
         >
             {showIcon && <LinkVariantIcon size={16}/>}
-            {showPlaceholder && placeholderText}
+            {showPlaceholder && <span style={textStyle}>{placeholderText}</span>}
         </StyledDropdownMenuItem>
     );
 };
