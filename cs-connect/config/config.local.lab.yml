@@ -10,6 +10,51 @@ organizations:
         url: http://www.isislab.it:3000/cs-data-provider/issues
         widgets:
           - type: channel
+  - name: Deyal
+    id: "7"
+    description: This is the Deyal organization for Larissa workshop
+    sections:
+      - name: Incidents
+        id: "18"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/7/incidents
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/7/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/7/incidents/:id/graph
+          - type: channel
+  - name: Larissa
+    id: "6"
+    description: This is the Larissa organization for Larissa workshop
+    sections:
+      - name: Incidents
+        id: "17"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/6/incidents
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/6/incidents/:id/text_box
+          - name: System
+            type: graph
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/6/incidents/:id/graph
+          - type: channel
+  - name: Foggia
+    id: "5"
+    description: This is the organization for Foggia workshop
+    sections:
+      - name: Social Media
+        id: "16"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/5/social_media
+        widgets:
+          - name: System
+            type: graph
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/5/incidents/:id/graph
+          - name: Posts
+            type: social-media-posts
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/5/social_media/:id/posts
+          - type: channel
   - name: Demo CS-AWARE EU
     id: "4"
     description: The organization at https://demo.cs-aware.eu/index.html
