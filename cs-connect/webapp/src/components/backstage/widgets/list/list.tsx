@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import {useRouteMatch} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
-import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {
@@ -16,6 +15,7 @@ import {
 } from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {ListData} from 'src/types/list';
+import {CopyLinkMenuItem} from 'src/components/commons/copy_link';
 
 const {Item} = List;
 const {Meta} = Item;

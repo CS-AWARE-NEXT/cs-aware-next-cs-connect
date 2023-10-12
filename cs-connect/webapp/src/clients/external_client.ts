@@ -8,6 +8,7 @@ import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
 import {ListData} from 'src/types/list';
 import {TimelineData} from 'src/types/timeline';
+import {PostData} from 'src/types/social_media';
 
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
     let data = await doGet<SectionInfo>(`${url}/${id}`);
@@ -80,6 +81,14 @@ export const fetchPlaybookData = async (url: string): Promise<any> => {
     let data = await doGet<any>(url);
     if (!data) {
         data = {} as any;
+    }
+    return data;
+};
+
+export const fetchPostData = async (url: string): Promise<PostData> => {
+    let data = await doGet<PostData>(url);
+    if (!data) {
+        data = {} as PostData;
     }
     return data;
 };

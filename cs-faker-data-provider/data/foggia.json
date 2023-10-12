@@ -1,0 +1,146 @@
+{
+    "type": "region",
+    "id": "region--71befe93-df41-4175-a2b1-419e75f72a33",
+    "name": "ASI Foggia",
+    "created": "2022-12-19T12:15:29.392Z",
+    "modified": "2022-12-19T12:15:29.392Z",
+    "version": "1.0",
+    "objects": [
+        {
+            "type": "node",
+            "id": "identity--da949ffc-f326-411e-8ac8-cc81975943c1",
+            "name": "Human Resource Management System",
+            "created": "2023-10-05T13:00:53.520Z",
+            "modified": "2023-10-05T13:00:53.520Z",
+            "description": "The human resource management service our company uses. Used to keep a record of our employees, and provides services like payroll management.",
+            "source": [
+                "identity--20521402-46c5-474d-85b2-9547fe364807",
+                "identity--856dbd76-8a6c-44eb-8960-b0e31a9a3ad3"
+            ],
+            "x_infoflow": [],
+            "x_categories": []
+        },
+        {
+            "type": "node",
+            "id": "identity--d456eb48-2ba1-43fa-82ac-48edd252c570",
+            "name": "Customer Relationship Management System (CRM)",
+            "created": "2023-10-05T13:07:32.451Z",
+            "modified": "2023-10-05T13:07:32.451Z",
+            "description": "Keeps records of our clients, and provides services to interact with them (including sales management and invoicing).",
+            "source": [
+                "identity--20521402-46c5-474d-85b2-9547fe364807",
+                "identity--f1113ee6-a66c-4feb-8ecf-7472b44cbb22"
+            ],
+            "x_infoflow": [],
+            "x_categories": []
+        },
+        {
+            "type": "root",
+            "id": "identity--701247cd-b4e9-4fb0-86da-df530a694453",
+            "name": "Internet",
+            "created": "2022-10-11T13:55:05.681Z",
+            "modified": "2022-10-11T13:55:05.681Z",
+            "description": "Some new resource",
+            "source": [
+                "----"
+            ],
+            "x_infoflow": [],
+            "x_csaware_node_type": "cloud",
+            "x_categories": [
+                "DDOS"
+            ]
+        },
+        {
+            "type": "node",
+            "id": "----",
+            "name": "Internet Router and Firewall",
+            "created": "2023-10-05T12:45:32.588Z",
+            "modified": "2023-10-05T12:45:32.588Z",
+            "description": "Enables our company to access the Internet and provides Firewall capabilities to protect our internal network from access through the Internet.",
+            "source": [
+                "identity--701247cd-b4e9-4fb0-86da-df530a694453",
+                "identity--588fa371-4527-4fef-8499-14383fa7a29d"
+            ],
+            "x_infoflow": [],
+            "x_categories": []
+        },
+        {
+            "type": "node",
+            "id": "identity--f1113ee6-a66c-4feb-8ecf-7472b44cbb22",
+            "name": "Database: CRM System",
+            "created": "2022-10-11T13:45:16.828Z",
+            "modified": "2022-10-11T13:45:16.828Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--d456eb48-2ba1-43fa-82ac-48edd252c570"
+            ],
+            "x_infoflow": [],
+            "x_csaware_node_type": "database",
+            "x_categories": [
+                "oracle",
+                "sql",
+                "phishing"
+            ]
+        },
+        {
+            "type": "node",
+            "id": "identity--856dbd76-8a6c-44eb-8960-b0e31a9a3ad3",
+            "name": "Database - Human Resource Management System",
+            "created": "2023-10-05T13:06:13.978Z",
+            "modified": "2023-10-05T13:06:13.978Z",
+            "description": "The database that keeps the data managed by our human resource management system.",
+            "source": [
+                "identity--da949ffc-f326-411e-8ac8-cc81975943c1"
+            ],
+            "x_infoflow": [],
+            "x_csaware_node_type": "database",
+            "x_categories": []
+        },
+        {
+            "type": "node",
+            "id": "identity--588fa371-4527-4fef-8499-14383fa7a29d",
+            "name": "Network Router (+Wireless)",
+            "created": "2023-10-05T12:46:29.110Z",
+            "modified": "2023-10-05T12:46:29.110Z",
+            "description": "The central hub of  our network that provides access for our Employee's devices (wired and wireless connections) to the Internet and to our internal servers/services.",
+            "source": [
+                "identity--44ca3521-334d-4e4e-8d90-d9315252b65a",
+                "----",
+                "identity--20521402-46c5-474d-85b2-9547fe364807"
+            ],
+            "x_infoflow": [],
+            "x_csaware_node_type": "network",
+            "x_categories": []
+        },
+        {
+            "type": "node",
+            "id": "identity--44ca3521-334d-4e4e-8d90-d9315252b65a",
+            "name": "File server/ Network attached storage (NAS)",
+            "created": "2023-10-05T12:52:43.228Z",
+            "modified": "2023-10-05T12:52:43.228Z",
+            "description": "A central file server that allows our employees to store and share company documents.",
+            "source": [
+                "identity--588fa371-4527-4fef-8499-14383fa7a29d"
+            ],
+            "x_infoflow": [],
+            "x_csaware_node_type": "server",
+            "x_categories": []
+        },
+        {
+            "type": "node",
+            "id": "identity--20521402-46c5-474d-85b2-9547fe364807",
+            "name": "Main server",
+            "created": "2023-10-05T12:55:45.206Z",
+            "modified": "2023-10-05T12:55:45.206Z",
+            "description": "A server hosting the software services our company uses to manage employees and customers.",
+            "source": [
+                "identity--d456eb48-2ba1-43fa-82ac-48edd252c570",
+                "identity--da949ffc-f326-411e-8ac8-cc81975943c1",
+                "identity--588fa371-4527-4fef-8499-14383fa7a29d"
+            ],
+            "x_infoflow": [],
+            "x_csaware_node_type": "server",
+            "x_categories": []
+        }
+    ]
+}

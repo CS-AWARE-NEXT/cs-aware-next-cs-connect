@@ -7,6 +7,9 @@ const (
 	Switch    string = "switch"
 	Server    string = "server"
 	VpnServer string = "vpn-server"
+	Database  string = "database"
+	Network   string = "network"
+	Cloud     string = "cloud"
 )
 
 // Layouted indicates whether node positions are provided
@@ -18,6 +21,7 @@ type GraphData struct {
 }
 
 type GraphNodeData struct {
+	Description string `json:"description"`
 	IsUrlHashed bool   `json:"isUrlHashed"`
 	Kind        string `json:"kind"`
 	Label       string `json:"label"`

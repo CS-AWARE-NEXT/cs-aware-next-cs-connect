@@ -545,6 +545,10 @@
         "Directory": "./plugins",
         "ClientDirectory": "./client/plugins",
         "Plugins": {
+            "com.github.matterpoll.matterpoll": {
+                "experimentalui": false,
+                "trigger": "poll"
+            },
             "com.mattermost.calls": {
                 "allowenablecalls": false,
                 "defaultenabled": true,
@@ -558,10 +562,13 @@
                 "udpserverport": 8443
             },
             "playbooks": {
-                "BotUserID": "gz5zm8ajbprcjdwyyqnj8ko34a"
+                "BotUserID": "wsw5xo8en3g97xr7wifxgieria"
             }
         },
         "PluginStates": {
+            "com.github.matterpoll.matterpoll": {
+                "Enable": true
+            },
             "com.mattermost.apps": {
                 "Enable": true
             },

@@ -5,14 +5,26 @@ import {
     NodeProps,
     Position,
 } from 'reactflow';
-import React from 'react';
+import React, {
+    Dispatch,
+    FC,
+    SetStateAction,
+    useState,
+} from 'react';
 import styled from 'styled-components';
+import {useIntl} from 'react-intl';
 
+// import {buildMap} from 'src/helpers';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
-import {CopyLinkMenuItem} from 'src/components/backstage/header/controls';
 import {getSiteUrl} from 'src/clients';
-import {GraphSectionOptions} from 'src/types/graph';
-import {buildMap} from 'src/helpers';
+import {GraphNodeInfo, GraphSectionOptions} from 'src/types/graph';
+import {CopyLinkMenuItem} from 'src/components/commons/copy_link';
+import {useToaster} from 'src/components/backstage/toast_banner';
+import {copyToClipboard} from 'src/utils';
+import {formatUrlAsMarkdown} from 'src/helpers';
+import 'src/styles/nodes.scss';
+
+import {GraphNodeInfoDropdown} from './graph_node_info';
 
 export const edgeType = 'step';
 export const nodeType = 'graphNodeType';
@@ -67,47 +79,109 @@ export const fillNodes = (
     return filledNodes;
 };
 
-const nodeKindMap = buildMap([
-    {key: 'switch', value: '5px'},
-    {key: 'server', value: '10px'},
-    {key: 'vpn-server', value: '0px'},
-    {key: 'customer', value: '50%'},
-]);
+// const nodeKindMap = buildMap([
+//     {key: 'switch', value: '5px'},
+//     {key: 'server', value: '10px'},
+//     {key: 'vpn-server', value: '0px'},
+//     {key: 'customer', value: '50%'},
+//     {key: 'database', value: '0px'},
+//     {key: 'network', value: '0px'},
+//     {key: 'cloud', value: '0px'},
+// ]);
 
 // These can be alternatives to nodes color
 // background: 'rgb(var(--button-bg-rgb), 0.4)',
 // border: '1px solid rgb(var(--button-bg-rgb), 0.2)',
-const GraphNodeType = ({id, data}: NodeProps) => {
+const GraphNodeType: FC<NodeProps & {
+    setNodeInfo: Dispatch<SetStateAction<GraphNodeInfo>>;
+}> = ({
+    id,
+    data,
+    sourcePosition,
+    targetPosition,
+    setNodeInfo,
+}) => {
+    const {formatMessage} = useIntl();
+    const {add: addToast} = useToaster();
+    const [openDropdown, setOpenDropdown] = useState<boolean>(false);
+
+    const onInfoClick = () => {
+        setNodeInfo({name: data.label, description: data.description});
+        setOpenDropdown(false);
+    };
+
+    const onCopyLinkClick = (path: string, text: string) => {
+        copyToClipboard(formatUrlAsMarkdown(path, text));
+        addToast({content: formatMessage({defaultMessage: 'Copied!'})});
+        setOpenDropdown(false);
+    };
+
+    const getClassName = () => {
+        let className = 'round-rectangle';
+        switch (data.kind) {
+        case 'database':
+            className = 'database';
+            break;
+        case 'cloud':
+            className = 'cloud';
+            break;
+        case 'network':
+            className = 'network';
+            break;
+        default:
+            className = 'round-rectangle';
+        }
+        return data.isUrlHashed ? `hyperlinked-${className}` : className;
+    };
+
+    const path = `${data.url}#${id}-${data.sectionId}-${data.parentId}`;
     return (
-        <>
+        <GraphNodeContainer>
             <Handle
                 type={'target'}
-                position={Position.Left}
+                position={targetPosition || Position.Left}
             />
             <NodeContainer
                 id={`${id}-${data.sectionId}-${data.parentId}`}
-                isUrlHashed={data.isUrlHashed}
-                kind={data.kind}
             >
-                <CopyLinkMenuItem
-                    path={`${data.url}#${id}-${data.sectionId}-${data.parentId}`}
-                    placeholder={data.label}
-                    showIcon={false}
-                    text={data.label}
-                />
+                <GraphNodeInfoDropdown
+                    open={openDropdown}
+                    setOpen={setOpenDropdown}
+                    onInfoClick={onInfoClick}
+                    onCopyLinkClick={() => onCopyLinkClick(path, data.label)}
+                >
+                    <CopyLinkMenuItem
+                        className={getClassName()}
+                        path={path}
+                        placeholder={data.label}
+                        showIcon={false}
+                        text={data.label}
+                        textStyle={{
+                            color: 'white',
+                            fontSize: 'bold',
+                            textAlign: 'center',
+                        }}
+                        hasHover={false}
+                        onContexMenu={(e) => {
+                            e.preventDefault();
+                            setOpenDropdown(!openDropdown);
+                        }}
+                    />
+                </GraphNodeInfoDropdown>
             </NodeContainer>
             <Handle
                 type={'source'}
-                position={Position.Right}
+                position={sourcePosition || Position.Right}
             />
-        </>
+        </GraphNodeContainer>
     );
 };
 
-const NodeContainer = styled.div<{isUrlHashed: boolean, kind: string}>`
-    background: ${(props) => (props.isUrlHashed ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)')};
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.8);
-    border-radius: ${(props) => nodeKindMap.get(props.kind)};
-`;
+// background: ${(props) => (props.isUrlHashed ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)')};
+// border: ${(props) => (props.noBorder ? '' : '1px solid rgba(var(--center-channel-color-rgb), 0.8)')};
+// border-radius: ${(props) => nodeKindMap.get(props.kind)};
+// const NodeContainer = styled.div<{isUrlHashed?: boolean, kind?: string, noBorder?: boolean}>``;
+const NodeContainer = styled.div``;
+const GraphNodeContainer = styled.div``;
 
 export default GraphNodeType;

@@ -1,14 +1,101 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React, {HTMLAttributes, useState} from 'react';
+import React, {FC, HTMLAttributes, useState} from 'react';
 import styled, {css} from 'styled-components';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
+import {LinkVariantIcon} from '@mattermost/compass-icons/components';
+import {Property} from 'csstype';
 
 import {OVERLAY_DELAY} from 'src/constants';
 import Tooltip from 'src/components/commons/tooltip';
 import {copyToClipboard} from 'src/utils';
-import {formatUrlAsMarkdown} from 'src/components/backstage/header/controls';
+import {formatUrlAsMarkdown} from 'src/helpers';
+import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
+import {useToaster} from 'src/components/backstage/toast_banner';
+
+import {ClickableImage, ClickableImageProps} from './image';
+
+type CopyLinkMenuItemProps = {
+    path: string;
+    placeholder?: string;
+    showIcon?: boolean;
+    showPlaceholder?: boolean;
+    svgMarginRight?: string;
+    text: string;
+    textStyle?: {
+        color: string;
+        fontSize: string;
+        textAlign: Property.TextAlign | undefined;
+    };
+    hasHover?: boolean;
+    className?: string;
+    onContexMenu?: (e: React.MouseEvent) => void;
+};
+
+export const CopyLinkMenuItem: FC<CopyLinkMenuItemProps> = ({
+    path,
+    placeholder,
+    showIcon = true,
+    showPlaceholder = true,
+    svgMarginRight,
+    text,
+    textStyle = {
+        color: '',
+        fontSize: '',
+        textAlign: 'center',
+    },
+    hasHover = true,
+    className = '',
+    onContexMenu,
+}) => {
+    const {formatMessage} = useIntl();
+    const {add: addToast} = useToaster();
+
+    const placeholderText = placeholder ? <span>{placeholder}</span> : <FormattedMessage defaultMessage='Copy link'/>;
+    return (
+        <StyledDropdownMenuItem
+            className={className}
+            svgMarginRight={svgMarginRight}
+            onClick={() => {
+                copyToClipboard(formatUrlAsMarkdown(path, text));
+                addToast({content: formatMessage({defaultMessage: 'Copied!'})});
+            }}
+            onContextMenu={onContexMenu}
+            hasHover={hasHover}
+        >
+            {showIcon && <LinkVariantIcon size={16}/>}
+            {showPlaceholder && <span style={textStyle}>{placeholderText}</span>}
+        </StyledDropdownMenuItem>
+    );
+};
+
+type CopyImageProps = {
+    text: string;
+    to: string;
+    imageProps: ClickableImageProps;
+};
+
+export const CopyImage: FC<CopyImageProps> = ({
+    text,
+    to,
+    imageProps,
+}) => {
+    const {formatMessage} = useIntl();
+    const {add: addToast} = useToaster();
+
+    const copyLink = (e: React.MouseEvent) => {
+        copyToClipboard(formatUrlAsMarkdown(to, text));
+        addToast({content: formatMessage({defaultMessage: 'Copied!'})});
+    };
+
+    return (
+        <ClickableImage
+            {...imageProps}
+            onClick={copyLink}
+        />
+    );
+};
 
 type Props = {
     id: string;
@@ -26,7 +113,7 @@ type Props = {
 
 type Attrs = HTMLAttributes<HTMLElement>;
 
-const CopyLink = ({
+const CopyLink: FC<Props & Attrs> = ({
     iconWidth,
     iconHeight,
     id,
@@ -35,7 +122,7 @@ const CopyLink = ({
     to,
     tooltipMessage,
     ...attrs
-}: Props & Attrs) => {
+}) => {
     const {formatMessage} = useIntl();
     const [wasCopied, setWasCopied] = useState(false);
 

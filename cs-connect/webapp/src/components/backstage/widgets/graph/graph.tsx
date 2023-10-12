@@ -1,5 +1,7 @@
 import 'reactflow/dist/style.css';
 import React, {
+    Dispatch,
+    SetStateAction,
     useCallback,
     useContext,
     useEffect,
@@ -15,21 +17,38 @@ import ReactFlow, {
     MiniMap,
     Node,
     NodeChange,
+    Panel,
+    Position,
     applyEdgeChanges,
     applyNodeChanges,
+    useReactFlow,
 } from 'reactflow';
 import styled from 'styled-components';
+import Dagre from 'dagre';
+import {Button, Tooltip} from 'antd';
+import {PartitionOutlined} from '@ant-design/icons';
+import {useIntl} from 'react-intl';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
-import {GraphData, GraphDescription, emptyDescription} from 'src/types/graph';
+import {
+    Direction,
+    GraphData,
+    GraphDescription,
+    GraphDirection,
+    GraphNodeInfo as NodeInfo,
+    emptyDescription,
+    panelPosition,
+} from 'src/types/graph';
 import TextBox, {TextBoxStyle} from 'src/components/backstage/widgets/text_box/text_box';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {buildQuery} from 'src/hooks';
-import {formatName} from 'src/helpers';
+import {formatName, getTextWidth} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
+import withAdditionalProps from 'src/components/hoc/with_additional_props';
 
 import GraphNodeType from './graph_node_type';
+import GraphNodeInfo from './graph_node_info';
 
 type GraphStyle = {
     containerDirection: string,
@@ -38,23 +57,34 @@ type GraphStyle = {
     textBoxStyle?: TextBoxStyle;
 };
 
+type GraphSidebarStyle = {
+    width: string;
+};
+
 type Props = {
     data: GraphData;
+    direction: GraphDirection;
     name: string;
     sectionId: string;
     parentId: string;
+    setDirection: Dispatch<SetStateAction<GraphDirection>>;
 };
 
 const DESCRIPTION_ID_PREFIX = 'graph-';
 
+// Pixels between each levels in the graph
+const GRAP_RANK_SEP = 75;
+
+// This is the style for the dashboard
 const defaultGraphStyle: GraphStyle = {
     containerDirection: 'row',
     graphWidth: '75%',
-    graphHeight: '40vh',
+    graphHeight: '50vh',
     textBoxStyle: {
         height: '5vh',
-        marginTop: '0px',
-        width: '25%',
+        marginTop: '24px',
+
+        // width: '25%',
     },
 };
 
@@ -62,6 +92,14 @@ const rhsGraphStyle: GraphStyle = {
     containerDirection: 'column',
     graphWidth: '100%',
     graphHeight: '40vh',
+};
+
+const defaultGraphSidebarStyle: GraphSidebarStyle = {
+    width: '25%',
+};
+
+const rhsGraphSidebarStyle: GraphSidebarStyle = {
+    width: '100%',
 };
 
 const fitViewOptions: FitViewOptions = {
@@ -81,21 +119,90 @@ const isDescriptionProvided = ({name, text}: GraphDescription) => {
     return name !== '' && text !== '';
 };
 
+const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+
+export const getLayoutedElements = (
+    nodes: Node[],
+    edges: Edge[],
+    direction: GraphDirection = Direction.HORIZONTAL,
+) => {
+    if (!nodes || !edges) {
+        return {nodes: [], edges: []};
+    }
+    g.setGraph({rankdir: direction, ranksep: GRAP_RANK_SEP});
+    nodes.forEach((node) => g.setNode(node.id, node));
+    edges.forEach((edge) => g.setEdge(edge.source, edge.target));
+    Dagre.layout(g, {ranksep: GRAP_RANK_SEP});
+
+    return {
+        nodes: nodes.map((node) => {
+            const isHorizontal = direction === Direction.HORIZONTAL;
+            node.sourcePosition = isHorizontal ? Position.Right : Position.Bottom;
+            node.targetPosition = isHorizontal ? Position.Left : Position.Top;
+
+            const width = getTextWidth(node.data.label) + 40;
+            const height = 42;
+
+            let {x, y} = g.node(node.id);
+            if (!node.width || !node.height) {
+                x = x < 0 ? x + 60 : x * 5;
+                y *= 2;
+            }
+            x -= (node.width ? node.width / 2 : width / 2);
+            y -= (node.height ? node.height / 2 : height / 2);
+            return {
+                ...node,
+                position: {
+                    x: x > 0 ? x + 100 : x,
+                    y,
+                },
+            };
+        }),
+        edges,
+    };
+};
+
 const Graph = ({
     data,
+    direction,
     name,
     sectionId,
     parentId,
+    setDirection,
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const {fitView} = useReactFlow();
+    const {formatMessage} = useIntl();
 
-    const nodeTypes = useMemo(() => ({graphNodeType: GraphNodeType}), []);
+    const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
+
+    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo})}), []);
+
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes] = useState<Node[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
+
+    const toggleDirection = (dir: GraphDirection): GraphDirection => {
+        return dir === Direction.HORIZONTAL ? Direction.VERTICAL : Direction.HORIZONTAL;
+    };
+
+    const onLayout = useCallback((dir: GraphDirection) => {
+        if (dir === direction) {
+            return;
+        }
+
+        const layouted = getLayoutedElements(nodes, edges, dir);
+        setNodes([...layouted.nodes]);
+        setEdges([...layouted.edges]);
+        setDirection(dir);
+
+        window.requestAnimationFrame(() => {
+            fitView();
+        });
+    }, [nodes, edges]);
 
     useEffect(() => {
         setDescription(data.description || emptyDescription);
@@ -103,14 +210,8 @@ const Graph = ({
         setEdges(data.edges || []);
     }, [data]);
 
-    const onNodesChange = useCallback(
-        (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
-        [setNodes]
-    );
-    const onEdgesChange = useCallback(
-        (changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-        [setEdges]
-    );
+    const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
+    const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
 
     // const getGraphStyle = useCallback<() => GraphStyle>((): GraphStyle => {
     //     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
@@ -126,7 +227,8 @@ const Graph = ({
     // }, []);
 
     // const graphStyle = getGraphStyle();
-    const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
+    const graphStyle = (isRhsClosed && isRhs) ? rhsGraphStyle : defaultGraphStyle;
+    const graphSidebarStyle = (isRhsClosed && isRhs) ? rhsGraphSidebarStyle : defaultGraphSidebarStyle;
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 
@@ -166,18 +268,38 @@ const Graph = ({
                         zoomable={true}
                         pannable={true}
                     />
+                    <Panel position={panelPosition}>
+                        <Tooltip
+                            title={formatMessage({defaultMessage: 'Toggle graph direction'})}
+                            placement='bottom'
+                        >
+                            <Button
+                                icon={<PartitionOutlined/>}
+                                onClick={() => onLayout(toggleDirection(direction))}
+                            />
+                        </Tooltip>
+                    </Panel>
                 </ReactFlow>
             </GraphContainer>
-            {isDescriptionProvided(description) &&
-                <TextBox
-                    idPrefix={DESCRIPTION_ID_PREFIX}
-                    name={description.name}
-                    sectionId={sectionId}
-                    style={graphStyle.textBoxStyle}
-                    parentId={parentId}
-                    text={description.text}
-                />
-            }
+            <GraphSidebar width={graphSidebarStyle.width}>
+                {isDescriptionProvided(description) &&
+                    <TextBox
+                        idPrefix={DESCRIPTION_ID_PREFIX}
+                        name={description.name}
+                        sectionId={sectionId}
+                        style={graphStyle.textBoxStyle}
+                        parentId={parentId}
+                        text={description.text}
+                    />
+                }
+                {nodeInfo &&
+                    <GraphNodeInfo
+                        info={nodeInfo}
+                        setNodeInfo={setNodeInfo}
+                        sectionId={sectionId}
+                        parentId={parentId}
+                    />}
+            </GraphSidebar>
         </Container>
     );
 };
@@ -193,6 +315,12 @@ const Container = styled.div<{containerDirection: string}>`
     display: flex;
     flex-direction: ${(props) => props.containerDirection};
     margin-top: 24px;
+`;
+
+const GraphSidebar = styled.div<{width: string}>`
+    width: ${(props) => props.width};
+    display: flex;
+    flex-direction: column;
 `;
 
 export default Graph;

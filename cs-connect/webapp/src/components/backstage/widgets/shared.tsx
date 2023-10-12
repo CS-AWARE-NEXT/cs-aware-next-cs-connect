@@ -58,6 +58,7 @@ export const LinkTitle = styled.h3`
     margin: 0;
     white-space: nowrap;
     display: inline-block;
+    text-wrap: wrap;
 
     ${CopyLink} {
         margin-left: -1.25em;

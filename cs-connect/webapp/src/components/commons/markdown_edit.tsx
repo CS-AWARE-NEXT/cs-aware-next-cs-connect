@@ -5,11 +5,12 @@ import {useUpdateEffect} from 'react-use';
 import FormattedMarkdown from './formatted_markdown';
 import ShowMore from './show_more';
 
-type MarkdownEditProps = {
+export type MarkdownEditProps = {
     value: string;
     placeholder: string;
     className?: string;
     noBorder?: boolean;
+    borderColor?: string;
     disabled?: boolean;
     previewDisabled?: boolean;
 };
@@ -29,6 +30,7 @@ const MarkdownEdit = (props: MarkdownEditProps) => {
             editing={isEditing}
             dashed={value === ''}
             noBorder={props.noBorder}
+            borderColor={props.borderColor}
             className={props.className}
         >
             <RenderedText data-testid='rendered-text'>
@@ -80,7 +82,12 @@ const commonTextStyle = css`
 // ${CancelSaveContainer} {
 //    padding: 8px 0;
 // }
-const MarkdownEditContainer = styled.div<{editing: boolean;dashed: boolean;noBorder?: boolean;}>`
+const MarkdownEditContainer = styled.div<{
+    editing: boolean;
+    dashed: boolean;
+    noBorder?: boolean;
+    borderColor?: string;
+}>`
     position: relative;
     box-sizing: border-box;
     border-radius: var(--markdown-textbox-radius, 4px);
@@ -104,6 +111,7 @@ const MarkdownEditContainer = styled.div<{editing: boolean;dashed: boolean;noBor
     }
 
     border: ${(props) => (props.dashed ? '1px dashed var(--center-channel-color-16)' : '1px solid var(--center-channel-color-08)')};
+    border-color: ${(props) => (props.borderColor ? props.borderColor : 'var(--center-channel-color-08)')};
     ${({editing, noBorder}) => (editing || noBorder) && css`
         border-color: transparent;
     `}
@@ -124,5 +132,16 @@ const PlaceholderText = styled.span`
     line-height: 20px;
     color: rgba(var(--center-channel-color-rgb), 0.56);
 `;
+
+type MarkdownEditWithIDProps = {
+    textBoxProps: MarkdownEditProps;
+    id: string;
+};
+
+export const MarkdownEditWithID = ({textBoxProps, id}: MarkdownEditWithIDProps) => (
+    <div id={id}>
+        <MarkdownEdit {...textBoxProps}/>
+    </div>
+);
 
 export default styled(MarkdownEdit)``;

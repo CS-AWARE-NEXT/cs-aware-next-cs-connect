@@ -102,7 +102,9 @@ export const DropdownMenuItem = (props: {
     children: React.ReactNode,
     disabled?: boolean,
     disabledAltText?: string,
+    hasHover?: boolean,
     onClick: () => void,
+    onContextMenu?: (e: React.MouseEvent) => void,
 }) => {
     const tooltipId = useUniqueId();
 
@@ -127,6 +129,9 @@ export const DropdownMenuItem = (props: {
             onClick={props.onClick}
             className={props.className}
             role={'button'}
+            onContextMenu={props.onContextMenu}
+
+            hasHover={props.hasHover ?? true}
 
             // Prevent trigger icon (parent) from propagating title prop to options
             // Menu items use to be full text (not just icons) so don't need title
@@ -181,7 +186,7 @@ export const DropdownMenu = styled.div`
     z-index: 12;
 `;
 
-export const DropdownMenuItemStyled = styled.a`
+export const DropdownMenuItemStyled = styled.a<{hasHover: boolean}>`
  && {
     font-family: 'Open Sans';
     font-style: normal;
@@ -192,8 +197,8 @@ export const DropdownMenuItemStyled = styled.a`
     text-decoration: unset;
 
     &:hover {
-        background: rgba(var(--center-channel-color-rgb), 0.08);
-        color: var(--center-channel-color);
+        background: ${(props) => (props.hasHover ? 'rgba(var(--center-channel-color-rgb), 0.08)' : '')};
+        color: ${(props) => (props.hasHover ? 'var(--center-channel-color)' : '')};
     }
     &&:focus {
         text-decoration: none;

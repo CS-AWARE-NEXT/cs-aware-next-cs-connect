@@ -7,6 +7,7 @@ export enum WidgetType {
     PaginatedTable = 'paginated-table',
     List = 'list',
     SingleChannel = 'channel',
+    SocialMediaPosts = 'social-media-posts',
     Table = 'table',
     TextBox = 'text-box',
     Timeline = 'timeline',

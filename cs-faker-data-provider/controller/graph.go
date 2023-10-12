@@ -8,6 +8,8 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
+	"gopkg.in/karalabe/cookiejar.v2/graph"
+	"gopkg.in/karalabe/cookiejar.v2/graph/bfs"
 )
 
 func GetGraph(c *fiber.Ctx) error {
@@ -17,14 +19,17 @@ func GetGraph(c *fiber.Ctx) error {
 		if err != nil {
 			return c.JSON(model.GraphData{})
 		}
-		c.JSON(graphData)
+		return c.JSON(graphData)
 	}
 	return c.JSON(graphMap[organizationId])
 }
 
 func getGraphFromJson(organizationId string) (model.GraphData, error) {
-	organizationName := "larissa"
+	organizationName := "foggia"
 	if organizationId == "6" {
+		organizationName = "larissa"
+	}
+	if organizationId == "7" {
 		organizationName = "deyal"
 	}
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
@@ -47,7 +52,98 @@ func getGraphFromJson(organizationId string) (model.GraphData, error) {
 }
 
 func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphData {
-	return model.GraphData{}
+	nodes := []model.GraphNode{}
+	edges := []model.GraphEdge{}
+	for _, csAwareNode := range csAwareGraphData.Objects {
+		nodes = append(nodes, model.GraphNode{
+			Position: model.GraphNodePosition{X: 0, Y: 0},
+			ID:       csAwareNode.ID,
+			Data: model.GraphNodeData{
+				Label:       csAwareNode.Name,
+				Description: csAwareNode.Description,
+				Kind:        csAwareNode.XCsawareNodeType,
+			},
+		})
+
+		// for _, source := range csAwareNode.Source {
+		// 	repeated := false
+		// 	for _, edge := range edges {
+		// 		leftID := fmt.Sprintf("%s-%s", csAwareNode.ID, source)
+		// 		rigthID := fmt.Sprintf("%s-%s", source, csAwareNode.ID)
+		// 		if edge.ID == leftID || edge.ID == rigthID {
+		// 			repeated = true
+		// 		}
+		// 	}
+		// 	if repeated {
+		// 		continue
+		// 	}
+		// 	edges = append(edges, model.GraphEdge{
+		// 		ID:         fmt.Sprintf("%s-%s", csAwareNode.ID, source),
+		// 		SourceName: csAwareNode.Name,
+		// 		Source:     csAwareNode.ID,
+		// 		TargetName: source,
+		// 		Target:     source,
+		// 	})
+		// }
+	}
+	nodeIndexes, nodeIDs, bfs := getBfs(csAwareGraphData.Objects)
+	for _, node := range nodes {
+		path := bfs.Path(nodeIndexes[node.ID])
+		if len(path) < 2 {
+			continue
+		}
+		index := path[len(path)-2]
+		ID := nodeIDs[index]
+		edges = append(edges, model.GraphEdge{
+			ID:     fmt.Sprintf("%s-%s", ID, node.ID),
+			Source: ID,
+			Target: node.ID,
+		})
+	}
+
+	return model.GraphData{
+		Description: model.GraphDescription{
+			Name: "Description",
+			Text: fmt.Sprintf("%s %s, version %s", csAwareGraphData.Name, csAwareGraphData.Type, csAwareGraphData.Version),
+		},
+		Nodes:    nodes,
+		Edges:    edges,
+		Layouted: false,
+	}
+}
+
+func getBfs(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string, *bfs.Bfs) {
+	root, count := getRootAndCount(nodes)
+	if count < 0 {
+		return nil, nil, nil
+	}
+	nodeIndexes, nodeIDs := nodesToMaps(nodes)
+	g := graph.New(count)
+	for index, node := range nodes {
+		for _, source := range node.Source {
+			g.Connect(index, nodeIndexes[source])
+		}
+	}
+	return nodeIndexes, nodeIDs, bfs.New(g, root)
+}
+
+func getRootAndCount(nodes []model.CSAwareGraphNode) (int, int) {
+	for index, node := range nodes {
+		if node.Type == "root" {
+			return index, len(nodes)
+		}
+	}
+	return -1, -1
+}
+
+func nodesToMaps(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string) {
+	nodeIndexes := make(map[string]int)
+	nodeIDs := make(map[int]string)
+	for index, node := range nodes {
+		nodeIndexes[node.ID] = index
+		nodeIDs[index] = node.ID
+	}
+	return nodeIndexes, nodeIDs
 }
 
 var graphMap = map[string]model.GraphData{
