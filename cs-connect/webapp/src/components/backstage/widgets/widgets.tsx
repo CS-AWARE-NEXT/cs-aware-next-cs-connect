@@ -12,6 +12,7 @@ import TableWrapper from './table/wrappers/table_wrapper';
 import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
 import TimelineWrapper from './timeline/wrappers/timeline_wrappers';
 import CacaoPlaybookWrapper from './cacao_playbook/wrappers/playbook_wrapper';
+import SocialMediaPostsWrapper from './social_media_posts/wrappers/social_media_posts_wrapper';
 import {WidgetType} from './widget_types';
 
 type Props = {
@@ -34,6 +35,8 @@ const buildWidgetByType = (
         return <PaginatedTableWrapper {...props}/>;
     case WidgetType.List:
         return <ListWrapper {...props}/>;
+    case WidgetType.SocialMediaPosts:
+        return <SocialMediaPostsWrapper {...props}/>;
     case WidgetType.Table:
         return <TableWrapper {...props}/>;
     case WidgetType.TextBox:
