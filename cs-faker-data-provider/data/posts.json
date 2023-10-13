@@ -30,7 +30,7 @@
                 "hacker"
             ],
             "url": "https://twitter.com/Infosharenew/status/1412293666031521794",
-            "Associated component": "router"
+            "associated_component": "Router"
         },
         {
             "id": "1709940220190490905",
@@ -52,7 +52,7 @@
                 "Cybersecurity"
             ],
             "URL": "https://twitter.com/TheDigitalJob/status/1709940220190490905",
-            "Associated component": "Database"
+            "associated_component": "Database"
         },
         {
             "id": "1711399173566718159",
@@ -73,7 +73,7 @@
                 "cybersecurity"
             ],
             "URL": "https://twitter.com/TheNimbleNerd/status/1711399173566718159",
-            "Associated component": "CRM"
+            "associated_component": "CRM"
         },
         {
             "id": "1712622931400954178",
@@ -92,7 +92,7 @@
             "replies": 0,
             "hashtags": [],
             "URL": "https://twitter.com/PatrickCMiller/status/1712622931400954178",
-            "Associated component": "Router"
+            "associated_component": "Router"
         }
     ]
 }
