@@ -10,7 +10,7 @@ UNDEPLOY=false
 # Function to handle option parsing
 parse_options() {
     # Parse the command-line options
-    while getopts "npu" opt; do
+    while getopts "bnpu" opt; do
         case $opt in
             b)
                 echo "Build option set."
@@ -33,6 +33,16 @@ parse_options() {
                 ;;
         esac
     done
+}
+
+# Function to handle arguments parsing
+parse_arguments() {
+    if [ -z "$1" ]
+        then
+            echo "Missing config file name, using $CONFIG_FILE_NAME as default."
+        else
+            CONFIG_FILE_NAME=$1
+    fi
 }
 
 select_config_file () {
@@ -79,6 +89,8 @@ parse_options "$@"
 
 # Shift the parsed options, so $1 will point to the first non-option argument (if any)
 shift "$((OPTIND - 1))"
+
+parse_arguments "$@"
 
 select_config_file "$1"
 
