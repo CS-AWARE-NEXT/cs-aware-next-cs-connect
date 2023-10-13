@@ -1,0 +1,366 @@
+{
+    "posts": [
+        {
+            "id": "662db9cf-ea3c-466b-a54f-ff00ee4e0246",
+            "user": {
+                "handle": "",
+                "name": "CryptoBusy",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "BREAKING: #Mixin Network $XIN database was attacked by hackers, resulting in a loss of $200 MILLION!\nThe hackers attacked its cloud database after discovering a vulnerability.\n$XIN currently has a market cap of $117 million, and it is a free and lightning-fast peer-to-peer transactional network for digital assets.\nThis incident happened on the 23rd of September, but the network shared the information today on their X page.",
+            "media": "https://pbs.twimg.com/media/F62Uh4Ka0AAP6YC?format=jpg&name=small",
+            "date": "25 September 2023",
+            "retweets": 18,
+            "likes": 27,
+            "replies": 18,
+            "hashtags": [],
+            "URL": "https://twitter.com/CryptoBusy/status/1706183254049796405",
+            "associated_component": "Database"
+        },
+        {
+            "id": "f36f4740-48ef-4b43-93a9-35554004d623",
+            "user": {
+                "handle": "",
+                "name": "BleepinComputer",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "PSA: Over 29,000 Internet-exposed QNAP NAS devices are still unpatched against a recently addressed critical vulnerability allowing malicious code injection. Patch now!",
+            "media": "https://pbs.twimg.com/card_img/1710924385383501825/IeZStizy?format=jpg&name=small",
+            "date": "1 February 2023",
+            "retweets": 39,
+            "likes": 42,
+            "replies": 1,
+            "hashtags": [],
+            "URL": "https://twitter.com/BleepinComputer/status/1620561319786078210",
+            "associated_component": "NAS"
+        },
+        {
+            "id": "f6e00319-c728-4a96-b459-b006d1f2fd25",
+            "user": {
+                "handle": "",
+                "name": "Laura Crypto",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "And it was expected... Due to the API vulnerability on the #FriendTech platform, the database containing the critical information of the users emerged.\nAfter this vulnerability, the list of #Twitter usernames of more than 100 thousand users along with their Ethereum addresses was shared on #GitHub.",
+            "media": "https://pbs.twimg.com/media/F4DwQIlWoAAsshA?format=jpg&name=small",
+            "date": "21 August 2023",
+            "retweets": 3,
+            "likes": 46,
+            "replies": 1,
+            "hashtags": [],
+            "URL": "https://twitter.com/airdrop_laura/status/1693617622816878641",
+            "associated_component": "Database"
+        },
+        {
+            "id": "54be26f2-9dd7-46f7-8e84-c0a44e7caca7",
+            "user": {
+                "handle": "",
+                "name": "0xor0ne",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Writeup on a command injection vulnerability in the Netgear RAX30 router’s WAN interface.\n(credits McCaulay Hudson (@NCCGroupInfosec))\nhttps://t.co/if2lut0aOe",
+            "media": "https://pbs.twimg.com/media/FnLITeWXoAATYS7?format=jpg&name=360x360",
+            "date": "23 January 2023",
+            "retweets": 82,
+            "likes": 256,
+            "replies": 3,
+            "hashtags": [
+                "iot",
+                "embedded",
+                "netgear",
+                "infosec",
+                "cybersecurity"
+            ],
+            "URL": "https://twitter.com/0xor0ne/status/1617575455544033294",
+            "associated_component": "Router"
+        },
+        {
+            "id": "30288602-8bf0-4192-a6b8-b193caccec47",
+            "user": {
+                "handle": "",
+                "name": "Cisco Talos Intelligence Group",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Our latest Vulnerability Roundup includes 10 zero-day vulnerabilities in an industrial cellular router and a use-after-free vulnerability that affects an open-source implementation of #WebKit http://cs.co/6014urAmu",
+            "media": "https://pbs.twimg.com/media/F8LQnvLWoAE62WZ?format=jpg&name=small",
+            "date": "11 October 2023",
+            "retweets": 3,
+            "likes": 7,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://twitter.com/TalosSecurity/status/1712160191867769107",
+            "associated_component": "Router"
+        },
+        {
+            "id": "9620b078-1e3a-4370-a49f-6a23d89c60d0",
+            "user": {
+                "handle": "",
+                "name": "Daily Dark Web",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Allegedly, Database and source code of an e-commerce company are on sale\nThreat actor claims to have informed the company about the vulnerability he found, but the company didn't come up with the money he offered.\nPrice: $4000",
+            "media": "https://pbs.twimg.com/media/F8AtqV8WIAgt9bd?format=jpg&name=small",
+            "date": "9 October 2023",
+            "retweets": 13,
+            "likes": 33,
+            "replies": 0,
+            "hashtags": [
+                "DarkWeb"
+            ],
+            "URL": "https://twitter.com/DailyDarkWeb/status/1711456495358140480",
+            "associated_component": "Database"
+        },
+        {
+            "id": "07548c1b-8816-4d33-a241-76ea8768d5e9",
+            "user": {
+                "handle": "",
+                "name": "Ampcus Cyber",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "📢Ampcus Cyber News Room: Mirai DDoS Malware variant Expands Targets with 13 Router Exploits.",
+            "media": "https://pbs.twimg.com/media/F8OzkGYaQAAFZ6Y?format=jpg&name=small",
+            "date": "12 October 2023",
+            "retweets": 1,
+            "likes": 1,
+            "replies": 0,
+            "hashtags": [
+                "ampcuscyber",
+                "cybersecurity",
+                "cyberattack",
+                "informationsecurity",
+                "dataprotection",
+                "privacy",
+                "compliance",
+                "security",
+                "cybercrime",
+                "malwareattack",
+                "infosec",
+                "vulnerability",
+                "hacking"
+            ],
+            "URL": "https://twitter.com/ampcuscyber/status/1712437971033723013",
+            "associated_component": "Router"
+        },
+        {
+            "id": "894c4c42-e641-4fda-a937-c5d686f26807",
+            "user": {
+                "handle": "",
+                "name": "{~♡☆RG!rl☆♡~}",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Today I successfully used #sqlmap to discover and exploit a SQL injection vulnerability on a vulnerable website database.",
+            "media": "https://pbs.twimg.com/media/Fm0yH3DXkAEpiHz?format=jpg&name=360x360",
+            "date": "19 January 2023",
+            "retweets": 4,
+            "likes": 14,
+            "replies": 3,
+            "hashtags": [
+                "cybersecurity",
+                "hacking",
+                "database",
+                "sqlinjection"
+            ],
+            "URL": "https://twitter.com/r0b0tgurl/status/1616002969438232587",
+            "associated_component": "Database"
+        },
+        {
+            "id": "d85de854-b238-4267-a6fe-86b67fdd64ea",
+            "user": {
+                "handle": "",
+                "name": "Wordfence",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "92 vulnerabilities identified in 88 WordPress Plugins last week. None detected in themes. Review key insights in our Vulnerability Database to safeguard your site. Thanks to the 37 researchers contributing to #WordPress Security.",
+            "media": "https://pbs.twimg.com/card_img/1712490297291390976/PJogGzCR?format=png&name=small",
+            "date": "12 October 2023",
+            "retweets": 2,
+            "likes": 3,
+            "replies": 0,
+            "hashtags": [
+                "CyberSecurity"
+            ],
+            "URL": "https://twitter.com/wordfence/status/1712490531958530096",
+            "associated_component": "CRM"
+        },
+        {
+            "id": "914b0f98-16d3-4713-a36b-643f012c9f9b",
+            "user": {
+                "handle": "",
+                "name": "Moby Media",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "The decentralized #crypto network Mixin has confirmed a loss of $200 million in a recent hack due to a vulnerability within its database.",
+            "date": "25 September 2023",
+            "retweets": 27,
+            "likes": 144,
+            "replies": 31,
+            "hashtags": [],
+            "URL": "https://twitter.com/mobymedia/status/1706190763254514094",
+            "associated_component": "Database"
+        },
+        {
+            "id": "05ab99d2-4633-48b3-b7d9-c7897eca46b9",
+            "user": {
+                "handle": "",
+                "name": "KitPloit - Hacker Tools",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "FirebaseExploiter - Vulnerability Discovery Tool That Discovers Firebase Database Which Are Open And Can Be Exploitable https://ift.tt/3zCnO0d",
+            "media": "https://pbs.twimg.com/media/Fu40ieqWcAAkIC7?format=png&name=small",
+            "date": "29 April 2023",
+            "retweets": 66,
+            "likes": 177,
+            "replies": 1,
+            "hashtags": [],
+            "URL": "https://twitter.com/KitPloit/status/1652315882029305856",
+            "associated_component": "Database"
+        },
+        {
+            "id": "e6d010e6-64b5-426f-a8e8-9c5519cc5ac6",
+            "user": {
+                "handle": "",
+                "name": "Fusion Intelligence Center @ StealthMole",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "A bad actor hacked into a website owned by the Argentine government using SQL vulnerability and leaked the database.",
+            "media": "https://pbs.twimg.com/media/F40-_VuaUAAyqBm?format=jpg&name=small",
+            "date": "31 August 2023",
+            "retweets": 16,
+            "likes": 32,
+            "replies": 1,
+            "hashtags": [],
+            "URL": "https://twitter.com/stealthmole_int/status/1697082094894424134",
+            "associated_component": "Database"
+        },
+        {
+            "id": "1412293666031521794",
+            "user": {
+                "handle": "",
+                "name": "InfoshareSystems",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 20,
+                "following_count": 1
+            },
+            "content": "Threat Actors Targeting Unpatched Cisco ASA Devices Aggressively Post the PoC Release.",
+            "date": "6 July 2021",
+            "retweets": 2,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity",
+                "cyberattack",
+                "cisco",
+                "attack",
+                "networksecurity",
+                "online",
+                "bug",
+                "vulnerability",
+                "exploit",
+                "internet",
+                "online",
+                "hacker"
+            ],
+            "url": "https://twitter.com/Infosharenew/status/1412293666031521794",
+            "associated_component": "Router"
+        },
+        {
+            "id": "1709940220190490905",
+            "user": {
+                "handle": "",
+                "name": "The Digital Job",
+                "profile_picture": "",
+                "bio": "Digital Mega trends - Technical learning. Online channel spreading content from top influencers and publishers.",
+                "followers_count": 6,
+                "following_count": 3
+            },
+            "content": "The Oracle and KPMG Cloud Threat Report identifies the key risks and challenges that organizations are facing as they implement and maintain cloud solutions.",
+            "date": "5 October 2023",
+            "retweets": 8,
+            "likes": 9,
+            "replies": 0,
+            "hashtags": [
+                "CloudComputing",
+                "Cybersecurity"
+            ],
+            "URL": "https://twitter.com/TheDigitalJob/status/1709940220190490905",
+            "associated_component": "Database"
+        },
+        {
+            "id": "1711399173566718159",
+            "user": {
+                "handle": "",
+                "name": "The Nimble Nerd",
+                "profile_picture": "",
+                "bio": "We are all digital citizens in an interconnected world, and just like we lock our doors at night, we need to secure our presence in the digital world",
+                "followers_count": 6,
+                "following_count": 3
+            },
+            "content": "CRM Provider’s Comedy of Errors: When ‘Keeping It Simple’ Goes Horribly Wrong https://buff.ly/3tuXCZo",
+            "date": "9 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity"
+            ],
+            "URL": "https://twitter.com/TheNimbleNerd/status/1711399173566718159",
+            "associated_component": "CRM"
+        },
+        {
+            "id": "1712622931400954178",
+            "user": {
+                "handle": "",
+                "name": "Patrick C Miller",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 6,
+                "following_count": 3
+            },
+            "content": "Cisco Can’t Stop Using Hard-Coded Passwords - Schneier on Security https://buff.ly/3tz73qK",
+            "date": "13 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://twitter.com/PatrickCMiller/status/1712622931400954178",
+            "associated_component": "Router"
+        }
+    ]
+}
