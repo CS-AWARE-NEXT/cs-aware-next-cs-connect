@@ -1,0 +1,98 @@
+{
+    "posts": [
+        {
+            "id": "1412293666031521794",
+            "user": {
+                "handle": "",
+                "name": "InfoshareSystems",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 20,
+                "following_count": 1
+            },
+            "content": "Threat Actors Targeting Unpatched Cisco ASA Devices Aggressively Post the PoC Release.",
+            "date": "6 July 2021",
+            "retweets": 2,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity",
+                "cyberattack",
+                "cisco",
+                "attack",
+                "networksecurity",
+                "online",
+                "bug",
+                "vulnerability",
+                "exploit",
+                "internet",
+                "online",
+                "hacker"
+            ],
+            "url": "https://twitter.com/Infosharenew/status/1412293666031521794",
+            "Associated component": "router"
+        },
+        {
+            "id": "1709940220190490905",
+            "user": {
+                "handle": "",
+                "name": "The Digital Job",
+                "profile_picture": "",
+                "bio": "Digital Mega trends - Technical learning. Online channel spreading content from top influencers and publishers.",
+                "followers_count": 6,
+                "following_count": 3
+            },
+            "content": "The Oracle and KPMG Cloud Threat Report identifies the key risks and challenges that organizations are facing as they implement and maintain cloud solutions.",
+            "date": "5 October 2023",
+            "retweets": 8,
+            "likes": 9,
+            "replies": 0,
+            "hashtags": [
+                "CloudComputing",
+                "Cybersecurity"
+            ],
+            "URL": "https://twitter.com/TheDigitalJob/status/1709940220190490905",
+            "Associated component": "Database"
+        },
+        {
+            "id": "1711399173566718159",
+            "user": {
+                "handle": "",
+                "name": "The Nimble Nerd",
+                "profile_picture": "",
+                "bio": "We are all digital citizens in an interconnected world, and just like we lock our doors at night, we need to secure our presence in the digital world",
+                "followers_count": 6,
+                "following_count": 3
+            },
+            "content": "CRM Provider’s Comedy of Errors: When ‘Keeping It Simple’ Goes Horribly Wrong https://buff.ly/3tuXCZo",
+            "date": "9 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity"
+            ],
+            "URL": "https://twitter.com/TheNimbleNerd/status/1711399173566718159",
+            "Associated component": "CRM"
+        },
+        {
+            "id": "1712622931400954178",
+            "user": {
+                "handle": "",
+                "name": "Patrick C Miller",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 6,
+                "following_count": 3
+            },
+            "content": "Cisco Can’t Stop Using Hard-Coded Passwords - Schneier on Security https://buff.ly/3tz73qK",
+            "date": "13 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://twitter.com/PatrickCMiller/status/1712622931400954178",
+            "Associated component": "Router"
+        }
+    ]
+}
