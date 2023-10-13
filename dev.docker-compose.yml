@@ -43,8 +43,10 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
       - "pgadmin:/var/lib/pgadmin"
+      - "./pgadmin/servers.json:/pgadmin4/servers.json"
+      - "./pgadmin/pgpassfile:/pgpass"
     ports:
-      - "${PGADMIN_PORT:-5050}:80"
+      - "${PGADMIN_PORT:-3001}:80"
     networks:
       - mattermost
   cs-data-provider:

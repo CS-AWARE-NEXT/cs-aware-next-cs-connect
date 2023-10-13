@@ -14,7 +14,7 @@ func (sqlStore *SQLStore) getSystemValue(q queryer, key string) (string, error) 
 
 	err := sqlStore.getBuilder(q, &value,
 		sq.Select("SValue").
-			From("CSA_System").
+			From("CS_System").
 			Where(sq.Eq{"SKey": key}),
 	)
 	if err == sql.ErrNoRows {
@@ -34,7 +34,7 @@ func (sqlStore *SQLStore) setSystemValue(e queryExecer, key, value string) error
 	// affected even when the key and value are already present.
 	if sqlStore.db.DriverName() == model.DatabaseDriverMysql {
 		_, err := sqlStore.execBuilder(e,
-			sq.Insert("CSA_System").
+			sq.Insert("CS_System").
 				Columns("SKey", "SValue").
 				Values(key, value).
 				Suffix("ON DUPLICATE KEY UPDATE SValue = ?", value),
@@ -44,7 +44,7 @@ func (sqlStore *SQLStore) setSystemValue(e queryExecer, key, value string) error
 	}
 
 	result, err := sqlStore.execBuilder(e,
-		sq.Update("CSA_System").
+		sq.Update("CS_System").
 			Set("SValue", value).
 			Where(sq.Eq{"SKey": key}),
 	)
@@ -58,7 +58,7 @@ func (sqlStore *SQLStore) setSystemValue(e queryExecer, key, value string) error
 	}
 
 	_, err = sqlStore.execBuilder(e,
-		sq.Insert("CSA_System").
+		sq.Insert("CS_System").
 			Columns("SKey", "SValue").
 			Values(key, value),
 	)
