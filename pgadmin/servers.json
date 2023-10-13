@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "mattermost",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "mmuser",
+            "Host": "10.5.0.5",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "mattermost_test"
+        }
+    }
+}
