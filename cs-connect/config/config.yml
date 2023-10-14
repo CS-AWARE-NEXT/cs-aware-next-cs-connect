@@ -54,7 +54,7 @@ organizations:
           - name: Posts
             type: social-media-posts
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media/:id/posts
-          - type: channel
+          - type: channels
   - name: Demo CS-AWARE EU
     id: "4"
     description: The organization at https://demo.cs-aware.eu/index.html
