@@ -8,4 +8,10 @@ export type Post = {
     content: string;
     media?: string;
     avatar?: string;
+    date?: string;
+    url?: string;
+    target?: string;
+    likes: number;
+    replies: number;
+    retweets: number;
 };
