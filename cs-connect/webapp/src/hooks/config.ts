@@ -19,7 +19,6 @@ export const useHideOptions = () => {
 const hideOptions = (): NodeJS.Timeout[][] => {
     (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
 
-    // TODO: discuss why this causes an error in Mozilla
     const hiddenIconBox = document.getElementById('hidden-icon')?.parentElement?.parentElement;
     if (hiddenIconBox) {
         hiddenIconBox.style.display = 'none';
@@ -34,7 +33,10 @@ const hideOptions = (): NodeJS.Timeout[][] => {
         const groups = document.getElementsByClassName('SidebarChannelGroup a11y__section') as HTMLCollectionOf<HTMLElement>;
         for (let i = 0; i < groups.length; i++) {
             const group = groups[i];
-            if (formatStringToLowerCase(group.innerText).includes('direct messages')) {
+            const groupInnerText = formatStringToLowerCase(group.innerText);
+
+            // TODO: this check has to be made based on locale
+            if (groupInnerText.includes('direct messages') || groupInnerText.includes('messaggi diretti')) {
                 group.style.display = 'none';
                 break;
             }
