@@ -41,7 +41,6 @@ type ScrollIntoViewPositions = {
 };
 
 export const useScrollIntoView = (hash: string, positions?: ScrollIntoViewPositions) => {
-    console.log('url hash in scroll', hash);
     useCleanUrlHash();
 
     // When first loading the page, the element with the ID corresponding to the URL
