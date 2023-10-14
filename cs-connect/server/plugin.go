@@ -70,7 +70,7 @@ func (p *Plugin) OnActivate() error {
 	p.eventService = app.NewEventService(p.API)
 	p.userService = app.NewUserService(p.API)
 
-	mutex, err := cluster.NewMutex(p.API, "CS_dbMutex")
+	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")
 	if err != nil {
 		return errors.Wrapf(err, "failed creating cluster mutex")
 	}

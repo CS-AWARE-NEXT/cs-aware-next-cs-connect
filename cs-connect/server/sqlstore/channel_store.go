@@ -35,7 +35,7 @@ func NewChannelStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ChannelS
 			"ParentID",
 			"SectionID",
 		).
-		From("CS_Channel")
+		From("CSA_Channel")
 
 	return &channelStore{
 		pluginAPI:      pluginAPI,
@@ -96,7 +96,7 @@ func (s *channelStore) addExistingChannel(sectionID string, params app.AddChanne
 	defer s.store.finalizeTransaction(tx)
 
 	if _, err := s.store.execBuilder(tx, sq.
-		Insert("CS_Channel").
+		Insert("CSA_Channel").
 		SetMap(map[string]interface{}{
 			"ChannelID": params.ChannelID,
 			"ParentID":  params.ParentID,
@@ -125,7 +125,7 @@ func (s *channelStore) createChannel(sectionID string, params app.AddChannelPara
 		return app.AddChannelResult{}, errors.Wrap(err, "could not add new channel")
 	}
 	if _, err := s.store.execBuilder(tx, sq.
-		Insert("CS_Channel").
+		Insert("CSA_Channel").
 		SetMap(map[string]interface{}{
 			"ChannelID": channel.Id,
 			"ParentID":  params.ParentID,
@@ -168,7 +168,7 @@ func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.
 func (s *channelStore) getChannelsIdsBySectionID(sectionID string, tx *sqlx.Tx) ([]string, error) {
 	channelsIdsSelect := s.store.builder.
 		Select("ChannelID").
-		From("CS_Channel").
+		From("CSA_Channel").
 		Where(sq.Eq{"SectionID": sectionID})
 
 	var channelsIds []string

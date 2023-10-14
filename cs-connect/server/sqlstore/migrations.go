@@ -22,41 +22,41 @@ var migrations = []Migration{
 		migrationFunc: func(e sqlx.Ext, sqlStore *SQLStore) error {
 			if e.DriverName() == model.DatabaseDriverMysql {
 				if _, err := e.Exec(`
-					CREATE TABLE IF NOT EXISTS CS_System (
+					CREATE TABLE IF NOT EXISTS CSA_System (
 						SKey VARCHAR(64) PRIMARY KEY,
 						SValue VARCHAR(1024) NULL
 					)
 				` + MySQLCharset); err != nil {
-					return errors.Wrapf(err, "failed creating table CS_System")
+					return errors.Wrapf(err, "failed creating table CSA_System")
 				}
 
 				if _, err := e.Exec(`
-					CREATE TABLE IF NOT EXISTS CS_Channel (
+					CREATE TABLE IF NOT EXISTS CSA_Channel (
 						ChannelID VARCHAR(26) PRIMARY KEY,
 						ParentID VARCHAR(26) NOT NULL,
 						SectionID VARCHAR(26) NOT NULL
 					)
 				` + MySQLCharset); err != nil {
-					return errors.Wrapf(err, "failed creating table CS_Channel")
+					return errors.Wrapf(err, "failed creating table CSA_Channel")
 				}
 			} else {
 				if _, err := e.Exec(`
-					CREATE TABLE IF NOT EXISTS CS_System (
+					CREATE TABLE IF NOT EXISTS CSA_System (
 						SKey VARCHAR(64) PRIMARY KEY,
 						SValue VARCHAR(1024) NULL
 					);
 				`); err != nil {
-					return errors.Wrapf(err, "failed creating table CS_System")
+					return errors.Wrapf(err, "failed creating table CSA_System")
 				}
 
 				if _, err := e.Exec(`
-					CREATE TABLE IF NOT EXISTS CS_Channel (
+					CREATE TABLE IF NOT EXISTS CSA_Channel (
 						ChannelID TEXT PRIMARY KEY,
 						ParentID TEXT NOT NULL,
 						SectionID TEXT NOT NULL
 					);
 				`); err != nil {
-					return errors.Wrapf(err, "failed creating table CS_Channel")
+					return errors.Wrapf(err, "failed creating table CSA_Channel")
 				}
 			}
 
@@ -76,7 +76,7 @@ var migrations = []Migration{
 		toVersion:   semver.MustParse("0.3.0"),
 		migrationFunc: func(e sqlx.Ext, sqlStore *SQLStore) error {
 			if e.DriverName() == model.DatabaseDriverMysql {
-				if _, err := e.Exec(`ALTER TABLE CS_System CONVERT TO CHARACTER SET utf8mb4`); err != nil {
+				if _, err := e.Exec(`ALTER TABLE CSA_System CONVERT TO CHARACTER SET utf8mb4`); err != nil {
 					return errors.Wrapf(err, "failed to migrate character set")
 				}
 			}
