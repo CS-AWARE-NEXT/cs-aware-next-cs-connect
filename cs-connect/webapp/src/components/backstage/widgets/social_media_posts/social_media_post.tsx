@@ -1,8 +1,15 @@
 import React, {FC, useContext} from 'react';
 import {useRouteMatch} from 'react-router-dom';
 import {Avatar as AntdAvatar, List, Space} from 'antd';
-import {LikeOutlined, MessageOutlined} from '@ant-design/icons';
+import {
+    LikeOutlined,
+    MessageOutlined,
+    NodeIndexOutlined,
+    RetweetOutlined,
+} from '@ant-design/icons';
 import Avatar from 'react-avatar';
+import {useIntl} from 'react-intl';
+import styled from 'styled-components';
 
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {FullUrlContext} from 'src/components/rhs/rhs';
@@ -17,6 +24,7 @@ import {
 } from 'src/hooks';
 import {CopyImage} from 'src/components/commons/copy_link';
 import {Post} from 'src/types/social_media';
+import HrefTooltip from 'src/components/commons/href_tooltip';
 
 import SocialMediaPostTitle from './social_media_post_title';
 
@@ -29,22 +37,38 @@ type Props = {
     sectionId: string;
 };
 
-const getAvatarComponent = (avatar: string | undefined, hint: string): JSX.Element => {
+const getAvatarComponent = (
+    avatar: string | undefined,
+    hint: string,
+    href: string | undefined,
+    tooltipMessage: string | undefined,
+): JSX.Element => {
     // Default antd size
-    const size = 32;
-    return avatar ?
+    const size = 55;
+    const avatarComponent = avatar ? (
         <AntdAvatar
             size={size}
             src={avatar}
-        /> :
+        />
+    ) : (
         <Avatar
             size={`${size}px`}
             name={hint}
             round={true}
-        />;
+        />
+    );
+    return (
+        <HrefTooltip
+            title={tooltipMessage ?? ''}
+            href={href ?? ''}
+        >
+            {avatarComponent}
+        </HrefTooltip>
+    );
 };
 
 const SocialMediaPost: FC<Props> = ({post, parentId, sectionId}) => {
+    const {formatMessage} = useIntl();
     const isRhs = useContext(IsRhsContext);
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
@@ -55,17 +79,46 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId}) => {
     const mediaId = `${postId}media`;
     const query = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
 
+    const href = post.url ?? '';
+    const viewOnTwitter = formatMessage({defaultMessage: 'View on Twitter'});
+
     const actions = [
-        <IconText
-            icon={LikeOutlined}
-            text='150'
+        <HrefTooltip
+            title={viewOnTwitter}
+            href={href}
             key={`${postId}like`}
-        />,
-        <IconText
-            icon={MessageOutlined}
-            text='10'
+        >
+            <IconText
+                icon={LikeOutlined}
+                text={`${post.likes}`}
+            />
+        </HrefTooltip>,
+        <HrefTooltip
+            title={viewOnTwitter}
+            href={href}
             key={`${postId}message`}
-        />,
+        >
+            <IconText
+                icon={MessageOutlined}
+                text={`${post.replies}`}
+            />
+        </HrefTooltip>,
+        <HrefTooltip
+            title={viewOnTwitter}
+            href={href}
+            key={`${postId}share`}
+        >
+            <IconText
+                icon={RetweetOutlined}
+                text={`${post.retweets}`}
+            />
+        </HrefTooltip>,
+        <Target
+            key={`${postId}target`}
+            style={{color: 'black', fontSize: 'bold'}}
+        >
+            {post.target && <><NodeIndexOutlined/> {post.target}</>}
+        </Target>,
     ];
 
     const getMediaComponent = (width: string | number): JSX.Element | null => {
@@ -95,7 +148,8 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId}) => {
             extra={isRhs ? null : getMediaComponent(300)}
         >
             <Meta
-                avatar={getAvatarComponent(post.avatar, post.title)}
+                avatar={getAvatarComponent(post.avatar, post.title, href, viewOnTwitter)}
+                description={post.date}
                 title={
                     <SocialMediaPostTitle
                         id={postId}
@@ -125,5 +179,7 @@ const IconText = ({icon, text}: {icon: FC; text: string}) => (
         {text}
     </Space>
 );
+
+const Target = styled.div``;
 
 export default SocialMediaPost;

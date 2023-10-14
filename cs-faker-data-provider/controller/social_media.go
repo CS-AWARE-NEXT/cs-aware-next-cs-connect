@@ -1,9 +1,12 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -30,21 +33,53 @@ func GetSocialMedia(c *fiber.Ctx) error {
 
 // Avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
 func GetSocialMediaPosts(c *fiber.Ctx) error {
-	var posts []model.SocialMediaPost
-	for i := 0; i < 23; i++ {
-		media := ""
-		if i%2 == 0 {
-			media = "https://random.imagecdn.app/550/350"
-		}
-		post := model.SocialMediaPost{
-			ID:      fmt.Sprintf("%d", i),
-			Title:   fmt.Sprintf("Username %d", i),
-			Content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-			Media:   media,
-		}
-		posts = append(posts, post)
+	socialMediaId := c.Params("socialMediaId")
+	fileName := "posts.json"
+	if socialMediaId == "165990a8-eb59-44bf-ab0c-613999960a48" {
+		fileName = "sample-posts.json"
 	}
-	return c.JSON(model.SocialMediaPostData{Items: posts})
+	filePath, err := util.GetEmbeddedFilePath(fileName, "*.json")
+	if err != nil {
+		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
+	}
+	content, err := data.Data.ReadFile(filePath)
+	if err != nil {
+		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
+	}
+	var socialMediaPostEntityData model.SocialMediaPostEntityData
+	err = json.Unmarshal(content, &socialMediaPostEntityData)
+	if err != nil {
+		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
+	}
+	return c.JSON(fromSocialMediaPostEntityData(socialMediaPostEntityData))
+}
+
+func fromSocialMediaPostEntityData(socialMediaPostEntityData model.SocialMediaPostEntityData) model.SocialMediaPostData {
+	var posts []model.SocialMediaPost
+	for _, post := range socialMediaPostEntityData.Posts {
+		posts = append(posts, model.SocialMediaPost{
+			ID:       post.ID,
+			Title:    post.User.Name,
+			Content:  buildContent(post),
+			Media:    post.Media,
+			Avatar:   post.User.ProfilePicture,
+			Date:     post.Date,
+			Target:   post.AssociatedComponent,
+			URL:      post.URL,
+			Likes:    post.Likes,
+			Replies:  post.Replies,
+			Retweets: post.Retweets,
+		})
+	}
+	return model.SocialMediaPostData{Items: posts}
+}
+func buildContent(post model.SocialMediaPostEntity) string {
+	content := fmt.Sprintf("%s\n\n", post.Content)
+	for _, hashtag := range post.Hashtags {
+		content = fmt.Sprintf("%s#%s ", content, hashtag)
+	}
+
+	return content
 }
 
 func getSocialMediaByID(c *fiber.Ctx) model.SocialMedia {
@@ -64,6 +99,11 @@ var socialMediaMap = map[string][]model.SocialMedia{
 			ID:          "cb55b098-4c1d-4bfe-86ec-923a5e8933af",
 			Name:        "Twitter",
 			Description: "Twitter is available at https://twitter.com/home",
+		},
+		{
+			ID:          "165990a8-eb59-44bf-ab0c-613999960a48",
+			Name:        "Sample Twitter",
+			Description: "Sample Twitter is available at https://twitter.com/home",
 		},
 	},
 }
