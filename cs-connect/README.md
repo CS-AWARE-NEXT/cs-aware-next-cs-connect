@@ -14,3 +14,4 @@ Build the custom Mattermost Docker image with the plugin installed.
 
 ```sh
 $ sudo ./build.sh
+```
