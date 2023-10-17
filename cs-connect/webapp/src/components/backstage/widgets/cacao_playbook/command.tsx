@@ -50,7 +50,6 @@ const CacaoCommand = ({
     parentId,
     sectionId,
 }: Props) => {
-    console.log('command', {command});
     const {formatMessage} = useIntl();
 
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
