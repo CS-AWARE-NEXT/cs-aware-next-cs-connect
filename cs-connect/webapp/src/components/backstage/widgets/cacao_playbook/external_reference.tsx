@@ -32,7 +32,6 @@ export const getExternalReferenceObjectByFormattedName = (externalReferences: an
         return defaultSelectObject;
     }
     const externalReferenceByName = externalReferences.find((externalReference) => formatName(externalReference.name) === name);
-    console.log('🚀 ~ file: external_reference.tsx:35 ~ getExternalReferenceObjectByName ~ externalReference:', externalReferenceByName, name);
     return {
         label: externalReferenceByName.name,
         value: externalReferenceByName.name,
@@ -58,8 +57,6 @@ export const getExternalReferencesFormattedNames = (externalReferences: any[]): 
         return [];
     }
     return externalReferences.map((externalReference) => {
-        console.log('🚀 ~ file: external_reference.tsx:63 ~ returnexternalReferences.map ~ externalReference:', externalReference);
-        console.log('🚀 ~ file: external_reference.tsx:64 ~ returnexternalReferences.map ~ externalReference.name:', externalReference.name);
         return formatName(externalReference.name);
     });
 };
@@ -69,7 +66,6 @@ const CacaoExternalReference = ({
     parentId,
     sectionId,
 }: Props) => {
-    console.log('externalReference', {data});
     const {formatMessage} = useIntl();
 
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);

@@ -124,7 +124,6 @@ const CacaoPlaybook = ({
         }
     }, [urlHash]);
 
-    console.log('data', {data});
     return (
         <Container
             id={id}
@@ -317,7 +316,7 @@ export const HorizontalContainer = styled.div<{disable?: boolean}>`
     flex-direction: ${({disable}) => (disable ? 'column' : 'row')};
     justify-content: ${({disable}) => (disable ? 'flex-start' : 'space-between')};
     margin: ${({disable}) => (disable ? '0' : '0 -8px')};
-    `;
+`;
 
 export const BorderBox = styled.div<{border?: boolean}>`
     ${({border}) => border && css`
