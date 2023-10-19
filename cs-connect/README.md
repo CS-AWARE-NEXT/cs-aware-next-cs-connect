@@ -26,3 +26,4 @@ With the previously generated .tar.gz of the cs-connect plugin, you can now buil
 
 ```sh
 $ ./build.sh
+```

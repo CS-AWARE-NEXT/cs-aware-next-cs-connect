@@ -61,7 +61,6 @@ const CacaoWorkflowStep = ({
     parentId,
     sectionId,
 }: Props) => {
-    console.log('workflow', {step});
     const {formatMessage} = useIntl();
 
     // const urlHash = useUrlHash();
