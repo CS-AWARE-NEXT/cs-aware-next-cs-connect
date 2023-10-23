@@ -5,7 +5,7 @@
 
 # Install
 - Build the packages by following the steps for each project.
-- Execute the command: `sudo ./start.sh` to clean the compose and run mattermost and cs-connect with the data provider.
+- Execute the command: `./start.sh` to clean the compose and run mattermost and cs-connect with the data provider.
 
 # System architecture overview
 ![architecture](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/raw/main/assets/architecture_overview.png)
@@ -14,23 +14,23 @@
 Run in `cs-connect` directory:
 
 ```sh
-$ sudo docker build -t cs-connect-base -f docker/dev.Dockerfile .
+$ docker build -t cs-connect-base -f docker/dev.Dockerfile .
 ```
 
 Run in `cs-faker-data-provider` directory:
 
 ```sh
-$ sudo ./build.sh
+$ ./build.sh
 ```
 
-Build and deploy:
+Build and deploy (change the config file as needed by choosing from the existing files in cs-connect/config):
 
 ```sh
-$ sudo ./make.sh -b -p
+$ ./make.sh -b -p config.local.yml
 ```
 
-Deploy:
+Deploy (change the config file as needed by choosing from the existing files in cs-connect/config):
 
 ```sh
-$ sudo ./make.sh -p
+$ ./make.sh -p config.local.yml
 ```

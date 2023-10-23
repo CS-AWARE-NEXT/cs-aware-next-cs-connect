@@ -1,5 +1,7 @@
 FROM ubuntu
 
+RUN mkdir -p /home/cs-aware-next-cs-connect
+
 RUN apt-get update
 
 # Install tools
@@ -15,7 +17,7 @@ RUN apt-get upgrade -y
 
 # Install another Node version
 RUN npm install -g n
-RUN n 18.0.0
+RUN n 18.17.0
 RUN npm install -g npm
 
 # Install eslint
@@ -37,3 +39,4 @@ RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/i
     | sh -s -- -b $(go env GOPATH)/bin v1.50.1
 
 RUN go install -v golang.org/x/tools/gopls@latest
+ENTRYPOINT ["/bin/bash"]

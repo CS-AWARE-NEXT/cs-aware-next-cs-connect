@@ -1,7 +1,7 @@
 GO ?= $(shell command -v go 2> /dev/null)
 NPM ?= $(shell command -v npm 2> /dev/null)
 CURL ?= $(shell command -v curl 2> /dev/null)
-MM_DEBUG ?= 
+MM_DEBUG ?=
 MANIFEST_FILE ?= plugin.json
 GOPATH ?= $(shell go env GOPATH)
 LD_FLAGS ?= -ldflags "-X main.configFileName=${CONFIG_FILE_NAME}"
@@ -13,7 +13,7 @@ DEFAULT_GOOS := $(shell go env GOOS)
 DEFAULT_GOARCH := $(shell go env GOARCH)
 
 # Arguments for the GO server (see server/arguments.go)
-CONFIG_FILE_NAME ?= 
+CONFIG_FILE_NAME ?=
 
 export GO111MODULE=on
 
@@ -55,7 +55,11 @@ ifneq ($(HAS_SERVER),)
 	fi; \
 
 	@echo Running golangci-lint
-	golangci-lint run ./...
+## Ugly hack: temporarily prefix node_modules with an underscore, so that the go recursive package listing (./... syntax) doesn't go die in it. See https://github.com/golang/go/issues/42965
+	mv webapp/node_modules/ webapp/_node_modules
+	golangci-lint run ./... --verbose; ret=$$?; \
+		mv webapp/_node_modules/ webapp/node_modules; \
+		exit $$ret
 endif
 
 ## Builds the server, if it exists, for all supported architectures, unless MM_SERVICESETTINGS_ENABLEDEVELOPER is set.
