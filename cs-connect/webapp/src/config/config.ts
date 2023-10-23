@@ -1,4 +1,9 @@
-import {Organization, PlatformConfig} from 'src/types/organization';
+import {
+    EnvironmentConfig,
+    Organization,
+    PlatformConfig,
+    ShowOptionsConfig,
+} from 'src/types/organization';
 
 export const DEFAULT_PLATFORM_CONFIG_PATH = '/configs/platform';
 export const PLATFORM_CONFIG_CACHE_NAME = 'platform-config-cache';
@@ -14,6 +19,7 @@ const PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\(.+?\\)(?:\\.\\S+)?`;
 const SUGGESTION_PATTERN_PLACEHOLDER = `${PATTERN_SYMBOL}\\((?!.*\\)).*$`;
 
 let platformConfig: PlatformConfig = {
+    environmentConfig: {},
     organizations: [],
 };
 
@@ -30,6 +36,14 @@ export const setPlatformConfig = (config: PlatformConfig) => {
         return;
     }
     platformConfig = config;
+};
+
+export const getEnvironmentConfig = (): EnvironmentConfig => {
+    return getPlatformConfig().environmentConfig;
+};
+
+export const getShowOptionsConfig = (): ShowOptionsConfig => {
+    return getPlatformConfig().environmentConfig.showOptionsConfig || {};
 };
 
 export const getOrganizations = (): Organization[] => {

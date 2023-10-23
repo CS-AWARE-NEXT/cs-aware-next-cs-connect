@@ -1,4 +1,4 @@
-import React, {ComponentType, useEffect} from 'react';
+import React, {ComponentType, useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
@@ -7,11 +7,15 @@ import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/s
 import {useHideOptions, useSuggestions, useUserAdded} from 'src/hooks';
 import Suggestions from 'src/components/chat/suggestions';
 import {channelNameSelector, teamNameSelector} from 'src/selectors';
+import {ShowOptionsConfig} from 'src/types/organization';
+import {getShowOptionsConfig} from 'src/config/config';
 
 const withPlatformOperations = (Component: ComponentType): (props: any) => JSX.Element => {
     return (props: any): JSX.Element => {
         useUserAdded();
-        useHideOptions();
+
+        const [showOptionsConfig, _setShowOptionsConfig] = useState<ShowOptionsConfig>(getShowOptionsConfig());
+        useHideOptions(showOptionsConfig);
         const [suggestions, isVisible, setIsVisible] = useSuggestions();
 
         const channelId = useSelector(getCurrentChannelId);

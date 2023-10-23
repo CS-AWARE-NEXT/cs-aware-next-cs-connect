@@ -1,5 +1,17 @@
 export interface PlatformConfig {
+    environmentConfig: EnvironmentConfig,
     organizations: Organization[];
+}
+
+export interface EnvironmentConfig {
+    showOptionsConfig?: ShowOptionsConfig
+}
+
+export interface ShowOptionsConfig {
+    showAddChannelButton?: boolean,
+    showUnreadIndicator?: boolean,
+    showDirectMessages?: boolean,
+    showDefaultChannels?: boolean
 }
 
 export interface Organization {

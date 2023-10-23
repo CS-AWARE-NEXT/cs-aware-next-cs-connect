@@ -7,7 +7,19 @@ import (
 )
 
 type PlatformConfig struct {
-	Organizations []Organization `json:"organizations" yaml:"organizations"`
+	EnvironmentConfig EnvironmentConfig `json:"environmentConfig" yaml:"environmentConfig"`
+	Organizations     []Organization    `json:"organizations" yaml:"organizations"`
+}
+
+type EnvironmentConfig struct {
+	ShowOptionsConfig ShowOptionsConfig `json:"showOptionsConfig" yaml:"showOptionsConfig"`
+}
+
+type ShowOptionsConfig struct {
+	ShowAddChannelButton bool `json:"showAddChannelButton" yaml:"showAddChannelButton"`
+	ShowUnreadIndicator  bool `json:"showUnreadIndicator" yaml:"showUnreadIndicator"`
+	ShowDirectMessages   bool `json:"showDirectMessages" yaml:"showDirectMessages"`
+	ShowDefaultChannels  bool `json:"showDefaultChannels" yaml:"showDefaultChannels"`
 }
 
 type Organization struct {
