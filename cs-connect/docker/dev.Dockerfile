@@ -1,6 +1,6 @@
 FROM ubuntu
 
-COPY .. /home/cs-aware-next-cs-connect/cs-connect
+RUN mkdir -p /home/cs-aware-next-cs-connect/cs-connect
 
 RUN apt-get update
 

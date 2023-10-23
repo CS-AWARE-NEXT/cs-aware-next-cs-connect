@@ -16,6 +16,8 @@ $ docker build -t cs-connect-base -f docker/dev.Dockerfile .
 $ docker run -it --name cs-connect-base cs-connect-base:latest
 ```
 
+For development purposes, you can use this container as a dev container, for example through [VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+
 Build the plugin by running the following command.
 
 ```sh
