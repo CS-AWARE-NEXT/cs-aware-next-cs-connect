@@ -14,21 +14,24 @@ import TimelineWrapper from './timeline/wrappers/timeline_wrappers';
 import CacaoPlaybookWrapper from './cacao_playbook/wrappers/playbook_wrapper';
 import SocialMediaPostsWrapper from './social_media_posts/wrappers/social_media_posts_wrapper';
 import {WidgetType} from './widget_types';
+import ChartWrapper from './chart/wrappers/chart_wrapper';
 
 type Props = {
     widgets: Widget[];
 };
 
 const buildWidgetByType = (
-    {name, type, url}: Widget,
+    {name, type, url, chartType}: Widget,
     index: number,
 ): JSX.Element => {
     const key = `${name}-${type}-${index}`;
-    const props = {key, name, url};
+    const props = {key, name, url, chartType, index};
 
     switch (type) {
     case WidgetType.CacaoPlaybook:
         return <CacaoPlaybookWrapper {...props}/>;
+    case WidgetType.Chart:
+        return <ChartWrapper {...props}/>;
     case WidgetType.Graph:
         return <GraphWrapper {...props}/>;
     case WidgetType.PaginatedTable:
@@ -59,6 +62,8 @@ const Widgets = ({widgets}: Props) => {
     const isRhs = useContext(IsRhsContext);
     const channelsWidgets = filterWidgetsByType(widgets, WidgetType.Channels);
     const singleChannelWidgets = filterWidgetsByType(widgets, WidgetType.SingleChannel);
+    // eslint-disable-next-line no-console
+    console.log(widgets);
 
     return (
         <>

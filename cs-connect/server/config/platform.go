@@ -41,9 +41,10 @@ type Section struct {
 }
 
 type Widget struct {
-	Name string `json:"name" yaml:"name"`
-	Type string `json:"type" yaml:"type"`
-	URL  string `json:"url" yaml:"url"`
+	Name      string `json:"name" yaml:"name"`
+	Type      string `json:"type" yaml:"type"`
+	URL       string `json:"url" yaml:"url"`
+	ChartType string `json:"chartType" yaml:"chartType"`
 }
 
 func getPlatformConfig(filepath string) (*PlatformConfig, error) {

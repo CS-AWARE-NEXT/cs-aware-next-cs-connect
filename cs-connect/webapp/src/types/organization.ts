@@ -1,3 +1,5 @@
+import {ChartType} from 'src/components/backstage/widgets/widget_types';
+
 export interface PlatformConfig {
     environmentConfig: EnvironmentConfig;
     organizations: Organization[];
@@ -36,6 +38,7 @@ export interface Widget {
     name?: string;
     type: string;
     url?: string;
+    chartType?: ChartType;
 }
 
 export interface SectionInfo {

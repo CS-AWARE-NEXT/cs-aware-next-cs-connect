@@ -50,6 +50,10 @@ func useOrganizationsIncidents(organizations fiber.Router) {
 		log.Printf("GET /:organizationId/incidents/:incidentId called")
 		return controller.GetIncident(c)
 	})
+	incidentsWithId.Get("/chart", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/incidents/:incidentId/chart called")
+		return controller.GetIncidentChart(c)
+	})
 	incidentsWithId.Get("/graph", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/incidents/:incidentId/graph called")
 		return controller.GetIncidentGraph(c)
