@@ -56,10 +56,7 @@ ifneq ($(HAS_SERVER),)
 
 	@echo Running golangci-lint
 ## Ugly hack: temporarily prefix node_modules with an underscore, so that the go recursive package listing (./... syntax) doesn't go die in it. See https://github.com/golang/go/issues/42965
-	mv webapp/node_modules/ webapp/_node_modules
-	golangci-lint run ./... --verbose; ret=$$?; \
-		mv webapp/_node_modules/ webapp/node_modules; \
-		exit $$ret
+	golangci-lint run ./...
 endif
 
 ## Builds the server, if it exists, for all supported architectures, unless MM_SERVICESETTINGS_ENABLEDEVELOPER is set.
