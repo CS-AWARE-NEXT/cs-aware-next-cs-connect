@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
@@ -33,25 +34,67 @@ func GetSocialMedia(c *fiber.Ctx) error {
 
 // Avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
 func GetSocialMediaPosts(c *fiber.Ctx) error {
-	socialMediaId := c.Params("socialMediaId")
 	fileName := "posts.json"
-	if socialMediaId == "165990a8-eb59-44bf-ab0c-613999960a48" {
+	socialMedia := getSocialMediaByID(c)
+	if strings.Contains(socialMedia.Name, "Sample Twitter") {
 		fileName = "sample-posts.json"
 	}
+	if socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName); err == nil {
+		return c.JSON(fromSocialMediaPostEntityData(socialMediaEntities))
+	}
+	return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
+}
+
+func GetSocialMediaChart(c *fiber.Ctx) error {
+	fileName := "posts.json"
+	socialMedia := getSocialMediaByID(c)
+	if strings.Contains(socialMedia.Name, "Sample Twitter") {
+		fileName = "sample-posts.json"
+	}
+	socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName)
+	if err != nil {
+		return c.JSON(model.SimpleLineChartData{LineData: []model.SimpleLineChartValue{}})
+	}
+	postsPerComponent := make(map[string]int)
+	for _, post := range socialMediaEntities.Posts {
+		n, ok := postsPerComponent[post.AssociatedComponent]
+		if !ok {
+			postsPerComponent[post.AssociatedComponent] = 1
+			continue
+		}
+		postsPerComponent[post.AssociatedComponent] = n + 1
+	}
+	lines := []model.SimpleLineChartValue{}
+	for k, v := range postsPerComponent {
+		lines = append(lines, model.SimpleLineChartValue{
+			Label:         k,
+			NumberOfPosts: float64(v),
+		})
+	}
+	chartData := model.SimpleLineChartData{
+		LineData: lines,
+		LineColor: model.LineColor{
+			NumberOfPosts: "#1DA1F2",
+		},
+	}
+	return c.JSON(chartData)
+}
+
+func getSocialMediaEntitiesFromFile(fileName string) (model.SocialMediaPostEntityData, error) {
 	filePath, err := util.GetEmbeddedFilePath(fileName, "*.json")
 	if err != nil {
-		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
+		return model.SocialMediaPostEntityData{}, err
 	}
 	content, err := data.Data.ReadFile(filePath)
 	if err != nil {
-		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
+		return model.SocialMediaPostEntityData{}, err
 	}
 	var socialMediaPostEntityData model.SocialMediaPostEntityData
 	err = json.Unmarshal(content, &socialMediaPostEntityData)
 	if err != nil {
-		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
+		return model.SocialMediaPostEntityData{}, err
 	}
-	return c.JSON(fromSocialMediaPostEntityData(socialMediaPostEntityData))
+	return socialMediaPostEntityData, nil
 }
 
 func fromSocialMediaPostEntityData(socialMediaPostEntityData model.SocialMediaPostEntityData) model.SocialMediaPostData {
@@ -102,6 +145,30 @@ var socialMediaMap = map[string][]model.SocialMedia{
 		},
 		{
 			ID:          "165990a8-eb59-44bf-ab0c-613999960a48",
+			Name:        "Sample Twitter",
+			Description: "Sample Twitter is available at https://twitter.com/home",
+		},
+	},
+	"6": {
+		{
+			ID:          "8086f15e-4a1d-48a7-a91d-b5ac971b23cd",
+			Name:        "Twitter",
+			Description: "Twitter is available at https://twitter.com/home",
+		},
+		{
+			ID:          "efdcbb7e-202c-44eb-bd12-5a952c7a228f",
+			Name:        "Sample Twitter",
+			Description: "Sample Twitter is available at https://twitter.com/home",
+		},
+	},
+	"7": {
+		{
+			ID:          "9f85f74b-1f8c-4546-aa10-e080a1b9cd2d",
+			Name:        "Twitter",
+			Description: "Twitter is available at https://twitter.com/home",
+		},
+		{
+			ID:          "98308983-87fe-4cce-b70d-4b198ddeec9b",
 			Name:        "Sample Twitter",
 			Description: "Sample Twitter is available at https://twitter.com/home",
 		},
