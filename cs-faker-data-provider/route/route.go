@@ -50,10 +50,6 @@ func useOrganizationsIncidents(organizations fiber.Router) {
 		log.Printf("GET /:organizationId/incidents/:incidentId called")
 		return controller.GetIncident(c)
 	})
-	incidentsWithId.Get("/chart", func(c *fiber.Ctx) error {
-		log.Printf("GET /:organizationId/incidents/:incidentId/chart called")
-		return controller.GetIncidentChart(c)
-	})
 	incidentsWithId.Get("/graph", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/incidents/:incidentId/graph called")
 		return controller.GetIncidentGraph(c)
@@ -141,6 +137,10 @@ func useOrganizationsSocialMedia(organizations fiber.Router) {
 	socialMediaWithId.Get("/posts", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/social_media/:socialMediaId/posts called")
 		return controller.GetSocialMediaPosts(c)
+	})
+	socialMediaWithId.Get("/chart", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/social_media/:socialMediaId/chart called")
+		return controller.GetSocialMediaChart(c)
 	})
 }
 
