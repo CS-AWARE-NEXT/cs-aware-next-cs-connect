@@ -6,10 +6,10 @@ type SimpleLineChartData struct {
 }
 
 type SimpleLineChartValue struct {
-	Label string  `json:"label"`
-	St    float64 `json:"st"`
+	Label         string  `json:"label"`
+	NumberOfPosts float64 `json:"numberOfPosts"`
 }
 
 type LineColor struct {
-	St string `json:"st"`
+	NumberOfPosts string `json:"numberOfPosts"`
 }
