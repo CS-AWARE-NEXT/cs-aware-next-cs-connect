@@ -52,25 +52,6 @@ func GetIncident(c *fiber.Ctx) error {
 	return c.JSON(getIncidentByID(c))
 }
 
-func GetIncidentChart(c *fiber.Ctx) error {
-	// Stub
-	lines := []model.SimpleLineChartValue{}
-	for x := 0; x < 3; x++ { // ++ is a statement.
-		lines = append(lines, model.SimpleLineChartValue{
-			Label: "test",
-			St:    float64(x),
-		})
-	}
-
-	chartData := model.SimpleLineChartData{
-		LineData: lines,
-		LineColor: model.LineColor{
-			St: "#636363",
-		},
-	}
-	return c.JSON(chartData)
-}
-
 func GetIncidentGraph(c *fiber.Ctx) error {
 	return GetGraph(c)
 }
