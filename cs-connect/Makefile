@@ -55,7 +55,6 @@ ifneq ($(HAS_SERVER),)
 	fi; \
 
 	@echo Running golangci-lint
-## Ugly hack: temporarily prefix node_modules with an underscore, so that the go recursive package listing (./... syntax) doesn't go die in it. See https://github.com/golang/go/issues/42965
 	golangci-lint run ./...
 endif
 
