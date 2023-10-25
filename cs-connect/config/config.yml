@@ -25,6 +25,21 @@ organizations:
             type: graph
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
           - type: channel
+      - name: Social Media
+        id: "21"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media
+        widgets:
+          - name: System
+            type: graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
+          - name: Posts
+            type: social-media-posts
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/posts
+          - name: Posts per Components
+            type: chart
+            chartType: simple-line
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/chart
+          - type: channels
   - name: Larissa
     id: "6"
     description: This is the Larissa organization for Larissa workshop
@@ -40,6 +55,21 @@ organizations:
             type: graph
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
           - type: channel
+      - name: Social Media
+        id: "20"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media
+        widgets:
+          - name: System
+            type: graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
+          - name: Posts
+            type: social-media-posts
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/posts
+          - name: Posts per Components
+            type: chart
+            chartType: simple-line
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/chart
+          - type: channels
   - name: Foggia
     id: "5"
     description: This is the organization for Foggia workshop
