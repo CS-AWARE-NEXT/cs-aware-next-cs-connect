@@ -34,13 +34,24 @@ func GetSocialMedia(c *fiber.Ctx) error {
 
 // Avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
 func GetSocialMediaPosts(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+
 	fileName := "posts.json"
 	socialMedia := getSocialMediaByID(c)
 	if strings.Contains(socialMedia.Name, "Sample Twitter") {
 		fileName = "sample-posts.json"
 	}
+
+	organizationName := ""
+	if organizationId == "6" {
+		organizationName = "larissa"
+	}
+	if organizationId == "7" {
+		organizationName = "deyal"
+	}
+
 	if socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName); err == nil {
-		return c.JSON(fromSocialMediaPostEntityData(socialMediaEntities))
+		return c.JSON(fromSocialMediaPostEntityData(socialMediaEntities, organizationName))
 	}
 	return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
 }
@@ -97,11 +108,18 @@ func getSocialMediaEntitiesFromFile(fileName string) (model.SocialMediaPostEntit
 	return socialMediaPostEntityData, nil
 }
 
-func fromSocialMediaPostEntityData(socialMediaPostEntityData model.SocialMediaPostEntityData) model.SocialMediaPostData {
+func fromSocialMediaPostEntityData(
+	socialMediaPostEntityData model.SocialMediaPostEntityData,
+	idNameSpace string,
+) model.SocialMediaPostData {
 	var posts []model.SocialMediaPost
 	for _, post := range socialMediaPostEntityData.Posts {
+		postId := post.ID
+		if idNameSpace != "" {
+			postId = fmt.Sprintf("%s-%s", post.ID, idNameSpace)
+		}
 		posts = append(posts, model.SocialMediaPost{
-			ID:       post.ID,
+			ID:       postId,
 			Title:    post.User.Name,
 			Content:  buildContent(post),
 			Media:    post.Media,
