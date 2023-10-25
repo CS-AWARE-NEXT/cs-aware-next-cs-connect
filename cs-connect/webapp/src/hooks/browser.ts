@@ -1,4 +1,4 @@
-import {useEffect} from 'react';
+import {RefObject, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
@@ -88,3 +88,25 @@ const buildOptions = (positions: ScrollIntoViewPositions | undefined): ScrollInt
 //         }
 //     }, [hash]);
 // };
+
+export const useOnScreen = (ref: RefObject<HTMLDivElement | null>, options?: IntersectionObserverInit): boolean => {
+    const current = ref.current;
+    const [isIntersecting, setIntersecting] = useState(false);
+
+    const observer: IntersectionObserver = new IntersectionObserver(([entry]) => {
+        setIntersecting(entry.isIntersecting);
+    }, options);
+
+    useEffect(() => {
+        if (current) {
+            observer.observe(current);
+        }
+        return () => {
+            if (current) {
+                observer.disconnect();
+            }
+        };
+    }, [current]);
+
+    return isIntersecting;
+};

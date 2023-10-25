@@ -2,6 +2,7 @@ import React, {
     FC,
     useContext,
     useEffect,
+    useRef,
     useState,
 } from 'react';
 import {
@@ -24,7 +25,7 @@ import {
 } from 'src/types/charts';
 
 import {formatStringToLowerCase} from 'src/helpers';
-import {useScrollIntoView, useUrlHash} from 'src/hooks';
+import {useOnScreen, useScrollIntoView, useUrlHash} from 'src/hooks';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 import {
@@ -78,6 +79,9 @@ const SimpleLineChart: FC<Props> = ({
 
     useScrollIntoView(isDefaultDot(selectedDot) ? '' : `#dot-${selectedDot.label}-${valueStringify(selectedDot.value)}-${idStringify(sectionId)}`);
 
+    const ref = useRef<HTMLDivElement | null>(null);
+    const isOnScreen = useOnScreen(ref, {threshold: 0.8});
+
     // isAnimationActive = false solves the problem of dots not appearing on first rendering
     // Another solution to keep the animation is to set the line key to Math.random()_key,
     // but this causes problem for subsequiental re-rendering for the hyperlinking mechanism
@@ -85,6 +89,7 @@ const SimpleLineChart: FC<Props> = ({
     // All of the above comments are solved but now the hyperlink does no work in the dashboard
     return (
         <div
+            ref={ref}
             id={`chart-container-${idStringify(sectionId)}`}
             style={{
                 width: '95%',
@@ -124,6 +129,7 @@ const SimpleLineChart: FC<Props> = ({
                                         selectedDot={selectedDot}
                                         sectionId={sectionId}
                                         delay={delay}
+                                        isOnScreen={isOnScreen}
                                     />}
                                 activeDot={
                                     <ClickableDot

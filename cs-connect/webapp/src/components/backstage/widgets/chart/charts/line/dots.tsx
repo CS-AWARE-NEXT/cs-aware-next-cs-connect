@@ -54,7 +54,7 @@ const getMsWithDelay = (delay: number, isEcosystemRhs: boolean): number => {
 type Props = any;
 
 export const Dot: FC<Props> = (props) => {
-    const {cx, cy, payload, value, originalColor, selectedDot, sectionId, delay} = props;
+    const {cx, cy, payload, value, originalColor, selectedDot, sectionId, delay, isOnScreen} = props;
 
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
@@ -83,6 +83,14 @@ export const Dot: FC<Props> = (props) => {
             clearTimeout(urlHashTimeout);
         };
     }, [isRhsClosed, selectedDot, urlHash]);
+
+    useEffect(() => {
+        const isSelected = isDotSelected(selectedDot, payload.label, value);
+        if (!isSelected) {
+            return;
+        }
+        setOpen(isOnScreen);
+    }, [isOnScreen]);
 
     // to put on separated lines: title={<div>{`${payload.label}`}<br/>{`${value}`}</div>}
     return (
