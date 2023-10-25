@@ -26,6 +26,7 @@ import {
     fetchAllUsers,
     fetchChannelById,
     fetchChannels,
+    fetchChartData,
     fetchGraphData,
     fetchListData,
     fetchPaginatedTableData,
@@ -59,6 +60,8 @@ import {TimelineData} from 'src/types/timeline';
 import {formatName, formatSectionPath} from 'src/helpers';
 import {UserOption} from 'src/types/users';
 import {PostData} from 'src/types/social_media';
+import {ChartData} from 'src/types/charts';
+import {ChartType} from 'src/components/backstage/widgets/widget_types';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -426,6 +429,27 @@ export const usePostData = (url: string): PostData => {
         };
     }, [url]);
     return postData as PostData;
+};
+
+export const useChartData = (url: string, chartType: ChartType | undefined): ChartData => {
+    const [chartData, setChartData] = useState<ChartData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchChartDataAsync() {
+            const chartDataResult = await fetchChartData(url, chartType);
+            if (!isCanceled) {
+                setChartData(chartDataResult);
+            }
+        }
+
+        fetchChartDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return chartData as ChartData;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {

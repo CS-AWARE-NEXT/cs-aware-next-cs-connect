@@ -13,6 +13,7 @@ import TextBoxWrapper from './text_box/wrappers/text_box_wrapper';
 import TimelineWrapper from './timeline/wrappers/timeline_wrappers';
 import CacaoPlaybookWrapper from './cacao_playbook/wrappers/playbook_wrapper';
 import SocialMediaPostsWrapper from './social_media_posts/wrappers/social_media_posts_wrapper';
+import ChartWrapper from './chart/wrappers/chart_wrapper';
 import {WidgetType} from './widget_types';
 
 type Props = {
@@ -20,15 +21,17 @@ type Props = {
 };
 
 const buildWidgetByType = (
-    {name, type, url}: Widget,
+    {name, type, url, chartType}: Widget,
     index: number,
 ): JSX.Element => {
     const key = `${name}-${type}-${index}`;
-    const props = {key, name, url};
+    const props = {key, name, url, chartType, index};
 
     switch (type) {
     case WidgetType.CacaoPlaybook:
         return <CacaoPlaybookWrapper {...props}/>;
+    case WidgetType.Chart:
+        return <ChartWrapper {...props}/>;
     case WidgetType.Graph:
         return <GraphWrapper {...props}/>;
     case WidgetType.PaginatedTable:

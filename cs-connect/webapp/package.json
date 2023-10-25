@@ -39,6 +39,7 @@
     "react-select": "4.3.1",
     "react-use": "17.3.2",
     "reactflow": "11.5.6",
+    "recharts": "2.9.0",
     "redux": "4.1.2",
     "styled-components": "5.3.3",
     "typescript": "4.7.4"

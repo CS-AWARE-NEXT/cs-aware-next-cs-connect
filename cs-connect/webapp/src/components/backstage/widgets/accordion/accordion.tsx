@@ -8,6 +8,7 @@ import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {buildQuery, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
+import {DOT_PREFIX} from 'src/components/backstage/widgets/chart/charts/line/dots';
 
 const {Panel} = Collapse;
 
@@ -53,12 +54,32 @@ const Accordion = ({
                 return;
             }
             for (let i = 0; i < panels.length; i++) {
+                let opened = false;
                 const panel = panels[i];
-                const referencedElements = panel?.querySelectorAll(`#${urlHash.substring(1)}`);
+                const selector = `#${urlHash.substring(1)}`;
+                const referencedElements = panel?.querySelectorAll(selector);
                 if (referencedElements && referencedElements.length > 0) {
                     const header = panel.querySelector('.ant-collapse-header') as HTMLElement;
                     if (header && !panel.classList.contains('ant-collapse-item-active')) {
                         header.click();
+                        opened = true;
+                    }
+                }
+
+                // TODO: probably a widget identifier is needed to generate unique widget container id when it is impossible to use id inside the element.
+                // TODO: maybe it is not needed because it is ok to open whenever of them in the object, the section id is of the object,
+                // thus it will be identical only if the widgets are in the same object which will always be in the same panel.
+                // Then it is a responsibility of the scrollIntoView to scroll to the right element, here we just need to open the panel where the widget is.
+                if (selector.includes(DOT_PREFIX) && !opened) {
+                    // TODO: maybe here there will the need for a widgetId part to be at selectorParts[selectorParts.length - 2]
+                    const selectorParts = selector.split('-');
+                    const selectorSectionId = selectorParts[selectorParts.length - 1];
+                    const chartElements = panel?.querySelectorAll(`#chart-container-${selectorSectionId}`);
+                    if (chartElements && chartElements.length > 0) {
+                        const header = panel.querySelector('.ant-collapse-header') as HTMLElement;
+                        if (header && !panel.classList.contains('ant-collapse-item-active')) {
+                            header.click();
+                        }
                     }
                 }
 
