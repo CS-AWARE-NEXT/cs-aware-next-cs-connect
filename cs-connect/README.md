@@ -4,19 +4,13 @@ An hyperlinking collaboration platform for CS-AWARE platform.
 
 ## How to build
 
-Build the Docker image for the environment for building the plugin...
+Build the Docker image for the environment for building the plugin.
 
 ```sh
 $ docker build -t cs-connect-base -f docker/dev.Dockerfile .
 ```
 
-... and create a container from it. The container will be used as a dev container to build the plugin. If you've already created the container, simply start it.
-
-```sh
-$ docker run -it --name cs-connect-base cs-connect-base:latest
-```
-
-For development purposes, you can use this container as a dev container, for example through [VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+For development purposes, you can use this container as a dev container, for example through [VSCode](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). If you're developing on Windows with the WSL2 backend for docker, be sure to have the project cloned in the WSL2 filesystem (**NOT** on /mnt/c). This is required to avoid an excessive slowdown of IO operations caused by the WSL2-Windows filesystem communication, which causes Go commands to timeout and other slowdowns across the whole project.
 
 Build the plugin by running the following command.
 
