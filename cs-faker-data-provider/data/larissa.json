@@ -502,6 +502,7 @@
       "cpe": "cpe:*:*:*:*:*:*:*:*:*:*:*:*:*",
       "x_ip_range": "0.0.0.0",
       "x_port_range": "0000",
+      "x_csaware_node_type": "cloud",
       "x_categories": []
     },
     {
