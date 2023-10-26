@@ -32,6 +32,9 @@ func getGraphFromJson(organizationId string) (model.GraphData, error) {
 	if organizationId == "7" {
 		organizationName = "deyal"
 	}
+	if organizationId == "8" {
+		organizationName = "5thype"
+	}
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
 	if err != nil {
 		return model.GraphData{}, err

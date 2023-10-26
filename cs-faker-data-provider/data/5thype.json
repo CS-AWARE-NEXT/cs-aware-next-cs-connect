@@ -1,0 +1,624 @@
+{
+    "type": "region",
+    "id": "region--71befe93-df41-4175-a2b1-419e75f72b22",
+    "name": "5th YPE",
+    "created": "2019-08-01T12:15:29.392Z",
+    "modified": "2019-08-05T10:00:00.387Z",
+    "version": "1.0",
+    "objects": [
+        {
+            "type": "node",
+            "id": "identity--f720d406-a520-4357-8c58-ef71598a39d7",
+            "name": "Health VLAN",
+            "created": "2022-10-30T12:36:10.202Z",
+            "modified": "2022-10-30T12:36:10.202Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--16203fc3-ba72-45d5-8d5e-d022ab2d1471",
+                "identity--3f8a7f5b-e42f-4cc4-8f8b-e06d63910c4e",
+                "identity--3959d2d4-fea9-4083-8eef-da3f6f54efcb",
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb",
+                "identity--4fe034f0-308d-4d5d-82b3-c78250becd9b"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--dbdb8d9f-1963-4883-8da2-a8157b02d599",
+            "name": "Data centre Athens",
+            "created": "2022-10-30T12:41:26.614Z",
+            "modified": "2022-10-30T12:41:26.614Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--4fe034f0-308d-4d5d-82b3-c78250becd9b",
+                "identity--902deb4d-ebfb-4cbd-846f-baf0a41e770a",
+                "identity--f2308dc5-3685-4ea6-8e8e-22788555de13"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--c8e6b1b0-f93f-4be6-838d-4c275ad75565",
+            "name": "E-prescription client",
+            "created": "2022-10-30T12:39:52.060Z",
+            "modified": "2022-10-30T12:39:52.060Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--f054feb4-c750-43ae-8a96-9f4c3a4222d6"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--4874ebd6-0113-49c9-88d5-d453af4c2b64",
+            "name": "Internal Medicine",
+            "created": "2022-10-30T12:58:16.718Z",
+            "modified": "2022-10-30T12:58:16.718Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--741bd956-6881-414f-82b5-a89dbf221d54"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--41c199d9-0b5f-4891-80bf-9e2d3e65883a",
+            "name": "Operating Room",
+            "created": "2022-10-30T12:59:56.710Z",
+            "modified": "2022-10-30T12:59:56.710Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--be3280a5-f41f-43e1-82e0-2028a61124a7",
+            "name": "Pharmacy",
+            "created": "2022-10-30T12:57:54.343Z",
+            "modified": "2022-10-30T12:57:54.343Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--741bd956-6881-414f-82b5-a89dbf221d54"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--e001a29d-ec16-44db-8fec-03716be96870",
+            "name": "ICU",
+            "created": "2022-10-30T13:00:25.439Z",
+            "modified": "2022-10-30T13:00:25.439Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--54be586e-84ff-44b9-8a1b-84ad02e42ce6",
+            "name": "ERP service/database",
+            "created": "2022-10-30T13:02:45.709Z",
+            "modified": "2022-10-30T13:02:45.709Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb",
+                "identity--862dd0f5-3180-47cd-8cae-c71a5cb43d9d",
+                "identity--fe5c06c2-d7b5-4d66-845d-6b7ff839ad2e",
+                "identity--4dd9c4a7-b52b-4000-8edf-9e158b68634f"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--8799f62e-0060-437f-8512-9e7351542988",
+            "name": "Technical (N, O2 supply) B.M.S.",
+            "created": "2022-10-30T13:04:45.616Z",
+            "modified": "2022-10-30T13:04:45.616Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--fe5c06c2-d7b5-4d66-845d-6b7ff839ad2e",
+            "name": "Procurement department",
+            "created": "2022-10-30T13:03:37.271Z",
+            "modified": "2022-10-30T13:03:37.271Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--54be586e-84ff-44b9-8a1b-84ad02e42ce6"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--4dd9c4a7-b52b-4000-8edf-9e158b68634f",
+            "name": "Accounting department",
+            "created": "2022-10-30T13:03:55.523Z",
+            "modified": "2022-10-30T13:03:55.523Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--54be586e-84ff-44b9-8a1b-84ad02e42ce6"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--365e3211-31f6-4cfa-8213-888716b4fb54",
+            "name": "SG Department",
+            "created": "2022-10-30T12:59:07.184Z",
+            "modified": "2022-10-30T12:59:07.184Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--741bd956-6881-414f-82b5-a89dbf221d54"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--7a6eeaa8-430e-4f51-866d-6c29a0b4acf0",
+            "name": "Emergency Room",
+            "created": "2022-10-30T12:57:32.005Z",
+            "modified": "2022-10-30T12:57:32.005Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--741bd956-6881-414f-82b5-a89dbf221d54"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--1f2d3498-6c6e-4485-8d9e-9d506eb67b18",
+            "name": "EDET-GRNET backup database",
+            "created": "2022-10-30T12:46:51.240Z",
+            "modified": "2022-10-30T12:46:51.240Z",
+            "description": "Radiography MRI & CT scans of patients are stored in the cloud as backup to the cloud",
+            "source": [
+                "identity--f4ea2321-b442-42ea-895b-480924385268"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--a0c30ba7-54ff-4b0d-8ce7-aa9d5e1bb1b0",
+            "name": "EDET-GRNET backup service",
+            "created": "2022-10-30T12:45:37.042Z",
+            "modified": "2022-10-30T12:45:37.042Z",
+            "description": "Radiography MRI & CT scans of patients are stored in the cloud as backup to the cloud",
+            "source": [
+                "identity--f4ea2321-b442-42ea-895b-480924385268"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--3959d2d4-fea9-4083-8eef-da3f6f54efcb",
+            "name": "General Hospital Larissa",
+            "created": "2022-10-30T12:37:00.633Z",
+            "modified": "2022-10-30T12:37:00.633Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--f720d406-a520-4357-8c58-ef71598a39d7",
+                "identity--f4ea2321-b442-42ea-895b-480924385268",
+                "identity--90a272af-9e1b-4880-87b1-4abef2cf3a2a"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--f054feb4-c750-43ae-8a96-9f4c3a4222d6",
+            "name": "Health Centre X",
+            "created": "2022-10-30T12:39:19.037Z",
+            "modified": "2022-10-30T12:39:19.037Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--4fe034f0-308d-4d5d-82b3-c78250becd9b",
+                "identity--c8e6b1b0-f93f-4be6-838d-4c275ad75565",
+                "identity--85a7137e-52fc-415a-8f8a-bb06a77b735b"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--f2308dc5-3685-4ea6-8e8e-22788555de13",
+            "name": "IDIKA database",
+            "created": "2022-10-30T12:42:03.650Z",
+            "modified": "2022-10-30T12:42:03.650Z",
+            "description": "patients’ demographic, insurance and prescription data",
+            "source": [
+                "identity--dbdb8d9f-1963-4883-8da2-a8157b02d599"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--85a7137e-52fc-415a-8f8a-bb06a77b735b",
+            "name": "E-procurement client",
+            "created": "2022-10-30T12:40:08.657Z",
+            "modified": "2022-10-30T12:40:08.657Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--f054feb4-c750-43ae-8a96-9f4c3a4222d6"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--9056ae6f-2ab5-41f3-8ec6-633480a7cd2b",
+            "name": "Lab",
+            "created": "2022-10-30T12:56:18.768Z",
+            "modified": "2022-10-30T12:56:18.768Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--3b9adf3f-ee87-46b8-83b0-05ef89adb639"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb",
+            "name": "University Hospital Larissa",
+            "created": "2022-10-30T12:37:21.237Z",
+            "modified": "2022-10-30T12:37:21.237Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--f720d406-a520-4357-8c58-ef71598a39d7",
+                "identity--f4ea2321-b442-42ea-895b-480924385268",
+                "identity--3b9adf3f-ee87-46b8-83b0-05ef89adb639",
+                "identity--741bd956-6881-414f-82b5-a89dbf221d54",
+                "identity--41c199d9-0b5f-4891-80bf-9e2d3e65883a",
+                "identity--e001a29d-ec16-44db-8fec-03716be96870",
+                "identity--54be586e-84ff-44b9-8a1b-84ad02e42ce6",
+                "identity--8799f62e-0060-437f-8512-9e7351542988",
+                "identity--eed9dafb-02a7-4f38-86aa-37eb1cfa8536",
+                "identity--4cd48678-8518-4bcc-811a-ef9ca175a2fb"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--f4ea2321-b442-42ea-895b-480924385268",
+            "name": "Data centre Crete",
+            "created": "2022-10-30T12:44:59.095Z",
+            "modified": "2022-10-30T12:44:59.095Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--1f2d3498-6c6e-4485-8d9e-9d506eb67b18",
+                "identity--a0c30ba7-54ff-4b0d-8ce7-aa9d5e1bb1b0",
+                "identity--3959d2d4-fea9-4083-8eef-da3f6f54efcb",
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb"
+            ],
+            "x_infoflow": [
+                "backup_database"
+            ],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--16203fc3-ba72-45d5-8d5e-d022ab2d1471",
+            "name": "MAN",
+            "created": "2022-10-30T12:35:39.939Z",
+            "modified": "2022-10-30T12:35:39.939Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--f720d406-a520-4357-8c58-ef71598a39d7"
+            ],
+            "x_infoflow": [],
+            "x_categories": [
+                "network"
+            ],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--4cd48678-8518-4bcc-811a-ef9ca175a2fb",
+            "name": "ICT department",
+            "created": "2022-10-30T13:05:54.901Z",
+            "modified": "2022-10-30T13:05:54.901Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--eed9dafb-02a7-4f38-86aa-37eb1cfa8536",
+            "name": "Biomedical",
+            "created": "2022-10-30T13:05:28.797Z",
+            "modified": "2022-10-30T13:05:28.797Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--90a272af-9e1b-4880-87b1-4abef2cf3a2a",
+            "name": "LIS/RIS database",
+            "created": "2022-10-30T12:48:53.901Z",
+            "modified": "2022-10-30T12:48:53.901Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--3959d2d4-fea9-4083-8eef-da3f6f54efcb"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--741bd956-6881-414f-82b5-a89dbf221d54",
+            "name": "HIS service/database",
+            "created": "2022-10-30T12:48:30.988Z",
+            "modified": "2022-10-30T12:48:30.988Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--7a6eeaa8-430e-4f51-866d-6c29a0b4acf0",
+                "identity--4874ebd6-0113-49c9-88d5-d453af4c2b64",
+                "identity--2919849f-9d8f-4c33-89dd-7731017a4423",
+                "identity--be3280a5-f41f-43e1-82e0-2028a61124a7",
+                "identity--365e3211-31f6-4cfa-8213-888716b4fb54",
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb",
+                "identity--4c97721b-bf05-4363-86dc-d04692b507b9"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--3b9adf3f-ee87-46b8-83b0-05ef89adb639",
+            "name": "LIS/RIS/PACS service/database",
+            "created": "2022-10-30T12:48:11.669Z",
+            "modified": "2022-10-30T12:48:11.669Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--5634c260-418d-4fef-8f6f-bf835091efdd",
+                "identity--9056ae6f-2ab5-41f3-8ec6-633480a7cd2b",
+                "identity--bfa384ba-82dd-446c-8212-9c9f0a9ababb"
+            ],
+            "x_infoflow": [
+                "backup_database"
+            ],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--5634c260-418d-4fef-8f6f-bf835091efdd",
+            "name": "GLOBALPACS",
+            "created": "2023-01-14T09:03:01.698Z",
+            "modified": "2023-01-14T09:03:01.698Z",
+            "description": "Local Pacs/DICOM transferred to National Global Datastore",
+            "source": [
+                "identity--f4ea2321-b442-42ea-895b-480924385268"
+            ],
+            "x_infoflow": [
+                "External"
+            ],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--6042a89d-0337-48b8-8840-5cde789c1c33",
+            "name": "Backup Repository",
+            "created": "2023-01-14T19:18:10.649Z",
+            "modified": "2023-01-14T19:18:10.649Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--4c97721b-bf05-4363-86dc-d04692b507b9"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--4c97721b-bf05-4363-86dc-d04692b507b9",
+            "name": "Fileserver",
+            "created": "2023-01-14T19:17:02.566Z",
+            "modified": "2023-01-14T19:17:02.566Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--6042a89d-0337-48b8-8840-5cde789c1c33"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--5c75d3e4-bab2-4265-86f2-f1fffb3ead32",
+            "name": "National Insurance EOPYY",
+            "created": "2023-01-14T19:20:36.861Z",
+            "modified": "2023-01-14T19:20:36.861Z",
+            "description": "Some new resource",
+            "source": [],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--862dd0f5-3180-47cd-8cae-c71a5cb43d9d",
+            "name": "Administrative/Financial department",
+            "created": "2022-10-30T13:03:20.028Z",
+            "modified": "2022-10-30T13:03:20.028Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--54be586e-84ff-44b9-8a1b-84ad02e42ce6",
+                "identity--5c75d3e4-bab2-4265-86f2-f1fffb3ead32"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "root",
+            "id": "identity--3f8a7f5b-e42f-4cc4-8f8b-e06d63910c4e",
+            "name": "5th YPE",
+            "created": "2022-10-30T12:36:26.185Z",
+            "modified": "2022-10-30T12:36:26.185Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--f720d406-a520-4357-8c58-ef71598a39d7"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--4fe034f0-308d-4d5d-82b3-c78250becd9b",
+            "name": "Syzefxis",
+            "created": "2022-10-30T12:38:13.634Z",
+            "modified": "2022-10-30T12:38:13.634Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--dbdb8d9f-1963-4883-8da2-a8157b02d599",
+                "identity--f054feb4-c750-43ae-8a96-9f4c3a4222d6",
+                "identity--f720d406-a520-4357-8c58-ef71598a39d7"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--902deb4d-ebfb-4cbd-846f-baf0a41e770a",
+            "name": "IDIKA service AMKA2DATA",
+            "created": "2022-10-30T12:41:49.555Z",
+            "modified": "2022-10-30T12:41:49.555Z",
+            "description": "patients’ demographic, insurance and prescription data",
+            "source": [
+                "identity--dbdb8d9f-1963-4883-8da2-a8157b02d599"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--2919849f-9d8f-4c33-89dd-7731017a4423",
+            "name": "OutPatient",
+            "created": "2022-10-30T13:00:53.400Z",
+            "modified": "2022-10-30T13:00:53.400Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--741bd956-6881-414f-82b5-a89dbf221d54",
+                "identity--c8e6b1b0-f93f-4be6-838d-4c275ad75565",
+                "identity--73ac4e15-0a9a-4578-8d28-db7758fb6bd5"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        },
+        {
+            "type": "node",
+            "id": "identity--73ac4e15-0a9a-4578-8d28-db7758fb6bd5",
+            "name": "KETEKNY DRG",
+            "created": "2023-09-29T09:42:25.659Z",
+            "modified": "2023-09-29T09:42:25.659Z",
+            "description": "Some new resource",
+            "source": [
+                "identity--2919849f-9d8f-4c33-89dd-7731017a4423"
+            ],
+            "x_infoflow": [],
+            "x_categories": [],
+            "test_fixed": [],
+            "test": []
+        }
+    ]
+}
