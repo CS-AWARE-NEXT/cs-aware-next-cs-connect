@@ -125,7 +125,13 @@ const GraphNodeType: FC<NodeProps & {
         case 'cloud':
             className = 'cloud';
             break;
+        case 'internet':
+            className = 'cloud';
+            break;
         case 'network':
+            className = 'network';
+            break;
+        case 'firewall':
             className = 'network';
             break;
         default:
