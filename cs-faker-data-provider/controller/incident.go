@@ -135,15 +135,22 @@ var incidentsMap = map[string][]model.Incident{
 	"6": {
 		{
 			ID:          "50518991-4596-450a-ae1b-9b1b485014ef",
-			Name:        "Brute-force attack 6",
-			Description: "In this attack, some asset (information, functionality, identity, etc.) is protected...",
+			Name:        "System Graph",
+			Description: "This provides an overview of the system graph for the Larissa organization",
 		},
 	},
 	"7": {
 		{
 			ID:          "ab4e9645-55b6-447f-a4a3-d8f004d4197a",
-			Name:        "Brute-force attack 7",
-			Description: "In this attack, some asset (information, functionality, identity, etc.) is protected...",
+			Name:        "System Graph",
+			Description: "This provides an overview of the system graph for the Deyal organization",
+		},
+	},
+	"8": {
+		{
+			ID:          "ec8ab249-940e-4bfe-8ecd-8c1b1bb02bb9",
+			Name:        "System Graph",
+			Description: "This provides an overview of the system graph for the 5thYPE organization",
 		},
 	},
 }
