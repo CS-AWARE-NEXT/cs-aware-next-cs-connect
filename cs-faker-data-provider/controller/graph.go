@@ -132,6 +132,11 @@ func getRootAndCount(nodes []model.CSAwareGraphNode) (int, int) {
 		if node.Type == "root" {
 			return index, len(nodes)
 		}
+
+		// This is temporary until we are provided with a way to udentify the root node in all graphs
+		if node.Name == "Internet" {
+			return index, len(nodes)
+		}
 	}
 	return -1, -1
 }
