@@ -28,6 +28,8 @@ import Dagre from 'dagre';
 import {Button, Tooltip} from 'antd';
 import {PartitionOutlined} from '@ant-design/icons';
 import {useIntl} from 'react-intl';
+import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
+import {useSelector} from 'react-redux';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
@@ -119,13 +121,14 @@ const isDescriptionProvided = ({name, text}: GraphDescription) => {
     return name !== '' && text !== '';
 };
 
-const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-
 export const getLayoutedElements = (
     nodes: Node[],
     edges: Edge[],
     direction: GraphDirection = Direction.HORIZONTAL,
 ) => {
+    // We need to create a new Dagre instance here because
+    // if done globally, the RHS would create problem when calculating positions.
+    const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
     if (!nodes || !edges) {
         return {nodes: [], edges: []};
     }
@@ -178,6 +181,10 @@ const Graph = ({
     const {formatMessage} = useIntl();
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
+    const channelId = useSelector(getCurrentChannelId);
+    useEffect(() => {
+        setNodeInfo(undefined);
+    }, [channelId]);
 
     const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo})}), []);
 
@@ -321,6 +328,7 @@ const GraphSidebar = styled.div<{width: string}>`
     width: ${(props) => props.width};
     display: flex;
     flex-direction: column;
+    margin-left: 12px;
 `;
 
 export default Graph;
