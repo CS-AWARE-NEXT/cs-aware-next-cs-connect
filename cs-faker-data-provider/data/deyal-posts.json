@@ -1,0 +1,221 @@
+{
+    "posts": [
+        {
+            "id": "d8993552-59d9-4a0a-8413-5975a2bcacc3",
+            "user": {
+                "handle": "",
+                "name": "Control.com",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "The U.S. Cybersecurity and Infrastructure Security Agency (@CISAgov) has recently published new advisory warning companies of ransomware attacks targeting water and wastewater facilities (WWS).\nhttps://control.com/news/cisa-issues-cyber-threat-warnings-for-water-and-wastewater-plants-and-systems/",
+            "date": "25 October 2021",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "IndustryNews",
+                "SecurityMeasures",
+                "ransomwareattack"
+            ],
+            "URL": "https://x.com/CtrlAutomation/status/1451206547527192578",
+            "associated_component": ""
+        },
+        {
+            "id": "be5cf16e-8892-42ed-953d-c457a8c69f0d",
+            "user": {
+                "handle": "",
+                "name": "Votiro",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Attacks targeting utility companies are rising. Security incidents can have profound impact due to their work with water treatment, natural gas supply and waste management. Read about how Votiro helped a European utility giant bolster its cyber defenses:",
+            "media": "https://pbs.twimg.com/card_img/1716927607436926976/tDHhR02b?format=png&name=small",
+            "date": "3 October 2023",
+            "retweets": 0,
+            "likes": 1,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://x.com/Votiro/status/1709249713801699769",
+            "associated_component": ""
+        },
+        {
+            "id": "ae582fb4-4c66-4856-a971-36a8a0b5a07f",
+            "user": {
+                "handle": "",
+                "name": "Benjamin Strick",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "In 2021 the campaign sent numerous emails from a Gmail email address to several companies involved with deep water drilling, oil and petroleum exploration, and Australian Naval Defence.\nIt used “COVID19 passport services in Australia” word docs to deliver malware.",
+            "media": "https://pbs.twimg.com/media/FbZrb6iUYAEi-ub?format=jpg&name=small",
+            "date": "30 August 2022",
+            "retweets": 1,
+            "likes": 9,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://x.com/BenDoBrown/status/1564556063319281664",
+            "associated_component": ""
+        },
+        {
+            "id": "b220a882-84e5-47e9-9196-b7a5cccb0ce0",
+            "user": {
+                "handle": "",
+                "name": "Republican American",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "State utilities report spike in phishing, malware threats: Connecticut’s electric, natural gas and water utility companies saw a large increase in phishing and malware threats at the onset of the state’s COVID-19 outbreak amid the shift to remote work.… http://dlvr.it/Rx4CmV",
+            "media": "https://pbs.twimg.com/media/EyQSwE2VcAEYxda?format=jpg&name=small",
+            "date": "6 April 2021",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://x.com/rep_am/status/1379248004809457664",
+            "associated_component": ""
+        },
+        {
+            "id": "70cee77b-a115-4ba3-a994-7e4d0116b9f9",
+            "user": {
+                "handle": "",
+                "name": "Auquan",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "In today's Portfolio Intelligence Daily:\n💡 UK water companies in severe crisis as Thames Water teeters\n💡 Netherlands restricts semiconductor exports to China\n💡 TSMC suffers ransomware data breach\nhttps://www.linkedin.com/pulse/uk-water-companies-crisis-netherlands-restricts-chip-exports-china/",
+            "media": "https://pbs.twimg.com/media/EyQSwE2VcAEYxda?format=jpg&name=small",
+            "date": "6 April 2021",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "esg",
+                "supplychain",
+                "tsmc",
+                "chipsact"
+            ],
+            "URL": "https://x.com/auquan_/status/1674821194405625858",
+            "associated_component": ""
+        },
+        {
+            "id": "8f25cdce-aa11-4519-aeea-7ed2a7a46977",
+            "user": {
+                "handle": "",
+                "name": "BlastWave Inc.",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "The water and wastewater industry is the target of #cybercriminals and 34% of companies experienced an IT #ransomware attack. #BlastShield can prevent OT #cyberattacks before they happen https://hubs.ly/Q01N48Kl0",
+            "date": "28 April 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity",
+                "criticalinfrastructure",
+                "waterwastewater",
+                "otsecurity"
+            ],
+            "URL": "https://x.com/BlastWaveInc/status/1652002829064712218",
+            "associated_component": ""
+        },
+        {
+            "id": "2353848e-b8e2-45ca-a650-611e18b4bcf7",
+            "user": {
+                "handle": "",
+                "name": "BlastWave Inc.",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "The water and wastewater industry is the target of #cybercriminals and 34% of companies experienced an IT #ransomware attack. #BlastShield can prevent OT #cyberattacks before they happen https://hubs.ly/Q01N48Kl0",
+            "date": "28 April 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity",
+                "criticalinfrastructure",
+                "waterwastewater",
+                "otsecurity"
+            ],
+            "URL": "https://x.com/BlastWaveInc/status/1652002829064712218",
+            "associated_component": ""
+        },
+        {
+            "id": "f206fe00-86bd-447c-83c9-2a094f74b8b6",
+            "user": {
+                "handle": "",
+                "name": "DarkFeed",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "🌐 BlackCat Day?\nThe #ransomware group added Five new victims. One of the victims is Empresas Publicas de Medellin EPM (@EPMestamosahi), a public group of companies owned by the city of Medellín in the Energy and water field with $12 Billion from Colombia 🇨🇴",
+            "media": "https://pbs.twimg.com/media/Fk-GkTJXgAEreJw?format=jpg&name=small",
+            "date": "27 December 2022",
+            "retweets": 8,
+            "likes": 18,
+            "replies": 0,
+            "hashtags": [
+                "BlackCat"
+            ],
+            "URL": "https://x.com/ido_cohen2/status/1607651873305104386",
+            "associated_component": ""
+        },
+        {
+            "id": "b1c24592-2640-4970-8c9b-f60d724e85a2",
+            "user": {
+                "handle": "",
+                "name": "Chris Wysopal",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Ransomware attackers go after water supply companies but say they don't want to disrupt the OT systems. How nice of them!\nhttps://www.zdnet.com/article/confused-cyber-criminals-have-hacked-a-water-company-in-a-bizarre-case-of-mistaken-identity/",
+            "date": "16 August 2022",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://x.com/WeldPond/status/1559517325119954944",
+            "associated_component": ""
+        },
+        {
+            "id": "7802ca63-11ca-4d84-8715-9d2013abbe2a",
+            "user": {
+                "handle": "",
+                "name": "Municipal Research and Services Center",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Water companies are increasingly uninsurable due to ransomware, industry execs say. https://cyberscoop.com/water-industry-ransomware-insurance/",
+            "media": "https://pbs.twimg.com/media/FV969FkUAAEN7Nw?format=jpg&name=small",
+            "date": "23 Jun 2022",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://x.com/MRSC_WA/status/1540084788744179712?s=20",
+            "associated_component": ""
+        }
+    ]
+}

@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
@@ -35,19 +36,24 @@ func GetSocialMedia(c *fiber.Ctx) error {
 // Avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
 func GetSocialMediaPosts(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
-
-	fileName := "posts.json"
-	socialMedia := getSocialMediaByID(c)
-	if strings.Contains(socialMedia.Name, "Sample Twitter") {
-		fileName = "sample-posts.json"
-	}
-
 	organizationName := ""
 	if organizationId == "6" {
 		organizationName = "larissa"
 	}
 	if organizationId == "7" {
 		organizationName = "deyal"
+	}
+	if organizationId == "8" {
+		organizationName = "5thype"
+	}
+
+	fileName := "posts.json"
+	if organizationName != "" {
+		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
+	}
+	socialMedia := getSocialMediaByID(c)
+	if strings.Contains(socialMedia.Name, "Sample Twitter") {
+		fileName = "sample-posts.json"
 	}
 
 	if socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName); err == nil {
@@ -56,12 +62,94 @@ func GetSocialMediaPosts(c *fiber.Ctx) error {
 	return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
 }
 
-func GetSocialMediaChart(c *fiber.Ctx) error {
+func GetSocialMediaPostsPerHashtagChart(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	organizationName := ""
+	if organizationId == "6" {
+		organizationName = "larissa"
+	}
+	if organizationId == "7" {
+		organizationName = "deyal"
+	}
+	if organizationId == "8" {
+		organizationName = "5thype"
+	}
 	fileName := "posts.json"
+	if organizationName != "" {
+		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
+	}
 	socialMedia := getSocialMediaByID(c)
 	if strings.Contains(socialMedia.Name, "Sample Twitter") {
 		fileName = "sample-posts.json"
 	}
+
+	socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName)
+	if err != nil {
+		return c.JSON(model.SimpleLineChartData{LineData: []model.SimpleLineChartValue{}})
+	}
+	postsPerHashtag := make(map[string]int)
+	for _, post := range socialMediaEntities.Posts {
+		for _, hashtag := range post.Hashtags {
+			_, ok := postsPerHashtag[strings.ToLower(hashtag)]
+			if !ok {
+				postsPerHashtag[strings.ToLower(hashtag)] = 0
+				continue
+			}
+		}
+	}
+	for _, post := range socialMediaEntities.Posts {
+		for _, hashtag := range post.Hashtags {
+			postsPerHashtag[strings.ToLower(hashtag)] = postsPerHashtag[strings.ToLower(hashtag)] + 1
+		}
+	}
+	keys := make([]string, 0, len(postsPerHashtag))
+	for key := range postsPerHashtag {
+		keys = append(keys, key)
+	}
+	sort.SliceStable(keys, func(i, j int) bool {
+		return postsPerHashtag[keys[i]] < postsPerHashtag[keys[j]]
+	})
+	lines := []model.SimpleLineChartValue{}
+	for _, k := range keys {
+		label := k
+		if k == "" {
+			label = "Missing"
+		}
+		lines = append(lines, model.SimpleLineChartValue{
+			Label:         label,
+			NumberOfPosts: float64(postsPerHashtag[k]),
+		})
+	}
+	chartData := model.SimpleLineChartData{
+		LineData: lines,
+		LineColor: model.LineColor{
+			NumberOfPosts: "#1DA1F2",
+		},
+	}
+	return c.JSON(chartData)
+}
+
+func GetSocialMediaPostsPerComponentChart(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	organizationName := ""
+	if organizationId == "6" {
+		organizationName = "larissa"
+	}
+	if organizationId == "7" {
+		organizationName = "deyal"
+	}
+	if organizationId == "8" {
+		organizationName = "5thype"
+	}
+	fileName := "posts.json"
+	if organizationName != "" {
+		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
+	}
+	socialMedia := getSocialMediaByID(c)
+	if strings.Contains(socialMedia.Name, "Sample Twitter") {
+		fileName = "sample-posts.json"
+	}
+
 	socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName)
 	if err != nil {
 		return c.JSON(model.SimpleLineChartData{LineData: []model.SimpleLineChartValue{}})
@@ -77,8 +165,12 @@ func GetSocialMediaChart(c *fiber.Ctx) error {
 	}
 	lines := []model.SimpleLineChartValue{}
 	for k, v := range postsPerComponent {
+		label := k
+		if k == "" {
+			label = "Missing"
+		}
 		lines = append(lines, model.SimpleLineChartValue{
-			Label:         k,
+			Label:         label,
 			NumberOfPosts: float64(v),
 		})
 	}
@@ -173,22 +265,12 @@ var socialMediaMap = map[string][]model.SocialMedia{
 			Name:        "Twitter",
 			Description: "Twitter is available at https://twitter.com/home",
 		},
-		{
-			ID:          "efdcbb7e-202c-44eb-bd12-5a952c7a228f",
-			Name:        "Sample Twitter",
-			Description: "Sample Twitter is available at https://twitter.com/home",
-		},
 	},
 	"7": {
 		{
 			ID:          "9f85f74b-1f8c-4546-aa10-e080a1b9cd2d",
 			Name:        "Twitter",
 			Description: "Twitter is available at https://twitter.com/home",
-		},
-		{
-			ID:          "98308983-87fe-4cce-b70d-4b198ddeec9b",
-			Name:        "Sample Twitter",
-			Description: "Sample Twitter is available at https://twitter.com/home",
 		},
 	},
 	"8": {

@@ -1,0 +1,446 @@
+{
+    "posts": [
+        {
+            "id": "76225fd4-c836-4e23-811f-820818f4033a",
+            "user": {
+                "handle": "",
+                "name": "SureShield",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Cyber attacks in healthcare are increasing. In September 2023, the FDA released cybersecurity guidelines for medical devices, including considerations for premarket submissions. Read on to learn the details: https://www.lexology.com/library/detail.aspx?g=be826343-ba9d-41d5-a4e3-cac138d1c610",
+            "date": "25 October 2023",
+            "retweets": 2,
+            "likes": 3,
+            "replies": 2,
+            "hashtags": [],
+            "URL": "https://x.com/ShieldSure/status/1717117279266082940",
+            "associated_component": ""
+        },
+        {
+            "id": "d8901438-ea8a-4275-92ec-11b2777bf8ec",
+            "user": {
+                "handle": "",
+                "name": "All You Can Learn Digital",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "As innovation advances in #healthcare, there is a need to gain awareness of the risk of #cyberattacks. While similar to attacks in other industries, those in the healthcare sector could breach sensitive information. By @antgrasso",
+            "media": "https://pbs.twimg.com/media/F9WBmBAXwAA7xin?format=jpg&name=small",
+            "date": "26 October 2023",
+            "retweets": 2,
+            "likes": 4,
+            "replies": 0,
+            "hashtags": [
+                "CyberSecurity"
+            ],
+            "URL": "https://x.com/AYCLearnDigital/status/1717421560628207790",
+            "associated_component": ""
+        },
+        {
+            "id": "37de9473-64e9-4284-9724-33ebd2ef9cd9",
+            "user": {
+                "handle": "",
+                "name": "Sphere",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "💡 5 tips to protect your practice from ransomware attacks: https://bit.ly/3Fik9eG",
+            "media": "https://pbs.twimg.com/media/F8vZqsvW4AA62lb?format=jpg&name=small",
+            "date": "26 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "ransomware",
+                "healthcare",
+                "cybersecurity"
+            ],
+            "URL": "https://x.com/SphereCommerce/status/1714703412065923441",
+            "associated_component": ""
+        },
+        {
+            "id": "9a8c129c-4934-49c2-85f1-f51c962d0061",
+            "user": {
+                "handle": "",
+                "name": "CeptBiro",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Healthcare Ransomware Attacks Cost US $78bn https://www.infosecurity-magazine.com/news/healthcare-ransomware-attacks-cost/",
+            "media": "https://pbs.twimg.com/card_img/1716733816910364672/uy7X5e7g?format=png&name=360x360",
+            "date": "24 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "Infosec",
+                "Security",
+                "Cybersecurity",
+                "CeptBiro",
+                "Healthcare",
+                "RansomwareAttacks"
+            ],
+            "URL": "https://x.com/CeptBiro/status/1716811766246645767",
+            "associated_component": ""
+        },
+        {
+            "id": "4815a4ff-043c-41d4-b7da-e1b9764e9ea7",
+            "user": {
+                "handle": "",
+                "name": "Derek Griffin",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Advanced Email Attacks Skyrocket in #Healthcare https://bit.ly/48XwVNu via @SecurityHIT",
+            "date": "20 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "Cybersecurity"
+            ],
+            "URL": "https://x.com/Derek_Griffin1/status/1715335054149259667",
+            "associated_component": ""
+        },
+        {
+            "id": "b8f43c4d-a691-4714-a899-d0d23bb5c811",
+            "user": {
+                "handle": "",
+                "name": "Ovation Healthcare",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Healthcare has faced a rise of cyberattacks this year. 88% of organizations dealt with an average of 40 cyberattacks and the prevalence of ransomware attacks rose to 54%, with 40% paying ransoms.\nLearn more: https://bit.ly/45s8JzJ @BeckersHR",
+            "date": "20 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity",
+                "healthIT"
+            ],
+            "URL": "https://x.com/OvationHC/status/1715457611946991979",
+            "associated_component": ""
+        },
+        {
+            "id": "3c11f741-16a1-444d-a908-99c81e03d430",
+            "user": {
+                "handle": "",
+                "name": "HIPAA Journal",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "QR Codes Increasingly Used in Phishing Attacks - https://www.hipaajournal.com/qr-codes-increasingly-used-in-phishing-attacks/",
+            "media": "https://pbs.twimg.com/card_img/1716832042305150976/08PjTSd0?format=jpg&name=small",
+            "date": "24 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "phishing",
+                "healthcare",
+                "squishing",
+                "cybersecurity"
+            ],
+            "URL": "https://x.com/HIPAAJournal/status/1716832609983221940",
+            "associated_component": ""
+        },
+        {
+            "id": "6f7deae4-3de7-47ee-b761-f707679dfaa0",
+            "user": {
+                "handle": "",
+                "name": "HalcyonAI",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "DHS Alerts on #NoEscape Ransomware\n#Healthcare and other critical infrastructure providers are a favored target for #ransomware attacks given they typically have the least resources to dedicate to #security...\nhttps://ransomwareattacks.halcyon.ai/news/department-of-health-and-human-services-alerts-on-noescape-ransomware",
+            "date": "25 October 2023",
+            "retweets": 1,
+            "likes": 1,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity",
+                "infosec",
+                "malware"
+            ],
+            "URL": "https://x.com/HalcyonAi/status/1717168635972648985",
+            "associated_component": ""
+        },
+        {
+            "id": "4ffe518d-a961-44da-87fe-f157180aa5b9",
+            "user": {
+                "handle": "",
+                "name": "ImmuniWeb",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Healthcare organizations a prime target for NoEscape №ransomware, HHS warns: https://www.scmagazine.com/news/hc3-healthcare-orgs-a-prime-target-for-noescape-ransomware",
+            "media": "https://pbs.twimg.com/card_img/1716858013393502208/hZ2IZLCG?format=jpg&name=small",
+            "date": "16 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "malware"
+            ],
+            "URL": "https://x.com/immuniweb/status/1713965733934154196",
+            "associated_component": ""
+        },
+        {
+            "id": "477db47ed-a8ce-4d52-931e-626ec3b4b8e5",
+            "user": {
+                "handle": "",
+                "name": "4i MAG",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Top 8 healthcare cybersecurity challenges https://4imag.com/top-8-healthcare-cybersecurity-challenges/",
+            "date": "6 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "healthcare",
+                "cybersec",
+                "cybersecurity",
+                "healthcaretips",
+                "cybersecmonth",
+                "malware",
+                "scammers"
+            ],
+            "URL": "https://x.com/4imag1/status/1710159647041081662",
+            "associated_component": ""
+        },
+        {
+            "id": "f65036fe-6e0a-4e8a-b7fa-f1c78140dca9",
+            "user": {
+                "handle": "",
+                "name": "Tarlogic",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Ransom and malware attacks, DDoS, social engineering, supply chain. Healthcare institutions and companies have become one of the central targets of #cybercriminals. In this article, we analyze the phenomenon.",
+            "date": "4 October 2023",
+            "retweets": 0,
+            "likes": 2,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://x.com/Tarlogic/status/1709482698912203245",
+            "associated_component": ""
+        },
+        {
+            "id": "b0dcde02-a978-4170-af91-bc8b2280520d",
+            "user": {
+                "handle": "",
+                "name": "DataSafe",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "🏥 Arpa-H's #Digiheals initiative was launched in late August to secure US healthcare against cyber attacks by crowdsourcing healthcare security solutions. Now, a month on from a proposal phase that ended on Sept 7th, we hope for some exciting news about this program very soon!",
+            "date": "4 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://x.com/DataSafe_/status/1714627535776973074",
+            "associated_component": ""
+        },
+        {
+            "id": "afb7f5a1-faa9-4f99-9398-f9eacfb36fed",
+            "user": {
+                "handle": "",
+                "name": "Federico Hansen",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "🕴 5 Ways Hospitals Can Help Improve Their IoT Security 🕴\nHIPAA compliance does not equal security, as continuing attacks on healthcare organizations show. Medical devices need to be secured.\n📖 Read(https://lnkd.in/dryPhgeU)\nvia 'Dark Reading'",
+            "media": "https://pbs.twimg.com/media/F8pY_unacAAjkir?format=png&name=small",
+            "date": "17 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cybersec",
+                "cibersecurity"
+            ],
+            "URL": "https://x.com/Stuckerbsas/status/1714280473172836526",
+            "associated_component": ""
+        },
+        {
+            "id": "ac339827-e088-491e-9dcc-5d04fc3f0260",
+            "user": {
+                "handle": "",
+                "name": "HalcyonAI",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Ransomware Attacks Negatively Impact Patient Treatment Outcomes\n#Ransomware attacks are the biggest threat facing organizations today, and #healthcare providers have been hit particularly hard...\nhttps://bit.ly/46A9sjQ?",
+            "media": "https://pbs.twimg.com/card_img/1717217676194713600/mgFQx-Vu?format=jpg&name=small",
+            "date": "24 October 2023",
+            "retweets": 2,
+            "likes": 3,
+            "replies": 0,
+            "hashtags": [
+                "cybersecurity",
+                "infosec",
+                "security"
+            ],
+            "URL": "https://x.com/HalcyonAi/status/1716615237602812263",
+            "associated_component": ""
+        },
+        {
+            "id": "871c6cef-9fe2-49a8-b99c-89d6c91faf47",
+            "user": {
+                "handle": "",
+                "name": "LMG Security",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "A new paper finds patients have a higher mortality risk when admitted to the #hospital during a #ransomware attack. Listen as @tradeoffspod dives into the details & interviews our COO @grl_geek on the challenges facing #healthcare orgs: https://ow.ly/qk2450PYCUs",
+            "media": "https://pbs.twimg.com/card_img/1717467580212940800/NqyVOu-k?format=jpg&name=small",
+            "date": "19 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "HIPAA",
+                "compliance"
+            ],
+            "URL": "https://x.com/LMGSecurity/status/1715019536552841232",
+            "associated_component": ""
+        },
+        {
+            "id": "fa430c9f-c8fc-466e-b7ce-5500cc3b9671",
+            "user": {
+                "handle": "",
+                "name": "CDW Healthcare",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "According to Critical Insight, the number of healthcare data breaches is down so far in 2023, but the attacks are much larger.\nCheck out the report’s findings and why healthcare orgs must keep an eye on their suppliers. https://cdw.social/3FpH1sE",
+            "media": "https://pbs.twimg.com/media/F8o9WVMWgAAlO6E?format=jpg&name=small",
+            "date": "17 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "HIPAA",
+                "compliance"
+            ],
+            "URL": "https://x.com/CDW_Healthcare/status/1714250063382188222",
+            "associated_component": ""
+        },
+        {
+            "id": "56f11fb9-6bc2-4052-a548-fb4427f930e9",
+            "user": {
+                "handle": "",
+                "name": "Shrikant Bhatade",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "🚨 Breaking News: New Zero-Day Attacks!\n1. DarkWebCraze: E-commerce, SQL Injection\n2. PhantomRansom: Healthcare, Remote Code Execution\n3. CryptoVaultBreak: Crypto Exchanges, Zero-Click Exploit\n4. PowerGridPanic: Energy, Supply Chain Attack",
+            "date": "18 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "Cyber_Security"
+            ],
+            "URL": "https://x.com/BhatadeShr98813/status/1714703739464913073",
+            "associated_component": ""
+        },
+        {
+            "id": "ff3cb03e-0656-4567-a5e2-7f1f4aa75ee7",
+            "user": {
+                "handle": "",
+                "name": "Data Breaches Digest",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Doctum: Greek Dialysis Healthcare Provider's 'Avaddon' Ransomware Attack Results In Data Leaked On The Dark Web And DDoS Threat https://www.technadu.com/greek-hemodialysis-unit-operator-hit-ransomware-gang-threatens-ddosing/275060/",
+            "date": "14 May 2021",
+            "retweets": 4,
+            "likes": 1,
+            "replies": 0,
+            "hashtags": [
+                "databreach",
+                "databreachesdigest",
+                "dataprivacy",
+                "GDPR",
+                "cybersec",
+                "cybersecurity",
+                "infosec",
+                "cyberattack",
+                "hacked",
+                "malware",
+                "ransomware"
+            ],
+            "URL": "https://x.com/db_digest/status/1393254085068009475",
+            "associated_component": ""
+        },
+        {
+            "id": "7736e071-8177-4683-b8aa-7efc19ba3395",
+            "user": {
+                "handle": "",
+                "name": "QA Valley, Inc.",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "One in three Greek companies fell victim to a cyber attack in the pandemic https://bit.ly/3o3tRrs",
+            "date": "21 October 2020",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [
+                "cyberattacks",
+                "Phishing",
+                "Malware",
+                "COVID19",
+                "cyberthreats",
+                "healthcare",
+                "QAcycle"
+            ],
+            "URL": "https://x.com/QAValley/status/1318892290459553796",
+            "associated_component": ""
+        }
+    ]
+}
