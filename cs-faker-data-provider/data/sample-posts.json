@@ -31,7 +31,7 @@
                 "following_count": 0
             },
             "content": "PSA: Over 29,000 Internet-exposed QNAP NAS devices are still unpatched against a recently addressed critical vulnerability allowing malicious code injection. Patch now!",
-            "media": "https://pbs.twimg.com/card_img/1710924385383501825/IeZStizy?format=jpg&name=small",
+            "media": "https://pbs.twimg.com/card_img/1716237250999017472/GO6gOt5q?format=jpg&name=small",
             "date": "1 February 2023",
             "retweets": 39,
             "likes": 42,
@@ -59,6 +59,25 @@
             "hashtags": [],
             "URL": "https://twitter.com/airdrop_laura/status/1693617622816878641",
             "associated_component": "Database"
+        },
+        {
+            "id": "9266d689-bc68-44a1-a908-1b9c391c96ca",
+            "user": {
+                "handle": "",
+                "name": "CrowdCyber",
+                "profile_picture": "",
+                "bio": "",
+                "followers_count": 0,
+                "following_count": 0
+            },
+            "content": "Alert Regarding Vulnerability in Trend Micro Multiple Endpoint Security Products for Enterprises https://www.jpcert.or.jp/english/at/2023/at230021.html",
+            "date": "17 October 2023",
+            "retweets": 0,
+            "likes": 0,
+            "replies": 0,
+            "hashtags": [],
+            "URL": "https://twitter.com/CrowdCyber_Com/status/1714083480911450409",
+            "associated_component": "Endpoint"
         },
         {
             "id": "54be26f2-9dd7-46f7-8e84-c0a44e7caca7",
@@ -173,7 +192,6 @@
                 "following_count": 0
             },
             "content": "Today I successfully used #sqlmap to discover and exploit a SQL injection vulnerability on a vulnerable website database.",
-            "media": "https://pbs.twimg.com/media/Fm0yH3DXkAEpiHz?format=jpg&name=360x360",
             "date": "19 January 2023",
             "retweets": 4,
             "likes": 14,
@@ -198,7 +216,7 @@
                 "following_count": 0
             },
             "content": "92 vulnerabilities identified in 88 WordPress Plugins last week. None detected in themes. Review key insights in our Vulnerability Database to safeguard your site. Thanks to the 37 researchers contributing to #WordPress Security.",
-            "media": "https://pbs.twimg.com/card_img/1712490297291390976/PJogGzCR?format=png&name=small",
+            "media": "https://pbs.twimg.com/card_img/1715028745755463680/cjAked4V?format=png&name=small",
             "date": "12 October 2023",
             "retweets": 2,
             "likes": 3,

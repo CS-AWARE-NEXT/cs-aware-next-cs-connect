@@ -191,6 +191,13 @@ var socialMediaMap = map[string][]model.SocialMedia{
 			Description: "Sample Twitter is available at https://twitter.com/home",
 		},
 	},
+	"8": {
+		{
+			ID:          "cc41562b-273c-494b-ab60-70b2ee12e343",
+			Name:        "Twitter",
+			Description: "Twitter is available at https://twitter.com/home",
+		},
+	},
 }
 
 var socialMediaPaginatedTableData = model.PaginatedTableData{

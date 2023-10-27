@@ -16,10 +16,8 @@
             "source": [
                 "identity--eaf85b43-84c4-446f-84d4-59ecd8b4a638"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -31,10 +29,8 @@
             "source": [
                 "identity--eaf85b43-84c4-446f-84d4-59ecd8b4a638"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -47,10 +43,8 @@
                 "identity--533acd49-cd79-4b3b-8ec8-01f3d2d8cd5a",
                 "identity--177695fa-b162-4a76-8d9f-26d8f9902f1e"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -62,10 +56,8 @@
             "source": [
                 "identity--cad58cac-f435-4216-8f98-df338dc8af45"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -77,10 +69,8 @@
             "source": [
                 "identity--eaf85b43-84c4-446f-84d4-59ecd8b4a638"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -92,10 +82,8 @@
             "source": [
                 "identity--1186b3fd-3bd2-4df5-8a42-3ce0489b069a"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -110,10 +98,8 @@
                 "identity--f1911f14-766d-4f0c-8d06-5f93d3bcf78d",
                 "identity--533acd49-cd79-4b3b-8ec8-01f3d2d8cd5a"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -125,10 +111,8 @@
             "source": [
                 "identity--d84ec5c2-9c89-41d8-8dba-72445eeb4d01"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -141,10 +125,8 @@
                 "identity--1186b3fd-3bd2-4df5-8a42-3ce0489b069a",
                 "identity--48c2deb6-cb1d-48ce-8edd-4a2d498a1b96"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -157,10 +139,8 @@
                 "identity--980065a0-9fc8-45c5-8b26-ddef2bb3ee37",
                 "identity--a10f8d8a-f630-4d22-8fa6-9f04d5797afe"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -173,10 +153,8 @@
                 "identity--898b7713-05bd-4579-8cf1-a702ffd4ef5a",
                 "identity--fc4b2588-f8c4-4e28-818b-47e221146cbf"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -189,10 +167,8 @@
                 "identity--898b7713-05bd-4579-8cf1-a702ffd4ef5a",
                 "identity--980065a0-9fc8-45c5-8b26-ddef2bb3ee37"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -204,10 +180,8 @@
             "source": [
                 "identity--980065a0-9fc8-45c5-8b26-ddef2bb3ee37"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -220,10 +194,8 @@
                 "identity--533acd49-cd79-4b3b-8ec8-01f3d2d8cd5a",
                 "identity--898b7713-05bd-4579-8cf1-a702ffd4ef5a"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -237,10 +209,8 @@
                 "identity--1186b3fd-3bd2-4df5-8a42-3ce0489b069a",
                 "identity--ad8050a2-fc80-453c-8b61-12e5f5f3f5bd"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -255,10 +225,8 @@
                 "identity--a10f8d8a-f630-4d22-8fa6-9f04d5797afe",
                 "identity--fc4b2588-f8c4-4e28-818b-47e221146cbf"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -270,10 +238,8 @@
             "source": [
                 "identity--fc4b2588-f8c4-4e28-818b-47e221146cbf"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -286,10 +252,8 @@
                 "identity--898b7713-05bd-4579-8cf1-a702ffd4ef5a",
                 "identity--03bf8f35-26a0-4394-856c-49486108d618"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -304,10 +268,8 @@
                 "identity--6213077c-cd56-4db0-8f14-01a4580a22cb",
                 "identity--533acd49-cd79-4b3b-8ec8-01f3d2d8cd5a"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -321,10 +283,8 @@
                 "identity--7716b45f-2f22-45bb-8ce5-4c1d24424a02",
                 "identity--ef9b8239-2631-4c5b-8d5f-15f56fada9cd"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -336,10 +296,8 @@
             "source": [
                 "identity--ec946ce8-e643-40ff-8ae5-c88cb3f2dca7"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -351,10 +309,8 @@
             "source": [
                 "identity--ec946ce8-e643-40ff-8ae5-c88cb3f2dca7"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -366,10 +322,8 @@
             "source": [
                 "identity--980065a0-9fc8-45c5-8b26-ddef2bb3ee37"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -381,10 +335,8 @@
             "source": [
                 "identity--ec946ce8-e643-40ff-8ae5-c88cb3f2dca7"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -402,10 +354,8 @@
                 "----",
                 "identity--ec946ce8-e643-40ff-8ae5-c88cb3f2dca7"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -444,10 +394,8 @@
                 "identity--3cc1c364-9c49-45c5-8432-74bcf6deefa3",
                 "identity--d84ec5c2-9c89-41d8-8dba-72445eeb4d01"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -459,11 +407,9 @@
             "source": [
                 "identity--533acd49-cd79-4b3b-8ec8-01f3d2d8cd5a"
             ],
-            "x_infoflow": [
-            ],
+            "x_infoflow": [],
             "x_csaware_node_type": "firewall",
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -477,10 +423,8 @@
                 "identity--980065a0-9fc8-45c5-8b26-ddef2bb3ee37",
                 "identity--ae1c1361-23cb-4637-8442-b2419ea3625f"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -493,10 +437,8 @@
                 "identity--03bf8f35-26a0-4394-856c-49486108d618",
                 "identity--980065a0-9fc8-45c5-8b26-ddef2bb3ee37"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -508,10 +450,8 @@
             "source": [
                 "identity--980065a0-9fc8-45c5-8b26-ddef2bb3ee37"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -528,8 +468,7 @@
             "x_infoflow": [
                 "GIS"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -546,8 +485,7 @@
             "x_infoflow": [
                 "GIS"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -563,8 +501,7 @@
             "x_infoflow": [
                 "GIS"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -579,8 +516,7 @@
             "x_infoflow": [
                 "GIS"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -592,10 +528,8 @@
             "source": [
                 "identity--d84ec5c2-9c89-41d8-8dba-72445eeb4d01"
             ],
-            "x_infoflow": [
-            ],
-            "x_categories": [
-            ]
+            "x_infoflow": [],
+            "x_categories": []
         },
         {
             "type": "node",
@@ -610,8 +544,7 @@
             "x_infoflow": [
                 "ERP_DATA"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -627,8 +560,7 @@
             "x_infoflow": [
                 "ERP_DATA"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -665,8 +597,7 @@
             "x_infoflow": [
                 "ERP_DATA"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -681,8 +612,7 @@
             "x_infoflow": [
                 "ERP_DATA"
             ],
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -701,11 +631,9 @@
                 "identity--b063665a-0a01-45de-8b7b-bc11843d2abf",
                 "identity--77429725-dc28-4335-8db5-12ee029ba868"
             ],
-            "x_infoflow": [
-            ],
+            "x_infoflow": [],
             "x_csaware_node_type": "internet",
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -721,8 +649,7 @@
                 "ERP_DATA"
             ],
             "x_csaware_node_type": "database",
-            "x_categories": [
-            ]
+            "x_categories": []
         },
         {
             "type": "node",
@@ -738,8 +665,7 @@
                 "GIS"
             ],
             "x_csaware_node_type": "database",
-            "x_categories": [
-            ]
+            "x_categories": []
         }
     ]
 }

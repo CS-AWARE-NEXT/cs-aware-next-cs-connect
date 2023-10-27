@@ -1,4 +1,8 @@
 ---
+environmentConfig:
+  showOptionsConfig:
+    showAddChannelButton: true
+    showDefaultChannels: true
 organizations:
   - name: Ecosystem
     id: "0"
@@ -10,6 +14,33 @@ organizations:
         url: http://172.16.15.1:3000/cs-data-provider/issues
         widgets:
           - type: channel
+  - name: 5thYPE
+    id: "8"
+    description: This is the 5thYPE organization for Larissa workshop
+    sections:
+      - name: Incidents
+        id: "22"
+        url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents
+        widgets:
+          - name: System
+            type: graph
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents/:id/graph
+          - type: channels
+      - name: Social Media
+        id: "23"
+        url: http://172.16.15.1:3000/cs-data-provider/organizations/8/social_media
+        widgets:
+          - name: System
+            type: graph
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents/:id/graph
+          - name: Posts
+            type: social-media-posts
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/social_media/:id/posts
+          - name: Posts per Components
+            type: chart
+            chartType: simple-line
+            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/social_media/:id/chart
+          - type: channels
   - name: Deyal
     id: "7"
     description: This is the Deyal organization for Larissa workshop
@@ -18,13 +49,10 @@ organizations:
         id: "18"
         url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents
         widgets:
-          - name: Description
-            type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents/:id/text_box
           - name: System
             type: graph
             url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents/:id/graph
-          - type: channel
+          - type: channels
       - name: Social Media
         id: "21"
         url: http://172.16.15.1:3000/cs-data-provider/organizations/7/social_media
@@ -48,13 +76,10 @@ organizations:
         id: "17"
         url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents
         widgets:
-          - name: Description
-            type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents/:id/text_box
           - name: System
             type: graph
             url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents/:id/graph
-          - type: channel
+          - type: channels
       - name: Social Media
         id: "20"
         url: http://172.16.15.1:3000/cs-data-provider/organizations/6/social_media
