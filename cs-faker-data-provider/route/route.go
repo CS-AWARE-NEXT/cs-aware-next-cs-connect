@@ -140,7 +140,7 @@ func useOrganizationsSocialMedia(organizations fiber.Router) {
 	})
 	socialMediaWithId.Get("/chart", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/social_media/:socialMediaId/chart called")
-		return controller.GetSocialMediaChart(c)
+		return controller.GetSocialMediaPostsPerHashtagChart(c)
 	})
 }
 

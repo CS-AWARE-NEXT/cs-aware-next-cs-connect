@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
@@ -61,7 +62,74 @@ func GetSocialMediaPosts(c *fiber.Ctx) error {
 	return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
 }
 
-func GetSocialMediaChart(c *fiber.Ctx) error {
+func GetSocialMediaPostsPerHashtagChart(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	organizationName := ""
+	if organizationId == "6" {
+		organizationName = "larissa"
+	}
+	if organizationId == "7" {
+		organizationName = "deyal"
+	}
+	if organizationId == "8" {
+		organizationName = "5thype"
+	}
+	fileName := "posts.json"
+	if organizationName != "" {
+		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
+	}
+	socialMedia := getSocialMediaByID(c)
+	if strings.Contains(socialMedia.Name, "Sample Twitter") {
+		fileName = "sample-posts.json"
+	}
+
+	socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName)
+	if err != nil {
+		return c.JSON(model.SimpleLineChartData{LineData: []model.SimpleLineChartValue{}})
+	}
+	postsPerHashtag := make(map[string]int)
+	for _, post := range socialMediaEntities.Posts {
+		for _, hashtag := range post.Hashtags {
+			_, ok := postsPerHashtag[strings.ToLower(hashtag)]
+			if !ok {
+				postsPerHashtag[strings.ToLower(hashtag)] = 0
+				continue
+			}
+		}
+	}
+	for _, post := range socialMediaEntities.Posts {
+		for _, hashtag := range post.Hashtags {
+			postsPerHashtag[strings.ToLower(hashtag)] = postsPerHashtag[strings.ToLower(hashtag)] + 1
+		}
+	}
+	keys := make([]string, 0, len(postsPerHashtag))
+	for key := range postsPerHashtag {
+		keys = append(keys, key)
+	}
+	sort.SliceStable(keys, func(i, j int) bool {
+		return postsPerHashtag[keys[i]] < postsPerHashtag[keys[j]]
+	})
+	lines := []model.SimpleLineChartValue{}
+	for _, k := range keys {
+		label := k
+		if k == "" {
+			label = "Missing"
+		}
+		lines = append(lines, model.SimpleLineChartValue{
+			Label:         label,
+			NumberOfPosts: float64(postsPerHashtag[k]),
+		})
+	}
+	chartData := model.SimpleLineChartData{
+		LineData: lines,
+		LineColor: model.LineColor{
+			NumberOfPosts: "#1DA1F2",
+		},
+	}
+	return c.JSON(chartData)
+}
+
+func GetSocialMediaPostsPerComponentChart(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	organizationName := ""
 	if organizationId == "6" {
