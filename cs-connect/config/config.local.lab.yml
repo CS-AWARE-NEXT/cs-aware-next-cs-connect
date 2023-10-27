@@ -36,7 +36,7 @@ organizations:
           - name: Posts
             type: social-media-posts
             url: http://www.isislab.it:3000/cs-data-provider/organizations/8/social_media/:id/posts
-          - name: Posts per Components
+          - name: Posts per Hashtag
             type: chart
             chartType: simple-line
             url: http://www.isislab.it:3000/cs-data-provider/organizations/8/social_media/:id/chart
@@ -63,7 +63,7 @@ organizations:
           - name: Posts
             type: social-media-posts
             url: http://www.isislab.it:3000/cs-data-provider/organizations/7/social_media/:id/posts
-          - name: Posts per Components
+          - name: Posts per Hashtag
             type: chart
             chartType: simple-line
             url: http://www.isislab.it:3000/cs-data-provider/organizations/7/social_media/:id/chart
@@ -90,7 +90,7 @@ organizations:
           - name: Posts
             type: social-media-posts
             url: http://www.isislab.it:3000/cs-data-provider/organizations/6/social_media/:id/posts
-          - name: Posts per Components
+          - name: Posts per Hashtag
             type: chart
             chartType: simple-line
             url: http://www.isislab.it:3000/cs-data-provider/organizations/6/social_media/:id/chart
