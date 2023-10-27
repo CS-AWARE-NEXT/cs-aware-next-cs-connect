@@ -32,14 +32,14 @@ organizations:
         widgets:
           - name: System
             type: graph
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/posts
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/posts
           - name: Posts per Components
             type: chart
             chartType: simple-line
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/chart
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/chart
           - type: channels
   - name: Deyal
     id: "7"
