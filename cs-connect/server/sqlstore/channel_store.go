@@ -162,8 +162,31 @@ func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.
 			return nil, errors.Wrap(err, "could not add channel to user's channel list")
 		}
 	}
+
+	// if err := s.addChannelToCategory(channel, params); err != nil {
+	// 	// TODO: choose what to do here
+	// 	return channel, nil
+	// }
+
 	return channel, nil
 }
+
+// func (s *channelStore) addChannelToCategory(channel *model.Channel, params app.AddChannelParams) error {
+// 	categories, err := s.pluginAPI.API.GetChannelSidebarCategories(params.UserID, params.TeamID)
+// 	if err != nil {
+// 		return errors.Wrap(err, "could not get categories for team to add channel")
+// 	}
+// 	for _, category := range categories.Categories {
+// 		formattedCategoryName := strings.ToLower(strings.ReplaceAll(category.DisplayName, " ", "-"))
+// 		if strings.Contains(strings.ToLower(channel.DisplayName), formattedCategoryName) {
+// 			category.Channels = append(category.Channels, channel.Id)
+// 			if _, err := s.pluginAPI.API.UpdateChannelSidebarCategories(params.UserID, params.TeamID, categories.Categories); err != nil {
+// 				return errors.Wrap(err, "could not update categories for team to add channel")
+// 			}
+// 		}
+// 	}
+// 	return nil
+// }
 
 func (s *channelStore) getChannelsIdsBySectionID(sectionID string, tx *sqlx.Tx) ([]string, error) {
 	channelsIdsSelect := s.store.builder.

@@ -67,7 +67,7 @@ func (p *Plugin) OnActivate() error {
 
 	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
 	p.channelService = app.NewChannelService(p.API, channelStore)
-	p.eventService = app.NewEventService(p.API)
+	p.eventService = app.NewEventService(p.API, p.platformService)
 	p.userService = app.NewUserService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")

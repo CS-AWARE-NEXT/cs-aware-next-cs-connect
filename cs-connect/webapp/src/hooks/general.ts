@@ -11,6 +11,7 @@ import {useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {useUpdateEffect} from 'react-use';
@@ -122,6 +123,7 @@ export const useOrganizationsNoPageList = (): Organization[] => {
 export const useUserAdded = () => {
     const teamId = useSelector(getCurrentTeamId);
     const userId = useSelector(getCurrentUserId);
+    const channelId = useSelector(getCurrentChannelId);
 
     useEffect(() => {
         let isCanceled = false;
@@ -134,7 +136,7 @@ export const useUserAdded = () => {
         return () => {
             isCanceled = true;
         };
-    }, [teamId, userId]);
+    }, [teamId, userId, channelId]);
 };
 
 export const useOrganizationsList = (defaultFetchParams: FetchOrganizationsParams, routed = true): [
