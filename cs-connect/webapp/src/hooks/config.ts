@@ -51,10 +51,16 @@ const hideOptions = (showOptionsConfig: ShowOptionsConfig): NodeJS.Timeout[][] =
             if (townSquare) {
                 townSquare.style.display = 'none';
             }
-            const offTopic = document.getElementById('sidebarItem_off-topic')?.parentElement;
-            if (offTopic) {
-                offTopic.style.display = 'none';
-            }
+        }
+
+        // TODO: this has to be removed server-side
+        const offTopic = document.getElementById('sidebarItem_off-topic')?.parentElement;
+        if (offTopic) {
+            offTopic.style.display = 'none';
+        }
+        const openDirectMessageMenuItem = document.getElementById('openDirectMessageMenuItem');
+        if (openDirectMessageMenuItem) {
+            openDirectMessageMenuItem.style.display = 'none';
         }
     }, estimatedOptionsLoadTime);
 
