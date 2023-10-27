@@ -35,19 +35,24 @@ func GetSocialMedia(c *fiber.Ctx) error {
 // Avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
 func GetSocialMediaPosts(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
-
-	fileName := "posts.json"
-	socialMedia := getSocialMediaByID(c)
-	if strings.Contains(socialMedia.Name, "Sample Twitter") {
-		fileName = "sample-posts.json"
-	}
-
 	organizationName := ""
 	if organizationId == "6" {
 		organizationName = "larissa"
 	}
 	if organizationId == "7" {
 		organizationName = "deyal"
+	}
+	if organizationId == "8" {
+		organizationName = "5thype"
+	}
+
+	fileName := "posts.json"
+	if organizationName != "" {
+		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
+	}
+	socialMedia := getSocialMediaByID(c)
+	if strings.Contains(socialMedia.Name, "Sample Twitter") {
+		fileName = "sample-posts.json"
 	}
 
 	if socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName); err == nil {
@@ -57,11 +62,26 @@ func GetSocialMediaPosts(c *fiber.Ctx) error {
 }
 
 func GetSocialMediaChart(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	organizationName := ""
+	if organizationId == "6" {
+		organizationName = "larissa"
+	}
+	if organizationId == "7" {
+		organizationName = "deyal"
+	}
+	if organizationId == "8" {
+		organizationName = "5thype"
+	}
 	fileName := "posts.json"
+	if organizationName != "" {
+		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
+	}
 	socialMedia := getSocialMediaByID(c)
 	if strings.Contains(socialMedia.Name, "Sample Twitter") {
 		fileName = "sample-posts.json"
 	}
+
 	socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName)
 	if err != nil {
 		return c.JSON(model.SimpleLineChartData{LineData: []model.SimpleLineChartValue{}})
@@ -77,8 +97,12 @@ func GetSocialMediaChart(c *fiber.Ctx) error {
 	}
 	lines := []model.SimpleLineChartValue{}
 	for k, v := range postsPerComponent {
+		label := k
+		if k == "" {
+			label = "Missing"
+		}
 		lines = append(lines, model.SimpleLineChartValue{
-			Label:         k,
+			Label:         label,
 			NumberOfPosts: float64(v),
 		})
 	}
@@ -173,22 +197,12 @@ var socialMediaMap = map[string][]model.SocialMedia{
 			Name:        "Twitter",
 			Description: "Twitter is available at https://twitter.com/home",
 		},
-		{
-			ID:          "efdcbb7e-202c-44eb-bd12-5a952c7a228f",
-			Name:        "Sample Twitter",
-			Description: "Sample Twitter is available at https://twitter.com/home",
-		},
 	},
 	"7": {
 		{
 			ID:          "9f85f74b-1f8c-4546-aa10-e080a1b9cd2d",
 			Name:        "Twitter",
 			Description: "Twitter is available at https://twitter.com/home",
-		},
-		{
-			ID:          "98308983-87fe-4cce-b70d-4b198ddeec9b",
-			Name:        "Sample Twitter",
-			Description: "Sample Twitter is available at https://twitter.com/home",
 		},
 	},
 	"8": {
