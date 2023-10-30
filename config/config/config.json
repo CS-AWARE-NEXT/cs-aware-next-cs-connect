@@ -56,11 +56,10 @@
         "SessionCacheInMinutes": 10,
         "SessionIdleTimeoutInMinutes": 43200,
         "WebsocketSecurePort": 443,
-        "WebsocketPort": 80,
+        "WebsocketPort": 8065,
         "WebserverMode": "gzip",
         "EnableGifPicker": true,
-        "GfycatAPIKey": "2_KtH_W5",
-        "GfycatAPISecret": "3wLVZPiswc3DnaiaFoLkDvB4X0IV6CpMkj4tf2inJRsBY6-FnkT08zGmppWFgeof",
+        "GiphySdkKey": "",
         "EnableCustomEmoji": true,
         "EnableEmojiPicker": true,
         "PostEditTimeLimit": -1,
@@ -90,6 +89,11 @@
         "EnableLatex": false,
         "EnableInlineLatex": true,
         "PostPriority": true,
+        "AllowPersistentNotifications": true,
+        "AllowPersistentNotificationsForGuests": false,
+        "PersistentNotificationIntervalMinutes": 5,
+        "PersistentNotificationMaxCount": 6,
+        "PersistentNotificationMaxRecipients": 5,
         "EnableAPIChannelDeletion": false,
         "EnableLocalMode": true,
         "LocalModeSocketLocation": "/var/tmp/mattermost_local.socket",
@@ -107,6 +111,7 @@
     "TeamSettings": {
         "SiteName": "Mattermost",
         "MaxUsersPerTeam": 50,
+        "EnableJoinLeaveMessageByDefault": true,
         "EnableUserCreation": true,
         "EnableOpenServer": true,
         "EnableUserDeactivation": false,
@@ -148,7 +153,8 @@
         "QueryTimeout": 30,
         "DisableDatabaseSearch": false,
         "MigrationsStatementTimeoutSeconds": 100000,
-        "ReplicaLagSettings": []
+        "ReplicaLagSettings": [],
+        "ReplicaMonitorIntervalSeconds": 5
     },
     "LogSettings": {
         "EnableConsole": true,
@@ -163,7 +169,9 @@
         "EnableDiagnostics": true,
         "VerboseDiagnostics": false,
         "EnableSentry": true,
-        "AdvancedLoggingConfig": ""
+        "AdvancedLoggingJSON": {},
+        "AdvancedLoggingConfig": "",
+        "MaxFieldSize": 2048
     },
     "ExperimentalAuditSettings": {
         "FileEnabled": false,
@@ -173,6 +181,7 @@
         "FileMaxBackups": 0,
         "FileCompress": false,
         "FileMaxQueueSize": 1000,
+        "AdvancedLoggingJSON": {},
         "AdvancedLoggingConfig": ""
     },
     "NotificationLogSettings": {
@@ -184,6 +193,7 @@
         "FileLevel": "INFO",
         "FileJson": true,
         "FileLocation": "",
+        "AdvancedLoggingJSON": {},
         "AdvancedLoggingConfig": ""
     },
     "PasswordSettings": {
@@ -191,7 +201,8 @@
         "Lowercase": false,
         "Number": false,
         "Uppercase": false,
-        "Symbol": false
+        "Symbol": false,
+        "EnableForgotLink": true
     },
     "FileSettings": {
         "EnableFileAttachments": true,
@@ -217,7 +228,22 @@
         "AmazonS3SignV2": false,
         "AmazonS3SSE": false,
         "AmazonS3Trace": false,
-        "AmazonS3RequestTimeoutMilliseconds": 30000
+        "AmazonS3RequestTimeoutMilliseconds": 30000,
+        "DedicatedExportStore": false,
+        "ExportDriverName": "local",
+        "ExportDirectory": "./data/",
+        "ExportAmazonS3AccessKeyId": "",
+        "ExportAmazonS3SecretAccessKey": "",
+        "ExportAmazonS3Bucket": "",
+        "ExportAmazonS3PathPrefix": "",
+        "ExportAmazonS3Region": "",
+        "ExportAmazonS3Endpoint": "s3.amazonaws.com",
+        "ExportAmazonS3SSL": true,
+        "ExportAmazonS3SignV2": false,
+        "ExportAmazonS3SSE": false,
+        "ExportAmazonS3Trace": false,
+        "ExportAmazonS3RequestTimeoutMilliseconds": 30000,
+        "ExportAmazonS3PresignExpiresSeconds": 21600
     },
     "EmailSettings": {
         "EnableSignUpWithEmail": true,
@@ -249,8 +275,7 @@
         "EmailNotificationContentsType": "full",
         "LoginButtonColor": "#0000",
         "LoginButtonBorderColor": "#2389D7",
-        "LoginButtonTextColor": "#2389D7",
-        "EnableInactivityEmail": true
+        "LoginButtonTextColor": "#2389D7"
     },
     "RateLimitSettings": {
         "Enable": false,
@@ -271,6 +296,7 @@
         "AboutLink": "https://docs.mattermost.com/about/product.html/",
         "HelpLink": "https://mattermost.com/default-help/",
         "ReportAProblemLink": "https://mattermost.com/default-report-a-problem/",
+        "ForgotPasswordLink": "",
         "SupportEmail": "",
         "CustomTermsOfServiceEnabled": false,
         "CustomTermsOfServiceReAcceptancePeriod": 365,
@@ -464,8 +490,9 @@
         "UseNewSAMLLibrary": false,
         "EnableSharedChannels": false,
         "EnableRemoteClusterService": false,
-        "EnableAppBar": false,
-        "PatchPluginsReactDOM": false
+        "DisableAppBar": false,
+        "DisableRefetchingOnBrowserFocus": false,
+        "DelayChannelAutocomplete": false
     },
     "AnalyticsSettings": {
         "MaxUsersForStatistics": 2500
@@ -494,7 +521,8 @@
         "CA": "",
         "ClientCert": "",
         "ClientKey": "",
-        "Trace": ""
+        "Trace": "",
+        "IgnoredPurgeIndexes": ""
     },
     "BleveSettings": {
         "IndexDir": "",
@@ -511,7 +539,9 @@
         "FileRetentionDays": 365,
         "BoardsRetentionDays": 365,
         "DeletionJobStartTime": "02:00",
-        "BatchSize": 3000
+        "BatchSize": 3000,
+        "TimeBetweenBatchesMilliseconds": 100,
+        "RetentionIdsBatchSize": 100
     },
     "MessageExportSettings": {
         "EnableExport": false,
@@ -534,9 +564,7 @@
         "CleanupJobsThresholdDays": -1,
         "CleanupConfigThresholdDays": -1
     },
-    "ProductSettings": {
-        "EnablePublicSharedBoards": false
-    },
+    "ProductSettings": {},
     "PluginSettings": {
         "Enable": true,
         "EnableUploads": true,
@@ -601,10 +629,12 @@
     },
     "DisplaySettings": {
         "CustomURLSchemes": [],
+        "MaxMarkdownNodes": 0,
         "ExperimentalTimezone": true
     },
     "GuestAccountsSettings": {
         "Enable": false,
+        "HideTags": false,
         "AllowEmailAccounts": true,
         "EnforceMultifactorAuthentication": false,
         "RestrictCreationToDomains": ""
@@ -617,7 +647,8 @@
     },
     "CloudSettings": {
         "CWSURL": "https://customers.mattermost.com",
-        "CWSAPIURL": "https://portal.internal.prod.cloud.mattermost.com"
+        "CWSAPIURL": "https://portal.internal.prod.cloud.mattermost.com",
+        "CWSMock": false
     },
     "ImportSettings": {
         "Directory": "./import",

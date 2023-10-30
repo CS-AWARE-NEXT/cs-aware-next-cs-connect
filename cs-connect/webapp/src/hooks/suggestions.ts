@@ -16,6 +16,8 @@ import {
 } from 'src/helpers';
 import {SuggestionsData} from 'src/types/parser';
 
+import {useDOMReadyById} from './mattermost';
+
 export const useSuggestions = (): [Element | undefined, boolean, Dispatch<SetStateAction<boolean>>] => {
     const suggestions = useCreateSuggestions();
     const [isVisible, setIsVisible] = useHandleSuggestionsVisibility();
@@ -24,6 +26,8 @@ export const useSuggestions = (): [Element | undefined, boolean, Dispatch<SetSta
 
 const useCreateSuggestions = (): Element | undefined => {
     const [suggestions, setSuggestions] = useState<Element | undefined>();
+    const DOMReady = useDOMReadyById('post_textbox');
+
     useEffect(() => {
         const advancedTextEditorCell = document.getElementById('advancedTextEditorCell');
         if (!advancedTextEditorCell) {
@@ -38,12 +42,13 @@ const useCreateSuggestions = (): Element | undefined => {
             return;
         }
         setSuggestions(firstDivChild);
-    }, []);
+    }, [DOMReady]);
     return suggestions;
 };
 
 const useHandleSuggestionsVisibility = (): [boolean, Dispatch<SetStateAction<boolean>>] => {
     const [isVisible, setIsVisible] = useState(false);
+    const DOMReady = useDOMReadyById('post_textbox');
 
     useEffect(() => {
         const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
@@ -113,13 +118,14 @@ const useHandleSuggestionsVisibility = (): [boolean, Dispatch<SetStateAction<boo
                 textarea.removeEventListener('keydown', handleKeyDown);
             }
         };
-    }, []);
+    }, [DOMReady]);
 
     return [isVisible, setIsVisible];
 };
 
 export const useSuggestionsData = (defaultData: SuggestionsData): SuggestionsData => {
     const [data, setData] = useState<SuggestionsData>(defaultData);
+    const DOMReady = useDOMReadyById('post_textbox');
 
     useEffect(() => {
         const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
@@ -147,7 +153,7 @@ export const useSuggestionsData = (defaultData: SuggestionsData): SuggestionsDat
                 textarea.removeEventListener('input', handleInput);
             }
         };
-    }, []);
+    }, [DOMReady]);
 
     return data;
 };

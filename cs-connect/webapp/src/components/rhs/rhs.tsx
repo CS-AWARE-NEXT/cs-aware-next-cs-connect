@@ -45,17 +45,24 @@ const RHSView = () => {
     const teamId = useSelector(getCurrentTeamId);
     const team = useSelector(teamNameSelector(teamId));
     const channel = useSelector(channelNameSelector(channelId));
-    const fullUrl = `/${team.name}/channels/${channel.name}`;
+    let fullUrl = '';
+    if (channelId && teamId) {
+        fullUrl = `/${team.name}/channels/${channel.name}`;
+    }
 
     const channelByID = useChannelById(channelId);
 
-    // Solves the problem of switching to an empty RHS after a non-empty one
-    const wasChannelFound = channelByID !== notFoundWidgetChannel;
+    let wasChannelFound = false;
+    let sectionContextOptions: SectionContextOptions = {parentId: '', sectionId: ''};
+    if (channelByID) {
+        // Solves the problem of switching to an empty RHS after a non-empty one
+        wasChannelFound = channelByID !== notFoundWidgetChannel;
 
-    const sectionContextOptions: SectionContextOptions = {
-        parentId: typeof parentIdParam === 'undefined' ? channelByID.parentId : parentIdParam,
-        sectionId: typeof sectionIdParam === 'undefined' ? channelByID.sectionId : sectionIdParam,
-    };
+        sectionContextOptions = {
+            parentId: typeof parentIdParam === 'undefined' ? channelByID.parentId : parentIdParam,
+            sectionId: typeof sectionIdParam === 'undefined' ? channelByID.sectionId : sectionIdParam,
+        };
+    }
 
     useEffect(() => {
         // Select the node that will be observed for mutations
@@ -90,22 +97,20 @@ const RHSView = () => {
 
     return (
         <>
-            {wasChannelFound ?
-                <FullUrlContext.Provider value={fullUrl}>
-                    <IsRhsClosedContext.Provider value={closed}>
-                        <SectionContext.Provider value={sectionContextOptions}>
-                            <ToastProvider>
-                                <RHSWidgets
-                                    parentId={sectionContextOptions.parentId}
-                                    sectionId={sectionContextOptions.sectionId}
-                                />
-                            </ToastProvider>
-                        </SectionContext.Provider>
-                    </IsRhsClosedContext.Provider>
-                </FullUrlContext.Provider> :
-                <Container>
-                    <FormattedMessage defaultMessage='The channel is not related to any data.'/>
-                </Container>}
+            {wasChannelFound ? <FullUrlContext.Provider value={fullUrl}>
+                <IsRhsClosedContext.Provider value={closed}>
+                    <SectionContext.Provider value={sectionContextOptions}>
+                        <ToastProvider>
+                            <RHSWidgets
+                                parentId={sectionContextOptions.parentId}
+                                sectionId={sectionContextOptions.sectionId}
+                            />
+                        </ToastProvider>
+                    </SectionContext.Provider>
+                </IsRhsClosedContext.Provider>
+            </FullUrlContext.Provider> : <Container>
+                <FormattedMessage defaultMessage='The channel is not related to any data.'/>
+            </Container>}
         </>
     );
 };
