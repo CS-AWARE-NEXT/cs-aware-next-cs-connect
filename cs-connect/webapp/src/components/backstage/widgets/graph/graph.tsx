@@ -6,6 +6,7 @@ import React, {
     useContext,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from 'react';
 import ReactFlow, {
@@ -153,6 +154,8 @@ export const getLayoutedElements = (
             }
             x -= (node.width ? node.width / 2 : width / 2);
             y -= (node.height ? node.height / 2 : height / 2);
+            node.width = node.width ? node.width : width;
+            node.height = node.height ? node.height : height;
             return {
                 ...node,
                 position: {
@@ -173,11 +176,12 @@ const Graph = ({
     parentId,
     setDirection,
 }: Props) => {
+    const ref = useRef<HTMLDivElement>(null);
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
-    const {fitView} = useReactFlow();
+    const {fitView, setViewport} = useReactFlow();
     const {formatMessage} = useIntl();
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
@@ -215,7 +219,30 @@ const Graph = ({
         setDescription(data.description || emptyDescription);
         setNodes(data.nodes || []);
         setEdges(data.edges || []);
-    }, [data]);
+
+        // Center the viewport on the hyperlinked node.
+        const targetNode = data.nodes.find((node) => node.data.isUrlHashed);
+        if (targetNode && ref.current) {
+            // TODO figure out a dynamic value to use? current viewport zoom might trigger a refresh loop
+            const fixedZoom = 0.5;
+
+            // Absolute position in the canvas
+            const nodeHalfWidth = (targetNode.width ?? 0) / 2;
+            const canvasHalfWidth = ref.current.offsetWidth / 2;
+            const canvasX = -(targetNode.position.x - canvasHalfWidth - nodeHalfWidth) * fixedZoom;
+
+            const nodeHalfHeight = (targetNode.height ?? 0) / 2;
+            const canvasHalfHeight = ref.current.offsetHeight / 2;
+            const canvasY = -(targetNode.position.y - canvasHalfHeight - nodeHalfHeight) * fixedZoom;
+
+            setViewport({x: canvasX, y: canvasY, zoom: fixedZoom});
+
+            // Due to the node hyperlink mechanism being based on a scrollToView operation done outside this component,
+            // we have to reset the scrollLeft/Top properties to avoid moving the controls and draggable canvas
+            // outside the visible DOM area (due to overflow: hidden).
+            (document.getElementsByClassName('react-flow')[0] as HTMLDivElement).scrollTo(0, 0);
+        }
+    }, [data, setViewport, ref.current]);
 
     const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
     const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
@@ -259,6 +286,7 @@ const Graph = ({
                     />
                 </Header>
                 <ReactFlow
+                    ref={ref}
                     nodes={nodes}
                     edges={edges}
                     onNodesChange={onNodesChange}
