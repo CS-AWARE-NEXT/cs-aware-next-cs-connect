@@ -181,8 +181,9 @@ const Graph = ({
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
-    const {fitView, setViewport} = useReactFlow();
+    const {fitView, getNode} = useReactFlow();
     const {formatMessage} = useIntl();
+    const [targetNode, setTargetNode] = useState<Node>();
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
     const channelId = useSelector(getCurrentChannelId);
@@ -220,29 +221,25 @@ const Graph = ({
         setNodes(data.nodes || []);
         setEdges(data.edges || []);
 
-        // Center the viewport on the hyperlinked node.
-        const targetNode = data.nodes.find((node) => node.data.isUrlHashed);
-        if (targetNode && ref.current) {
-            // TODO figure out a dynamic value to use? current viewport zoom might trigger a refresh loop
-            const fixedZoom = 0.5;
-
-            // Absolute position in the canvas
-            const nodeHalfWidth = (targetNode.width ?? 0) / 2;
-            const canvasHalfWidth = ref.current.offsetWidth / 2;
-            const canvasX = -(targetNode.position.x - canvasHalfWidth - nodeHalfWidth) * fixedZoom;
-
-            const nodeHalfHeight = (targetNode.height ?? 0) / 2;
-            const canvasHalfHeight = ref.current.offsetHeight / 2;
-            const canvasY = -(targetNode.position.y - canvasHalfHeight - nodeHalfHeight) * fixedZoom;
-
-            setViewport({x: canvasX, y: canvasY, zoom: fixedZoom});
-
+        // Set a target node to center the viewport on, if there's one associated to the hash in the url.
+        const urlHashedNode = data.nodes.find((node) => node.data.isUrlHashed);
+        if (urlHashedNode) {
             // Due to the node hyperlink mechanism being based on a scrollToView operation done outside this component,
             // we have to reset the scrollLeft/Top properties to avoid moving the controls and draggable canvas
             // outside the visible DOM area (due to overflow: hidden).
             (document.getElementsByClassName('react-flow')[0] as HTMLDivElement).scrollTo(0, 0);
+            const node = getNode(urlHashedNode.id);
+            if (node) {
+                setTargetNode(node);
+            }
         }
-    }, [data, setViewport, ref.current]);
+    }, [data, getNode]);
+
+    useEffect(() => {
+        if (targetNode) {
+            fitView({nodes: [targetNode], maxZoom: 0.5});
+        }
+    }, [targetNode, fitView]);
 
     const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
     const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
