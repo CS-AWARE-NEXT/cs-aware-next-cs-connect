@@ -6,7 +6,6 @@ import React, {
     useContext,
     useEffect,
     useMemo,
-    useRef,
     useState,
 } from 'react';
 import ReactFlow, {
@@ -176,7 +175,6 @@ const Graph = ({
     parentId,
     setDirection,
 }: Props) => {
-    const ref = useRef<HTMLDivElement>(null);
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
@@ -289,7 +287,6 @@ const Graph = ({
                     />
                 </Header>
                 <ReactFlow
-                    ref={ref}
                     nodes={nodes}
                     edges={edges}
                     onNodesChange={onNodesChange}
