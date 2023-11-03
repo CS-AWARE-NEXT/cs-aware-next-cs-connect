@@ -181,14 +181,15 @@ const Graph = ({
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
-    const {fitView, getNode} = useReactFlow();
+    const {fitView, getNode, setViewport} = useReactFlow();
     const {formatMessage} = useIntl();
-    const [targetNode, setTargetNode] = useState<Node>();
+    const [targetNode, setTargetNode] = useState<Node | undefined>();
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
     const channelId = useSelector(getCurrentChannelId);
     useEffect(() => {
         setNodeInfo(undefined);
+        setTargetNode(undefined);
     }, [channelId]);
 
     const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo})}), []);
@@ -232,6 +233,11 @@ const Graph = ({
             if (node) {
                 setTargetNode(node);
             }
+        } else if (!urlHashedNode && targetNode) {
+            // The data has changed but there's still a targetNode left over, so we reset it and the viewport position
+            // (the latter to avoid ending up with an empty viewport in some corner of the graph)
+            setViewport({x: 0, y: 0, zoom: 0.5});
+            setTargetNode(undefined);
         }
     }, [data, getNode]);
 
