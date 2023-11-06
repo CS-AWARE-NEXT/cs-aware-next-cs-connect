@@ -16,7 +16,7 @@ import {
 } from 'src/helpers';
 import {SuggestionsData} from 'src/types/parser';
 
-import {useDOMReadyById} from './mattermost';
+import {useDOMReadyById} from './browser';
 
 export const useSuggestions = (): [Element | undefined, boolean, Dispatch<SetStateAction<boolean>>] => {
     const suggestions = useCreateSuggestions();
