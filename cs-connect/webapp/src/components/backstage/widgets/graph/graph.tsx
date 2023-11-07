@@ -75,7 +75,7 @@ type Props = {
 const DESCRIPTION_ID_PREFIX = 'graph-';
 
 // Pixels between each levels in the graph
-const GRAP_RANK_SEP = 75;
+const GRAP_RANK_SEP = 85;
 
 // This is the style for the dashboard
 const defaultGraphStyle: GraphStyle = {
@@ -234,14 +234,14 @@ const Graph = ({
         } else if (!urlHashedNode && targetNode) {
             // The data has changed but there's still a targetNode left over, so we reset it and the viewport position
             // (the latter to avoid ending up with an empty viewport in some corner of the graph)
-            setViewport({x: 0, y: 0, zoom: 0.5});
+            setViewport({x: 0, y: 0, zoom: 0.6});
             setTargetNode(undefined);
         }
     }, [data, getNode]);
 
     useEffect(() => {
         if (targetNode) {
-            fitView({nodes: [targetNode], maxZoom: 0.5});
+            fitView({nodes: [targetNode], maxZoom: 0.6});
         }
     }, [targetNode, fitView]);
 
