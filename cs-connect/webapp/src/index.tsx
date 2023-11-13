@@ -4,6 +4,14 @@ import React from 'react';
 import {Store} from 'redux';
 import {render} from 'react-dom';
 
+import {ChannelTypes} from 'mattermost-webapp/packages/mattermost-redux/src/action_types';
+
+import {getCurrentChannel} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/channels';
+
+import {selectChannel} from 'mattermost-webapp/packages/mattermost-redux/src/actions/channels';
+
+import {getCurrentUserId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
+
 import {
     DEFAULT_PATH,
     DOCUMENTATION_PATH,
@@ -20,8 +28,9 @@ import RHSView from 'src/components/rhs/rhs';
 import {pluginId} from 'src/manifest';
 
 import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} from './hooks';
-import {navigateToPluginUrl} from './browser_routing';
+import {navigateToPluginUrl, navigateToUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
+import LHSView from './components/lhs/lhs';
 
 type WindowObject = {
     location: {
@@ -123,6 +132,30 @@ export default class Plugin {
         registry.registerSlashCommandWillBePostedHook(slashCommandWillBePosted);
         registry.registerMessageWillBePostedHook(messageWillBePosted);
         registry.registerMessageWillBeUpdatedHook(messageWillBeUpdated);
+
+        registry.registerLeftSidebarHeaderComponent(LHSView);
+
+        registry.registerWebSocketEventHandler('custom_cs-aware-connect_refresh_channels', async (msg: any) => {
+            const currentChannel = getCurrentChannel(store.getState()) || {};
+            const currentUserId = getCurrentUserId(store.getState());
+            if (currentUserId !== msg.data.user_id) {
+                return;
+            }
+            store.dispatch({
+                type: ChannelTypes.LEAVE_CHANNEL,
+                data: {
+                    id: msg.data.channel_id,
+                    user_id: msg.data.user_id,
+                    team_id: msg.data.team_id,
+                },
+            });
+
+            // Change the channel we're leaving to the default (town-square) if the user's currently viewing it
+            if (msg.data.channel_id === currentChannel.id) {
+                store.dispatch(selectChannel(msg.data.default_channel_id));
+                navigateToUrl(`/${msg.data.team_name}/channels/${msg.data.default_channel_name}`);
+            }
+        });
 
         // registry.registerMessageWillFormatHook(messageWillFormat);
     }

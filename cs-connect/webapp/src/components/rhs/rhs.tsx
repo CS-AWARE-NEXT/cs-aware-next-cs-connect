@@ -46,7 +46,7 @@ const RHSView = () => {
     const team = useSelector(teamNameSelector(teamId));
     const channel = useSelector(channelNameSelector(channelId));
     let fullUrl = '';
-    if (channelId && teamId) {
+    if (channel && team) {
         fullUrl = `/${team.name}/channels/${channel.name}`;
     }
 

@@ -34,9 +34,9 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const defaultChannelCreation = {
         teamId: '',
         channelId: '',
-        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, otherwise create_new_channel
+        channelMode: 'create_new_channel', // {'create_new_channel', 'link_existing_channel'}
         channelName: '',
-        createPublicChannel: true,
+        createPublicChannel: false,
     };
     const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, defaultChannelCreation);
 

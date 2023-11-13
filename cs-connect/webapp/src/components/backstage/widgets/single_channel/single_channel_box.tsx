@@ -44,7 +44,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
         channelId: '',
         channelMode: 'create_new_channel',
         channelName: '',
-        createPublicChannel: true,
+        createPublicChannel: false,
     };
     const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, defaultChannelCreation);
     useEffect(() => {

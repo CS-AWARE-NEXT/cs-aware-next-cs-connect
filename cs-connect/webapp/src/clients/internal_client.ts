@@ -17,7 +17,7 @@ import {
 
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
-import {UserAddedParams} from 'src/types/events';
+import {GetUserPropsParams, SetUserOrganizationParams, UserAddedParams} from 'src/types/events';
 import {UserResult} from 'src/types/users';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
@@ -107,6 +107,26 @@ export const userAdded = async (params: UserAddedParams): Promise<void> => {
         `${apiUrl}/events/user_added`,
         JSON.stringify(params),
     );
+};
+
+export const setUserOrganization = async (params: SetUserOrganizationParams): Promise<void> => {
+    await doPost(
+        `${apiUrl}/events/set_organization`,
+        JSON.stringify(params),
+    );
+};
+
+export interface UserProps {
+    orgId: string;
+}
+
+export const getUserProps = async (params: GetUserPropsParams): Promise<UserProps> => {
+    const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
+    let data = await doGet(`${apiUrl}/events/user_props${queryParams}`);
+    if (!data) {
+        data = {orgId: ''} as UserProps;
+    }
+    return data as UserProps;
 };
 
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {

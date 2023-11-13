@@ -6,11 +6,13 @@ import React, {Dispatch} from 'react';
 import styled from 'styled-components';
 
 import {AutomationHeader, AutomationLabel, AutomationTitle} from 'src/components/backstage/widgets/channels/styles';
-import {HorizontalSplit} from 'src/components/backstage/grid';
+import {HorizontalSpacer, HorizontalSplit, VerticalSplit} from 'src/components/backstage/grid';
 import {ChannelCreation} from 'src/types/channels';
 import {ErrorMessage} from 'src/components/commons/messages';
 import {PatternedInput} from 'src/components/backstage/widgets/channels/patterned_input';
 import {channelCreationAction} from 'src/actions';
+
+import {RadioInput} from 'src/components/backstage/styles';
 
 type Props = {
     channelCreation: ChannelCreation;
@@ -39,6 +41,15 @@ export const CreateSingleChannel = ({
         setChangesMade?.(true);
     };
 
+    const handlePublicChange = (isPublic: boolean) => {
+        cleanErrorMessages();
+        dispatchChannelCreation(channelCreationAction({
+            ...channelCreation,
+            createPublicChannel: isPublic,
+        }));
+        setChangesMade?.(true);
+    };
+
     const attrs = {
         css: {
             alignSelf: 'flex-start',
@@ -56,6 +67,37 @@ export const CreateSingleChannel = ({
                     </AutomationLabel>
                 </AutomationTitle>
                 <HorizontalSplit>
+                    <VerticalSplit>
+                        <ButtonLabel disabled={archived || channelCreation.channelMode === 'link_existing_channel'}>
+                            <RadioInput
+                                type='radio'
+                                disabled={archived || channelCreation.channelMode === 'link_existing_channel'}
+                                checked={channelCreation.createPublicChannel}
+                                onChange={() => handlePublicChange(true)}
+                            />
+                            <Icon
+                                disabled={channelCreation.channelMode === 'link_existing_channel'}
+                                active={channelCreation.createPublicChannel}
+                                className={'icon-globe'}
+                            />
+                            <BigText>{formatMessage({defaultMessage: 'Public'})}</BigText>
+                        </ButtonLabel>
+                        <HorizontalSpacer size={8}/>
+                        <ButtonLabel disabled={archived || channelCreation.channelMode === 'link_existing_channel'}>
+                            <RadioInput
+                                type='radio'
+                                disabled={archived || channelCreation.channelMode === 'link_existing_channel'}
+                                checked={!channelCreation.createPublicChannel}
+                                onChange={() => handlePublicChange(false)}
+                            />
+                            <Icon
+                                disabled={channelCreation.channelMode === 'link_existing_channel'}
+                                active={!channelCreation.createPublicChannel}
+                                className={'icon-lock-outline'}
+                            />
+                            <BigText>{formatMessage({defaultMessage: 'Private'})}</BigText>
+                        </ButtonLabel>
+                    </VerticalSplit>
                     <PatternedInput
                         enabled={!archived && channelCreation.channelMode === 'create_new_channel'}
                         input={channelCreation.channelName}
@@ -82,4 +124,29 @@ const Container = styled.div`
 
 const ChannelText = styled.div`
     font-size: 1.1em;
+`;
+
+const ButtonLabel = styled.label<{disabled: boolean}>`
+    padding: 10px 16px;
+    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    background: ${({disabled}) => (disabled ? 'rgba(var(--center-channel-color-rgb), 0.04)' : 'var(--center-channel-bg)')};
+    border-radius: 4px;
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+`;
+
+const Icon = styled.i<{ active?: boolean, disabled: boolean }>`
+    font-size: 16px;
+    line-height: 16px;
+    color: ${({active, disabled}) => (active && !disabled ? 'var(--button-bg)' : 'rgba(var(--center-channel-color-rgb), 0.56)')};
+`;
+
+const BigText = styled.div`
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
 `;

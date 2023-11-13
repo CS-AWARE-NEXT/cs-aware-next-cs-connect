@@ -153,12 +153,13 @@ func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create channel to add")
 	}
-	members, err := s.pluginAPI.API.GetTeamMembers(params.TeamID, 0, 200)
-	if err != nil {
+	members, getErr := s.getOrganizationMembers(params.ChannelName, params.TeamID)
+	// members, err := s.pluginAPI.API.GetTeamMembers(params.TeamID, 0, 200)
+	if getErr != nil {
 		return nil, errors.Wrap(err, "could not add channel to users in team")
 	}
 	for _, member := range members {
-		if _, err := s.pluginAPI.API.AddChannelMember(channel.Id, member.UserId); err != nil {
+		if _, err := s.pluginAPI.API.AddChannelMember(channel.Id, member.Id); err != nil {
 			return nil, errors.Wrap(err, "could not add channel to user's channel list")
 		}
 	}
@@ -227,4 +228,25 @@ func (s *channelStore) toChannel(channelEntity ChannelEntity) app.Channel {
 		return app.Channel{}
 	}
 	return channel
+}
+
+func (s *channelStore) getOrganizationMembers(channelDisplayName, teamID string) ([]*model.User, error) {
+	allUsers, err := s.pluginAPI.API.GetUsersInTeam(teamID, 0, 200)
+	var orgUsers []*model.User
+	if err != nil {
+		return nil, errors.Wrap(err, "could not add channel to users in team")
+	}
+
+	for _, user := range allUsers {
+		userOrg, isPropSet := user.GetProp("orgName")
+		if isPropSet {
+			formattedOrganizationName := strings.ToLower(strings.ReplaceAll(userOrg, " ", "-"))
+			if strings.Contains(strings.ToLower(channelDisplayName), formattedOrganizationName) {
+				orgUsers = append(orgUsers, user)
+			}
+		}
+	}
+
+	s.pluginAPI.API.LogInfo("users set for new channel: ", "channel", channelDisplayName, "users", orgUsers)
+	return orgUsers, nil
 }
