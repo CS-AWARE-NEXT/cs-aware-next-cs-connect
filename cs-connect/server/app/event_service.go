@@ -16,15 +16,17 @@ type EventService struct {
 	store                  CategoryStore
 	mattermostChannelStore MattermostChannelStore
 	platformService        *config.PlatformService
+	botID                  string
 }
 
 // NewEventService returns a new platform config service
-func NewEventService(api plugin.API, store CategoryStore, mattermostChannelStore MattermostChannelStore, platformService *config.PlatformService) *EventService {
+func NewEventService(api plugin.API, store CategoryStore, mattermostChannelStore MattermostChannelStore, platformService *config.PlatformService, botID string) *EventService {
 	return &EventService{
 		api:                    api,
 		store:                  store,
 		mattermostChannelStore: mattermostChannelStore,
 		platformService:        platformService,
+		botID:                  botID,
 	}
 }
 
@@ -45,9 +47,25 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 		return errors.Wrap(err, "could not clean categories for team to add channel")
 	}
 
-	channels, err := s.api.GetPublicChannelsForTeam(params.TeamID, 0, 200)
+	publicChannels, err := s.api.GetPublicChannelsForTeam(params.TeamID, 0, 200)
 	if err != nil {
 		return fmt.Errorf("couldn't get public channels for team %s", params.TeamID)
+	}
+
+	allChannels, xerr := s.mattermostChannelStore.GetChannelsForTeam(params.TeamID)
+	if xerr != nil {
+		return fmt.Errorf("couldn't get all channels for team %s", params.TeamID)
+	}
+
+	// Ensure the bot user is present in all channels
+	if _, err := s.api.CreateTeamMember(params.TeamID, s.botID); err != nil {
+		s.api.LogWarn("failed to add bot to team", "team", params.TeamID, "err", err)
+	} else {
+		for _, channel := range allChannels {
+			if _, err := s.api.AddChannelMember(channel.Id, s.botID); err != nil {
+				s.api.LogWarn("couldn't add channel to bot", "channel", channel.Id, "bot", s.botID, "err", err)
+			}
+		}
 	}
 
 	config, configErr := s.platformService.GetPlatformConfig()
@@ -56,7 +74,7 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 	}
 
 	// Automatically join public channels (ecosystem and default ones, NOT organization ones)
-	for _, channel := range channels {
+	for _, channel := range publicChannels {
 		if channel.Type != model.ChannelTypeOpen {
 			continue
 		}
@@ -109,10 +127,6 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 		return fmt.Errorf("couldn't get all channels of team %s", params.TeamID)
 	}
 
-	// TODO what was team_name for
-	team, _ := s.api.GetTeam(params.TeamID)
-	// Send the info of the default channel back to the user to properly handle redirecting in case the current opened channel is related to the previous organization
-	defaultChannel, _ := s.api.GetChannelByName(params.TeamID, "town-square", false)
 	var orgName string
 
 	for _, channel := range channels {
@@ -129,18 +143,12 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 					orgName = organization.Name
 				} else {
 					// Private channels cannot be left if the user's the last member with the normal API
-					_ = s.mattermostChannelStore.ForceMemberLeave(channel.Id, params.UserID)
-
-					// Broadcast an event to allow the user to refresh his channel list
-					f := model.WebsocketBroadcast{TeamId: params.TeamID}
-					var data = make(map[string]any)
-					data["channel_id"] = channel.Id
-					data["user_id"] = params.UserID
-					data["team_id"] = params.TeamID
-					data["team_name"] = team.Name
-					data["default_channel_id"] = defaultChannel.Id
-					data["default_channel_name"] = defaultChannel.Name
-					s.api.PublishWebSocketEvent("refresh_channels", data, &f)
+					_ = s.api.DeleteChannelMember(channel.Id, params.UserID)
+					// Currently even though the call errors out with a "LeaveChannel: You're the only member left, try removing the Private Channel instead of leaving." message,
+					// the user is actually kicked correctly from the channel. This is possibly a weird false positive on the Mattermost side
+					/* if delErr != nil {
+						s.api.LogWarn("failed to remove user from channel", "channel", channel.Id, "channelName", channel.Name, "user", params.UserID, "err", delErr)
+					} */
 				}
 			}
 		}

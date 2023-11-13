@@ -113,8 +113,6 @@ export const useOrganizionsNoEcosystem = (): Organization[] => {
 export const useOrganizationsNoPageList = (): Organization[] => {
     const [organizations, setOrganizations] = useState<Organization[]>(getOrganizations());
     const currentTeamId = useSelector(getCurrentTeamId);
-    // eslint-disable-next-line no-console
-    console.log('team id from useorgnopagelist', currentTeamId);
 
     useEffect(() => {
         organizations.sort();
