@@ -4,6 +4,7 @@ export enum WidgetType {
 
     Channels = 'channels',
     Chart = 'chart',
+    Exercise = 'exercise',
     Graph = 'graph',
     PaginatedTable = 'paginated-table',
     List = 'list',
