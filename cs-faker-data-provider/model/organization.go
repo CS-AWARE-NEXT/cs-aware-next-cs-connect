@@ -71,6 +71,11 @@ type ExtendedIncident struct {
 	Description   string `json:"description"`
 }
 
+type IncidentWithOrganizationId struct {
+	Incident
+	OrganizationId string `json:"organizationId"`
+}
+
 type Policy struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
@@ -84,6 +89,12 @@ type Story struct {
 }
 
 type SocialMedia struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type Exercise struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`

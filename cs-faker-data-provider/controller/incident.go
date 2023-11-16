@@ -44,6 +44,10 @@ func GetIncidents(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
+func GetIncidentsByOrganizationId(organizationId string) []model.Incident {
+	return incidentsMap[organizationId]
+}
+
 func GetIncident(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	if organizationId == "4" {
@@ -130,6 +134,13 @@ var incidentsMap = map[string][]model.Incident{
 			ID:          "7defe83a-acbf-4784-9bc2-eb3447a0a545",
 			Name:        "Brute-force attack 5",
 			Description: "In this attack, some asset (information, functionality, identity, etc.) is protected...",
+		},
+	},
+	"5": {
+		{
+			ID:          "ca238fb9-a2bc-4420-9476-386c35a0e36f",
+			Name:        "System Graph",
+			Description: "This provides an overview of the system graph for the Foggia organization",
 		},
 	},
 	"6": {
