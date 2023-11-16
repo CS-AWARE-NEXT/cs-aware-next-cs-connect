@@ -32,6 +32,7 @@ export interface AddChannelParams {
     sectionId: string;
     parentId: string;
     teamId: string;
+    organizationId: string;
 }
 
 export interface AddChannelResult {

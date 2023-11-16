@@ -114,6 +114,7 @@ const StepsModal = ({
                     parentId,
                     sectionId: savedSectionInfo.id,
                     teamId,
+                    organizationId,
                 }).
                     then(() => {
                         cleanModal();

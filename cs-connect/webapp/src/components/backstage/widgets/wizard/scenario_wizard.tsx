@@ -116,6 +116,7 @@ const ScenarioWizard = ({
                     parentId,
                     sectionId: savedSectionInfo.id,
                     teamId,
+                    organizationId,
                 }).
                     then(() => {
                         cleanModal();

@@ -34,6 +34,7 @@ func NewChannelStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ChannelS
 			"ChannelID",
 			"ParentID",
 			"SectionID",
+			"OrganizationID",
 		).
 		From("CSA_Channel")
 
@@ -54,6 +55,37 @@ func (s *channelStore) GetChannels(sectionID string, parentID string) (app.GetCh
 		return app.GetChannelsResults{}, errors.Wrap(app.ErrNotFound, "no channels found for the section")
 	} else if err != nil {
 		return app.GetChannelsResults{}, errors.Wrap(err, "failed to get channels for the section")
+	}
+
+	return app.GetChannelsResults{
+		Items: s.toChannels(channelsEntities),
+	}, nil
+}
+
+// GetChannels retrieves all channels
+func (s *channelStore) GetAllChannels() (app.GetChannelsResults, error) {
+	var channelsEntities []ChannelEntity
+	err := s.store.selectBuilder(s.store.db, &channelsEntities, s.channelsSelect)
+	if err == sql.ErrNoRows {
+		return app.GetChannelsResults{}, errors.Wrap(app.ErrNotFound, "no channels found")
+	} else if err != nil {
+		return app.GetChannelsResults{}, errors.Wrap(err, "failed to get channels")
+	}
+
+	return app.GetChannelsResults{
+		Items: s.toChannels(channelsEntities),
+	}, nil
+}
+
+// GetChannelsByOrganizationId retrieves all channels for an organization
+func (s *channelStore) GetChannelsByOrganizationID(organizationlID string) (app.GetChannelsResults, error) {
+	queryForResults := s.channelsSelect.Where(sq.Eq{"OrganizationId": organizationlID})
+	var channelsEntities []ChannelEntity
+	err := s.store.selectBuilder(s.store.db, &channelsEntities, queryForResults)
+	if err == sql.ErrNoRows {
+		return app.GetChannelsResults{}, errors.Wrap(app.ErrNotFound, "no channels found for the organization")
+	} else if err != nil {
+		return app.GetChannelsResults{}, errors.Wrap(err, "failed to get channels for the organization")
 	}
 
 	return app.GetChannelsResults{
@@ -127,9 +159,10 @@ func (s *channelStore) createChannel(sectionID string, params app.AddChannelPara
 	if _, err := s.store.execBuilder(tx, sq.
 		Insert("CSA_Channel").
 		SetMap(map[string]interface{}{
-			"ChannelID": channel.Id,
-			"ParentID":  params.ParentID,
-			"SectionID": sectionID,
+			"ChannelID":      channel.Id,
+			"ParentID":       params.ParentID,
+			"SectionID":      sectionID,
+			"OrganizationID": params.OrganizationID,
 		})); err != nil {
 		return app.AddChannelResult{}, errors.Wrap(err, "could not add new channel to section")
 	}
@@ -153,7 +186,7 @@ func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create channel to add")
 	}
-	members, getErr := s.getOrganizationMembers(params.ChannelName, params.TeamID)
+	members, getErr := s.getOrganizationMembers(params.ChannelID, params.OrganizationID, params.TeamID)
 	// members, err := s.pluginAPI.API.GetTeamMembers(params.TeamID, 0, 200)
 	if getErr != nil {
 		return nil, errors.Wrap(err, "could not add channel to users in team")
@@ -230,7 +263,7 @@ func (s *channelStore) toChannel(channelEntity ChannelEntity) app.Channel {
 	return channel
 }
 
-func (s *channelStore) getOrganizationMembers(channelDisplayName, teamID string) ([]*model.User, error) {
+func (s *channelStore) getOrganizationMembers(channelID, organizationID, teamID string) ([]*model.User, error) {
 	allUsers, err := s.pluginAPI.API.GetUsersInTeam(teamID, 0, 200)
 	var orgUsers []*model.User
 	if err != nil {
@@ -238,15 +271,13 @@ func (s *channelStore) getOrganizationMembers(channelDisplayName, teamID string)
 	}
 
 	for _, user := range allUsers {
-		userOrg, isPropSet := user.GetProp("orgName")
+		userOrgID, isPropSet := user.GetProp("orgID")
 		if isPropSet {
-			formattedOrganizationName := strings.ToLower(strings.ReplaceAll(userOrg, " ", "-"))
-			if strings.Contains(strings.ToLower(channelDisplayName), formattedOrganizationName) {
+			if userOrgID == organizationID {
 				orgUsers = append(orgUsers, user)
 			}
 		}
 	}
 
-	s.pluginAPI.API.LogInfo("users set for new channel: ", "channel", channelDisplayName, "users", orgUsers)
 	return orgUsers, nil
 }

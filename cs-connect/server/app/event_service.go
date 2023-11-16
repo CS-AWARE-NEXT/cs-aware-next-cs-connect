@@ -16,16 +16,18 @@ type EventService struct {
 	store                  CategoryStore
 	mattermostChannelStore MattermostChannelStore
 	platformService        *config.PlatformService
+	channelService         *ChannelService
 	botID                  string
 }
 
 // NewEventService returns a new platform config service
-func NewEventService(api plugin.API, store CategoryStore, mattermostChannelStore MattermostChannelStore, platformService *config.PlatformService, botID string) *EventService {
+func NewEventService(api plugin.API, store CategoryStore, mattermostChannelStore MattermostChannelStore, platformService *config.PlatformService, channelService *ChannelService, botID string) *EventService {
 	return &EventService{
 		api:                    api,
 		store:                  store,
 		mattermostChannelStore: mattermostChannelStore,
 		platformService:        platformService,
+		channelService:         channelService,
 		botID:                  botID,
 	}
 }
@@ -57,6 +59,11 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 		return fmt.Errorf("couldn't get all channels for team %s", params.TeamID)
 	}
 
+	allOrgChannels, xerr := s.channelService.GetAllChannels()
+	if xerr != nil {
+		return fmt.Errorf("couldn't get all organization channels")
+	}
+
 	// Ensure the bot user is present in all channels
 	if _, err := s.api.CreateTeamMember(params.TeamID, s.botID); err != nil {
 		s.api.LogWarn("failed to add bot to team", "team", params.TeamID, "err", err)
@@ -72,6 +79,10 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 	if configErr != nil {
 		return fmt.Errorf("couldn't get config")
 	}
+	ecosystem, ecosystemFound := config.GetEcosystem()
+	if !ecosystemFound {
+		return fmt.Errorf("couldn't get ecosystem")
+	}
 
 	// Automatically join public channels (ecosystem and default ones, NOT organization ones)
 	for _, channel := range publicChannels {
@@ -80,15 +91,9 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 		}
 
 		ignoreChannel := false
-		for _, organization := range config.Organizations {
-			if organization.IsEcosystem {
-				continue
-			}
-			formattedOrganizationName := strings.ToLower(strings.ReplaceAll(organization.Name, " ", "-"))
-			if strings.Contains(strings.ToLower(channel.DisplayName), formattedOrganizationName) {
-				// Public organization channel, ignore
+		for _, orgChannel := range allOrgChannels.Items {
+			if channel.Id == orgChannel.ChannelID && orgChannel.OrganizationID != ecosystem.ID {
 				ignoreChannel = true
-				break
 			}
 		}
 		if ignoreChannel {
@@ -107,15 +112,6 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 	s.api.LogInfo("Params on setOrganization", "params", params)
 
-	categories, err := s.api.GetChannelSidebarCategories(params.UserID, params.TeamID)
-	if err != nil {
-		return fmt.Errorf("couldn't get categories for user %s", params.UserID)
-	}
-
-	if err := s.cleanCategories(categories, params.TeamID, params.UserID); err != nil {
-		return errors.Wrap(err, "could not update categories for team to add channel")
-	}
-
 	config, configErr := s.platformService.GetPlatformConfig()
 	if configErr != nil {
 		return fmt.Errorf("couldn't get config for user %s", params.UserID)
@@ -127,28 +123,27 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 		return fmt.Errorf("couldn't get all channels of team %s", params.TeamID)
 	}
 
-	var orgName string
+	allOrgChannels, xerr := s.channelService.GetAllChannels()
+	if xerr != nil {
+		return fmt.Errorf("couldn't get all organization channels")
+	}
+
+	ecosystem, ecosystemFound := config.GetEcosystem()
+	if !ecosystemFound {
+		return fmt.Errorf("couldn't get ecosystem")
+	}
 
 	for _, channel := range channels {
-		for _, organization := range config.Organizations {
-			if organization.IsEcosystem {
-				continue
-			}
-			formattedOrganizationName := strings.ToLower(strings.ReplaceAll(organization.Name, " ", "-"))
-			// Currently channels are associated to organizations by the name. This should be improved with an explicit link (for example by reusing the CSA_channels table)
-			if strings.Contains(strings.ToLower(channel.DisplayName), formattedOrganizationName) {
-				// This is an organization channel, automatically join or exit it based on the organization selected by the user
-				if organization.ID == params.OrgID {
-					_, err = s.api.AddChannelMember(channel.Id, params.UserID)
-					orgName = organization.Name
+		for _, orgChannel := range allOrgChannels.Items {
+			if channel.Id == orgChannel.ChannelID {
+				if orgChannel.OrganizationID == ecosystem.ID {
+					continue
+				}
+
+				if orgChannel.OrganizationID == params.OrgID {
+					_, _ = s.api.AddChannelMember(channel.Id, params.UserID)
 				} else {
-					// Private channels cannot be left if the user's the last member with the normal API
 					_ = s.api.DeleteChannelMember(channel.Id, params.UserID)
-					// Currently even though the call errors out with a "LeaveChannel: You're the only member left, try removing the Private Channel instead of leaving." message,
-					// the user is actually kicked correctly from the channel. This is possibly a weird false positive on the Mattermost side
-					/* if delErr != nil {
-						s.api.LogWarn("failed to remove user from channel", "channel", channel.Id, "channelName", channel.Name, "user", params.UserID, "err", delErr)
-					} */
 				}
 			}
 		}
@@ -156,12 +151,21 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 
 	user, userErr := s.api.GetUser(params.UserID)
 	if userErr != nil {
-		return errors.Wrap(err, "could not fetch user to set orgID prop")
+		return errors.Wrap(userErr, "could not fetch user to set orgID prop")
 	}
-	user.SetProp("orgId", params.OrgID)
-	user.SetProp("orgName", orgName) // TODO remove when a better channel<->org link exists
+	user.SetProp("orgID", params.OrgID)
 	if _, err := s.api.UpdateUser(user); err != nil {
 		return fmt.Errorf("couldn't update user props")
+	}
+
+	// Also needed to actually refresh the channel order in the left sidebar, or else it'll happen when the user switches the channel the first time after setting the org
+	categories, err := s.api.GetChannelSidebarCategories(params.UserID, params.TeamID)
+	if err != nil {
+		return fmt.Errorf("couldn't get categories for user %s", params.UserID)
+	}
+
+	if err := s.cleanCategories(categories, params.TeamID, params.UserID); err != nil {
+		return errors.Wrap(err, "could not update categories for team to add channel")
 	}
 
 	return nil
@@ -171,7 +175,6 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 func (s *EventService) cleanCategories(categories *model.OrderedSidebarCategories, teamID, userID string) error {
 	var categoriesToRemove []*model.SidebarCategoryWithChannels
 	var ecosystemCategory *model.SidebarCategoryWithChannels
-	var ecosystemOrganization config.Organization
 	config, err := s.platformService.GetPlatformConfig()
 
 	if err != nil {
@@ -186,17 +189,19 @@ func (s *EventService) cleanCategories(categories *model.OrderedSidebarCategorie
 		}
 	}
 
-	for _, organization := range config.Organizations {
-		if organization.IsEcosystem {
-			ecosystemOrganization = organization
-			break
-		}
+	ecosystem, ecosystemFound := config.GetEcosystem()
+	if !ecosystemFound {
+		return fmt.Errorf("couldn't get ecosystem")
 	}
 
-	formattedOrganizationName := strings.ToLower(strings.ReplaceAll(ecosystemOrganization.Name, " ", "-"))
+	allOrganizationsChannels, xerr := s.channelService.GetAllChannels()
+	if xerr != nil {
+		return fmt.Errorf("couldn't get all organizations channels: %s", xerr.Error())
+	}
+
 	// Create if absent
 	if ecosystemCategory == nil {
-		ecosystemCategory, _ = s.buildOrganizationCategory(teamID, userID, ecosystemOrganization)
+		ecosystemCategory, _ = s.buildOrganizationCategory(teamID, userID, *ecosystem)
 
 		if _, catErr := s.api.CreateChannelSidebarCategory(userID, teamID, ecosystemCategory); catErr != nil {
 			return errors.Wrap(err, "Could not create sidebar category")
@@ -205,30 +210,19 @@ func (s *EventService) cleanCategories(categories *model.OrderedSidebarCategorie
 
 	for _, category := range categories.Categories {
 		if category.Type == model.SidebarCategoryChannels {
-			channels, err := s.api.GetChannelsForTeamForUser(teamID, userID, true)
-			if err != nil {
-				continue
+			var channelIds []string
+			for _, categoryChannelID := range category.Channels {
+				for _, orgChannel := range allOrganizationsChannels.Items {
+					if orgChannel.ChannelID == categoryChannelID {
+						if orgChannel.OrganizationID == ecosystem.ID {
+							ecosystemCategory.Channels = append(ecosystemCategory.Channels, categoryChannelID)
+						} else {
+							channelIds = append(channelIds, categoryChannelID)
+						}
+					}
+				}
 			}
 
-			var channelIds []string
-			for _, channel := range channels {
-				// Get the channel data from the ID without passing by the API
-				found := false
-				for _, categoryChannelID := range category.Channels {
-					if categoryChannelID == channel.Id {
-						found = true
-						break
-					}
-				}
-				if found {
-					// filter out the ecosystem channels from the default category
-					if strings.Contains(strings.ToLower(channel.DisplayName), formattedOrganizationName) {
-						ecosystemCategory.Channels = append(ecosystemCategory.Channels, channel.Id)
-					} else {
-						channelIds = append(channelIds, channel.Id)
-					}
-				}
-			}
 			category.Channels = channelIds
 			continue
 		}

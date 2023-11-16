@@ -1,9 +1,10 @@
 package app
 
 type Channel struct {
-	ChannelID string `json:"channelId"`
-	ParentID  string `json:"parentId"`
-	SectionID string `json:"sectionId"`
+	ChannelID      string `json:"channelId"`
+	ParentID       string `json:"parentId"`
+	SectionID      string `json:"sectionId"`
+	OrganizationID string `json:"organizationId"`
 }
 
 type ChannelFilterOptions struct {
@@ -31,6 +32,7 @@ type AddChannelParams struct {
 	ParentID            string `json:"parentId"`
 	SectionID           string `json:"sectionId"`
 	TeamID              string `json:"teamId"`
+	OrganizationID      string `json:"organizationId"`
 }
 
 type AddChannelResult struct {

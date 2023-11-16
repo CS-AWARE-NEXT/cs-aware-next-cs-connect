@@ -83,4 +83,14 @@ var migrations = []Migration{
 			return nil
 		},
 	},
+	{
+		fromVersion: semver.MustParse("0.3.0"),
+		toVersion:   semver.MustParse("0.4.0"),
+		migrationFunc: func(e sqlx.Ext, sqlStore *SQLStore) error {
+			if _, err := e.Exec(`ALTER TABLE CSA_Channel ADD OrganizationID VARCHAR(26) NULL`); err != nil {
+				return errors.Wrapf(err, "failed to add organization ID column to CSA channels")
+			}
+			return nil
+		},
+	},
 }

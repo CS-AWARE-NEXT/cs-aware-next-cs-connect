@@ -58,3 +58,13 @@ func getPlatformConfig(filepath string) (*PlatformConfig, error) {
 	}
 	return config, nil
 }
+
+// Utility to get the ecosystem organization. We assume only one exists in the config channel.
+func (p PlatformConfig) GetEcosystem() (*Organization, bool) {
+	for _, organization := range p.Organizations {
+		if organization.IsEcosystem {
+			return &organization, true
+		}
+	}
+	return nil, false
+}

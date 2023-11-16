@@ -21,9 +21,10 @@ type Props = {
     parentId: string;
     sectionId: string;
     teamId: string;
+    organizationId: string,
 };
 
-const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
+const ChannelBox = ({parentId, sectionId, teamId, organizationId}: Props) => {
     const {formatMessage} = useIntl();
     const channels = useChannelsList({section_id: sectionId, parent_id: parentId});
 
@@ -63,6 +64,7 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
                     parentId={parentId}
                     sectionId={sectionId}
                     teamId={teamId}
+                    organizationId={organizationId}
                     addChannelErrorMessage={addChannelErrorMessage}
                     dispacthAddChannelErrorMessage={dispacthAddChannelErrorMessage}
                     dispatchSelectErrorMessage={dispatchSelectErrorMessage}

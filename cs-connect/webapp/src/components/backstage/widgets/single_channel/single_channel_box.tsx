@@ -76,6 +76,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
                         parentId={parentId}
                         sectionId={sectionId}
                         teamId={teamId}
+                        organizationId={organizationId}
                         addChannelErrorMessage={addChannelErrorMessage}
                         dispacthAddChannelErrorMessage={dispacthAddChannelErrorMessage}
                         dispatchSelectErrorMessage={dispatchSelectErrorMessage}
