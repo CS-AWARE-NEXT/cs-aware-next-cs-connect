@@ -18,7 +18,16 @@ export const useHideOptions = (showOptionsConfig: ShowOptionsConfig) => {
 
 const hideOptions = (showOptionsConfig: ShowOptionsConfig): NodeJS.Timeout[][] => {
     if (!showOptionsConfig.showAddChannelButton) {
-        (document.getElementsByClassName('AddChannelDropdown_dropdownButton')[0] as HTMLElement).style.display = 'none';
+        const dropdownButtons = document.getElementsByClassName('AddChannelDropdown_dropdownButton');
+        if (dropdownButtons.length) {
+            const dropdownButton = dropdownButtons[0] as HTMLElement;
+            dropdownButton.style.display = 'none';
+        }
+
+        const addChannelCTA = document.getElementById('addChannelsCta');
+        if (addChannelCTA) {
+            addChannelCTA.style.display = 'none';
+        }
     }
     const hiddenIconBox = document.getElementById('hidden-icon')?.parentElement?.parentElement;
     if (hiddenIconBox) {

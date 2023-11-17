@@ -492,7 +492,9 @@ export const useChannelById = (channelId: string): WidgetChannel => {
             }
         }
 
-        fetchChannelsAsync();
+        if (channelId) {
+            fetchChannelsAsync();
+        }
 
         return () => {
             isCanceled = true;
