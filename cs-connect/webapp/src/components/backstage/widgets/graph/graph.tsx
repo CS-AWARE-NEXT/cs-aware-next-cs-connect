@@ -75,7 +75,7 @@ type Props = {
 const DESCRIPTION_ID_PREFIX = 'graph-';
 
 // Pixels between each levels in the graph
-const GRAP_RANK_SEP = 75;
+const GRAP_RANK_SEP = 85;
 
 // This is the style for the dashboard
 const defaultGraphStyle: GraphStyle = {
@@ -153,6 +153,8 @@ export const getLayoutedElements = (
             }
             x -= (node.width ? node.width / 2 : width / 2);
             y -= (node.height ? node.height / 2 : height / 2);
+            node.width = node.width ? node.width : width;
+            node.height = node.height ? node.height : height;
             return {
                 ...node,
                 position: {
@@ -177,13 +179,15 @@ const Graph = ({
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
-    const {fitView} = useReactFlow();
+    const {fitView, getNode, setViewport} = useReactFlow();
     const {formatMessage} = useIntl();
+    const [targetNode, setTargetNode] = useState<Node | undefined>();
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
     const channelId = useSelector(getCurrentChannelId);
     useEffect(() => {
         setNodeInfo(undefined);
+        setTargetNode(undefined);
     }, [channelId]);
 
     const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo})}), []);
@@ -215,7 +219,31 @@ const Graph = ({
         setDescription(data.description || emptyDescription);
         setNodes(data.nodes || []);
         setEdges(data.edges || []);
-    }, [data]);
+
+        // Set a target node to center the viewport on, if there's one associated to the hash in the url.
+        const urlHashedNode = data.nodes.find((node) => node.data.isUrlHashed);
+        if (urlHashedNode) {
+            // Due to the node hyperlink mechanism being based on a scrollToView operation done outside this component,
+            // we have to reset the scrollLeft/Top properties to avoid moving the controls and draggable canvas
+            // outside the visible DOM area (due to overflow: hidden).
+            (document.getElementsByClassName('react-flow')[0] as HTMLDivElement).scrollTo(0, 0);
+            const node = getNode(urlHashedNode.id);
+            if (node) {
+                setTargetNode(node);
+            }
+        } else if (!urlHashedNode && targetNode) {
+            // The data has changed but there's still a targetNode left over, so we reset it and the viewport position
+            // (the latter to avoid ending up with an empty viewport in some corner of the graph)
+            setViewport({x: 0, y: 0, zoom: 0.6});
+            setTargetNode(undefined);
+        }
+    }, [data, getNode]);
+
+    useEffect(() => {
+        if (targetNode) {
+            fitView({nodes: [targetNode], maxZoom: 0.6});
+        }
+    }, [targetNode, fitView]);
 
     const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
     const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
