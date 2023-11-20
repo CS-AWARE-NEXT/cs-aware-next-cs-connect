@@ -18,6 +18,8 @@ import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
 import {ClientError} from '@mattermost/client';
 
+import {getCurrentUserId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
+
 import {StepData} from 'src/types/steps_modal';
 import {
     formatName,
@@ -56,6 +58,7 @@ const StepsModal = ({
     const {path} = useRouteMatch();
     const {formatMessage} = useIntl();
     const teamId = useSelector(getCurrentTeamId);
+    const userId = useSelector(getCurrentUserId);
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
 
@@ -114,6 +117,7 @@ const StepsModal = ({
                     parentId,
                     sectionId: savedSectionInfo.id,
                     teamId,
+                    userId,
                     organizationId,
                 }).
                     then(() => {

@@ -26,7 +26,7 @@ func NewMattermostChannelStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) ap
 }
 
 // Get all channels associated to a team. This returns private channels as well, unlike the RPC API method.
-func (s *mattermostChannelStore) GetChannelsForTeam(teamID string) ([]model.Channel, error) {
+func (s *mattermostChannelStore) GetChannelsForTeam(teamID string) (app.GetMattermostChannelsResults, error) {
 	queryForResults := s.queryBuilder.Select("*").
 		From("channels").
 		Where(sq.Eq{"teamid": teamID})
@@ -34,8 +34,8 @@ func (s *mattermostChannelStore) GetChannelsForTeam(teamID string) ([]model.Chan
 
 	err := s.store.selectBuilder(s.store.db, &channels, queryForResults)
 	if err != nil {
-		return nil, errors.Wrap(err, "could not get channels")
+		return app.GetMattermostChannelsResults{}, errors.Wrap(err, "could not get channels")
 	}
 
-	return channels, nil
+	return app.GetMattermostChannelsResults{Items: channels}, nil
 }

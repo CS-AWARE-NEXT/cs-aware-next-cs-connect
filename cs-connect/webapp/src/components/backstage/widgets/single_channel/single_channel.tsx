@@ -12,9 +12,10 @@ type Props = {
     parentId: string;
     sectionId: string;
     teamId: string;
+    userId: string;
 };
 
-const SingleChannel = ({parentId, sectionId, teamId}: Props) => {
+const SingleChannel = ({parentId, sectionId, teamId, userId}: Props) => {
     const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
 
@@ -39,6 +40,7 @@ const SingleChannel = ({parentId, sectionId, teamId}: Props) => {
                 parentId={parentId}
                 sectionId={sectionId}
                 teamId={teamId}
+                userId={userId}
             />
         </Container>
     );

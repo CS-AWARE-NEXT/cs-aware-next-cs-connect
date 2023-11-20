@@ -19,6 +19,7 @@ type CreateChannelProps = {
     parentId: string;
     sectionId: string;
     teamId: string;
+    userId: string;
     organizationId: string;
     addChannelErrorMessage: string;
     dispacthAddChannelErrorMessage: Dispatch<any>;
@@ -32,6 +33,7 @@ const createChannel = (
     sectionId: string,
     teamId: string,
     teamName: string,
+    userId: string,
     organizationId: string,
     dispacthAddChannelErrorMessage: Dispatch<any>,
     dispatchNameErrorMessage: Dispatch<any>,
@@ -62,6 +64,7 @@ const createChannel = (
     }
 
     addChannel({
+        userId,
         channelId: linkExistingChannel ? channelId : undefined,
         channelName: createNewChannel ? channelName : undefined,
         createPublicChannel: createNewChannel ? createPublicChannel : false,
@@ -83,6 +86,7 @@ export const CreateChannel = ({
     parentId,
     sectionId,
     teamId,
+    userId,
     organizationId,
     addChannelErrorMessage,
     dispacthAddChannelErrorMessage,
@@ -106,6 +110,7 @@ export const CreateChannel = ({
                         sectionId,
                         teamId,
                         team.name,
+                        userId,
                         organizationId,
                         dispacthAddChannelErrorMessage,
                         dispatchNameErrorMessage,

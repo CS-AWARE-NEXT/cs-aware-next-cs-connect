@@ -39,6 +39,7 @@ type Plugin struct {
 	pluginURLPathPrefix string
 
 	platformService *config.PlatformService
+	categoryService *app.CategoryService
 	channelService  *app.ChannelService
 	eventService    *app.EventService
 	userService     *app.UserService
@@ -68,8 +69,9 @@ func (p *Plugin) OnActivate() error {
 	mattermostChannelStore := sqlstore.NewMattermostChannelStore(apiClient, sqlStore)
 
 	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
-	p.channelService = app.NewChannelService(p.API, channelStore)
-	p.eventService = app.NewEventService(p.API, categoryStore, mattermostChannelStore, p.platformService, p.channelService, p.botID)
+	p.categoryService = app.NewCategoryService(p.API, p.platformService, channelStore, categoryStore)
+	p.channelService = app.NewChannelService(p.API, channelStore, mattermostChannelStore, p.categoryService, p.platformService)
+	p.eventService = app.NewEventService(p.API, p.platformService, p.channelService, p.categoryService, p.botID)
 	p.userService = app.NewUserService(p.API)
 
 	mutex, err := cluster.NewMutex(p.API, "CSA_dbMutex")

@@ -26,6 +26,7 @@ export interface ChannelCreation {
 }
 
 export interface AddChannelParams {
+    userId: string;
     channelId?: string;
     channelName?: string;
     createPublicChannel?: boolean;
