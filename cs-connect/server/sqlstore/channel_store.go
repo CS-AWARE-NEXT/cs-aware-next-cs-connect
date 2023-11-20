@@ -205,6 +205,26 @@ func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.
 	return channel, nil
 }
 
+func (s *channelStore) LinkChannelToOrganization(channelID, organizationID string) error {
+	tx, err := s.store.db.Beginx()
+	if err != nil {
+		return err
+	}
+	defer s.store.finalizeTransaction(tx)
+	if _, err := s.store.execBuilder(tx, sq.
+		Update("CSA_Channel").
+		Where(sq.Eq{"ChannelID": channelID}).
+		SetMap(map[string]interface{}{
+			"OrganizationID": organizationID,
+		})); err != nil {
+		return err
+	}
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+	return nil
+}
+
 // func (s *channelStore) addChannelToCategory(channel *model.Channel, params app.AddChannelParams) error {
 // 	categories, err := s.pluginAPI.API.GetChannelSidebarCategories(params.UserID, params.TeamID)
 // 	if err != nil {

@@ -12,19 +12,21 @@ import (
 )
 
 type CategoryService struct {
-	api             plugin.API
-	platformService *config.PlatformService
-	channelStore    ChannelStore
-	categoryStore   CategoryStore
+	api                    plugin.API
+	platformService        *config.PlatformService
+	channelStore           ChannelStore
+	categoryStore          CategoryStore
+	mattermostChannelStore MattermostChannelStore
 }
 
 // NewCategoryService returns a new channels service
-func NewCategoryService(api plugin.API, platformService *config.PlatformService, channelStore ChannelStore, categoryStore CategoryStore) *CategoryService {
+func NewCategoryService(api plugin.API, platformService *config.PlatformService, channelStore ChannelStore, categoryStore CategoryStore, mattermostChannelStore MattermostChannelStore) *CategoryService {
 	return &CategoryService{
-		api:             api,
-		platformService: platformService,
-		channelStore:    channelStore,
-		categoryStore:   categoryStore,
+		api:                    api,
+		platformService:        platformService,
+		channelStore:           channelStore,
+		categoryStore:          categoryStore,
+		mattermostChannelStore: mattermostChannelStore,
 	}
 }
 
@@ -54,6 +56,11 @@ func (s *CategoryService) cleanCategories(categories *model.OrderedSidebarCatego
 	allOrganizationsChannels, xerr := s.channelStore.GetAllChannels()
 	if xerr != nil {
 		return fmt.Errorf("couldn't get all organizations channels: %s", xerr.Error())
+	}
+
+	allChannels, allChannelsErr := s.mattermostChannelStore.GetChannelsForTeam(teamID)
+	if allChannelsErr != nil {
+		return fmt.Errorf("couldn't get all channels of team %s", teamID)
 	}
 
 	// Create if absent
@@ -91,6 +98,33 @@ func (s *CategoryService) cleanCategories(categories *model.OrderedSidebarCatego
 
 		if category.Id == ecosystemCategory.Id {
 			continue
+		}
+
+		// Old organization categories, those have no explicit org association, but they follow a naming convention we can use to migrate them
+		for _, categoryChannelID := range category.Channels {
+			channelProcessed := false
+			for _, channel := range allChannels.Items {
+				if channel.Id == categoryChannelID {
+					formattedChannelName := strings.ToLower(strings.ReplaceAll(channel.DisplayName, " ", "-"))
+					for _, organization := range config.Organizations {
+						formattedOrganizationName := strings.ToLower(strings.ReplaceAll(organization.Name, " ", "-"))
+						if strings.Contains(formattedChannelName, formattedOrganizationName) {
+							// We matched this channel to an organization. We assume the channel's entry in the CSA_channels table exists already
+							if err := s.channelStore.LinkChannelToOrganization(channel.Id, organization.ID); err != nil {
+								s.api.LogWarn("found a channel implicitly related to an organization but failed to make the link explicit", "channelID", channel.Id, "organizationID", organization.ID)
+							} else {
+								s.api.LogInfo("organization channel without an explicit orgID migrated successfully", "channelID", channel.Id, "organizationID", organization.ID)
+							}
+							channelProcessed = true
+							break
+						}
+					}
+					if channelProcessed {
+						break
+					}
+				}
+			}
+			channelProcessed = false
 		}
 
 		category.Channels = []string{}

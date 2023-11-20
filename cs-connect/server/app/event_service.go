@@ -57,7 +57,7 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 		return fmt.Errorf("couldn't get all channels for team %s", params.TeamID)
 	}
 
-	allOrgChannels, xerr := s.channelService.GetAllChannels()
+	allOrgChannels, xerr := s.channelService.GetAllOrganizationChannels()
 	if xerr != nil {
 		return fmt.Errorf("couldn't get all organization channels")
 	}
@@ -129,7 +129,7 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 		return fmt.Errorf("couldn't get all channels of team %s", params.TeamID)
 	}
 
-	allOrgChannels, xerr := s.channelService.GetAllChannels()
+	allOrgChannels, xerr := s.channelService.GetAllOrganizationChannels()
 	if xerr != nil {
 		return fmt.Errorf("couldn't get all organization channels")
 	}

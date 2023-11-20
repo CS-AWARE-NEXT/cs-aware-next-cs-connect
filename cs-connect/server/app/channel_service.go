@@ -32,7 +32,7 @@ func (s *ChannelService) GetChannels(sectionID string, parentID string) (GetChan
 	return s.store.GetChannels(sectionID, parentID)
 }
 
-func (s *ChannelService) GetAllChannels() (GetChannelsResults, error) {
+func (s *ChannelService) GetAllOrganizationChannels() (GetChannelsResults, error) {
 	s.api.LogInfo("Getting all channels")
 	return s.store.GetAllChannels()
 }

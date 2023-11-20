@@ -69,7 +69,7 @@ func (p *Plugin) OnActivate() error {
 	mattermostChannelStore := sqlstore.NewMattermostChannelStore(apiClient, sqlStore)
 
 	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
-	p.categoryService = app.NewCategoryService(p.API, p.platformService, channelStore, categoryStore)
+	p.categoryService = app.NewCategoryService(p.API, p.platformService, channelStore, categoryStore, mattermostChannelStore)
 	p.channelService = app.NewChannelService(p.API, channelStore, mattermostChannelStore, p.categoryService, p.platformService)
 	p.eventService = app.NewEventService(p.API, p.platformService, p.channelService, p.categoryService, p.botID)
 	p.userService = app.NewUserService(p.API)
@@ -159,4 +159,8 @@ func (p *Plugin) getBotID() (string, error) {
 		return "", errors.Wrap(err, "failed to ensure bot, so cannot get botID")
 	}
 	return botID, nil
+}
+
+func (p *Plugin) onInit() {
+
 }

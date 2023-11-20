@@ -16,4 +16,6 @@ type ChannelStore interface {
 
 	// AddChannel adds a channel to a section
 	AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error)
+
+	LinkChannelToOrganization(channelID, organizationID string) error
 }
