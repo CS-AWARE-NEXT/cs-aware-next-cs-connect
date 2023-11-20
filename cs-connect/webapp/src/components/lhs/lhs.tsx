@@ -5,6 +5,8 @@ import React, {useEffect, useState} from 'react';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 
+import styled from 'styled-components';
+
 import {setUserOrganization} from 'src/clients';
 
 import {useOrganizionsNoEcosystem, useUserProps} from 'src/hooks';
@@ -14,6 +16,7 @@ import {Organization} from 'src/types/organization';
 
 const LHSView = () => {
     const [selectedObject, setSelectedObject] = useState<SelectObject>(defaultSelectObject);
+    const [disabled, setDisabled] = useState<boolean>(false);
     const {formatMessage} = useIntl();
     const organizations = useOrganizionsNoEcosystem();
     const [options, setOptions] = useState<SelectObject[]>();
@@ -34,6 +37,7 @@ const LHSView = () => {
                 const organization = organizations.find((org) => org.id === orgId);
                 if (organization) {
                     setSelectedObject({value: organization?.id, label: organization.name});
+                    setDisabled(true);
                 }
             }
         }
@@ -52,17 +56,22 @@ const LHSView = () => {
     }, [selectedObject]);
 
     return (
-        <Select
+        <StyledSelect
             value={selectedObject.value}
+            disabled={disabled}
             showSearch={true}
             style={{width: '100%'}}
             placeholder={formatMessage({defaultMessage: 'Search or select'})}
             optionFilterProp='children'
 
             options={options}
-            onChange={(value) => setSelectedObject({value, label: value})}
+            onChange={(value: any) => setSelectedObject({value, label: value})}
         />
     );
 };
+
+const StyledSelect = styled(Select)`
+    background: var(--center-channel-bg);
+`;
 
 export default LHSView;

@@ -271,7 +271,7 @@ func (s *channelStore) getOrganizationMembers(channelID, organizationID, teamID 
 	}
 
 	for _, user := range allUsers {
-		userOrgID, isPropSet := user.GetProp("orgID")
+		userOrgID, isPropSet := user.GetProp("orgId")
 		if isPropSet {
 			if userOrgID == organizationID {
 				orgUsers = append(orgUsers, user)

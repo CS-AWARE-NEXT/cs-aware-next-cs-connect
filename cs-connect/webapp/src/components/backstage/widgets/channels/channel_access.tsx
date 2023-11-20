@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 
 import {AutomationHeader, AutomationLabel, AutomationTitle} from 'src/components/backstage/widgets/channels/styles';
-import {HorizontalSpacer, HorizontalSplit, VerticalSplit} from 'src/components/backstage/grid';
+import {HorizontalSplit} from 'src/components/backstage/grid';
 import {ChannelCreation} from 'src/types/channels';
 import ChannelSelector from 'src/components/backstage/channel_selector';
 import {ErrorMessage} from 'src/components/commons/messages';
@@ -37,14 +37,14 @@ export const CreateAChannel = ({
     const teamId = useSelector(getCurrentTeamId);
     const archived = false;
 
-    const handlePublicChange = (isPublic: boolean) => {
+    /* const handlePublicChange = (isPublic: boolean) => {
         cleanErrorMessages();
         dispatchChannelCreation(channelCreationAction({
             ...channelCreation,
             createPublicChannel: isPublic,
         }));
         setChangesMade?.(true);
-    };
+    }; */
 
     const handleChannelNameTemplateChange = (channelName: string) => {
         cleanErrorMessages();
@@ -124,7 +124,7 @@ export const CreateAChannel = ({
                     </AutomationLabel>
                 </AutomationTitle>
                 <HorizontalSplit>
-                    <VerticalSplit>
+                    {/* <VerticalSplit>
                         <ButtonLabel disabled={archived || channelCreation.channelMode === 'link_existing_channel'}>
                             <RadioInput
                                 type='radio'
@@ -154,7 +154,7 @@ export const CreateAChannel = ({
                             />
                             <BigText>{formatMessage({defaultMessage: 'Private'})}</BigText>
                         </ButtonLabel>
-                    </VerticalSplit>
+                    </VerticalSplit> */}
                     <PatternedInput
                         enabled={!archived && channelCreation.channelMode === 'create_new_channel'}
                         input={channelCreation.channelName}

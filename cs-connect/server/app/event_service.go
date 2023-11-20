@@ -117,6 +117,14 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 		return fmt.Errorf("couldn't get config for user %s", params.UserID)
 	}
 
+	user, userErr := s.api.GetUser(params.UserID)
+	if userErr != nil {
+		return errors.Wrap(userErr, "could not fetch user to set orgID prop")
+	}
+	if _, found := user.GetProp("orgId"); found {
+		return fmt.Errorf("couldn't set organization for user %s: the user already has an organization seleted", params.UserID)
+	}
+
 	// Custom getter to properly fetch private channels for the team as well
 	channels, getChannelsErr := s.mattermostChannelStore.GetChannelsForTeam(params.TeamID)
 	if getChannelsErr != nil {
@@ -149,11 +157,7 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 		}
 	}
 
-	user, userErr := s.api.GetUser(params.UserID)
-	if userErr != nil {
-		return errors.Wrap(userErr, "could not fetch user to set orgID prop")
-	}
-	user.SetProp("orgID", params.OrgID)
+	user.SetProp("orgId", params.OrgID)
 	if _, err := s.api.UpdateUser(user); err != nil {
 		return fmt.Errorf("couldn't update user props")
 	}
