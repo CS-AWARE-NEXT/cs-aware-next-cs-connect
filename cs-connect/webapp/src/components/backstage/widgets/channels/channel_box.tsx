@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import styled from 'styled-components';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import {
@@ -13,7 +13,7 @@ import ChannelsList from 'src/components/backstage/widgets/channels/channels_lis
 import {CreateAChannel} from 'src/components/backstage/widgets/channels/channel_access';
 import Header from 'src/components/commons/header';
 import {Section} from 'src/components/backstage/widgets/channels/styles';
-import {useChannelsList} from 'src/hooks';
+import {useChannelsList, useUserProps} from 'src/hooks';
 
 import {CreateChannel} from './controls';
 
@@ -28,6 +28,7 @@ type Props = {
 const ChannelBox = ({parentId, sectionId, teamId, userId, organizationId}: Props) => {
     const {formatMessage} = useIntl();
     const channels = useChannelsList({section_id: sectionId, parent_id: parentId});
+    const [userProps, _setUserProps] = useUserProps();
 
     const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
@@ -49,7 +50,7 @@ const ChannelBox = ({parentId, sectionId, teamId, userId, organizationId}: Props
     };
 
     return (
-        <>
+        (userProps && userProps.orgId === organizationId) ? <>
             <StyledSection>
                 <Setting id={'channel-action'}>
                     <CreateAChannel
@@ -85,7 +86,9 @@ const ChannelBox = ({parentId, sectionId, teamId, userId, organizationId}: Props
                 />
                 <ChannelsList channels={channels}/>
             </ChannelListContainer>
-        </>
+        </> : <div className='text-center pt-4'>
+            <FormattedMessage defaultMessage='You cannot view the channels information for this organization.'/>
+        </div>
     );
 };
 

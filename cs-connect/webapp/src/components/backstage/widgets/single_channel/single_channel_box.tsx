@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useReducer} from 'react';
 import styled from 'styled-components';
 
+import {FormattedMessage} from 'react-intl';
+
 import {addChannelErrorMessageAction, channelCreationAction, nameErrorMessageAction} from 'src/actions';
 import {
     setAddChannelErrorMessage,
@@ -17,6 +19,7 @@ import {
     useOrganization,
     useSection,
     useSectionInfo,
+    useUserProps,
 } from 'src/hooks';
 import {formatChannelName} from 'src/helpers';
 
@@ -35,6 +38,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId, userId}: Props) => {
     const organization = useOrganization(organizationId);
     const section = useSection(parentId);
     const sectionInfo = useSectionInfo(sectionId, section.url);
+    const [userProps, _setUserProps] = useUserProps();
 
     const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [_, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
@@ -61,7 +65,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId, userId}: Props) => {
     };
 
     return (
-        <>
+        (userProps && userProps.orgId === organizationId) ? <>
             {(!channels || channels.length < 1) &&
                 <StyledSection>
                     <Setting id={'channel-action'}>
@@ -92,7 +96,9 @@ const SingleChannelBox = ({parentId, sectionId, teamId, userId}: Props) => {
                         isList={false}
                     />
                 </ChannelContainer>}
-        </>
+        </> : <div className='text-center pt-4'>
+            <FormattedMessage defaultMessage='You cannot view the channels information for this organization.'/>
+        </div>
     );
 };
 
