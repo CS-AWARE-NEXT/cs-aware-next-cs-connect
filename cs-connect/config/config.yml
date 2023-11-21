@@ -122,7 +122,7 @@ organizations:
         id: "24"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/exercises
         widgets:
-          - name: Assignment
+          - name: Exercise
             type: exercise
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/exercises/:id/assignment
           - type: channels

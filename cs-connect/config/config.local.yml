@@ -122,7 +122,7 @@ organizations:
         id: "24"
         url: http://localhost:3000/cs-data-provider/organizations/5/exercises
         widgets:
-          - name: Assignment
+          - name: Exercise
             type: exercise
             url: http://localhost:3000/cs-data-provider/organizations/5/exercises/:id/assignment
           - type: channels
