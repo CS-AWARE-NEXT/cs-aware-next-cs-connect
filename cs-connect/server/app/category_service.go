@@ -56,7 +56,7 @@ func (s *CategoryService) cleanCategories(categories *model.OrderedSidebarCatego
 		return errors.Wrap(userErr, "could not fetch user to set orgID prop")
 	}
 	orgID, found := user.GetProp("orgId")
-	if !found {
+	if !found || orgID == "" {
 		// Silent fail, we'll retry when the user sets his organization
 		s.api.LogWarn("couldn't setup categories: the user has not selected an organization yet", "userID", userID)
 		return nil

@@ -106,9 +106,9 @@ func (p *Plugin) OnActivate() error {
 		p.userService,
 	)
 
-	// if err := p.registerCommands(); err != nil {
-	// 	return errors.Wrapf(err, "failed to register commands")
-	// }
+	if err := p.registerCommands(); err != nil {
+		return errors.Wrapf(err, "failed to register commands")
+	}
 
 	p.API.LogInfo("Plugin activated successfully", "pluginID", p.pluginID, "botID", p.botID)
 	return nil
@@ -124,6 +124,8 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	switch r.URL.Path {
 	case command.GetOrganizationURLPath:
 		p.handleGetOrganizationURL(w, r)
+	case command.ResetUserOrganizationPath:
+		p.handleResetUserOrganization(w, r)
 	default:
 		p.handler.ServeHTTP(w, r)
 	}

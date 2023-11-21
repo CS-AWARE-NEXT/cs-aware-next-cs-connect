@@ -127,7 +127,7 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 	if userErr != nil {
 		return errors.Wrap(userErr, "could not fetch user to set orgID prop")
 	}
-	if _, found := user.GetProp("orgId"); found {
+	if orgID, found := user.GetProp("orgId"); found && orgID != "" {
 		return fmt.Errorf("couldn't set organization for user %s: the user already has an organization seleted", params.UserID)
 	}
 

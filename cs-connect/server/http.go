@@ -47,6 +47,46 @@ func (p *Plugin) handleGetOrganizationURL(w http.ResponseWriter, r *http.Request
 	p.completeRequest(w)
 }
 
+func (p *Plugin) handleResetUserOrganization(w http.ResponseWriter, r *http.Request) {
+	serverConfig := p.API.GetConfig()
+	request, err := p.getDialogRequestFromBody(r)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	userID, err := p.getUserIDByUserRequestID(request)
+	if err != nil {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if p.isRequestCanceled(request) {
+		return
+	}
+
+	if err := command.ResetUserOrganization(&command.ResetUserOrganizationConfig{
+		UserID: userID,
+		PluginConfig: command.PluginConfig{
+			PathPrefix: p.pluginURLPathPrefix,
+			PluginID:   p.pluginID,
+			SiteURL:    *serverConfig.ServiceSettings.SiteURL,
+			PluginAPI: command.PluginAPI{
+				API: p.API,
+			},
+		},
+	}, p.configuration, request); err != nil {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
+			"error": "Wrong password.",
+		})
+		return
+	}
+
+	p.completeRequest(w)
+}
+
 func (p *Plugin) getDialogRequestFromBody(r *http.Request) (*model.SubmitDialogRequest, error) {
 	request := &model.SubmitDialogRequest{}
 	body, err := io.ReadAll(r.Body)
