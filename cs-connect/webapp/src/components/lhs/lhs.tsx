@@ -1,9 +1,16 @@
-import {Select} from 'antd';
+import {
+    Button,
+    Form,
+    Input,
+    Modal,
+    Select,
+} from 'antd';
 import {getCurrentUserId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
 import React, {useEffect, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
+import {LockOutlined} from '@ant-design/icons';
 
 import styled from 'styled-components';
 
@@ -23,6 +30,10 @@ const LHSView = () => {
     const teamId = useSelector(getCurrentTeamId);
     const userId = useSelector(getCurrentUserId);
     const [userProps, setUserProps] = useUserProps();
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [form] = Form.useForm();
 
     useEffect(() => {
         if (organizations.length) {
@@ -54,6 +65,12 @@ const LHSView = () => {
         if (selectedObject === defaultSelectObject || (userProps && userProps.orgId === selectedObject.value)) {
             return;
         }
+
+        if (selectedObject.value === ORGANIZATION_ID_ALL) {
+            setIsPasswordModalOpen(true);
+            return;
+        }
+
         async function setUserOrganizationAsync() {
             setUserOrganization({teamId, userId, orgId: selectedObject.value});
             setUserProps({orgId: selectedObject.value});
@@ -62,23 +79,114 @@ const LHSView = () => {
         setUserOrganizationAsync();
     }, [selectedObject]);
 
-    return (
-        <StyledSelect
-            value={selectedObject.value}
-            disabled={disabled}
-            showSearch={true}
-            style={{width: '100%'}}
-            placeholder={formatMessage({defaultMessage: 'Search or select'})}
-            optionFilterProp='children'
+    useEffect(() => {
+        if (isPasswordInvalid) {
+            form.validateFields();
+        }
+    }, [isPasswordInvalid]);
 
-            options={options}
-            onChange={(value: any) => setSelectedObject({value, label: value})}
-        />
+    const onFinish = async (values: FieldType) => {
+        setConfirmLoading(true);
+
+        try {
+            await setUserOrganization({teamId, userId, orgId: selectedObject.value, password: values.password});
+        } catch (e) {
+            setConfirmLoading(false);
+            setIsPasswordInvalid(true);
+            return;
+        }
+        setUserProps({orgId: selectedObject.value});
+
+        setConfirmLoading(false);
+
+        setIsPasswordModalOpen(false);
+    };
+
+    const closeModal = () => {
+        setIsPasswordModalOpen(false);
+        setSelectedObject(defaultSelectObject);
+        setDisabled(false);
+        setIsPasswordInvalid(false);
+    };
+
+    return (
+        <>
+            <Modal
+                open={isPasswordModalOpen}
+                width={'20vw'}
+                title={'View all organizations'}
+                centered={true}
+                onCancel={closeModal}
+                confirmLoading={confirmLoading}
+                destroyOnClose={true}
+                footer={[]}
+            >
+                <FormattedMessage defaultMessage='You need to be an administrator to view all the organizations.'/>
+                <Form
+                    name='set_org_pw_check'
+                    form={form}
+                    onFinish={onFinish}
+                    style={{paddingTop: '15px'}}
+                    onChange={() => {
+                        if (isPasswordInvalid) {
+                            setIsPasswordInvalid(false);
+                        }
+                    }}
+                >
+                    <Form.Item
+                        name='password'
+                        rules={[
+                            {required: true, message: 'Input the administrator password.'},
+                            () => ({
+                                validator() {
+                                    if (isPasswordInvalid) {
+                                        return Promise.reject(new Error('The password is incorrect.'));
+                                    }
+                                    return Promise.resolve();
+                                },
+                            }),
+                        ]}
+                    >
+                        <Input
+                            prefix={<LockOutlined className='site-form-item-icon'/>}
+                            type='password'
+                            placeholder='Password'
+                            autoFocus={true}
+                        />
+                    </Form.Item>
+
+                    <Form.Item wrapperCol={{offset: 8, span: 16}}>
+                        <Button
+                            type='primary'
+                            htmlType='submit'
+                        >
+                            <FormattedMessage defaultMessage='Confirm'/>
+                        </Button>
+                    </Form.Item>
+                </Form>
+
+            </Modal>
+            <StyledSelect
+                value={selectedObject.value}
+                disabled={disabled}
+                showSearch={true}
+                style={{width: '100%'}}
+                placeholder={formatMessage({defaultMessage: 'Search or select'})}
+                optionFilterProp='children'
+
+                options={options}
+                onChange={(value: any) => setSelectedObject({value, label: value})}
+            />
+        </>
     );
 };
 
 const StyledSelect = styled(Select)`
     background: var(--center-channel-bg);
 `;
+
+type FieldType = {
+    password?: string;
+};
 
 export default LHSView;

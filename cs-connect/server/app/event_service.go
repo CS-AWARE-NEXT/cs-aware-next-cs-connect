@@ -1,6 +1,7 @@
 package app
 
 import (
+	"encoding/base64"
 	"fmt"
 
 	"github.com/mattermost/mattermost-server/v6/model"
@@ -16,16 +17,18 @@ type EventService struct {
 	channelService  *ChannelService
 	categoryService *CategoryService
 	botID           string
+	configuration   *config.MattermostConfig
 }
 
 // NewEventService returns a new platform config service
-func NewEventService(api plugin.API, platformService *config.PlatformService, channelService *ChannelService, categoryService *CategoryService, botID string) *EventService {
+func NewEventService(api plugin.API, platformService *config.PlatformService, channelService *ChannelService, categoryService *CategoryService, botID string, configuration *config.MattermostConfig) *EventService {
 	return &EventService{
 		api:             api,
 		platformService: platformService,
 		channelService:  channelService,
 		categoryService: categoryService,
 		botID:           botID,
+		configuration:   configuration,
 	}
 }
 
@@ -108,6 +111,12 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 // Set the organization the user will be related to. This will automatically join and leave the organization channels based on the org ID passed.
 func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 	s.api.LogInfo("Params on setOrganization", "params", params)
+
+	if params.OrgID == config.OrganizationIDAll {
+		if params.Password == "" || base64.StdEncoding.EncodeToString([]byte(params.Password)) != s.configuration.GetConfiguration().AdminPassword {
+			return fmt.Errorf("used an incorrect password while allowing all organizations to be shown to user %s", params.UserID)
+		}
+	}
 
 	platformConfig, configErr := s.platformService.GetPlatformConfig()
 	if configErr != nil {

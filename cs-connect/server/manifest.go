@@ -38,7 +38,12 @@ const manifestStr = `
   "settings_schema": {
     "header": "",
     "footer": "",
-    "settings": []
+    "settings": [{
+			"key": "adminPassword",
+			"display_name": "Admin password",
+			"type": "text",
+			"help_text": "A password used to select the \"All\" option from the organization dropdown, to be able to view all channels."
+	}]
   }
 }
 `

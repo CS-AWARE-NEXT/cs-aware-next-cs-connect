@@ -7,6 +7,7 @@ export interface SetUserOrganizationParams {
     teamId: string;
     userId: string;
     orgId: string;
+    password?: string;
 }
 
 export interface GetUserPropsParams {
