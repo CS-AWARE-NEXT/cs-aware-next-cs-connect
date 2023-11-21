@@ -15,6 +15,8 @@ import Header from 'src/components/commons/header';
 import {Section} from 'src/components/backstage/widgets/channels/styles';
 import {useChannelsList, useUserProps} from 'src/hooks';
 
+import {ORGANIZATION_ID_ALL} from 'src/types/organization';
+
 import {CreateChannel} from './controls';
 
 type Props = {
@@ -50,7 +52,7 @@ const ChannelBox = ({parentId, sectionId, teamId, userId, organizationId}: Props
     };
 
     return (
-        (userProps && userProps.orgId === organizationId) ? <>
+        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)) ? <>
             <StyledSection>
                 <Setting id={'channel-action'}>
                     <CreateAChannel

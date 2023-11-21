@@ -1,8 +1,6 @@
 package app
 
 import (
-	"github.com/pkg/errors"
-
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/config"
@@ -58,20 +56,8 @@ func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (
 		return addChannelResult, err
 	}
 
-	config, configErr := s.platformService.GetPlatformConfig()
-	ecosystem, ecosystemFound := config.GetEcosystem()
-
-	if configErr != nil || !ecosystemFound {
-		s.api.LogWarn("Failed to check whether the channel should be added to the ecosystem sidebar category")
-		return addChannelResult, err
+	if catErr := s.categoryService.addChannelToCategoryByOrganizationID(params.UserID, params.TeamID, addChannelResult.ChannelID, params.OrganizationID); catErr != nil {
+		s.api.LogWarn("couldn't add channel to organization category", "channelID", addChannelResult.ChannelID, "orgID", params.OrganizationID)
 	}
-	if params.OrganizationID != ecosystem.ID {
-		s.api.LogWarn("the provided channel isn't linked to an ecosystem, skipping category update")
-		return addChannelResult, err
-	}
-
-	if catErr := s.categoryService.addChannelToEcosystemCategory(params.UserID, params.TeamID, addChannelResult.ChannelID); catErr != nil {
-		return addChannelResult, errors.Wrap(catErr, "couldn't add channel to ecosystem category")
-	}
-	return addChannelResult, err
+	return addChannelResult, nil
 }

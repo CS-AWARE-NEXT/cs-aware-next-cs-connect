@@ -63,3 +63,5 @@ export interface FetchOrganizationsParams {
 }
 
 export type Object = any;
+
+export const ORGANIZATION_ID_ALL = '__all';

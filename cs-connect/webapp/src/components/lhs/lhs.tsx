@@ -12,7 +12,7 @@ import {setUserOrganization} from 'src/clients';
 import {useOrganizionsNoEcosystem, useUserProps} from 'src/hooks';
 
 import {SelectObject, defaultSelectObject} from 'src/types/object_select';
-import {Organization} from 'src/types/organization';
+import {ORGANIZATION_ID_ALL, Organization} from 'src/types/organization';
 
 const LHSView = () => {
     const [selectedObject, setSelectedObject] = useState<SelectObject>(defaultSelectObject);
@@ -26,7 +26,9 @@ const LHSView = () => {
 
     useEffect(() => {
         if (organizations.length) {
-            setOptions(organizations.map((org: Organization) => ({value: org.id, label: org.name})));
+            const orgs = organizations.map((org: Organization) => ({value: org.id, label: org.name}));
+            orgs.push({value: ORGANIZATION_ID_ALL, label: 'All'});
+            setOptions(orgs);
         }
     }, []);
 
@@ -34,10 +36,15 @@ const LHSView = () => {
         if (userProps) {
             const orgId = userProps.orgId;
             if (orgId) {
-                const organization = organizations.find((org) => org.id === orgId);
-                if (organization) {
-                    setSelectedObject({value: organization?.id, label: organization.name});
+                if (orgId === ORGANIZATION_ID_ALL) {
+                    setSelectedObject({value: ORGANIZATION_ID_ALL, label: 'All'});
                     setDisabled(true);
+                } else {
+                    const organization = organizations.find((org) => org.id === orgId);
+                    if (organization) {
+                        setSelectedObject({value: organization?.id, label: organization.name});
+                        setDisabled(true);
+                    }
                 }
             }
         }

@@ -23,6 +23,8 @@ import {
 } from 'src/hooks';
 import {formatChannelName} from 'src/helpers';
 
+import {ORGANIZATION_ID_ALL} from 'src/types/organization';
+
 import {CreateSingleChannel} from './single_channel_creation';
 
 type Props = {
@@ -65,7 +67,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId, userId}: Props) => {
     };
 
     return (
-        (userProps && userProps.orgId === organizationId) ? <>
+        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)) ? <>
             {(!channels || channels.length < 1) &&
                 <StyledSection>
                     <Setting id={'channel-action'}>

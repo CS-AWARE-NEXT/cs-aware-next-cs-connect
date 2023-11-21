@@ -2,7 +2,6 @@ package app
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
@@ -110,7 +109,7 @@ func (s *EventService) UserAdded(params UserAddedParams) error {
 func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 	s.api.LogInfo("Params on setOrganization", "params", params)
 
-	config, configErr := s.platformService.GetPlatformConfig()
+	platformConfig, configErr := s.platformService.GetPlatformConfig()
 	if configErr != nil {
 		return fmt.Errorf("couldn't get config for user %s", params.UserID)
 	}
@@ -134,7 +133,7 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 		return fmt.Errorf("couldn't get all organization channels")
 	}
 
-	ecosystem, ecosystemFound := config.GetEcosystem()
+	ecosystem, ecosystemFound := platformConfig.GetEcosystem()
 	if !ecosystemFound {
 		return fmt.Errorf("couldn't get ecosystem")
 	}
@@ -146,7 +145,7 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 					continue
 				}
 
-				if orgChannel.OrganizationID == params.OrgID {
+				if params.OrgID == config.OrganizationIDAll || orgChannel.OrganizationID == params.OrgID {
 					_, _ = s.api.AddChannelMember(channel.Id, params.UserID)
 				} else {
 					_ = s.api.DeleteChannelMember(channel.Id, params.UserID)
@@ -179,131 +178,4 @@ func (s *EventService) GetUserProps(params GetUserPropsParams) (model.StringMap,
 		return nil, fmt.Errorf("could not fetch user %s to get props", params.UserID)
 	}
 	return user.Props, nil
-}
-
-// Currently unused
-func (s *EventService) setupCategories(platformService *config.PlatformService) error {
-	s.api.LogInfo("Setting up categories")
-	config, err := platformService.GetPlatformConfig()
-	if err != nil {
-		return err
-	}
-	teams, teamsErr := s.api.GetTeams()
-	if teamsErr != nil {
-		s.api.LogError(fmt.Sprintf("Could not get teams seting up categories due to %s", teamsErr.Error()))
-		return err
-	}
-	for _, team := range teams {
-		users, err := s.api.GetUsersInTeam(team.Id, 0, 200)
-		if err != nil {
-			s.api.LogError(fmt.Sprintf("Could not get users in setting up categories due to %s", teamsErr.Error()))
-			return err
-		}
-		for _, user := range users {
-			categories, err := s.api.GetChannelSidebarCategories(user.Id, team.Id)
-			if err != nil {
-				s.api.LogError(fmt.Sprintf("Could not get sidebar categories due to %s", teamsErr.Error()))
-				return err
-			}
-			if s.hasEachOrganizationCategory(config, categories) {
-				continue
-			}
-			for _, organization := range config.Organizations {
-				if s.hasOrganizationCategory(organization, categories) {
-					continue
-				}
-				category, err := s.categoryService.buildOrganizationCategory(team.Id, user.Id, organization)
-				if err != nil {
-					continue
-				}
-				if _, err := s.api.CreateChannelSidebarCategory(user.Id, team.Id, category); err != nil {
-					s.api.LogError(fmt.Sprintf("Could not create sidebar category due to %s", teamsErr.Error()))
-					continue
-				}
-			}
-		}
-	}
-	return nil
-}
-
-// Currently unused
-func (s *EventService) hasEachOrganizationCategory(config *config.PlatformConfig, categories *model.OrderedSidebarCategories) bool {
-	organizations := config.Organizations
-	matches := 0
-	for _, organization := range organizations {
-		for _, category := range categories.Categories {
-			if strings.Contains(strings.ToLower(category.DisplayName), strings.ToLower(organization.Name)) {
-				matches++
-				break
-			}
-		}
-	}
-	return matches == len(organizations)
-}
-
-// Currently unused
-func (s *EventService) hasOrganizationCategory(organization config.Organization, categories *model.OrderedSidebarCategories) bool {
-	for _, category := range categories.Categories {
-		if strings.Contains(strings.ToLower(category.DisplayName), strings.ToLower(organization.Name)) {
-			return true
-		}
-	}
-	return false
-}
-
-// Setup one category per organization, where the org's channels will reside.
-// The channel's name is used to figure out which organization it is related to (org name as substring of the channel name).
-// Currently not used
-func (s *EventService) setupOrganizationCategories(channels []*model.Channel, userID, teamID string) error {
-	if err := s.setupCategories(s.platformService); err != nil {
-		return errors.Wrapf(err, "Could not setup categories")
-	}
-
-	for _, channel := range channels {
-		if _, err := s.api.AddChannelMember(channel.Id, userID); err != nil {
-			return fmt.Errorf("couldn't add channel %s to user %s", channel.Id, userID)
-		}
-
-		categories, err := s.api.GetChannelSidebarCategories(userID, teamID)
-		if err != nil {
-			return fmt.Errorf("couldn't get categories in %s for user %s", channel.Id, userID)
-		}
-		for _, category := range categories.Categories {
-			if strings.Contains(strings.ToLower(category.DisplayName), "channels") {
-				config, err := s.platformService.GetPlatformConfig()
-				if err != nil {
-					return fmt.Errorf("couldn't get config in %s for user %s", channel.Id, userID)
-				}
-				for i, channelID := range category.Channels {
-					if channel.Id == channelID {
-						for _, organization := range config.Organizations {
-							formattedOrganizationName := strings.ToLower(strings.ReplaceAll(organization.Name, " ", "-"))
-							if strings.Contains(strings.ToLower(channel.DisplayName), formattedOrganizationName) {
-								category.Channels = append(category.Channels[:i], category.Channels[i+1:]...)
-							}
-						}
-					}
-				}
-			}
-			formattedCategoryName := strings.ToLower(strings.ReplaceAll(category.DisplayName, " ", "-"))
-			if strings.Contains(strings.ToLower(channel.DisplayName), formattedCategoryName) {
-				contained := false
-				for _, channelID := range category.Channels {
-					if channel.Id == channelID {
-						contained = true
-						break
-					}
-				}
-				if contained {
-					break
-				}
-				category.Channels = append(category.Channels, channel.Id)
-			}
-		}
-		if _, err := s.api.UpdateChannelSidebarCategories(userID, teamID, categories.Categories); err != nil {
-			return errors.Wrap(err, "could not update categories for team to add channel")
-		}
-	}
-
-	return nil
 }

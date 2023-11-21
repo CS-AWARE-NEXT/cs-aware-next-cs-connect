@@ -6,6 +6,9 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
+// Marker ID to select all organizations, used when deciding which channels to show in the left sidebar
+const OrganizationIDAll = "__all"
+
 type PlatformConfig struct {
 	EnvironmentConfig EnvironmentConfig `json:"environmentConfig" yaml:"environmentConfig"`
 	Organizations     []Organization    `json:"organizations" yaml:"organizations"`
