@@ -36,7 +36,7 @@ func GetExercise(c *fiber.Ctx) error {
 }
 
 func GetExerciseAssignment(c *fiber.Ctx) error {
-	organizationId := c.Params("organizationId")
+	// organizationId := c.Params("organizationId")
 	exerciseId := c.Params("exerciseId")
 	organizationName := "foggia"
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s-exercise-%s", organizationName, exerciseId), "*.xlsx")
@@ -71,17 +71,17 @@ func GetExerciseAssignment(c *fiber.Ctx) error {
 				assignment.DescriptionName = caser.String(col)
 				continue
 			}
-			if strings.Contains(col, "Attack phases") {
-				col = strings.Trim(col, " ")
-				col = strings.Trim(col, ":")
-				assignment.AttackName = caser.String(col)
-				continue
-			}
-			if strings.Contains(col, "Assignment") {
+			// if strings.Contains(col, "Attack phases") {
+			// 	col = strings.Trim(col, " ")
+			// 	col = strings.Trim(col, ":")
+			// 	assignment.AttackName = caser.String(col)
+			// 	continue
+			// }
+			if strings.Contains(strings.ToLower(col), "assignment") {
 				assignment.QuestionName = caser.String(col)
 				continue
 			}
-			if strings.Contains(col, "Education") {
+			if strings.Contains(strings.ToLower(col), "material") {
 				assignment.EducationName = caser.String(col)
 				continue
 			}
@@ -94,10 +94,10 @@ func GetExerciseAssignment(c *fiber.Ctx) error {
 				assignment.Questions = append(assignment.Questions, col)
 				continue
 			}
-			if assignment.AttackName != "" {
-				assignment.AttackParts = append(assignment.AttackParts, col)
-				continue
-			}
+			// if assignment.AttackName != "" {
+			// 	assignment.AttackParts = append(assignment.AttackParts, col)
+			// 	continue
+			// }
 			if assignment.DescriptionName != "" {
 				assignment.DescriptionParts = append(assignment.DescriptionParts, col)
 			}
@@ -105,12 +105,14 @@ func GetExerciseAssignment(c *fiber.Ctx) error {
 	}
 
 	incidents := []model.IncidentWithOrganizationId{}
-	for _, incident := range GetIncidentsByOrganizationId(organizationId) {
-		incidents = append(incidents, model.IncidentWithOrganizationId{
-			Incident:       incident,
-			OrganizationId: organizationId,
-		})
-	}
+
+	// for _, incident := range GetIncidentsByOrganizationId(organizationId) {
+	// 	incidents = append(incidents, model.IncidentWithOrganizationId{
+	// 		Incident:       incident,
+	// 		OrganizationId: organizationId,
+	// 	})
+	// }
+
 	return c.JSON(model.ExerciseAssignment{
 		Assignment: assignment,
 		Incidents:  incidents,

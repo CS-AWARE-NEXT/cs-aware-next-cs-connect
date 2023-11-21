@@ -1,6 +1,7 @@
 package model
 
 type ExerciseAssignment struct {
+	ExerciseID string                       `json:"exerciseId"`
 	Assignment Assignment                   `json:"assignment"`
 	Incidents  []IncidentWithOrganizationId `json:"incidents"`
 }
