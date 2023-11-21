@@ -42,7 +42,7 @@ const manifestStr = `
 			"key": "adminPassword",
 			"display_name": "Admin password",
 			"type": "text",
-			"help_text": "A password used to select the \"All\" option from the organization dropdown, to be able to view all channels."
+			"help_text": "A standard base64 encoded password used to select the \"All\" option from the organization dropdown, to be able to view all channels."
 	}]
   }
 }
