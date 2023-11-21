@@ -160,7 +160,3 @@ func (p *Plugin) getBotID() (string, error) {
 	}
 	return botID, nil
 }
-
-func (p *Plugin) onInit() {
-
-}

@@ -227,6 +227,7 @@ func (s *CategoryService) setupOrganizationCategories(orgChannels []Channel, use
 		return fmt.Errorf("couldn't get config")
 	}
 
+	var skippedIds []string
 	for _, category := range categories.Categories {
 		// Remove organization channels from the default category
 		if category.Type == model.SidebarCategoryChannels {
@@ -239,6 +240,8 @@ func (s *CategoryService) setupOrganizationCategories(orgChannels []Channel, use
 						found = true
 						if orgChannel.OrganizationID == "" {
 							channelIds = append(channelIds, channelID)
+						} else {
+							skippedIds = append(skippedIds, channelID)
 						}
 						break
 					}
@@ -257,6 +260,19 @@ func (s *CategoryService) setupOrganizationCategories(orgChannels []Channel, use
 			if formattedOrganizationName == formattedCategoryName {
 				// We got the corresponding organization id, now we can add all the related channels
 				for _, channel := range orgChannels {
+					// Skip channels that weren't in the default category
+					// this is useful to avoid adding channels from other teams since we do not track the team ID yet (we should)
+					valid := false
+					for _, cid := range skippedIds {
+						if cid == channel.ChannelID {
+							valid = true
+							break
+						}
+					}
+					if !valid {
+						continue
+					}
+
 					// Skip channels already under this categories
 					contained := false
 					for _, channelID := range category.Channels {
