@@ -32,15 +32,17 @@ const Exercise = ({
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
 
     const incidentsElements = data?.incidents?.map((incident: SectionInfo) => ({
+        ...incident,
         type: ExerciseElementType.Incident,
         header: incident.name,
-        ...incident,
+        id: `${data.exerciseId}-${incident.id}`,
     })) ?? [];
 
+    const assignmentId = `${data.exerciseId}-assignment`;
     const elements = [
         {
             type: ExerciseElementType.Assignment,
-            id: 'assignment',
+            id: assignmentId,
             name: 'Assignment',
             header: 'Assignment',
             ...data?.assignment,
@@ -66,6 +68,7 @@ const Exercise = ({
                 <Accordion
                     name={name}
                     withHeader={false}
+                    defaultActiveKey={`${assignmentId}-panel-key`}
                     childComponent={ExerciseAccordionChild}
                     elements={elements}
                     parentId={parentId}

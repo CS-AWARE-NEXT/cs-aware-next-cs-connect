@@ -1,6 +1,7 @@
 import {SectionInfo} from './organization';
 
 export type ExerciseAssignment = {
+    exerciseId: string;
     assignment: Assignment;
     incidents: SectionInfo[];
 };

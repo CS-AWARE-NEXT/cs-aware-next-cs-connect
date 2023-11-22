@@ -28,22 +28,22 @@ const AssignmentPart = ({
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
 
-    const descriptionItems = data?.descriptionParts.map((part: string, index: number) => ({
+    const descriptionItems = data?.descriptionParts?.map((part: string, index: number) => ({
         id: `desc-${index}`,
         text: part,
-    }));
-    const attackItems = data?.attackParts.map((part: string, index: number) => ({
+    })) ?? [];
+    const attackItems = data?.attackParts?.map((part: string, index: number) => ({
         id: `attack-${index}`,
         text: part,
-    }));
-    const questionsItems = data?.questions.map((part: string, index: number) => ({
+    })) ?? [];
+    const questionsItems = data?.questions?.map((part: string, index: number) => ({
         id: `question-${index}`,
         text: part,
-    }));
-    const educationItems = data?.educationMaterial.map((part: string, index: number) => ({
+    })) ?? [];
+    const educationItems = data?.educationMaterial?.map((part: string, index: number) => ({
         id: `education-${index}`,
         text: part,
-    }));
+    })) ?? [];
 
     return (
         <Container
@@ -59,30 +59,34 @@ const AssignmentPart = ({
                     title={name}
                 />
             </Header>
-            <ItemsList
-                data={{items: descriptionItems ?? []}}
-                name={data?.descriptionName ?? ''}
-                sectionId={sectionId}
-                parentId={parentId}
-            />
-            <ItemsList
-                data={{items: attackItems ?? []}}
-                name={data?.attackName ?? ''}
-                sectionId={sectionId}
-                parentId={parentId}
-            />
-            <ItemsList
-                data={{items: questionsItems ?? []}}
-                name={data?.questionName ?? ''}
-                sectionId={sectionId}
-                parentId={parentId}
-            />
-            <ItemsList
-                data={{items: educationItems ?? []}}
-                name={data?.educationName ?? ''}
-                sectionId={sectionId}
-                parentId={parentId}
-            />
+            {(descriptionItems && descriptionItems.length > 0) &&
+                <ItemsList
+                    data={{items: descriptionItems ?? []}}
+                    name={data?.descriptionName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
+            {(attackItems && attackItems.length > 0) &&
+                <ItemsList
+                    data={{items: attackItems ?? []}}
+                    name={data?.attackName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
+            {(questionsItems && questionsItems.length > 0) &&
+                <ItemsList
+                    data={{items: questionsItems ?? []}}
+                    name={data?.questionName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
+            {(educationItems && educationItems.length > 0) &&
+                <ItemsList
+                    data={{items: educationItems ?? []}}
+                    name={data?.educationName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
         </Container>
     );
 };

@@ -25,6 +25,7 @@ type Props = {
     parentId: string;
     sectionId: string;
     withHeader?: boolean;
+    defaultActiveKey?: string[] | string | number[] | number;
     childComponent: ElementType<AccordionChildProps>;
     [key: string]: any;
 };
@@ -35,6 +36,7 @@ const Accordion = ({
     parentId,
     sectionId,
     withHeader = true,
+    defaultActiveKey = '',
     childComponent: ChildComponent,
     ...props
 }: Props) => {
@@ -127,7 +129,10 @@ const Accordion = ({
 
                 // If you want one of the element to be opened by default, you can do as follows
                 // defaultActiveKey={`${elements[0].id}-panel-key`}
-                <Collapse accordion={true}>
+                <Collapse
+                    accordion={true}
+                    defaultActiveKey={defaultActiveKey ?? ''}
+                >
                     {elements.map((element) => (
                         <>
                             <Panel
