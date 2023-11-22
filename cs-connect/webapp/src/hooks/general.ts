@@ -28,6 +28,7 @@ import {
     fetchChannelById,
     fetchChannels,
     fetchChartData,
+    fetchExerciseData,
     fetchGraphData,
     fetchListData,
     fetchPaginatedTableData,
@@ -63,6 +64,7 @@ import {UserOption} from 'src/types/users';
 import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
+import {ExerciseAssignment} from 'src/types/exercise';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -452,6 +454,28 @@ export const useChartData = (url: string, chartType: ChartType | undefined): Cha
         };
     }, [url]);
     return chartData as ChartData;
+};
+
+export const useExerciseData = (url: string): ExerciseAssignment => {
+    const [exerciseAssignment, setExerciseAssignment] = useState<ExerciseAssignment | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchExerciseDataAsync() {
+            const exerciseAssignmentResult = await fetchExerciseData(url);
+            if (!isCanceled) {
+                setExerciseAssignment(exerciseAssignmentResult);
+            }
+        }
+
+        fetchExerciseDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+
+    return exerciseAssignment as ExerciseAssignment;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {

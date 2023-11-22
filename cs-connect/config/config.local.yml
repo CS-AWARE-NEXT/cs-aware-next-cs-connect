@@ -99,6 +99,14 @@ organizations:
     id: "5"
     description: This is the organization for Foggia workshop
     sections:
+      - name: Incidents
+        id: "25"
+        url: http://localhost:3000/cs-data-provider/organizations/5/incidents
+        widgets:
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
+          - type: channels
       - name: Social Media
         id: "16"
         url: http://localhost:3000/cs-data-provider/organizations/5/social_media
@@ -109,6 +117,14 @@ organizations:
           - name: Posts
             type: social-media-posts
             url: http://localhost:3000/cs-data-provider/organizations/5/social_media/:id/posts
+          - type: channels
+      - name: Exercises
+        id: "24"
+        url: http://localhost:3000/cs-data-provider/organizations/5/exercises
+        widgets:
+          - name: Exercise
+            type: exercise
+            url: http://localhost:3000/cs-data-provider/organizations/5/exercises/:id/assignment
           - type: channels
   - name: Demo CS-AWARE EU
     id: "4"

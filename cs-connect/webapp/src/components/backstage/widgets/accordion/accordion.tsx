@@ -14,6 +14,8 @@ const {Panel} = Collapse;
 
 type AccordionChildProps = {
     element: AccordionData;
+    parentId?: string;
+    sectionId?: string;
     [key: string]: any;
 };
 
@@ -22,6 +24,7 @@ type Props = {
     elements: AccordionData[];
     parentId: string;
     sectionId: string;
+    withHeader?: boolean;
     childComponent: ElementType<AccordionChildProps>;
     [key: string]: any;
 };
@@ -31,6 +34,7 @@ const Accordion = ({
     elements,
     parentId,
     sectionId,
+    withHeader = true,
     childComponent: ChildComponent,
     ...props
 }: Props) => {
@@ -109,15 +113,16 @@ const Accordion = ({
             id={id}
             data-testid={id}
         >
-            <Header>
-                <AnchorLinkTitle
-                    fullUrl={fullUrl}
-                    id={id}
-                    query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
-                    text={name}
-                    title={name}
-                />
-            </Header>
+            {withHeader &&
+                <Header>
+                    <AnchorLinkTitle
+                        fullUrl={fullUrl}
+                        id={id}
+                        query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
+                        text={name}
+                        title={name}
+                    />
+                </Header>}
             {elements && elements.length > 0 ?
 
                 // If you want one of the element to be opened by default, you can do as follows
@@ -133,6 +138,8 @@ const Accordion = ({
                             >
                                 <ChildComponent
                                     element={element}
+                                    sectionId={sectionId}
+                                    parentId={parentId}
                                     {...props}
                                 />
                             </Panel>

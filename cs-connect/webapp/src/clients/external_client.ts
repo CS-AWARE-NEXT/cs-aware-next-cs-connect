@@ -11,6 +11,7 @@ import {TimelineData} from 'src/types/timeline';
 import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
+import {ExerciseAssignment} from 'src/types/exercise';
 
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
     let data = await doGet<SectionInfo>(`${url}/${id}`);
@@ -103,6 +104,14 @@ export const fetchChartData = async (url: string, chartType: ChartType | undefin
     let data = await doGet<ChartData>(url);
     if (!data) {
         data = defaultChartData;
+    }
+    return data;
+};
+
+export const fetchExerciseData = async (url: string): Promise<ExerciseAssignment> => {
+    let data = await doGet<ExerciseAssignment>(url);
+    if (!data) {
+        data = {} as ExerciseAssignment;
     }
     return data;
 };

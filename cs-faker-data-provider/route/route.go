@@ -37,6 +37,7 @@ func useOrganizations(basePath fiber.Router) {
 	useOrganizationsPolicies(organizations)
 	useOrganizationsPlaybooks(organizations)
 	useOrganizationsSocialMedia(organizations)
+	useOrganizationsExercises(organizations)
 }
 
 func useOrganizationsIncidents(organizations fiber.Router) {
@@ -141,6 +142,23 @@ func useOrganizationsSocialMedia(organizations fiber.Router) {
 	socialMediaWithId.Get("/chart", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/social_media/:socialMediaId/chart called")
 		return controller.GetSocialMediaPostsPerHashtagChart(c)
+	})
+}
+
+func useOrganizationsExercises(organizations fiber.Router) {
+	exercise := organizations.Group("/:organizationId/exercises")
+	exercise.Get("/", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/exercises called")
+		return controller.GetExercises(c)
+	})
+	exerciseWithId := exercise.Group("/:exerciseId")
+	exerciseWithId.Get("/", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/exercises/:exerciseId called")
+		return controller.GetExercise(c)
+	})
+	exerciseWithId.Get("/assignment", func(c *fiber.Ctx) error {
+		log.Printf("GET /:organizationId/exercises/:exerciseId/assignment called")
+		return controller.GetExerciseAssignment(c)
 	})
 }
 
