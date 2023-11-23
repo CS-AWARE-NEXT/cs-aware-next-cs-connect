@@ -7,6 +7,8 @@ import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/
 import {useSelector} from 'react-redux';
 import {useRouteMatch} from 'react-router-dom';
 
+import {getCurrentUserId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
+
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {navigateToUrl} from 'src/browser_routing';
@@ -53,6 +55,7 @@ const ScenarioWizard = ({
     const {formatMessage} = useIntl();
     const {path} = useRouteMatch();
     const teamId = useSelector(getCurrentTeamId);
+    const userId = useSelector(getCurrentUserId);
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
 
@@ -111,11 +114,13 @@ const ScenarioWizard = ({
         saveSectionInfo(issue, targetUrl).
             then((savedSectionInfo) => {
                 addChannel({
+                    userId,
                     channelName: formatName(`${organization.name}-${savedSectionInfo.name}`),
                     createPublicChannel: true,
                     parentId,
                     sectionId: savedSectionInfo.id,
                     teamId,
+                    organizationId,
                 }).
                     then(() => {
                         cleanModal();

@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -49,7 +50,11 @@ func (h *ChannelHandler) getChannelByID(c *Context, w http.ResponseWriter, r *ht
 	channelID := vars["channelId"]
 	channels, err := h.channelService.GetChannelByID(channelID)
 	if err != nil {
-		h.HandleError(w, c.logger, err)
+		if errors.Is(err, app.ErrNotFound) {
+			h.HandleErrorWithCode(w, c.logger, http.StatusNotFound, "channel not found", err)
+		} else {
+			h.HandleError(w, c.logger, err)
+		}
 		return
 	}
 	ReturnJSON(w, channels, http.StatusOK)

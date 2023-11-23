@@ -1,6 +1,8 @@
 import React, {useContext, useEffect, useReducer} from 'react';
 import styled from 'styled-components';
 
+import {FormattedMessage} from 'react-intl';
+
 import {addChannelErrorMessageAction, channelCreationAction, nameErrorMessageAction} from 'src/actions';
 import {
     setAddChannelErrorMessage,
@@ -17,8 +19,11 @@ import {
     useOrganization,
     useSection,
     useSectionInfo,
+    useUserProps,
 } from 'src/hooks';
 import {formatChannelName} from 'src/helpers';
+
+import {ORGANIZATION_ID_ALL} from 'src/types/organization';
 
 import {CreateSingleChannel} from './single_channel_creation';
 
@@ -26,14 +31,16 @@ type Props = {
     parentId: string;
     sectionId: string;
     teamId: string;
+    userId: string;
 };
 
-const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
+const SingleChannelBox = ({parentId, sectionId, teamId, userId}: Props) => {
     const channels = useChannelsList({section_id: sectionId, parent_id: parentId});
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
     const section = useSection(parentId);
     const sectionInfo = useSectionInfo(sectionId, section.url);
+    const [userProps, _setUserProps] = useUserProps();
 
     const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [_, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
@@ -44,7 +51,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
         channelId: '',
         channelMode: 'create_new_channel',
         channelName: '',
-        createPublicChannel: true,
+        createPublicChannel: false,
     };
     const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, defaultChannelCreation);
     useEffect(() => {
@@ -60,7 +67,7 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
     };
 
     return (
-        <>
+        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)) ? <>
             {(!channels || channels.length < 1) &&
                 <StyledSection>
                     <Setting id={'channel-action'}>
@@ -76,6 +83,8 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
                         parentId={parentId}
                         sectionId={sectionId}
                         teamId={teamId}
+                        userId={userId}
+                        organizationId={organizationId}
                         addChannelErrorMessage={addChannelErrorMessage}
                         dispacthAddChannelErrorMessage={dispacthAddChannelErrorMessage}
                         dispatchSelectErrorMessage={dispatchSelectErrorMessage}
@@ -89,7 +98,9 @@ const SingleChannelBox = ({parentId, sectionId, teamId}: Props) => {
                         isList={false}
                     />
                 </ChannelContainer>}
-        </>
+        </> : <div className='text-center pt-4'>
+            <FormattedMessage defaultMessage='You cannot view the channels information for this organization.'/>
+        </div>
     );
 };
 

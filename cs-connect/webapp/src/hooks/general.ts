@@ -24,6 +24,7 @@ import {
     SectionInfo,
 } from 'src/types/organization';
 import {
+    UserProps,
     fetchAllUsers,
     fetchChannelById,
     fetchChannels,
@@ -38,6 +39,7 @@ import {
     fetchTableData,
     fetchTextBoxData,
     fetchTimelineData,
+    getUserProps,
     userAdded,
 } from 'src/clients';
 import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
@@ -554,6 +556,29 @@ export const useAllUsersOptions = (): UserOption[] => {
         };
     }, []);
     return users;
+};
+
+export const useUserProps = (): [UserProps, React.Dispatch<React.SetStateAction<UserProps>>] => {
+    const userId = useSelector(getCurrentUserId);
+    const [userProps, setUserProps] = useState<UserProps>();
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchUserPropsAsync() {
+            const result = await getUserProps({userId});
+            if (!isCanceled) {
+                setUserProps(result);
+            }
+        }
+
+        fetchUserPropsAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [userId]);
+
+    return [userProps as UserProps, setUserProps as React.Dispatch<React.SetStateAction<UserProps>>];
 };
 
 // Update the query string when the fetchParams change

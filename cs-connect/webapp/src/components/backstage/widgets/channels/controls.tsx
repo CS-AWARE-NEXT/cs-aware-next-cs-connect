@@ -19,6 +19,8 @@ type CreateChannelProps = {
     parentId: string;
     sectionId: string;
     teamId: string;
+    userId: string;
+    organizationId: string;
     addChannelErrorMessage: string;
     dispacthAddChannelErrorMessage: Dispatch<any>;
     dispatchNameErrorMessage: Dispatch<any>;
@@ -31,6 +33,8 @@ const createChannel = (
     sectionId: string,
     teamId: string,
     teamName: string,
+    userId: string,
+    organizationId: string,
     dispacthAddChannelErrorMessage: Dispatch<any>,
     dispatchNameErrorMessage: Dispatch<any>,
     dispatchSelectErrorMessage: Dispatch<any>,
@@ -60,12 +64,14 @@ const createChannel = (
     }
 
     addChannel({
+        userId,
         channelId: linkExistingChannel ? channelId : undefined,
         channelName: createNewChannel ? channelName : undefined,
         createPublicChannel: createNewChannel ? createPublicChannel : false,
         parentId,
         sectionId,
         teamId,
+        organizationId,
     }).
         then((result) => {
             navigateToUrl(`/${teamName}/channels/${result.channelId}?${SECTION_ID_PARAM}=${result.sectionId}&${PARENT_ID_PARAM}=${result.parentId}&from=channel_list`);
@@ -80,6 +86,8 @@ export const CreateChannel = ({
     parentId,
     sectionId,
     teamId,
+    userId,
+    organizationId,
     addChannelErrorMessage,
     dispacthAddChannelErrorMessage,
     dispatchNameErrorMessage,
@@ -102,6 +110,8 @@ export const CreateChannel = ({
                         sectionId,
                         teamId,
                         team.name,
+                        userId,
+                        organizationId,
                         dispacthAddChannelErrorMessage,
                         dispatchNameErrorMessage,
                         dispatchSelectErrorMessage,

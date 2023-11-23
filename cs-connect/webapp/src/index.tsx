@@ -22,6 +22,7 @@ import {pluginId} from 'src/manifest';
 import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} from './hooks';
 import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
+import LHSView from './components/lhs/lhs';
 
 type WindowObject = {
     location: {
@@ -123,6 +124,8 @@ export default class Plugin {
         registry.registerSlashCommandWillBePostedHook(slashCommandWillBePosted);
         registry.registerMessageWillBePostedHook(messageWillBePosted);
         registry.registerMessageWillBeUpdatedHook(messageWillBeUpdated);
+
+        registry.registerLeftSidebarHeaderComponent(LHSView);
 
         // registry.registerMessageWillFormatHook(messageWillFormat);
     }

@@ -7,18 +7,11 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 
-import {
-    AutomationHeader,
-    AutomationLabel,
-    AutomationTitle,
-    SelectorWrapper,
-} from 'src/components/backstage/widgets/channels/styles';
-import {HorizontalSpacer, HorizontalSplit, VerticalSplit} from 'src/components/backstage/grid';
+import {AutomationHeader, AutomationLabel, AutomationTitle} from 'src/components/backstage/widgets/channels/styles';
+import {HorizontalSplit} from 'src/components/backstage/grid';
 import {ChannelCreation} from 'src/types/channels';
 import ChannelSelector from 'src/components/backstage/channel_selector';
-import ClearIndicator from 'src/components/backstage/widgets/channels/clear_indicator';
 import {ErrorMessage} from 'src/components/commons/messages';
-import MenuList from 'src/components/backstage/widgets/channels/menu_list';
 import {PatternedInput} from 'src/components/backstage/widgets/channels/patterned_input';
 import {RadioInput} from 'src/components/backstage/styles';
 import {channelCreationAction} from 'src/actions';
@@ -44,14 +37,14 @@ export const CreateAChannel = ({
     const teamId = useSelector(getCurrentTeamId);
     const archived = false;
 
-    const handlePublicChange = (isPublic: boolean) => {
+    /* const handlePublicChange = (isPublic: boolean) => {
         cleanErrorMessages();
         dispatchChannelCreation(channelCreationAction({
             ...channelCreation,
             createPublicChannel: isPublic,
         }));
         setChangesMade?.(true);
-    };
+    }; */
 
     const handleChannelNameTemplateChange = (channelName: string) => {
         cleanErrorMessages();
@@ -88,7 +81,7 @@ export const CreateAChannel = ({
 
     return (
         <Container>
-            <AutomationHeader id={'link-existing-channel'}>
+            {/* <AutomationHeader id={'link-existing-channel'}>
                 <AutomationTitle {...attrs}>
                     <AutomationLabel disabled={archived}>
                         <ChannelModeRadio
@@ -117,7 +110,7 @@ export const CreateAChannel = ({
                         {selectErrorMessage}
                     </ErrorMessage>
                 </SelectorWrapper>
-            </AutomationHeader>
+            </AutomationHeader> */}
             <AutomationHeader id={'create-new-channel'}>
                 <AutomationTitle {...attrs}>
                     <AutomationLabel disabled={archived}>
@@ -131,7 +124,7 @@ export const CreateAChannel = ({
                     </AutomationLabel>
                 </AutomationTitle>
                 <HorizontalSplit>
-                    <VerticalSplit>
+                    {/* <VerticalSplit>
                         <ButtonLabel disabled={archived || channelCreation.channelMode === 'link_existing_channel'}>
                             <RadioInput
                                 type='radio'
@@ -161,7 +154,7 @@ export const CreateAChannel = ({
                             />
                             <BigText>{formatMessage({defaultMessage: 'Private'})}</BigText>
                         </ButtonLabel>
-                    </VerticalSplit>
+                    </VerticalSplit> */}
                     <PatternedInput
                         enabled={!archived && channelCreation.channelMode === 'create_new_channel'}
                         input={channelCreation.channelName}

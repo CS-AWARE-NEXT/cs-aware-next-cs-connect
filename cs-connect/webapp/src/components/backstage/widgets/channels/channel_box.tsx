@@ -1,6 +1,6 @@
 import React, {useReducer} from 'react';
 import styled from 'styled-components';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {addChannelErrorMessageAction, nameErrorMessageAction, selectErrorMessageAction} from 'src/actions';
 import {
@@ -13,7 +13,9 @@ import ChannelsList from 'src/components/backstage/widgets/channels/channels_lis
 import {CreateAChannel} from 'src/components/backstage/widgets/channels/channel_access';
 import Header from 'src/components/commons/header';
 import {Section} from 'src/components/backstage/widgets/channels/styles';
-import {useChannelsList} from 'src/hooks';
+import {useChannelsList, useUserProps} from 'src/hooks';
+
+import {ORGANIZATION_ID_ALL} from 'src/types/organization';
 
 import {CreateChannel} from './controls';
 
@@ -21,11 +23,14 @@ type Props = {
     parentId: string;
     sectionId: string;
     teamId: string;
+    userId: string;
+    organizationId: string,
 };
 
-const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
+const ChannelBox = ({parentId, sectionId, teamId, userId, organizationId}: Props) => {
     const {formatMessage} = useIntl();
     const channels = useChannelsList({section_id: sectionId, parent_id: parentId});
+    const [userProps, _setUserProps] = useUserProps();
 
     const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
@@ -34,9 +39,9 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     const defaultChannelCreation = {
         teamId: '',
         channelId: '',
-        channelMode: 'link_existing_channel', // Default is creation link_existing_channel, otherwise create_new_channel
+        channelMode: 'create_new_channel', // {'create_new_channel', 'link_existing_channel'}
         channelName: '',
-        createPublicChannel: true,
+        createPublicChannel: false,
     };
     const [channelCreation, dispatchChannelCreation] = useReducer(setChannelCreation, defaultChannelCreation);
 
@@ -47,7 +52,7 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
     };
 
     return (
-        <>
+        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)) ? <>
             <StyledSection>
                 <Setting id={'channel-action'}>
                     <CreateAChannel
@@ -63,6 +68,8 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
                     parentId={parentId}
                     sectionId={sectionId}
                     teamId={teamId}
+                    userId={userId}
+                    organizationId={organizationId}
                     addChannelErrorMessage={addChannelErrorMessage}
                     dispacthAddChannelErrorMessage={dispacthAddChannelErrorMessage}
                     dispatchSelectErrorMessage={dispatchSelectErrorMessage}
@@ -81,7 +88,9 @@ const ChannelBox = ({parentId, sectionId, teamId}: Props) => {
                 />
                 <ChannelsList channels={channels}/>
             </ChannelListContainer>
-        </>
+        </> : <div className='text-center pt-4'>
+            <FormattedMessage defaultMessage='You cannot view the channels information for this organization.'/>
+        </div>
     );
 };
 

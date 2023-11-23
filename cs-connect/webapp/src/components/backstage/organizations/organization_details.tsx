@@ -15,7 +15,7 @@ const OrganizationDetails = () => {
     const {hash: urlHash} = useLocation();
     const organization = useOrganization(organizationId);
 
-    useForceDocumentTitle(organization.name ? (organization.name) : 'Organizations');
+    useForceDocumentTitle(organization?.name ? (organization.name) : 'Organizations');
 
     useScrollIntoView(urlHash);
 

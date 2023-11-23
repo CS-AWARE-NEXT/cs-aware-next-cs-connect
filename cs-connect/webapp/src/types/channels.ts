@@ -26,12 +26,14 @@ export interface ChannelCreation {
 }
 
 export interface AddChannelParams {
+    userId: string;
     channelId?: string;
     channelName?: string;
     createPublicChannel?: boolean;
     sectionId: string;
     parentId: string;
     teamId: string;
+    organizationId: string;
 }
 
 export interface AddChannelResult {

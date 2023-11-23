@@ -6,6 +6,9 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
+// Marker ID to select all organizations, used when deciding which channels to show in the left sidebar
+const OrganizationIDAll = "__all"
+
 type PlatformConfig struct {
 	EnvironmentConfig EnvironmentConfig `json:"environmentConfig" yaml:"environmentConfig"`
 	Organizations     []Organization    `json:"organizations" yaml:"organizations"`
@@ -57,4 +60,14 @@ func getPlatformConfig(filepath string) (*PlatformConfig, error) {
 		return nil, err
 	}
 	return config, nil
+}
+
+// Utility to get the ecosystem organization. We assume only one exists in the config channel.
+func (p PlatformConfig) GetEcosystem() (*Organization, bool) {
+	for _, organization := range p.Organizations {
+		if organization.IsEcosystem {
+			return &organization, true
+		}
+	}
+	return nil, false
 }

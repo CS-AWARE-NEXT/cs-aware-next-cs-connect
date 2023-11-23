@@ -24,6 +24,8 @@ func NewEventHandler(router *mux.Router, eventService *app.EventService) *EventH
 
 	platformRouter := router.PathPrefix("/events").Subrouter()
 	platformRouter.HandleFunc("/user_added", withContext(handler.userAdded)).Methods(http.MethodPost)
+	platformRouter.HandleFunc("/set_organization", withContext(handler.setOrganization)).Methods(http.MethodPost)
+	platformRouter.HandleFunc("/user_props", withContext(handler.getUserProps)).Methods(http.MethodGet)
 
 	return handler
 }
@@ -39,4 +41,32 @@ func (h *EventHandler) userAdded(c *Context, w http.ResponseWriter, r *http.Requ
 		return
 	}
 	ReturnJSON(w, "", http.StatusOK)
+}
+
+func (h *EventHandler) setOrganization(c *Context, w http.ResponseWriter, r *http.Request) {
+	var params app.SetOrganizationParams
+	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to decode set organization payload", err)
+		return
+	}
+	if err := h.eventService.SetOrganizations(params); err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to handle set organization", err)
+		return
+	}
+	ReturnJSON(w, "", http.StatusOK)
+}
+
+func (h *EventHandler) getUserProps(c *Context, w http.ResponseWriter, r *http.Request) {
+	var params app.GetUserPropsParams
+	params.UserID = r.URL.Query().Get("userId")
+	if params.UserID == "" {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "no userId provided", nil)
+		return
+	}
+	userProps, err := h.eventService.GetUserProps(params)
+	if err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to handle getUserProps", err)
+		return
+	}
+	ReturnJSON(w, userProps, http.StatusOK)
 }
