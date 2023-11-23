@@ -11,6 +11,7 @@ import (
 	"github.com/mattermost/mattermost-server/v6/model"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/app"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/config"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/util"
 )
 
@@ -293,7 +294,7 @@ func (s *channelStore) getOrganizationMembers(channelID, organizationID, teamID 
 	for _, user := range allUsers {
 		userOrgID, isPropSet := user.GetProp("orgId")
 		if isPropSet {
-			if userOrgID == organizationID {
+			if userOrgID == organizationID || userOrgID == config.OrganizationIDAll {
 				orgUsers = append(orgUsers, user)
 			}
 		}

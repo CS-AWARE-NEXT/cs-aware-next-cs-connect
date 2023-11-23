@@ -36,12 +36,12 @@ const LHSView = () => {
     const [form] = Form.useForm();
 
     useEffect(() => {
-        if (organizations.length) {
+        if (organizations.length && !options) {
             const orgs = organizations.map((org: Organization) => ({value: org.id, label: org.name}));
             orgs.push({value: ORGANIZATION_ID_ALL, label: 'All'});
             setOptions(orgs);
         }
-    }, []);
+    }, [organizations]);
 
     useEffect(() => {
         if (userProps) {

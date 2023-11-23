@@ -251,8 +251,11 @@ func (s *CategoryService) setupOrganizationCategories(orgChannels []Channel, use
 				}
 			}
 			category.Channels = channelIds
+			break
 		}
+	}
 
+	for _, category := range categories.Categories {
 		// Identify the organization of this category by the name
 		formattedCategoryName := strings.ToLower(strings.ReplaceAll(category.DisplayName, " ", "-"))
 		for _, organization := range config.Organizations {

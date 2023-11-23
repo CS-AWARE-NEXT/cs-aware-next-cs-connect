@@ -6,5 +6,5 @@ docker cp cs-connect-base:/home/cs-aware-next-cs-connect/cs-connect/dist/cs-awar
     ~/cs-connect-packages/cs-aware-connect-+.tar.gz
 
 scp -i ~/.ssh/isislab/cs-connect-demo.cs-aware.eu \
-    ./cs-connect-packages/cs-aware-connect-+.tar.gz \
+    ~/cs-connect-packages/cs-aware-connect-+.tar.gz \
     ubuntu@cs-connect-demo.cs-aware.eu:/home/ubuntu/cs-aware-next-cs-connect/cs-connect/docker/package/cs-aware-connect-+.tar.gz
