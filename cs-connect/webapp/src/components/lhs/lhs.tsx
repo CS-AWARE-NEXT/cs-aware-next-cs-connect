@@ -109,6 +109,10 @@ const LHSView = () => {
         setIsPasswordInvalid(false);
     };
 
+    if (userProps && userProps.orgId !== '' && selectedObject !== defaultSelectObject) {
+        return <StyledContainer>{selectedObject.label}</StyledContainer>;
+    }
+
     return (
         <>
             <Modal
@@ -183,6 +187,17 @@ const LHSView = () => {
 
 const StyledSelect = styled(Select)`
     background: var(--center-channel-bg);
+`;
+
+const StyledContainer = styled.div`
+	color: rgba(var(--sidebar-text-rgb), 0.6);
+	font-family: "Open Sans",sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	text-align: left;
+	text-transform: uppercase;
+	white-space: nowrap;
+	padding-left: 16px;
 `;
 
 type FieldType = {
