@@ -18,11 +18,12 @@ import {useIntl} from 'react-intl';
 import {PARENT_ID_PARAM, SECTION_ID_PARAM} from 'src/constants';
 import {getSiteUrl} from 'src/clients';
 import {GraphNodeInfo, GraphSectionOptions} from 'src/types/graph';
-import {CopyLinkMenuItem} from 'src/components/commons/copy_link';
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {copyToClipboard} from 'src/utils';
 import {formatUrlAsMarkdown} from 'src/helpers';
 import 'src/styles/nodes.scss';
+
+import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
 
 import {GraphNodeInfoDropdown} from './graph_node_info';
 
@@ -79,6 +80,41 @@ export const fillNodes = (
     return filledNodes;
 };
 
+/// Mark edges and connected nodes related to the url hashed nodes, so that they get rendered differently
+export const markNodesAndEdges = (nodes: Node[], edges: Edge[], targetNode: Node | undefined) => {
+    if (targetNode !== undefined) {
+        const nodeIdsToMark: string[] = [targetNode.id];
+
+        edges.map((edge) => {
+            if (edge.source === targetNode.id || edge.target === targetNode.id) {
+                edge.style = {stroke: '#FF0000', strokeWidth: 2};
+                if (edge.source === targetNode.id) {
+                    nodeIdsToMark.push(edge.target);
+                } else {
+                    nodeIdsToMark.push(edge.source);
+                }
+            } else {
+                edge.style = {};
+            }
+            return edge;
+        });
+
+        nodes.forEach((node) => {
+            if (nodeIdsToMark.includes(node.id)) {
+                if (node.id === targetNode.id) {
+                    node.data = {...node.data, isUrlHashed: true};
+                } else {
+                    node.data = {...node.data, isUrlHashed: false, marked: true};
+                }
+            } else if (!node.data.isUrlHashed || (node.data.isUrlHashed && node.id !== targetNode.id)) {
+                // We also need to reset isUrlHashed for the case where the user performs a search after using a node's hyperlink
+                node.data = {...node.data, isUrlHashed: false, marked: false};
+            }
+        });
+        targetNode.data = {...targetNode.data, isUrlHashed: true};
+    }
+};
+
 // const nodeKindMap = buildMap([
 //     {key: 'switch', value: '5px'},
 //     {key: 'server', value: '10px'},
@@ -94,12 +130,14 @@ export const fillNodes = (
 // border: '1px solid rgb(var(--button-bg-rgb), 0.2)',
 const GraphNodeType: FC<NodeProps & {
     setNodeInfo: Dispatch<SetStateAction<GraphNodeInfo>>;
+    setTargetNodeId: (nodeId: string) => void;
 }> = ({
     id,
     data,
     sourcePosition,
     targetPosition,
     setNodeInfo,
+    setTargetNodeId,
 }) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
@@ -113,6 +151,11 @@ const GraphNodeType: FC<NodeProps & {
     const onCopyLinkClick = (path: string, text: string) => {
         copyToClipboard(formatUrlAsMarkdown(path, text));
         addToast({content: formatMessage({defaultMessage: 'Copied!'})});
+        setOpenDropdown(false);
+    };
+
+    const onViewConnectionsClick = () => {
+        setTargetNodeId(id);
         setOpenDropdown(false);
     };
 
@@ -137,7 +180,14 @@ const GraphNodeType: FC<NodeProps & {
         default:
             className = 'round-rectangle';
         }
-        return data.isUrlHashed ? `hyperlinked-${className}` : className;
+
+        if (data.isUrlHashed) {
+            return `hyperlinked-${className}`;
+        }
+        if (data.marked) {
+            return `marked-${className}`;
+        }
+        return className;
     };
 
     const path = `${data.url}#${id}-${data.sectionId}-${data.parentId}`;
@@ -149,30 +199,34 @@ const GraphNodeType: FC<NodeProps & {
             />
             <NodeContainer
                 id={`${id}-${data.sectionId}-${data.parentId}`}
+                className={`parent-${getClassName()}`} // Used to properly outline masked nodes such as clouds and networks
             >
                 <GraphNodeInfoDropdown
                     open={openDropdown}
                     setOpen={setOpenDropdown}
                     onInfoClick={onInfoClick}
                     onCopyLinkClick={() => onCopyLinkClick(path, data.label)}
+                    onViewConnectionsClick={onViewConnectionsClick}
                 >
-                    <CopyLinkMenuItem
+                    <StyledDropdownMenuItem
                         className={getClassName()}
-                        path={path}
-                        placeholder={data.label}
-                        showIcon={false}
-                        text={data.label}
-                        textStyle={{
-                            color: 'white',
-                            fontSize: 'bold',
-                            textAlign: 'center',
-                        }}
                         hasHover={false}
-                        onContexMenu={(e) => {
+                        onClick={() => {
+                            setTargetNodeId(id);
+                        }}
+                        onContextMenu={(e: any) => {
                             e.preventDefault();
                             setOpenDropdown(!openDropdown);
                         }}
-                    />
+                    >
+                        <span
+                            style={{
+                                color: 'white',
+                                fontSize: 'bold',
+                                textAlign: 'center',
+                            }}
+                        >{data.label}</span>
+                    </StyledDropdownMenuItem>
                 </GraphNodeInfoDropdown>
             </NodeContainer>
             <Handle

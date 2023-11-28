@@ -12,7 +12,12 @@ import React, {
     useContext,
 } from 'react';
 import styled from 'styled-components';
-import {CloseOutlined, InfoCircleOutlined, LinkOutlined} from '@ant-design/icons';
+import {
+    CloseOutlined,
+    InfoCircleOutlined,
+    LinkOutlined,
+    NodeIndexOutlined,
+} from '@ant-design/icons';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import TextBox from 'src/components/backstage/widgets/text_box/text_box';
@@ -78,6 +83,7 @@ const GraphNodeInfo: FC<Props> = ({
 type GraphNodeInfoDropdown = {
     onInfoClick: () => void;
     onCopyLinkClick: () => void;
+    onViewConnectionsClick: () => void;
     children: ReactNode;
     trigger?: ('contextMenu' | 'click' | 'hover')[] | undefined;
     open: boolean;
@@ -87,6 +93,7 @@ type GraphNodeInfoDropdown = {
 export const GraphNodeInfoDropdown: FC<GraphNodeInfoDropdown> = ({
     onInfoClick,
     onCopyLinkClick,
+    onViewConnectionsClick,
     children,
     trigger = ['click'],
     open = false,
@@ -110,6 +117,16 @@ export const GraphNodeInfoDropdown: FC<GraphNodeInfoDropdown> = ({
                     onClick={onInfoClick}
                 >
                     <InfoCircleOutlined/> <FormattedMessage defaultMessage={'View info'}/>
+                </div>
+            ),
+        },
+        {
+            key: 'view-connections',
+            label: (
+                <div
+                    onClick={onViewConnectionsClick}
+                >
+                    <NodeIndexOutlined/> <FormattedMessage defaultMessage={'View connections'}/>
                 </div>
             ),
         },
