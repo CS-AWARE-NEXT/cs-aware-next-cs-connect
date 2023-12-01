@@ -84,7 +84,7 @@ const defaultGraphStyle: GraphStyle = {
     graphHeight: '50vh',
     textBoxStyle: {
         height: '5vh',
-        marginTop: '24px',
+        marginTop: '72px',
 
         // width: '25%',
     },
@@ -94,6 +94,9 @@ const rhsGraphStyle: GraphStyle = {
     containerDirection: 'column',
     graphWidth: '100%',
     graphHeight: '40vh',
+    textBoxStyle: {
+        marginTop: '62px',
+    },
 };
 
 const defaultGraphSidebarStyle: GraphSidebarStyle = {
@@ -363,7 +366,10 @@ const Graph = ({
                     </Panel>
                 </ReactFlow>
             </GraphContainer>
-            <GraphSidebar width={graphSidebarStyle.width}>
+            <GraphSidebar
+                width={graphSidebarStyle.width}
+                noMargin={(isRhsClosed && isRhs) ?? false}
+            >
                 {isDescriptionProvided(description) &&
                     <TextBox
                         idPrefix={DESCRIPTION_ID_PREFIX}
@@ -397,17 +403,19 @@ const Container = styled.div<{containerDirection: string}>`
     display: flex;
     flex-direction: ${(props) => props.containerDirection};
     margin-top: 24px;
+    margin-bottom: 36px;
 `;
 
-const GraphSidebar = styled.div<{width: string}>`
+const GraphSidebar = styled.div<{width: string, noMargin: boolean}>`
     width: ${(props) => props.width};
     display: flex;
     flex-direction: column;
-    margin-left: 12px;
+    margin-left: ${(props) => (props.noMargin ? '' : '16px')};
 `;
 
 const StyledSelect = styled(Select)`
     width: 100%;
+    margin-bottom: 12px;
 ` as typeof Select;
 
 export default Graph;
