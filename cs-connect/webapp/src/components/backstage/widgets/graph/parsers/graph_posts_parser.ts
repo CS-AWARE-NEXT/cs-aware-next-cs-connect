@@ -3,6 +3,8 @@ import {formatName, formatUrlWithId} from 'src/helpers';
 import {Widget} from 'src/types/organization';
 import {HyperlinkReference, WidgetHash} from 'src/types/parser';
 
+import {NODE_INFO_SECTIONS} from './graph_suggestions_parser';
+
 const DESCRIPTION_ID_PREFIX = 'graph-';
 
 type GraphTriple = {
@@ -27,6 +29,7 @@ export const parseGraphWidgetId = async (
     if (isReferenceToGraph) {
         return graphWidgetHash;
     }
+
     let widgetUrl = url as string;
     if (object) {
         widgetUrl = formatUrlWithId(widgetUrl, object.id);
@@ -36,6 +39,19 @@ export const parseGraphWidgetId = async (
         return graphWidgetHash;
     }
     const {id, isDescription, text} = graphTriple as GraphTriple;
+
+    // Referencing a node info section
+    if (tokens.length === 1) {
+        const selectedSectionLabel = tokens[0];
+        const selectedSection = NODE_INFO_SECTIONS.find((sectionInfo) => sectionInfo.label === selectedSectionLabel);
+        if (!selectedSection) {
+            return graphWidgetHash;
+        }
+        const hash = selectedSection.idCallback(id, section?.id || '', object?.id || '');
+        return {hash, text: selectedSection.label};
+    }
+
+    // Referencing a node or the graph description
     let hash = `${id}-${object?.id}-${section?.id}`;
     hash = isDescription ? `${DESCRIPTION_ID_PREFIX}${hash}-widget` : hash;
     return {hash, text};
