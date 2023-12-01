@@ -87,7 +87,7 @@ export const markNodesAndEdges = (nodes: Node[], edges: Edge[], targetNode: Node
 
         edges.map((edge) => {
             if (edge.source === targetNode.id || edge.target === targetNode.id) {
-                edge.style = {stroke: '#FF0000', strokeWidth: 2};
+                edge.style = {stroke: '#1BC41B', strokeWidth: 2};
                 if (edge.source === targetNode.id) {
                     nodeIdsToMark.push(edge.target);
                 } else {
