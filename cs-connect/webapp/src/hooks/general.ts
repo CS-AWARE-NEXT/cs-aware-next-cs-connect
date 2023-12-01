@@ -42,7 +42,7 @@ import {
     getUserProps,
     userAdded,
 } from 'src/clients';
-import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
+import {fillEdges, fillNodes, markNodesAndEdges} from 'src/components/backstage/widgets/graph/graph_node_type';
 import {
     getEcosystem,
     getOrganizationById,
@@ -263,6 +263,7 @@ export const useGraphData = (
             if (!isCanceled) {
                 const filledNodes = fillNodes(graphDataResult.nodes, {...options, sectionUrlHash});
                 const filledEdges = fillEdges(graphDataResult.edges);
+                markNodesAndEdges(filledNodes, filledEdges, filledNodes.find((node) => node.data.isUrlHashed));
                 setGraphData({
                     description: graphDataResult.description,
                     edges: filledEdges,

@@ -12,20 +12,18 @@ import ReactFlow, {
     Background,
     Controls,
     Edge,
-    EdgeChange,
     FitViewOptions,
     MiniMap,
     Node,
-    NodeChange,
     Panel,
     Position,
-    applyEdgeChanges,
-    applyNodeChanges,
+    useEdgesState,
+    useNodesState,
     useReactFlow,
 } from 'reactflow';
 import styled from 'styled-components';
 import Dagre from 'dagre';
-import {Button, Tooltip} from 'antd';
+import {Button, Select, Tooltip} from 'antd';
 import {PartitionOutlined} from '@ant-design/icons';
 import {useIntl} from 'react-intl';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
@@ -49,7 +47,9 @@ import {formatName, getTextWidth} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import withAdditionalProps from 'src/components/hoc/with_additional_props';
 
-import GraphNodeType from './graph_node_type';
+import {SelectObject} from 'src/types/object_select';
+
+import GraphNodeType, {markNodesAndEdges} from './graph_node_type';
 import GraphNodeInfo from './graph_node_info';
 
 type GraphStyle = {
@@ -84,7 +84,7 @@ const defaultGraphStyle: GraphStyle = {
     graphHeight: '50vh',
     textBoxStyle: {
         height: '5vh',
-        marginTop: '24px',
+        marginTop: '72px',
 
         // width: '25%',
     },
@@ -94,6 +94,9 @@ const rhsGraphStyle: GraphStyle = {
     containerDirection: 'column',
     graphWidth: '100%',
     graphHeight: '40vh',
+    textBoxStyle: {
+        marginTop: '62px',
+    },
 };
 
 const defaultGraphSidebarStyle: GraphSidebarStyle = {
@@ -182,19 +185,27 @@ const Graph = ({
     const {fitView, getNode, setViewport} = useReactFlow();
     const {formatMessage} = useIntl();
     const [targetNode, setTargetNode] = useState<Node | undefined>();
+    const [selectedObject, setSelectedObject] = useState<SelectObject|null>(null);
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
     const channelId = useSelector(getCurrentChannelId);
+    const setTargetNodeId = useCallback((nodeId: string) => {
+        const node = getNode(nodeId);
+        if (node) {
+            setTargetNode(node);
+        }
+    }, []);
+
     useEffect(() => {
         setNodeInfo(undefined);
         setTargetNode(undefined);
     }, [channelId]);
 
-    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo})}), []);
+    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo, setTargetNodeId})}), []);
 
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
-    const [nodes, setNodes] = useState<Node[]>([]);
-    const [edges, setEdges] = useState<Edge[]>([]);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
     const toggleDirection = (dir: GraphDirection): GraphDirection => {
         return dir === Direction.HORIZONTAL ? Direction.VERTICAL : Direction.HORIZONTAL;
@@ -222,6 +233,9 @@ const Graph = ({
 
         // Set a target node to center the viewport on, if there's one associated to the hash in the url.
         const urlHashedNode = data.nodes.find((node) => node.data.isUrlHashed);
+        if (urlHashedNode?.id === targetNode?.id) {
+            return;
+        }
         if (urlHashedNode) {
             // Due to the node hyperlink mechanism being based on a scrollToView operation done outside this component,
             // we have to reset the scrollLeft/Top properties to avoid moving the controls and draggable canvas
@@ -237,16 +251,31 @@ const Graph = ({
             setViewport({x: 0, y: 0, zoom: 0.6});
             setTargetNode(undefined);
         }
-    }, [data, getNode]);
+    }, [data]);
 
     useEffect(() => {
-        if (targetNode) {
-            fitView({nodes: [targetNode], maxZoom: 0.6});
+        if (targetNode?.id !== selectedObject?.value) {
+            setSelectedObject(null);
         }
-    }, [targetNode, fitView]);
 
-    const onNodesChange = useCallback((changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
-    const onEdgesChange = useCallback((changes: EdgeChange[]) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
+        if (targetNode) {
+            markNodesAndEdges(nodes, edges, targetNode);
+            setNodes([...nodes]);
+            setEdges([...edges]);
+        }
+
+        // This value is supposed to be slightly higher than the one used in the useScrollIntoView hook which is the culprit of the problem: https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/blob/main/cs-connect/webapp/src/hooks/browser.ts#L61
+        const ms = 350;
+        const scrollTimeout = setTimeout(() => {
+            if (targetNode) {
+                fitView({nodes: [targetNode], maxZoom: 0.6});
+            }
+        }, ms);
+
+        return () => {
+            clearTimeout(scrollTimeout);
+        };
+    }, [targetNode, fitView]);
 
     // const getGraphStyle = useCallback<() => GraphStyle>((): GraphStyle => {
     //     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
@@ -267,6 +296,16 @@ const Graph = ({
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 
+    const onChange = (nodeId: string) => {
+        const target = data.nodes.find((node) => node.id === nodeId);
+        setSelectedObject(nodeId ? {value: nodeId, label: target?.data.label} : null);
+        if (target !== undefined) {
+            setTargetNode(target);
+        }
+    };
+    const filterOption = (input: string, option?: { label: string; value: string }) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
@@ -286,6 +325,17 @@ const Graph = ({
                         title={name}
                     />
                 </Header>
+                <StyledSelect
+                    value={selectedObject?.value}
+                    showSearch={true}
+                    placeholder='Select a node'
+                    optionFilterProp='children'
+                    onChange={onChange}
+                    filterOption={filterOption}
+                    options={data.nodes.map((node) => {
+                        return {value: node.id, label: node.data.label};
+                    })}
+                />
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -316,7 +366,10 @@ const Graph = ({
                     </Panel>
                 </ReactFlow>
             </GraphContainer>
-            <GraphSidebar width={graphSidebarStyle.width}>
+            <GraphSidebar
+                width={graphSidebarStyle.width}
+                noMargin={(isRhsClosed && isRhs) ?? false}
+            >
                 {isDescriptionProvided(description) &&
                     <TextBox
                         idPrefix={DESCRIPTION_ID_PREFIX}
@@ -350,13 +403,19 @@ const Container = styled.div<{containerDirection: string}>`
     display: flex;
     flex-direction: ${(props) => props.containerDirection};
     margin-top: 24px;
+    margin-bottom: 36px;
 `;
 
-const GraphSidebar = styled.div<{width: string}>`
+const GraphSidebar = styled.div<{width: string, noMargin: boolean}>`
     width: ${(props) => props.width};
     display: flex;
     flex-direction: column;
-    margin-left: 12px;
+    margin-left: ${(props) => (props.noMargin ? '' : '16px')};
 `;
+
+const StyledSelect = styled(Select)`
+    width: 100%;
+    margin-bottom: 12px;
+` as typeof Select;
 
 export default Graph;
