@@ -225,8 +225,8 @@ export const useSectionData = ({id, name, url}: Section): PaginatedTableData => 
             const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
                 const {columns, rows} = sectionData;
-                paginatedTableDataResult.columns.forEach(({title}) => {
-                    columns.push(fillColumn(title));
+                paginatedTableDataResult.columns.forEach(({title, sortable}) => {
+                    columns.push(fillColumn(title, sortable));
                 });
                 paginatedTableDataResult.rows.forEach((row) => {
                     rows.push({
@@ -313,8 +313,8 @@ export const usePaginatedTableData = (url: string, query: string): PaginatedTabl
             const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
                 const {columns, rows} = paginatedTableData;
-                paginatedTableDataResult.columns.forEach(({title}) => {
-                    columns.push(fillColumn(title));
+                paginatedTableDataResult.columns.forEach(({title, sortable}) => {
+                    columns.push(fillColumn(title, sortable));
                 });
                 paginatedTableDataResult.rows.forEach((row) => {
                     rows.push(fillRow(row, fullUrl, routeUrl, query));
