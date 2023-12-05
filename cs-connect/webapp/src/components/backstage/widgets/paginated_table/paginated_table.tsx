@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
-import {useRouteMatch} from 'react-router-dom';
+import {useLocation, useRouteMatch} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import CopyLink from 'src/components/commons/copy_link';
@@ -49,6 +49,8 @@ type Props = {
 
 const {Panel} = Collapse;
 
+const ROW_PER_PAGE = 10;
+
 const iconColumn: PaginatedTableColumn = {
     title: '',
     dataIndex: 'icon',
@@ -67,13 +69,26 @@ const iconColumn: PaginatedTableColumn = {
     ),
 };
 
-export const fillColumn = (title: string): PaginatedTableColumn => {
+export const fillColumn = (title: string, sortable: boolean | undefined): PaginatedTableColumn => {
     const formattedTitle = formatPropertyName(title);
-    return {
+    const column = {
         title,
         dataIndex: formattedTitle,
         key: formattedTitle,
     };
+    const sortableColumn = {
+        ...column,
+        sorter: (a: PaginatedTableRow, b: PaginatedTableRow) => {
+            const aValue = a[formattedTitle];
+            const bValue = b[formattedTitle];
+            console.log('a', {a}, 'b', {b}, 'aValue', {aValue}, 'bValue', {bValue});
+            if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
+                return Number(aValue) - Number(bValue);
+            }
+            return aValue.localeCompare(bValue);
+        },
+    };
+    return sortable ? sortableColumn : column;
 };
 
 export const fillRow = (
@@ -146,6 +161,26 @@ const PaginatedTable = ({
     const paginatedTableIdPrefix = sectionId ? `${id}-${sectionId}-${parentId}` : `${id}-${parentId}`;
     const paginatedTableId = isSection ? `${paginatedTableIdPrefix}-section` : `${paginatedTableIdPrefix}-widget`;
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
+    const urlHash = useUrlHash();
+    const {hash} = useLocation();
+    useEffect(() => {
+        if (!urlHash || !urlHash.startsWith('#paginated-table-row-')) {
+            return;
+        }
+        if (!data) {
+            // Fixes when sidebar is closed and posts are not loaded yet
+            return;
+        }
+        const index = data.rows.findIndex((row) => urlHash.includes(`${row.id}`));
+        if (index < 0) {
+            return;
+        }
+        const current = Math.ceil((index + 1) / ROW_PER_PAGE);
+        setCurrentPage(current);
+    }, [urlHash, hash, data]);
+
     return (
         <Container
             id={paginatedTableId}
@@ -190,6 +225,11 @@ const PaginatedTable = ({
                                 pointer,
                                 record,
                             };
+                        }}
+                        pagination={{
+                            current: currentPage,
+                            onChange: (page) => setCurrentPage(page),
+                            pageSize: ROW_PER_PAGE,
                         }}
                         rowKey='key'
                         size='middle'

@@ -10,7 +10,7 @@ import {
     removeSectionNameFromPath,
 } from 'src/helpers';
 import {StepValue} from 'src/types/steps_modal';
-import {PaginatedTableData, PaginatedTableRow} from 'src/types/paginated_table';
+import {PaginatedTableData, PaginatedTableRow, WITH_SORTER} from 'src/types/paginated_table';
 import {navigateToUrl} from 'src/browser_routing';
 import {PARENT_ID_PARAM, ecosystemElementsFields, ecosystemElementsWidget} from 'src/constants';
 import PaginatedTable, {fillColumn, fillRow} from 'src/components/backstage/widgets/paginated_table/paginated_table';
@@ -50,7 +50,7 @@ const EcosystemElementsWrapper = ({
             };
         }) : [];
         const columns = ecosystemElementsFields.map((field) => {
-            return fillColumn(field);
+            return fillColumn(field, WITH_SORTER);
         });
         setData({columns, rows});
     }, [elements]);

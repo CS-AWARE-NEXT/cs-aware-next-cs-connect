@@ -55,7 +55,7 @@ const EcosystemRolesWrapper = ({
             return fillRow(row, '', rowUrl, query);
         }) : [];
         const columns = ecosystemRolesFields.map((field) => {
-            const column = fillColumn(field);
+            const column = fillColumn(field, field !== 'roles');
             if (column.key !== 'roles') {
                 return column;
             }
