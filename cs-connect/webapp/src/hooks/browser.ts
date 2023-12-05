@@ -120,12 +120,8 @@ export const useOnScreen = (ref: RefObject<HTMLDivElement | null>, options?: Int
  */
 export const useDOMReadyById = (id: string): boolean => {
     const [DOMReady, setDOMReady] = useState(false);
-    if (!DOMReady) {
-        setTimeout(() => {
-            if (document.getElementById(id)) {
-                setDOMReady(true);
-            }
-        });
-    }
+    setTimeout(() => {
+        setDOMReady(document.getElementById(id) !== null);
+    });
     return DOMReady;
 };

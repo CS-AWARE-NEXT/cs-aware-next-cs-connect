@@ -54,6 +54,9 @@ const useHandleSuggestionsVisibility = (): [boolean, Dispatch<SetStateAction<boo
         const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
 
         const handleKeyDown = (event: KeyboardEvent) => {
+            if (!textarea) {
+                return;
+            }
             if (event.key === 'Enter') {
                 // event.preventDefault();
                 setIsVisible(false);
@@ -94,6 +97,9 @@ const useHandleSuggestionsVisibility = (): [boolean, Dispatch<SetStateAction<boo
         };
 
         const handleInput = () => {
+            if (!textarea) {
+                return;
+            }
             const [text, cursorStartPosition] = getTextAndCursorPositions(textarea);
             const symbolStartIndex = text.lastIndexOf(getStartSymbol(), cursorStartPosition);
             if (symbolStartIndex === -1) {
@@ -131,6 +137,9 @@ export const useSuggestionsData = (defaultData: SuggestionsData): SuggestionsDat
         const textarea = (document.getElementById('post_textbox') as HTMLTextAreaElement);
 
         const handleInput = async () => {
+            if (!textarea) {
+                return;
+            }
             const tokens = getSuggestionsTokens(textarea);
             if (!tokens) {
                 return;
@@ -145,7 +154,9 @@ export const useSuggestionsData = (defaultData: SuggestionsData): SuggestionsDat
             setData(suggestions);
         };
 
-        textarea.addEventListener('input', handleInput);
+        if (textarea) {
+            textarea.addEventListener('input', handleInput);
+        }
         handleInput();
 
         return () => {
