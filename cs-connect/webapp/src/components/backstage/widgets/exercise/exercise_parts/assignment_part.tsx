@@ -8,7 +8,6 @@ import {buildQuery} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {AccordionData} from 'src/types/accordion';
 import ItemsList from 'src/components/backstage/widgets/list/list';
-import FormattedMarkdown from 'src/components/commons/formatted_markdown';
 
 type Props = {
     data: AccordionData;
@@ -43,7 +42,7 @@ const AssignmentPart = ({
     })) ?? [];
     const educationItems = data?.educationMaterial?.map((part: string, index: number) => ({
         id: `education-${index}`,
-        text: <FormattedMarkdown value={part}/>,
+        text: part,
     })) ?? [];
 
     return (

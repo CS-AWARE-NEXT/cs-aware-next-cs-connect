@@ -16,6 +16,7 @@ import {
 import {formatName} from 'src/helpers';
 import {ListData} from 'src/types/list';
 import {CopyLinkMenuItem} from 'src/components/commons/copy_link';
+import FormattedMarkdown from 'src/components/commons/formatted_markdown';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -90,9 +91,9 @@ const ItemsList = ({
                             {Avatar ?
                                 <Meta
                                     avatar={Avatar}
-                                    title={item.text}
+                                    title={<FormattedMarkdown value={item.text}/>}
                                 /> :
-                                <Meta title={item.text}/>}
+                                <Meta title={<FormattedMarkdown value={item.text}/>}/>}
                         </Item>
                     );
                 }}
