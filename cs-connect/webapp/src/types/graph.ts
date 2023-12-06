@@ -28,6 +28,7 @@ export type GraphSectionOptions = {
 export type GraphNodeInfo = {
     name: string;
     description?: string;
+    nodeId: string;
 };
 
 export type GraphDirection = 'LR' | 'TB';

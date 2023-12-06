@@ -70,7 +70,7 @@ export const fillNodes = (
             data: {
                 ...node.data,
                 url,
-                isUrlHashed: `#${node.id}-${sectionId}-${parentId}` === sectionUrlHash,
+                isUrlHashed: sectionUrlHash?.includes(`#${node.id}-${sectionId}-${parentId}`),
                 parentId,
                 sectionId,
             },
@@ -131,6 +131,7 @@ export const markNodesAndEdges = (nodes: Node[], edges: Edge[], targetNode: Node
 const GraphNodeType: FC<NodeProps & {
     setNodeInfo: Dispatch<SetStateAction<GraphNodeInfo>>;
     setTargetNodeId: (nodeId: string) => void;
+    setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
 }> = ({
     id,
     data,
@@ -138,13 +139,15 @@ const GraphNodeType: FC<NodeProps & {
     targetPosition,
     setNodeInfo,
     setTargetNodeId,
+    setIsDrawerOpen,
 }) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
     const [openDropdown, setOpenDropdown] = useState<boolean>(false);
 
     const onInfoClick = () => {
-        setNodeInfo({name: data.label, description: data.description});
+        setIsDrawerOpen(true);
+        setNodeInfo({name: data.label, description: data.description, nodeId: id});
         setOpenDropdown(false);
     };
 

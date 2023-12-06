@@ -23,6 +23,8 @@ type Props = {
     sectionId: string;
     style?: TextBoxStyle;
     text: string;
+    customId?: string;
+    titleText?: string;
 };
 
 const TextBox = ({
@@ -36,11 +38,13 @@ const TextBox = ({
         marginRight: '0px',
         width: '100%',
     },
+    customId,
+    titleText,
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
     const {formatMessage} = useIntl();
-    const id = `${idPrefix}${formatName(name)}-${sectionId}-${parentId}-widget`;
+    const id = customId || `${idPrefix}${formatName(name)}-${sectionId}-${parentId}-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
 
     return (
@@ -54,7 +58,7 @@ const TextBox = ({
                     fullUrl={fullUrl}
                     id={id}
                     query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
-                    text={name}
+                    text={titleText || name}
                     title={name}
                 />
             </Header>

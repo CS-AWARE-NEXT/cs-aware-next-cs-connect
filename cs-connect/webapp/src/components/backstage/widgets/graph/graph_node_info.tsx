@@ -1,9 +1,4 @@
-import {
-    Button,
-    Dropdown,
-    MenuProps,
-    Tooltip,
-} from 'antd';
+import {Dropdown, MenuProps} from 'antd';
 import React, {
     Dispatch,
     FC,
@@ -18,23 +13,20 @@ import {
     LinkOutlined,
     NodeIndexOutlined,
 } from '@ant-design/icons';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 
 import TextBox from 'src/components/backstage/widgets/text_box/text_box';
 import {EMPTY_NODE_DESCRIPTION, GraphNodeInfo as NodeInfo} from 'src/types/graph';
-import {Spacer, VerticalSpacer} from 'src/components/backstage/grid';
-import {Header} from 'src/components/backstage/widgets/shared';
+import {VerticalSpacer} from 'src/components/backstage/grid';
 import {IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
-// TODO: Add node info in chat hyperlinks
-const NODE_INFO_ID_PREFIX = 'node-info-';
+export const NODE_INFO_ID_PREFIX = 'node-info-';
 
 type Props = {
     info: NodeInfo;
     sectionId: string;
     parentId: string;
-    setNodeInfo: Dispatch<SetStateAction<NodeInfo | undefined>>;
 };
 
 const textBoxStyle = {
@@ -42,38 +34,26 @@ const textBoxStyle = {
     marginTop: '0px',
 };
 
+// To add more sections, be sure to also update the suggestions parsers to properly add hyperlinking functionality.
 const GraphNodeInfo: FC<Props> = ({
     info,
     sectionId,
     parentId,
-    setNodeInfo,
 }) => {
-    const {formatMessage} = useIntl();
     const isRhs = useContext(IsRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
 
-    const {name, description} = info;
+    const {description} = info;
     return (
         <Container>
-            {(!isRhs || !isRhsClosed) && <VerticalSpacer size={34}/>}
-            <Header>
-                <Spacer/>
-                <Tooltip title={formatMessage({defaultMessage: 'Close info'})}>
-                    <Button
-                        key='close'
-                        danger={true}
-                        icon={<CloseOutlined/>}
-                        onClick={() => setNodeInfo(undefined)}
-                    />
-                </Tooltip>
-            </Header>
             <TextBox
-                idPrefix={NODE_INFO_ID_PREFIX}
-                name={name}
+                name={'Description'}
                 sectionId={sectionId}
                 parentId={parentId}
                 text={description ?? EMPTY_NODE_DESCRIPTION}
                 style={textBoxStyle}
+                customId={`${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-widget`}
+                titleText={`${info.name} | Description`}
             />
             {(isRhs && isRhsClosed) && <VerticalSpacer size={24}/>}
         </Container>

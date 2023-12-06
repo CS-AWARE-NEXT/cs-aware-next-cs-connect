@@ -23,11 +23,18 @@ import ReactFlow, {
 } from 'reactflow';
 import styled from 'styled-components';
 import Dagre from 'dagre';
-import {Button, Select, Tooltip} from 'antd';
+import {
+    Button,
+    Drawer,
+    Select,
+    Tooltip,
+} from 'antd';
 import {PartitionOutlined} from '@ant-design/icons';
 import {useIntl} from 'react-intl';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 import {useSelector} from 'react-redux';
+
+import {useLocation} from 'react-router-dom';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
@@ -50,7 +57,7 @@ import withAdditionalProps from 'src/components/hoc/with_additional_props';
 import {SelectObject} from 'src/types/object_select';
 
 import GraphNodeType, {markNodesAndEdges} from './graph_node_type';
-import GraphNodeInfo from './graph_node_info';
+import GraphNodeInfo, {NODE_INFO_ID_PREFIX} from './graph_node_info';
 
 type GraphStyle = {
     containerDirection: string,
@@ -182,10 +189,12 @@ const Graph = ({
     const isRhsClosed = useContext(IsRhsClosedContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const {hash: sectionUrlHash} = useLocation();
     const {fitView, getNode, setViewport} = useReactFlow();
     const {formatMessage} = useIntl();
     const [targetNode, setTargetNode] = useState<Node | undefined>();
     const [selectedObject, setSelectedObject] = useState<SelectObject|null>(null);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
     const channelId = useSelector(getCurrentChannelId);
@@ -198,10 +207,12 @@ const Graph = ({
 
     useEffect(() => {
         setNodeInfo(undefined);
+        setIsDrawerOpen(false);
         setTargetNode(undefined);
+        setViewport({x: 0, y: 0, zoom: 0.6});
     }, [channelId]);
 
-    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo, setTargetNodeId})}), []);
+    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo, setTargetNodeId, setIsDrawerOpen})}), []);
 
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -246,10 +257,11 @@ const Graph = ({
                 setTargetNode(node);
             }
         } else if (!urlHashedNode && targetNode) {
-            // The data has changed but there's still a targetNode left over, so we reset it and the viewport position
-            // (the latter to avoid ending up with an empty viewport in some corner of the graph)
-            setViewport({x: 0, y: 0, zoom: 0.6});
-            setTargetNode(undefined);
+            // When following a hyperlink, the data can be reset and due to the sectionid being stripped from the url post-navigation
+            // the urlHashed node loses its isUrlHashed property. We still have a targetNode reference though, so we sync them again
+            markNodesAndEdges(nodes, edges, targetNode);
+            setNodes([...nodes]);
+            setEdges([...edges]);
         }
     }, [data]);
 
@@ -276,6 +288,28 @@ const Graph = ({
             clearTimeout(scrollTimeout);
         };
     }, [targetNode, fitView]);
+
+    useEffect(() => {
+        if (sectionUrlHash) {
+            const urlHashedNode = data.nodes.find((node) => sectionUrlHash.includes(node.id));
+            if (urlHashedNode) {
+                setTargetNode(urlHashedNode);
+            }
+        }
+
+        if (sectionUrlHash.includes(NODE_INFO_ID_PREFIX)) {
+            // We assume ids are unique across nodes and sections
+            // #identity--588fa371-4527-4fef-8499-14383fa7a29d-cb55b098-4c1d-4bfe-86ec-923a5e8933af-16-node-info--widget to nodeId-sectionid-parentid
+            const nodeId = sectionUrlHash.
+                split(NODE_INFO_ID_PREFIX)[0].
+                slice(1, -1);
+            const hashedNode = data.nodes.find((node) => nodeId.includes(node.id));
+            if (hashedNode !== undefined) {
+                setIsDrawerOpen(true);
+                setNodeInfo({name: hashedNode.data.label, description: hashedNode.data.description, nodeId});
+            }
+        }
+    }, [sectionUrlHash, data]);
 
     // const getGraphStyle = useCallback<() => GraphStyle>((): GraphStyle => {
     //     const graphStyle = (isRhsClosed && isRhs) || !isDescriptionProvided(description) ? rhsGraphStyle : defaultGraphStyle;
@@ -366,6 +400,22 @@ const Graph = ({
                     </Panel>
                 </ReactFlow>
             </GraphContainer>
+            <Drawer
+                title={nodeInfo?.name}
+                placement='right'
+                onClose={() => {
+                    setIsDrawerOpen(false);
+                }}
+                open={isDrawerOpen}
+                size='large'
+            >
+                {nodeInfo &&
+                <GraphNodeInfo
+                    info={nodeInfo}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
+            </Drawer>
             <GraphSidebar
                 width={graphSidebarStyle.width}
                 noMargin={(isRhsClosed && isRhs) ?? false}
@@ -380,13 +430,6 @@ const Graph = ({
                         text={description.text}
                     />
                 }
-                {nodeInfo &&
-                    <GraphNodeInfo
-                        info={nodeInfo}
-                        setNodeInfo={setNodeInfo}
-                        sectionId={sectionId}
-                        parentId={parentId}
-                    />}
             </GraphSidebar>
         </Container>
     );
