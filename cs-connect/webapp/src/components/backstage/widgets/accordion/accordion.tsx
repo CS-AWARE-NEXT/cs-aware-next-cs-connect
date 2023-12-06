@@ -106,7 +106,7 @@ const Accordion = ({
                 // }
             }
         }
-    }, [urlHash]);
+    }, [urlHash, elements]);
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 

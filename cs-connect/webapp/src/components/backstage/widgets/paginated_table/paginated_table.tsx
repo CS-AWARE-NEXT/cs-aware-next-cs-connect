@@ -81,7 +81,6 @@ export const fillColumn = (title: string, sortable: boolean | undefined): Pagina
         sorter: (a: PaginatedTableRow, b: PaginatedTableRow) => {
             const aValue = a[formattedTitle];
             const bValue = b[formattedTitle];
-            console.log('a', {a}, 'b', {b}, 'aValue', {aValue}, 'bValue', {bValue});
             if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
                 return Number(aValue) - Number(bValue);
             }
