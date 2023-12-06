@@ -41,3 +41,23 @@ Be sure that:
 1) the `config/config` and `config/logs` folder are owned by the user 2000 (the Mattermost container user);
 2) the `cs-connect/build/manifest` and `cs-connect/build/pluginctl` files should have the execute flag (this might be needed if you cloned the project on the Windows filesystem and later moved it on the WSL filesystem)
 
+# Deploy on the AWS machine with the locally packaged cs-connect plugin
+1) Build the cs-connect package locally as instructed in [its README](cs-connect/README.md). Be sure to use the correct config passed as argument. This is required due to the AWS machine not being powerful enough for the build step.
+2) Copy the packaged plugin to the machine with the `aws.copy-package.sh` script. The script assumes the existence of the required private key to authenticate with the machine in the path `~/.ssh/isislab/cs-connect-demo.cs-aware.eu`.
+3) Access the machine via SSH.
+4) Execute a git pull. This isn't required to update the cs-connect plugin, but it is required if you want to update the cs-faker-data-provider, since the latter is built directly on the AWS machine.
+5) Change the working directory to cs-connect and run the following command, after updating the version according to the change done:
+```sh
+sudo docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile . 
+```
+6) If needed, update the faker module by navigating to its directory and executing the following script with the proper version, based on the changes done:
+```sh
+./build.sh {VERSION}
+```
+7) Navigate to the `/opt/cs-connect` directory.
+8) Edit the docker-compose.yml file with sudo (`sudo vim the docker-compose.yml`) to upgrade the versions of the cs-connect and/or faker images according to the versions chosen previously.
+9) Update the environment:
+```sh
+sudo docker-compose up -d
+```
+10) Clean up the images that aren't needed anymore. Keep an eye out for the <none> image generated while updating the faker module image, which should also be deleted.
