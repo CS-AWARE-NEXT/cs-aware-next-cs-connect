@@ -79,6 +79,17 @@ func (ic *IssueController) SaveIssue(c *fiber.Ctx) error {
 	})
 }
 
+func (ic *IssueController) DeleteIssue(c *fiber.Ctx) error {
+	id := c.Params("issueId")
+	if err := ic.issueRepository.DeleteIssueByID(id); err != nil {
+		return c.JSON(fiber.Map{
+			"error": fmt.Sprintf("Could not delete issue due to %s", err.Error()),
+		})
+	}
+
+	return c.JSON(fiber.Map{})
+}
+
 func (ic *IssueController) ExistsIssueByName(name string) bool {
 	return ic.issueRepository.ExistsIssueByName(name)
 }

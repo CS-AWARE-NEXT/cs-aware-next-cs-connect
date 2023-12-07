@@ -13,3 +13,7 @@ export interface SetUserOrganizationParams {
 export interface GetUserPropsParams {
     userId: string;
 }
+
+export interface ArchiveIssueChannelsParams {
+    issueId: string;
+}

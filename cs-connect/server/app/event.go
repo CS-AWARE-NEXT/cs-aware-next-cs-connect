@@ -15,3 +15,7 @@ type SetOrganizationParams struct {
 type GetUserPropsParams struct {
 	UserID string `json:"userId"`
 }
+
+type ArchiveIssueChannelsParams struct {
+	IssueID string `json:"issueId"`
+}

@@ -26,6 +26,7 @@ func NewEventHandler(router *mux.Router, eventService *app.EventService) *EventH
 	platformRouter.HandleFunc("/user_added", withContext(handler.userAdded)).Methods(http.MethodPost)
 	platformRouter.HandleFunc("/set_organization", withContext(handler.setOrganization)).Methods(http.MethodPost)
 	platformRouter.HandleFunc("/user_props", withContext(handler.getUserProps)).Methods(http.MethodGet)
+	platformRouter.HandleFunc("/archive_issue_channels", withContext(handler.archiveIssueChannels)).Methods(http.MethodPost)
 
 	return handler
 }
@@ -69,4 +70,17 @@ func (h *EventHandler) getUserProps(c *Context, w http.ResponseWriter, r *http.R
 		return
 	}
 	ReturnJSON(w, userProps, http.StatusOK)
+}
+
+func (h *EventHandler) archiveIssueChannels(c *Context, w http.ResponseWriter, r *http.Request) {
+	var params app.ArchiveIssueChannelsParams
+	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to decode archive issue channels payload", err)
+		return
+	}
+	if err := h.eventService.ArchiveIssueChannels(params); err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to handle archive issue channels", err)
+		return
+	}
+	ReturnJSON(w, "", http.StatusOK)
 }

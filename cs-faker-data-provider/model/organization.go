@@ -14,6 +14,7 @@ type Issue struct {
 	Elements                  []IssueElement    `json:"elements"`
 	Roles                     []IssueRole       `json:"roles"`
 	Attachments               []IssueAttachment `json:"attachments"`
+	DeleteAt                  int64             `json:"deleteat"` // Follows the same rule of Mattermost DeleteAt columns (Unix milliseconds timestamp, 0 is used to signal the record is NOT deleted)
 }
 
 type IssueOutcome struct {

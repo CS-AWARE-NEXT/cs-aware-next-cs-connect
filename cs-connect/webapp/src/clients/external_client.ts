@@ -116,6 +116,11 @@ export const fetchExerciseData = async (url: string): Promise<ExerciseAssignment
     return data;
 };
 
+export const deleteIssue = async (id: string, url: string): Promise<null> => {
+    const data = await doDelete(`${url}/${id}`);
+    return data;
+};
+
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {
     const {data} = await doFetchWithResponse<TData>(url, {method: 'get'});
     return data;

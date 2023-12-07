@@ -95,9 +95,24 @@ const RHSView = () => {
         };
     });
 
+    if (!wasChannelFound) {
+        return (
+            <Container>
+                <FormattedMessage defaultMessage='The channel is not related to any data.'/>
+            </Container>
+        );
+    }
+    if (channelByID.deletedAt !== 0) {
+        return (
+            <Container>
+                <FormattedMessage defaultMessage='The data related to this channel has been deleted.'/>
+            </Container>
+        );
+    }
+
     return (
         <>
-            {wasChannelFound ? <FullUrlContext.Provider value={fullUrl}>
+            <FullUrlContext.Provider value={fullUrl}>
                 <IsRhsClosedContext.Provider value={closed}>
                     <SectionContext.Provider value={sectionContextOptions}>
                         <ToastProvider>
@@ -108,9 +123,7 @@ const RHSView = () => {
                         </ToastProvider>
                     </SectionContext.Provider>
                 </IsRhsClosedContext.Provider>
-            </FullUrlContext.Provider> : <Container>
-                <FormattedMessage defaultMessage='The channel is not related to any data.'/>
-            </Container>}
+            </FullUrlContext.Provider>
         </>
     );
 };

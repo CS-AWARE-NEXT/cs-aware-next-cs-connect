@@ -46,7 +46,29 @@ func (s *ChannelService) GetChannelsByOrganizationID(organizationID string) (Get
 
 func (s *ChannelService) GetChannelByID(channelID string) (GetChannelByIDResult, error) {
 	s.api.LogInfo("Getting channel", "channelId", channelID)
-	return s.store.GetChannelByID(channelID)
+	channel, err := s.store.GetChannelByID(channelID)
+	if err != nil {
+		return GetChannelByIDResult{}, err
+	}
+	mattermostChannel, getErr := s.api.GetChannel(channelID)
+	if getErr != nil {
+		return GetChannelByIDResult{}, err
+	}
+
+	return GetChannelByIDResult{
+		Channel: FullChannel{
+			ChannelID:      channel.ChannelID,
+			ParentID:       channel.ParentID,
+			SectionID:      channel.SectionID,
+			OrganizationID: channel.OrganizationID,
+			DeleteAt:       mattermostChannel.DeleteAt,
+		},
+	}, nil
+}
+
+func (s *ChannelService) GetChannelsBySectionID(sectionID string) (GetChannelsResults, error) {
+	s.api.LogInfo("Getting channels", "sectionID", sectionID)
+	return s.store.GetChannelsBySectionID(sectionID)
 }
 
 func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error) {

@@ -94,20 +94,33 @@ func (s *channelStore) GetChannelsByOrganizationID(organizationlID string) (app.
 	}, nil
 }
 
+func (s *channelStore) GetChannelsBySectionID(sectionID string) (app.GetChannelsResults, error) {
+	queryForResults := s.channelsSelect.Where(sq.Eq{"SectionID": sectionID})
+	var channelsEntities []ChannelEntity
+	err := s.store.selectBuilder(s.store.db, &channelsEntities, queryForResults)
+	if err == sql.ErrNoRows {
+		return app.GetChannelsResults{}, errors.Wrap(app.ErrNotFound, "no channels found for the section id provided")
+	} else if err != nil {
+		return app.GetChannelsResults{}, errors.Wrap(err, "failed to get channels for the section id provided")
+	}
+
+	return app.GetChannelsResults{
+		Items: s.toChannels(channelsEntities),
+	}, nil
+}
+
 // GetChannelByID retrieves a channel given the channel id
-func (s *channelStore) GetChannelByID(channelID string) (app.GetChannelByIDResult, error) {
+func (s *channelStore) GetChannelByID(channelID string) (app.Channel, error) {
 	queryForResult := s.channelsSelect.Where(sq.Eq{"ChannelID": channelID})
 	var channel ChannelEntity
 	err := s.store.getBuilder(s.store.db, &channel, queryForResult)
 	if err == sql.ErrNoRows {
-		return app.GetChannelByIDResult{}, errors.Wrap(app.ErrNotFound, "no channel found for the given id")
+		return app.Channel{}, errors.Wrap(app.ErrNotFound, "no channel found for the given id")
 	} else if err != nil {
-		return app.GetChannelByIDResult{}, errors.Wrap(err, "failed to get channel for the given id")
+		return app.Channel{}, errors.Wrap(err, "failed to get channel for the given id")
 	}
 
-	return app.GetChannelByIDResult{
-		Channel: s.toChannel(channel),
-	}, nil
+	return s.toChannel(channel), nil
 }
 
 // AddChannel adds a channel to a product

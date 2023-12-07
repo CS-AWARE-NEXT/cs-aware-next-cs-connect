@@ -36,6 +36,10 @@ export const pluginErrorUrl = (type: string) => {
     return pluginUrl(`/error?type=${type}`);
 };
 
+export const navigateToBackstageOrganization = async (orgId: string) => {
+    navigateToPluginUrl(`/organizations/${orgId}`);
+};
+
 export const handleFormattedTextClick = (e: React.MouseEvent<HTMLElement, MouseEvent>, currentRelativeTeamUrl: string) => {
     // @ts-ignore
     const channelMentionAttribute = e.target.getAttributeNode('data-channel-mention');
