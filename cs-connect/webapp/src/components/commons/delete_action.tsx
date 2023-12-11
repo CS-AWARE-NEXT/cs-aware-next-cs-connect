@@ -9,7 +9,8 @@ import {OVERLAY_DELAY} from 'src/constants';
 
 type Props = {
     id: string;
-    name: string;
+    modalTitle: string;
+    modalContent: string;
     iconWidth?: string;
     iconHeight?: string;
     onDelete: () => void;
@@ -22,7 +23,8 @@ const DeleteAction: FC<Props & Attrs> = ({
     iconWidth,
     iconHeight,
     id,
-    name,
+    modalTitle,
+    modalContent,
     onDelete,
     ...attrs
 }) => {
@@ -34,8 +36,8 @@ const DeleteAction: FC<Props & Attrs> = ({
 
     const showModal = () => {
         Modal.confirm({
-            title: formatMessage({defaultMessage: 'Delete issue'}),
-            content: formatMessage({defaultMessage: 'Do you really want to delete this issue?'}),
+            title: modalTitle,
+            content: modalContent,
             onOk: deleteAction,
             okText: formatMessage({defaultMessage: 'Yes'}),
             cancelText: formatMessage({defaultMessage: 'No'}),
@@ -50,7 +52,7 @@ const DeleteAction: FC<Props & Attrs> = ({
                 placement='bottom'
                 delay={OVERLAY_DELAY}
                 shouldUpdatePosition={true}
-                content={formatMessage({defaultMessage: 'Delete issue'})}
+                content={modalTitle}
             >
                 <AutoSizeDeleteIcon
                     onClick={showModal}

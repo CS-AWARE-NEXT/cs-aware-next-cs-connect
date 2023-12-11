@@ -56,7 +56,8 @@ export const NameHeader = ({id, name, path, url, onDelete}: Props) => {
                     {(onDelete && url) &&
                     <StyledDeleteAction
                         id='delete-tooltip'
-                        name={name}
+                        modalTitle={formatMessage({defaultMessage: 'Delete issue'})}
+                        modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
                         onDelete={onDelete}
                     />}
                 </>
