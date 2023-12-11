@@ -248,10 +248,6 @@ const Graph = ({
             return;
         }
         if (urlHashedNode) {
-            // Due to the node hyperlink mechanism being based on a scrollToView operation done outside this component,
-            // we have to reset the scrollLeft/Top properties to avoid moving the controls and draggable canvas
-            // outside the visible DOM area (due to overflow: hidden).
-            (document.getElementsByClassName('react-flow')[0] as HTMLDivElement).scrollTo(0, 0);
             const node = getNode(urlHashedNode.id);
             if (node) {
                 setTargetNode(node);
@@ -343,6 +339,12 @@ const Graph = ({
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
+            onScrollCapture={() => {
+                // Due to the node hyperlink mechanism being based on a scrollToView operation done outside this component,
+                // we have to reset the scrollLeft/Top properties to avoid moving the controls and draggable canvas
+                // outside the visible DOM area (due to overflow: hidden).
+                (document.getElementsByClassName('react-flow')[0] as HTMLDivElement).scrollTo(0, 0);
+            }}
         >
             <GraphContainer
                 id={id}
