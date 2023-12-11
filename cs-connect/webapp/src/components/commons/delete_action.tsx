@@ -39,6 +39,7 @@ const DeleteAction: FC<Props & Attrs> = ({
             onOk: deleteAction,
             okText: formatMessage({defaultMessage: 'Yes'}),
             cancelText: formatMessage({defaultMessage: 'No'}),
+            focusTriggerAfterClose: false,
         });
     };
 
