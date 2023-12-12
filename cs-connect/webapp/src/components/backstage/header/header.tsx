@@ -7,15 +7,19 @@ import CopyLink from 'src/components/commons/copy_link';
 import {SemiBoldHeading} from 'src/styles/headings';
 import TextEdit from 'src/components/commons/text_edit';
 
+import DeleteAction from 'src/components/commons/delete_action';
+
 import {ContextMenu} from './context_menu';
 
 type Props = {
     id: string;
     name: string;
     path: string;
+    url?: string
+    onDelete?: () => void
 };
 
-export const NameHeader = ({id, name, path}: Props) => {
+export const NameHeader = ({id, name, path, url, onDelete}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
@@ -49,6 +53,13 @@ export const NameHeader = ({id, name, path}: Props) => {
                         to={path}
                         tooltipMessage={formatMessage({defaultMessage: 'Copy link'})}
                     />
+                    {(onDelete && url) &&
+                    <StyledDeleteAction
+                        id='delete-tooltip'
+                        modalTitle={formatMessage({defaultMessage: 'Delete issue'})}
+                        modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
+                        onDelete={onDelete}
+                    />}
                 </>
             </TextEdit>
         </Container>
@@ -67,6 +78,16 @@ const Container = styled.div`
 `;
 
 const StyledCopyLink = styled(CopyLink)`
+    border-radius: 4px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    display: grid;
+    place-items: center;
+`;
+
+const StyledDeleteAction = styled(DeleteAction)`
     border-radius: 4px;
     font-size: 18px;
     width: 28px;

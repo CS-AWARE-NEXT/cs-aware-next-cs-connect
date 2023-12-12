@@ -17,7 +17,12 @@ import {
 
 import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
-import {GetUserPropsParams, SetUserOrganizationParams, UserAddedParams} from 'src/types/events';
+import {
+    ArchiveIssueChannelsParams,
+    GetUserPropsParams,
+    SetUserOrganizationParams,
+    UserAddedParams,
+} from 'src/types/events';
 import {UserResult} from 'src/types/users';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
@@ -112,6 +117,13 @@ export const userAdded = async (params: UserAddedParams): Promise<void> => {
 export const setUserOrganization = async (params: SetUserOrganizationParams): Promise<void> => {
     await doPost(
         `${apiUrl}/events/set_organization`,
+        JSON.stringify(params),
+    );
+};
+
+export const archiveIssueChannels = async (params: ArchiveIssueChannelsParams): Promise<void> => {
+    await doPost(
+        `${apiUrl}/events/archive_issue_channels`,
         JSON.stringify(params),
     );
 };

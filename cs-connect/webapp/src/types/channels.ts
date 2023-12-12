@@ -2,6 +2,7 @@ export interface WidgetChannel {
     channelId: string;
     parentId: string;
     sectionId: string;
+    deletedAt: number;
 }
 
 export interface FetchChannelsParams {
@@ -46,4 +47,5 @@ export const notFoundWidgetChannel: WidgetChannel = {
     channelId: 'not-found',
     parentId: '',
     sectionId: '',
+    deletedAt: 0,
 };

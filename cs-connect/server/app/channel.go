@@ -9,6 +9,15 @@ type Channel struct {
 	OrganizationID string `json:"organizationId"`
 }
 
+// Unifies cs-connect channel data with mattermost data we're interested about
+type FullChannel struct {
+	ChannelID      string `json:"channelId"`
+	ParentID       string `json:"parentId"`
+	SectionID      string `json:"sectionId"`
+	OrganizationID string `json:"organizationId"`
+	DeleteAt       int64  `json:"deletedAt"`
+}
+
 type ChannelFilterOptions struct {
 	Sort       SortField
 	Direction  SortDirection
@@ -28,7 +37,7 @@ type GetMattermostChannelsResults struct {
 }
 
 type GetChannelByIDResult struct {
-	Channel Channel `json:"channel"`
+	Channel FullChannel `json:"channel"`
 }
 
 type AddChannelParams struct {

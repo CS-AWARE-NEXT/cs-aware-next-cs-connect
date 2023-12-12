@@ -188,3 +188,17 @@ func (s *EventService) GetUserProps(params GetUserPropsParams) (model.StringMap,
 	}
 	return user.Props, nil
 }
+
+func (s *EventService) ArchiveIssueChannels(params ArchiveIssueChannelsParams) error {
+	channels, err := s.channelService.GetChannelsBySectionID(params.IssueID)
+	if err != nil {
+		return fmt.Errorf("could not fetch channels for issue %s", params.IssueID)
+	}
+
+	for _, channel := range channels.Items {
+		if deleteErr := s.api.DeleteChannel(channel.ChannelID); deleteErr != nil {
+			s.api.LogWarn("Failed to delete channel", "channelID", channel)
+		}
+	}
+	return nil
+}

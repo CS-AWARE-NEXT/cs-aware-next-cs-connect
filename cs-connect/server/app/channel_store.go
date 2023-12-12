@@ -12,7 +12,10 @@ type ChannelStore interface {
 	GetChannelsByOrganizationID(organizationlID string) (GetChannelsResults, error)
 
 	// GetChannelByID retrieves a channel given the channel id
-	GetChannelByID(channelID string) (GetChannelByIDResult, error)
+	GetChannelByID(channelID string) (Channel, error)
+
+	// Get channels by section, where section can be an ecosystem issue for example
+	GetChannelsBySectionID(sectionID string) (GetChannelsResults, error)
 
 	// AddChannel adds a channel to a section
 	AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error)

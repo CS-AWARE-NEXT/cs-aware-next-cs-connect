@@ -3,7 +3,9 @@ package repository
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"strings"
+	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/jmoiron/sqlx"
@@ -26,10 +28,12 @@ func NewIssueRepository(db *db.DB) *IssueRepository {
 	}
 }
 
+// Returns non deleted issues.
 func (r *IssueRepository) GetIssues() ([]model.Issue, error) {
 	issuesSelect := r.queryBuilder.
 		Select("*").
-		From("CSFDP_Issue")
+		From("CSFDP_Issue").
+		Where(sq.Eq{"DeleteAt": 0})
 	var issuesResults []model.Issue
 	err := r.db.SelectBuilder(r.db.DB, &issuesResults, issuesSelect)
 	if err == sql.ErrNoRows {
@@ -252,5 +256,27 @@ func (r *IssueRepository) saveIssueAttachments(tx *sqlx.Tx, issue model.Issue) e
 			return errors.Wrap(err, "could not save attachment")
 		}
 	}
+	return nil
+}
+
+func (r *IssueRepository) DeleteIssueByID(id string) error {
+	tx, err := r.db.DB.Beginx()
+	if err != nil {
+		return errors.Wrap(err, "could not begin transaction")
+	}
+	defer r.db.FinalizeTransaction(tx)
+
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Update("CSFDP_Issue").
+		Where(sq.Eq{"ID": id}).
+		SetMap(map[string]interface{}{
+			"DeleteAt": time.Now().UnixMilli(),
+		})); err != nil {
+		return errors.Wrap(err, fmt.Sprintf("could not delete the issue with id %s", id))
+	}
+	if err := tx.Commit(); err != nil {
+		return errors.Wrap(err, "could not commit transaction")
+	}
+
 	return nil
 }
