@@ -98,7 +98,7 @@ const DeleteIcon = styled.button<{clicked: boolean, iconWidth?: string, iconHeig
     `}
 `;
 
-const AutoSizeDeleteIcon = styled(DeleteIcon)`
+export const AutoSizeDeleteIcon = styled(DeleteIcon)`
     font-size: inherit;
 `;
 

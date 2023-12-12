@@ -34,6 +34,7 @@ const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
             widgets={section.widgets}
             childrenBottom={false}
             deleteProps={{url: section.url}}
+            enableEdit={true}
         >
             <EcosystemObjectivesWrapper
                 name={formatStringToCapitalize(ecosystemObjectivesWidget)}

@@ -23,7 +23,7 @@ export const fillAttachments = (attachments: string[]): Attachment[] => {
 };
 
 const AttachmentsStep = ({data, setWizardData}: Props) => {
-    const [attachements, setAttachements] = useState<string[]>(data);
+    const [attachements, setAttachements] = useState<string[]>(data || []);
 
     return (
         <Container>

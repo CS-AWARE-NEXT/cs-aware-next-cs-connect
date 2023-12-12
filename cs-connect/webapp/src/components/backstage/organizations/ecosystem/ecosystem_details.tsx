@@ -23,14 +23,7 @@ import ScenarioWizard from 'src/components/backstage/widgets/wizard/scenario_wiz
 
 export const IsEcosystemContext = createContext(false);
 
-const EcosystemDetails = () => {
-    const {url, path} = useRouteMatch();
-    const {hash: urlHash} = useLocation();
-    const organizationId = useContext(OrganizationIdContext);
-    const ecosystem = useOrganization(organizationId);
-    const organizations = useOrganizionsNoEcosystem();
-
-    const [currentSection, _] = useState(0);
+export const useStepData = (organizations: any): [StepData[], React.Dispatch<React.SetStateAction<StepData[]>>] => {
     const [stepData, setStepData] = useState<StepData[]>([]);
 
     useEffect(() => {
@@ -68,6 +61,19 @@ const EcosystemDetails = () => {
 
         fetchData();
     }, []);
+
+    return [stepData, setStepData];
+};
+
+const EcosystemDetails = () => {
+    const {url, path} = useRouteMatch();
+    const {hash: urlHash} = useLocation();
+    const organizationId = useContext(OrganizationIdContext);
+    const ecosystem = useOrganization(organizationId);
+    const organizations = useOrganizionsNoEcosystem();
+
+    const [currentSection, _] = useState(0);
+    const [stepData, setStepData] = useStepData(organizations);
 
     useForceDocumentTitle(ecosystem.name ? (ecosystem.name) : 'Organizations');
 

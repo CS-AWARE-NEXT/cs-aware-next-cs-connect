@@ -32,6 +32,7 @@ type Props = {
     children?: ReactNode;
     childrenBottom?: boolean;
     deleteProps?: DeleteProps;
+    enableEdit?: boolean;
 };
 
 type DeleteProps = {
@@ -50,6 +51,7 @@ const SectionsWidgetsContainer = ({
     children = [],
     childrenBottom = true,
     deleteProps,
+    enableEdit = false,
 }: Props) => {
     const organizationId = useContext(OrganizationIdContext);
 
@@ -70,6 +72,7 @@ const SectionsWidgetsContainer = ({
                             path={headerPath}
                             name={sectionInfo?.name || name}
                             url={deleteProps?.url}
+                            sectionInfo={sectionInfo}
                             onDelete={async () => {
                                 if (sectionInfo && deleteProps) {
                                     await deleteIssue(sectionInfo.id, deleteProps.url);
@@ -77,6 +80,7 @@ const SectionsWidgetsContainer = ({
                                     navigateToBackstageOrganization(organizationId);
                                 }
                             }}
+                            enableEdit={enableEdit}
                         />
                     </Header>
                     <Main>

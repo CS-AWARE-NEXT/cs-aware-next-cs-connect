@@ -179,6 +179,10 @@ func useEcosystem(basePath fiber.Router, context *config.Context) {
 		log.Printf("POST /issues called")
 		return issueController.SaveIssue(c)
 	})
+	ecosystem.Post("/:issueId", func(c *fiber.Ctx) error {
+		log.Printf("POST /issues/:issueId called")
+		return issueController.UpdateIssue(c)
+	})
 	ecosystem.Delete("/:issueId", func(c *fiber.Ctx) error {
 		log.Printf("DELETE /issues/:issueId called")
 		return issueController.DeleteIssue(c)

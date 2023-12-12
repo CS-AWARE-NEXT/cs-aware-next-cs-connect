@@ -66,7 +66,7 @@ func (ic *IssueController) SaveIssue(c *fiber.Ctx) error {
 			"error": fmt.Sprintf("Issue with name '%s' already exists", issue.Name),
 		})
 	}
-	savedIssue, err := ic.issueRepository.SaveIssue(fillIssue(issue))
+	savedIssue, err := ic.issueRepository.SaveIssue(fillIssue(issue, false))
 	if err != nil {
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{
@@ -76,6 +76,30 @@ func (ic *IssueController) SaveIssue(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"id":   savedIssue.ID,
 		"name": savedIssue.Name,
+	})
+}
+
+func (ic *IssueController) UpdateIssue(c *fiber.Ctx) error {
+	id := c.Params("issueId")
+	var issue model.Issue
+	err := json.Unmarshal(c.Body(), &issue)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"error": "Not a valid issue provided",
+		})
+	}
+
+	updatedIssue, err := ic.issueRepository.UpdateIssue(id, fillIssue(issue, true))
+	if err != nil {
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{
+			"error": fmt.Sprintf("Could not update issue due to %s", err.Error()),
+		})
+	}
+	return c.JSON(fiber.Map{
+		"id":   updatedIssue.ID,
+		"name": updatedIssue.Name,
 	})
 }
 
@@ -94,8 +118,10 @@ func (ic *IssueController) ExistsIssueByName(name string) bool {
 	return ic.issueRepository.ExistsIssueByName(name)
 }
 
-func fillIssue(issue model.Issue) model.Issue {
-	issue.ID = util.GenerateUUID()
+func fillIssue(issue model.Issue, skipID bool) model.Issue {
+	if !skipID {
+		issue.ID = util.GenerateUUID()
+	}
 
 	outcomes := []model.IssueOutcome{}
 	for _, outcome := range issue.Outcomes {

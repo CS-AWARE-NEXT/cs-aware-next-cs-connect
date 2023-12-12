@@ -195,6 +195,58 @@ func (r *IssueRepository) SaveIssue(issue model.Issue) (model.Issue, error) {
 	return issue, nil
 }
 
+func (r *IssueRepository) UpdateIssue(id string, issue model.Issue) (model.Issue, error) {
+	tx, err := r.db.DB.Beginx()
+	if err != nil {
+		return model.Issue{}, errors.Wrap(err, "could not begin transaction")
+	}
+	defer r.db.FinalizeTransaction(tx)
+
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Update("CSFDP_Issue").
+		Where(sq.Eq{"ID": issue.ID}).
+		SetMap(map[string]interface{}{
+			"Name":                      issue.Name,
+			"ObjectivesAndResearchArea": issue.ObjectivesAndResearchArea,
+		})); err != nil {
+		return model.Issue{}, errors.Wrap(err, "could not create the new issue")
+	}
+
+	// Clean up old linked data
+	if err := r.deleteIssueOutcomes(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+	if err := r.deleteIssueRoles(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+	if err := r.deleteIssueElements(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+	if err := r.deleteIssueAttachments(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+
+	// And recreate it
+	if err := r.saveIssueOutcomes(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+	if err := r.saveIssueRoles(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+	if err := r.saveIssueElements(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+	if err := r.saveIssueAttachments(tx, issue); err != nil {
+		return model.Issue{}, err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return model.Issue{}, errors.Wrap(err, "could not commit transaction")
+	}
+
+	return issue, nil
+}
+
 func (r *IssueRepository) saveIssueOutcomes(tx *sqlx.Tx, issue model.Issue) error {
 	for _, outcome := range issue.Outcomes {
 		var outcomeMap map[string]interface{}
@@ -207,6 +259,15 @@ func (r *IssueRepository) saveIssueOutcomes(tx *sqlx.Tx, issue model.Issue) erro
 			SetMap(outcomeMap)); err != nil {
 			return errors.Wrap(err, "could not save outcome")
 		}
+	}
+	return nil
+}
+
+func (r *IssueRepository) deleteIssueOutcomes(tx *sqlx.Tx, issue model.Issue) error {
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Delete("CSFDP_Outcome").
+		Where(sq.Eq{"IssueID": issue.ID})); err != nil {
+		return errors.Wrap(err, "could not delete issue outcomes")
 	}
 	return nil
 }
@@ -227,6 +288,15 @@ func (r *IssueRepository) saveIssueRoles(tx *sqlx.Tx, issue model.Issue) error {
 	return nil
 }
 
+func (r *IssueRepository) deleteIssueRoles(tx *sqlx.Tx, issue model.Issue) error {
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Delete("CSFDP_Role").
+		Where(sq.Eq{"IssueID": issue.ID})); err != nil {
+		return errors.Wrap(err, "could not delete issue roles")
+	}
+	return nil
+}
+
 func (r *IssueRepository) saveIssueElements(tx *sqlx.Tx, issue model.Issue) error {
 	for _, element := range issue.Elements {
 		var elementMap map[string]interface{}
@@ -243,6 +313,15 @@ func (r *IssueRepository) saveIssueElements(tx *sqlx.Tx, issue model.Issue) erro
 	return nil
 }
 
+func (r *IssueRepository) deleteIssueElements(tx *sqlx.Tx, issue model.Issue) error {
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Delete("CSFDP_Element").
+		Where(sq.Eq{"IssueID": issue.ID})); err != nil {
+		return errors.Wrap(err, "could not delete issue elements")
+	}
+	return nil
+}
+
 func (r *IssueRepository) saveIssueAttachments(tx *sqlx.Tx, issue model.Issue) error {
 	for _, attachment := range issue.Attachments {
 		var attachmentMap map[string]interface{}
@@ -255,6 +334,15 @@ func (r *IssueRepository) saveIssueAttachments(tx *sqlx.Tx, issue model.Issue) e
 			SetMap(attachmentMap)); err != nil {
 			return errors.Wrap(err, "could not save attachment")
 		}
+	}
+	return nil
+}
+
+func (r *IssueRepository) deleteIssueAttachments(tx *sqlx.Tx, issue model.Issue) error {
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Delete("CSFDP_Attachment").
+		Where(sq.Eq{"IssueID": issue.ID})); err != nil {
+		return errors.Wrap(err, "could not delete issue attachments")
 	}
 	return nil
 }

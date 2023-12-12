@@ -7,6 +7,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {PrimaryButtonLarger, TextInput} from 'src/components/backstage/widgets/shared';
 import {Outcome} from 'src/types/scenario_wizard';
+import {AutoSizeDeleteIcon} from 'src/components/commons/delete_action';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -23,7 +24,7 @@ export const fillOutcomes = (outcomes: string[]): Outcome[] => {
 };
 
 const OutcomesStep = ({data, setWizardData}: Props) => {
-    const [outcomes, setOutcomes] = useState<string[]>(data);
+    const [outcomes, setOutcomes] = useState<string[]>(data || []);
 
     return (
         <Container>
@@ -37,7 +38,20 @@ const OutcomesStep = ({data, setWizardData}: Props) => {
                 itemLayout='horizontal'
                 dataSource={outcomes}
                 renderItem={(outcome, index) => (
-                    <Item>
+                    <Item
+                        actions={[
+                            <StyledDeleteAction
+                                key={`outcome-${index}-delete`}
+                                onClick={() => {
+                                    const currentOutcomes = [...outcomes.filter((prevOutcome) => prevOutcome !== outcome)];
+                                    setOutcomes(currentOutcomes);
+                                    setWizardData((prev: any) => ({...prev, outcomes: currentOutcomes}));
+                                }}
+                                className={'icon-trash-can-outline'}
+                                clicked={false}
+                            />,
+                        ]}
+                    >
                         <Meta
                             avatar={<Avatar icon={<UnorderedListOutlined/>}/>}
                             title={(
@@ -64,6 +78,16 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 24px;
+`;
+
+const StyledDeleteAction = styled(AutoSizeDeleteIcon)`
+    border-radius: 4px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    display: grid;
+    place-items: center;
 `;
 
 export default OutcomesStep;
