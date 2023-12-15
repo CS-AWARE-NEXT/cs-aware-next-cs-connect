@@ -22,11 +22,11 @@ type Props = {
     url?: string
     onDelete?: () => void
     enableEdit?: boolean
-    issueData?: SectionInfo
-    setIssueData?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
+    sectionInfo?: SectionInfo
+    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
 };
 
-export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit = false, issueData, setIssueData}: Props) => {
+export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit = false, sectionInfo, setSectionInfo}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
@@ -70,8 +70,8 @@ export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit
                     {enableEdit &&
                     <StyledEditAction
                         id='edit-tooltip'
-                        issueData={issueData}
-                        setIssueData={setIssueData}
+                        sectionInfo={sectionInfo}
+                        setSectionInfo={setSectionInfo}
                         ecosystem={ecosystem}
                     />}
                 </>

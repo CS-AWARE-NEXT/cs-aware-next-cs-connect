@@ -22,7 +22,7 @@ const EcosystemAccordionChild = ({element}: Props) => {
                 <SectionContext.Provider value={{parentId: element.parentId, sectionId: element.id}}>
                     <RhsSectionsWidgetsContainer
                         headerPath={`${getSiteUrl()}${fullUrl}#_${sectionInfo.id}`}
-                        issueData={sectionInfo}
+                        sectionInfo={sectionInfo}
                         url={fullUrl}
                         widgets={section?.widgets}
                     />

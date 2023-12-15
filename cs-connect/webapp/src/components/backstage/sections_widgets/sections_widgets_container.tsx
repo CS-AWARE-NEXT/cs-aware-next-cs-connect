@@ -24,8 +24,8 @@ type Props = {
     headerPath: string;
     isRhs?: boolean;
     name?: string
-    issueData?: SectionInfo;
-    setIssueData?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
+    sectionInfo?: SectionInfo;
+    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
     sectionPath?: string;
     sections?: Section[];
     url: string;
@@ -44,8 +44,8 @@ const SectionsWidgetsContainer = ({
     headerPath,
     isRhs = false,
     name = '',
-    issueData,
-    setIssueData,
+    sectionInfo,
+    setSectionInfo,
     sectionPath,
     sections,
     url,
@@ -71,16 +71,16 @@ const SectionsWidgetsContainer = ({
                 <MainWrapper>
                     <Header>
                         <NameHeader
-                            id={issueData?.id || name}
+                            id={sectionInfo?.id || name}
                             path={headerPath}
-                            name={issueData?.name || name}
+                            name={sectionInfo?.name || name}
                             url={deleteProps?.url}
-                            issueData={issueData}
-                            setIssueData={setIssueData}
+                            sectionInfo={sectionInfo}
+                            setSectionInfo={setSectionInfo}
                             onDelete={async () => {
-                                if (issueData && deleteProps) {
-                                    await deleteIssue(issueData.id, deleteProps.url);
-                                    await archiveIssueChannels({issueId: issueData.id});
+                                if (sectionInfo && deleteProps) {
+                                    await deleteIssue(sectionInfo.id, deleteProps.url);
+                                    await archiveIssueChannels({issueId: sectionInfo.id});
                                     navigateToBackstageOrganization(organizationId);
                                 }
                             }}

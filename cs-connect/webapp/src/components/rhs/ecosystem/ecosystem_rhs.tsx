@@ -42,14 +42,14 @@ const EcosystemRhs = ({
     sectionInfo,
 }: Props) => {
     const ecosystem = useOrganization(parentId);
-    const [issueData, setIssueData] = useState<SectionInfo | undefined>(sectionInfo);
-    const elements = (issueData && issueData.elements) ? issueData.elements.map((element: any) => ({
+    const [currentSectionInfo, setCurrentSectionInfo] = useState<SectionInfo | undefined>(sectionInfo);
+    const elements = (currentSectionInfo && currentSectionInfo.elements) ? currentSectionInfo.elements.map((element: any) => ({
         ...element,
         header: `${getOrganizationById(element.organizationId).name} - ${element.name}`,
     })) : [];
 
     useEffect(() => {
-        setIssueData(sectionInfo);
+        setCurrentSectionInfo(sectionInfo);
     }, [sectionInfo]);
 
     return (
@@ -57,12 +57,12 @@ const EcosystemRhs = ({
             <MainWrapper>
                 <Header>
                     <NameHeader
-                        id={issueData?.id || ''}
+                        id={currentSectionInfo?.id || ''}
                         path={headerPath}
-                        name={issueData?.name || ''}
+                        name={currentSectionInfo?.name || ''}
                         enableEdit={true}
-                        issueData={issueData}
-                        setIssueData={setIssueData}
+                        sectionInfo={currentSectionInfo}
+                        setSectionInfo={setCurrentSectionInfo}
                         ecosystem={ecosystem}
                     />
                 </Header>
@@ -70,15 +70,15 @@ const EcosystemRhs = ({
                     <Body>
                         <EcosystemObjectivesWrapper
                             name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                            objectives={issueData?.objectivesAndResearchArea}
+                            objectives={currentSectionInfo?.objectivesAndResearchArea}
                         />
                         <EcosystemOutcomesWrapper
                             name={formatStringToCapitalize(ecosystemOutcomesWidget)}
-                            outcomes={issueData?.outcomes}
+                            outcomes={currentSectionInfo?.outcomes}
                         />
                         <EcosystemRolesWrapper
                             name={formatStringToCapitalize(ecosystemRolesWidget)}
-                            roles={issueData?.roles}
+                            roles={currentSectionInfo?.roles}
                         />
                         <Accordion
                             name={formatStringToCapitalize(ecosystemElementsWidget)}
@@ -89,7 +89,7 @@ const EcosystemRhs = ({
                         />
                         <EcosystemAttachmentsWrapper
                             name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
-                            attachments={issueData?.attachments}
+                            attachments={currentSectionInfo?.attachments}
                         />
                     </Body>
                 </Main>

@@ -17,8 +17,8 @@ type Props = {
     ecosystem: Organization;
     iconWidth?: string;
     iconHeight?: string;
-    issueData?: SectionInfo;
-    setIssueData?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>;
+    sectionInfo?: SectionInfo;
+    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>;
 };
 
 type Attrs = HTMLAttributes<HTMLElement>;
@@ -28,8 +28,8 @@ const EditAction: FC<Props & Attrs> = ({
     iconWidth,
     iconHeight,
     id,
-    issueData,
-    setIssueData,
+    sectionInfo,
+    setSectionInfo,
     ecosystem,
     ...attrs
 }) => {
@@ -69,8 +69,8 @@ const EditAction: FC<Props & Attrs> = ({
                 targetUrl={ecosystem.sections[currentSection].url}
                 visible={visible}
                 setVisible={setVisible}
-                prefillWizardData={issueData}
-                wizardDataSetter={setIssueData}
+                prefillWizardData={sectionInfo}
+                wizardDataSetter={setSectionInfo}
                 isEdit={true}
             />
             }

@@ -44,7 +44,7 @@ const SectionDetails = () => {
             /> :
             <SectionsWidgetsContainer
                 headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
-                issueData={sectionInfo}
+                sectionInfo={sectionInfo}
                 sectionPath={path}
                 sections={section.sections}
                 url={url}

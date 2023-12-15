@@ -303,7 +303,7 @@ const ScenarioWizardModal = ({
                     key='submit'
                     type='primary'
                     onClick={handleOk}
-                    disabled={current !== steps.length - 1}
+                    disabled={!wizardData.name}
                 >
                     {isEdit ? <FormattedMessage defaultMessage={'Update'}/> : <FormattedMessage defaultMessage={'Create'}/>}
                 </Button>,
