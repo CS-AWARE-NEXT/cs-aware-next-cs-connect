@@ -53,6 +53,7 @@ type Props = {
     parentId: string;
     targetUrl: string;
     prefillWizardData?: SectionInfo;
+    wizardDataSetter?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>;
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     isEdit?: boolean;
@@ -131,6 +132,7 @@ const ScenarioWizardModal = ({
     parentId,
     targetUrl,
     prefillWizardData,
+    wizardDataSetter,
     visible,
     setVisible,
     isEdit = false,
@@ -232,9 +234,11 @@ const ScenarioWizardModal = ({
     const editIssue = async (issue: SectionInfo) => {
         issue.id = prefillWizardData?.id || '';
         try {
-            await updateSectionInfo(issue, `${targetUrl}/${issue.id}`);
+            const newData = await updateSectionInfo(issue, `${targetUrl}/${issue.id}`);
             cleanModal();
-            navigateToUrl(formatSectionPath(path, organizationId));
+            if (wizardDataSetter) {
+                wizardDataSetter(newData);
+            }
         } catch (err: any) {
             const message = JSON.parse(err.message);
             setErrorMessage(`${message.error}.`);

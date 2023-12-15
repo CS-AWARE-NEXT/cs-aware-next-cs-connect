@@ -1,29 +1,24 @@
-import React, {
-    FC,
-    HTMLAttributes,
-    useContext,
-    useState,
-} from 'react';
+import React, {FC, HTMLAttributes, useState} from 'react';
 import {useIntl} from 'react-intl';
 import styled, {css} from 'styled-components';
 
 import Tooltip from 'src/components/commons/tooltip';
 import {OVERLAY_DELAY} from 'src/constants';
 
-import {useOrganization, useOrganizionsNoEcosystem} from 'src/hooks';
+import {useOrganizionsNoEcosystem} from 'src/hooks';
 
 import {useStepData} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
 
-import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
-
 import ScenarioWizardModal from 'src/components/backstage/widgets/wizard/scenario_wizard_modal';
-import {SectionInfo} from 'src/types/organization';
+import {Organization, SectionInfo} from 'src/types/organization';
 
 type Props = {
     id: string;
+    ecosystem: Organization;
     iconWidth?: string;
     iconHeight?: string;
-    sectionInfo?: SectionInfo
+    issueData?: SectionInfo;
+    setIssueData?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>;
 };
 
 type Attrs = HTMLAttributes<HTMLElement>;
@@ -33,13 +28,13 @@ const EditAction: FC<Props & Attrs> = ({
     iconWidth,
     iconHeight,
     id,
-    sectionInfo,
+    issueData,
+    setIssueData,
+    ecosystem,
     ...attrs
 }) => {
     const {formatMessage} = useIntl();
     const organizations = useOrganizionsNoEcosystem();
-    const organizationId = useContext(OrganizationIdContext);
-    const ecosystem = useOrganization(organizationId);
     const [currentSection, _] = useState(0);
     const [stepData, _setStepData] = useStepData(organizations);
     const [visible, setVisible] = useState(false);
@@ -66,6 +61,7 @@ const EditAction: FC<Props & Attrs> = ({
                     iconHeight={iconHeight}
                 />
             </Tooltip>
+            {ecosystem &&
             <ScenarioWizardModal
                 organizationsData={stepData}
                 name={ecosystem.sections[currentSection].name}
@@ -73,9 +69,11 @@ const EditAction: FC<Props & Attrs> = ({
                 targetUrl={ecosystem.sections[currentSection].url}
                 visible={visible}
                 setVisible={setVisible}
-                prefillWizardData={sectionInfo}
+                prefillWizardData={issueData}
+                wizardDataSetter={setIssueData}
                 isEdit={true}
             />
+            }
         </>
     );
 };

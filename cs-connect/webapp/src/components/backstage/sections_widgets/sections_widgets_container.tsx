@@ -11,7 +11,7 @@ import {Section, SectionInfo, Widget} from 'src/types/organization';
 import {NameHeader} from 'src/components/backstage/header/header';
 import Sections from 'src/components/backstage/sections/sections';
 import Widgets from 'src/components/backstage/widgets/widgets';
-import {isUrlEqualWithoutQueryParams} from 'src/hooks';
+import {isUrlEqualWithoutQueryParams, useOrganization} from 'src/hooks';
 import {archiveIssueChannels, deleteIssue, getSiteUrl} from 'src/clients';
 import {formatName, formatNameNoLowerCase} from 'src/helpers';
 import {navigateToBackstageOrganization} from 'src/browser_routing';
@@ -24,7 +24,8 @@ type Props = {
     headerPath: string;
     isRhs?: boolean;
     name?: string
-    sectionInfo?: SectionInfo;
+    issueData?: SectionInfo;
+    setIssueData?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
     sectionPath?: string;
     sections?: Section[];
     url: string;
@@ -43,7 +44,8 @@ const SectionsWidgetsContainer = ({
     headerPath,
     isRhs = false,
     name = '',
-    sectionInfo,
+    issueData,
+    setIssueData,
     sectionPath,
     sections,
     url,
@@ -54,6 +56,7 @@ const SectionsWidgetsContainer = ({
     enableEdit = false,
 }: Props) => {
     const organizationId = useContext(OrganizationIdContext);
+    const ecosystem = useOrganization(organizationId);
 
     // This currently suppose that the children are shown for issues,
     // that are placed always as the first section in the ecosystem organization.
@@ -68,19 +71,21 @@ const SectionsWidgetsContainer = ({
                 <MainWrapper>
                     <Header>
                         <NameHeader
-                            id={sectionInfo?.id || name}
+                            id={issueData?.id || name}
                             path={headerPath}
-                            name={sectionInfo?.name || name}
+                            name={issueData?.name || name}
                             url={deleteProps?.url}
-                            sectionInfo={sectionInfo}
+                            issueData={issueData}
+                            setIssueData={setIssueData}
                             onDelete={async () => {
-                                if (sectionInfo && deleteProps) {
-                                    await deleteIssue(sectionInfo.id, deleteProps.url);
-                                    await archiveIssueChannels({issueId: sectionInfo.id});
+                                if (issueData && deleteProps) {
+                                    await deleteIssue(issueData.id, deleteProps.url);
+                                    await archiveIssueChannels({issueId: issueData.id});
                                     navigateToBackstageOrganization(organizationId);
                                 }
                             }}
                             enableEdit={enableEdit}
+                            ecosystem={ecosystem}
                         />
                     </Header>
                     <Main>
@@ -105,4 +110,4 @@ const SectionsWidgetsContainer = ({
     );
 };
 
-export default SectionsWidgetsContainer;
+export default React.memo(SectionsWidgetsContainer);

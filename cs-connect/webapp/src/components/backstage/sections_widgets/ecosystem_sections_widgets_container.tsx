@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRouteMatch} from 'react-router-dom';
 
 import {buildQuery} from 'src/hooks';
@@ -26,10 +26,16 @@ type Props = {
 
 const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
     const {url} = useRouteMatch<{sectionId: string}>();
+    const [issueData, setIssueData] = useState<SectionInfo | undefined>(sectionInfo);
+    useEffect(() => {
+        setIssueData(sectionInfo);
+    }, [sectionInfo]);
+
     return (
         <SectionsWidgetsContainer
-            headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
-            sectionInfo={sectionInfo}
+            headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${issueData?.id}`}
+            issueData={issueData}
+            setIssueData={setIssueData}
             url={url}
             widgets={section.widgets}
             childrenBottom={false}
@@ -38,23 +44,23 @@ const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
         >
             <EcosystemObjectivesWrapper
                 name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                objectives={sectionInfo.objectivesAndResearchArea}
+                objectives={issueData?.objectivesAndResearchArea}
             />
             <EcosystemOutcomesWrapper
                 name={formatStringToCapitalize(ecosystemOutcomesWidget)}
-                outcomes={sectionInfo.outcomes}
+                outcomes={issueData?.outcomes}
             />
             <EcosystemRolesWrapper
                 name={formatStringToCapitalize(ecosystemRolesWidget)}
-                roles={sectionInfo.roles}
+                roles={issueData?.roles}
             />
             <EcosystemElementsWrapper
                 name={formatStringToCapitalize(ecosystemElementsWidget)}
-                elements={sectionInfo.elements}
+                elements={issueData?.elements}
             />
             <EcosystemAttachmentsWrapper
                 name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
-                attachments={sectionInfo.attachments}
+                attachments={issueData?.attachments}
             />
         </SectionsWidgetsContainer>
     );

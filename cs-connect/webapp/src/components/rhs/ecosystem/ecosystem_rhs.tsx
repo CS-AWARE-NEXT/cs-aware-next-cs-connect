@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
     Body,
@@ -24,6 +24,8 @@ import {
 } from 'src/constants';
 import {getOrganizationById} from 'src/config/config';
 
+import {useOrganization} from 'src/hooks';
+
 import EcosystemAccordionChild from './ecosystem_accordion_child';
 
 type Props = {
@@ -39,34 +41,44 @@ const EcosystemRhs = ({
     sectionId,
     sectionInfo,
 }: Props) => {
-    const elements = (sectionInfo && sectionInfo.elements) ? sectionInfo.elements.map((element: any) => ({
+    const ecosystem = useOrganization(parentId);
+    const [issueData, setIssueData] = useState<SectionInfo | undefined>(sectionInfo);
+    const elements = (issueData && issueData.elements) ? issueData.elements.map((element: any) => ({
         ...element,
         header: `${getOrganizationById(element.organizationId).name} - ${element.name}`,
     })) : [];
+
+    useEffect(() => {
+        setIssueData(sectionInfo);
+    }, [sectionInfo]);
 
     return (
         <Container>
             <MainWrapper>
                 <Header>
                     <NameHeader
-                        id={sectionInfo.id}
+                        id={issueData?.id || ''}
                         path={headerPath}
-                        name={sectionInfo.name}
+                        name={issueData?.name || ''}
+                        enableEdit={true}
+                        issueData={issueData}
+                        setIssueData={setIssueData}
+                        ecosystem={ecosystem}
                     />
                 </Header>
                 <Main>
                     <Body>
                         <EcosystemObjectivesWrapper
                             name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                            objectives={sectionInfo.objectivesAndResearchArea}
+                            objectives={issueData?.objectivesAndResearchArea}
                         />
                         <EcosystemOutcomesWrapper
                             name={formatStringToCapitalize(ecosystemOutcomesWidget)}
-                            outcomes={sectionInfo.outcomes}
+                            outcomes={issueData?.outcomes}
                         />
                         <EcosystemRolesWrapper
                             name={formatStringToCapitalize(ecosystemRolesWidget)}
-                            roles={sectionInfo.roles}
+                            roles={issueData?.roles}
                         />
                         <Accordion
                             name={formatStringToCapitalize(ecosystemElementsWidget)}
@@ -77,7 +89,7 @@ const EcosystemRhs = ({
                         />
                         <EcosystemAttachmentsWrapper
                             name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
-                            attachments={sectionInfo.attachments}
+                            attachments={issueData?.attachments}
                         />
                     </Body>
                 </Main>
@@ -86,4 +98,4 @@ const EcosystemRhs = ({
     );
 };
 
-export default EcosystemRhs;
+export default React.memo(EcosystemRhs);

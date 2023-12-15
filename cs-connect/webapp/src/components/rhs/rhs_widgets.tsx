@@ -66,7 +66,7 @@ const RHSWidgets = (props: Props) => {
             {(section && sectionInfo && !isEcosystem) &&
                 <RhsSectionsWidgetsContainer
                     headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
-                    sectionInfo={sectionInfo}
+                    issueData={sectionInfo}
                     url={fullUrl}
                     widgets={section?.widgets}
                 />}

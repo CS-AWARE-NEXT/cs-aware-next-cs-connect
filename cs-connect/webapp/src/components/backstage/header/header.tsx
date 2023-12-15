@@ -10,7 +10,7 @@ import TextEdit from 'src/components/commons/text_edit';
 import DeleteAction from 'src/components/commons/delete_action';
 import EditAction from 'src/components/commons/edit_action';
 
-import {SectionInfo} from 'src/types/organization';
+import {Organization, SectionInfo} from 'src/types/organization';
 
 import {ContextMenu} from './context_menu';
 
@@ -18,13 +18,15 @@ type Props = {
     id: string;
     name: string;
     path: string;
+    ecosystem: Organization;
     url?: string
     onDelete?: () => void
     enableEdit?: boolean
-    sectionInfo?: SectionInfo
+    issueData?: SectionInfo
+    setIssueData?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
 };
 
-export const NameHeader = ({id, name, path, url, onDelete, enableEdit = false, sectionInfo}: Props) => {
+export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit = false, issueData, setIssueData}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
@@ -68,7 +70,9 @@ export const NameHeader = ({id, name, path, url, onDelete, enableEdit = false, s
                     {enableEdit &&
                     <StyledEditAction
                         id='edit-tooltip'
-                        sectionInfo={sectionInfo}
+                        issueData={issueData}
+                        setIssueData={setIssueData}
+                        ecosystem={ecosystem}
                     />}
                 </>
             </TextEdit>

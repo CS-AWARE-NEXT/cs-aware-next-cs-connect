@@ -5,7 +5,7 @@ import {SectionInfo, Widget} from 'src/types/organization';
 
 type Props = {
     headerPath: string;
-    sectionInfo: SectionInfo;
+    issueData: SectionInfo;
     url: string;
     widgets: Widget[];
 };
