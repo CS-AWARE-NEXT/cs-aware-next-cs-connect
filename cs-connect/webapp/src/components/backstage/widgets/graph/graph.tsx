@@ -36,6 +36,8 @@ import {useSelector} from 'react-redux';
 
 import {useLocation} from 'react-router-dom';
 
+import {isEqual} from 'lodash';
+
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {
@@ -239,20 +241,22 @@ const Graph = ({
 
     useEffect(() => {
         setDescription(data.description || emptyDescription);
-        setNodes(data.nodes || []);
-        setEdges(data.edges || []);
+
+        // Ignore node properties such as position which can change due to a scroll event happening - we only care about a structural update (new/deleted nodes)
+        const oldNodes = nodes.map((node) => node.id);
+        const newNodes = (data.nodes || []).map((node) => node.id);
+
+        if (!isEqual(oldNodes, newNodes) || !isEqual(edges, data.edges)) {
+            setNodes(data.nodes || []);
+            setEdges(data.edges || []);
+        }
 
         // Set a target node to center the viewport on, if there's one associated to the hash in the url.
         const urlHashedNode = data.nodes.find((node) => node.data.isUrlHashed);
         if (urlHashedNode?.id === targetNode?.id) {
             return;
         }
-        if (urlHashedNode) {
-            const node = getNode(urlHashedNode.id);
-            if (node) {
-                setTargetNode(node);
-            }
-        } else if (!urlHashedNode && targetNode) {
+        if (!urlHashedNode && targetNode) {
             // When following a hyperlink, the data can be reset and due to the sectionid being stripped from the url post-navigation
             // the urlHashed node loses its isUrlHashed property. We still have a targetNode reference though, so we sync them again
             markNodesAndEdges(nodes, edges, targetNode);
@@ -265,32 +269,20 @@ const Graph = ({
         if (targetNode?.id !== selectedObject?.value) {
             setSelectedObject(null);
         }
-
         if (targetNode) {
             markNodesAndEdges(nodes, edges, targetNode);
             setNodes([...nodes]);
             setEdges([...edges]);
+            fitView({nodes: [targetNode], maxZoom: 0.6});
         }
-
-        // This value is supposed to be slightly higher than the one used in the useScrollIntoView hook which is the culprit of the problem: https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/blob/main/cs-connect/webapp/src/hooks/browser.ts#L61
-        const ms = 350;
-        const scrollTimeout = setTimeout(() => {
-            if (targetNode) {
-                fitView({nodes: [targetNode], maxZoom: 0.6});
-            }
-        }, ms);
-
-        return () => {
-            clearTimeout(scrollTimeout);
-        };
-    }, [targetNode, fitView]);
+    }, [targetNode]);
 
     useEffect(() => {
         if (sectionUrlHash) {
             const urlHashedNode = data.nodes.find((node) => sectionUrlHash.includes(node.id));
-            if (urlHashedNode) {
-                setTargetNode(urlHashedNode);
-            }
+
+            // The target node is also resetted if the section hash refers to a non-node element
+            setTargetNode(urlHashedNode);
         }
 
         if (sectionUrlHash.includes(NODE_INFO_ID_PREFIX)) {
@@ -339,12 +331,6 @@ const Graph = ({
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
-            onScrollCapture={() => {
-                // Due to the node hyperlink mechanism being based on a scrollToView operation done outside this component,
-                // we have to reset the scrollLeft/Top properties to avoid moving the controls and draggable canvas
-                // outside the visible DOM area (due to overflow: hidden).
-                (document.getElementsByClassName('react-flow')[0] as HTMLDivElement).scrollTo(0, 0);
-            }}
         >
             <GraphContainer
                 id={id}
