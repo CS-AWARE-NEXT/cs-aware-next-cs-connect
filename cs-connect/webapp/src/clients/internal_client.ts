@@ -128,6 +128,12 @@ export const archiveIssueChannels = async (params: ArchiveIssueChannelsParams): 
     );
 };
 
+export const exportChannel = async (channelId: string, format: string): Promise<Blob> => {
+    const queryParams = qs.stringify({format}, {addQueryPrefix: true, indices: false});
+    const {data} = await doFetchWithBlobResponse(`${apiUrl}/channel/${channelId}/export${queryParams}`, {method: 'get'});
+    return data;
+};
+
 export interface UserProps {
     orgId: string;
 }
@@ -249,3 +255,26 @@ const doFetchWithoutResponse = async (
     });
 };
 
+const doFetchWithBlobResponse = async (
+    url: string,
+    options = {},
+): Promise<{
+    response: Response;
+    data: Blob;
+}> => {
+    const response = await fetch(url, Client4.getOptions(options));
+    let data;
+    if (response.ok) {
+        data = await response.blob();
+        return {
+            response,
+            data,
+        };
+    }
+
+    throw new ClientError(Client4.url, {
+        message: '',
+        status_code: response.status,
+        url,
+    });
+};
