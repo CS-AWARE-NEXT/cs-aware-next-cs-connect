@@ -1,3 +1,3 @@
 feature: ['feature/*', 'feature-*', 'feat/*', 'feat-*']
 fix: ['fix/*', 'fix-*']
-docs: ['documentation/*', 'documentation-*', 'docs/*', 'docs-*']
+documentation: ['documentation/*', 'documentation-*', 'docs/*', 'docs-*']
