@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRouteMatch} from 'react-router-dom';
 
 import {buildQuery} from 'src/hooks';
@@ -26,34 +26,41 @@ type Props = {
 
 const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
     const {url} = useRouteMatch<{sectionId: string}>();
+    const [currentSectionInfo, setCurrentSectionInfo] = useState<SectionInfo | undefined>(sectionInfo);
+    useEffect(() => {
+        setCurrentSectionInfo(sectionInfo);
+    }, [sectionInfo]);
+
     return (
         <SectionsWidgetsContainer
-            headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
-            sectionInfo={sectionInfo}
+            headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${currentSectionInfo?.id}`}
+            sectionInfo={currentSectionInfo}
+            setSectionInfo={setCurrentSectionInfo}
             url={url}
             widgets={section.widgets}
             childrenBottom={false}
             deleteProps={{url: section.url}}
+            enableEdit={true}
         >
             <EcosystemObjectivesWrapper
                 name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                objectives={sectionInfo.objectivesAndResearchArea}
+                objectives={currentSectionInfo?.objectivesAndResearchArea}
             />
             <EcosystemOutcomesWrapper
                 name={formatStringToCapitalize(ecosystemOutcomesWidget)}
-                outcomes={sectionInfo.outcomes}
+                outcomes={currentSectionInfo?.outcomes}
             />
             <EcosystemRolesWrapper
                 name={formatStringToCapitalize(ecosystemRolesWidget)}
-                roles={sectionInfo.roles}
+                roles={currentSectionInfo?.roles}
             />
             <EcosystemElementsWrapper
                 name={formatStringToCapitalize(ecosystemElementsWidget)}
-                elements={sectionInfo.elements}
+                elements={currentSectionInfo?.elements}
             />
             <EcosystemAttachmentsWrapper
                 name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
-                attachments={sectionInfo.attachments}
+                attachments={currentSectionInfo?.attachments}
             />
         </SectionsWidgetsContainer>
     );

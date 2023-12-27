@@ -8,6 +8,7 @@ import {FormattedMessage} from 'react-intl';
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 import {StepRole} from 'src/types/scenario_wizard';
 import {useAllUsersOptions} from 'src/hooks';
+import {AutoSizeDeleteIcon} from 'src/components/commons/delete_action';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -20,6 +21,7 @@ type Props = {
 const RolesStep = ({data, setWizardData}: Props) => {
     const [roles, setRoles] = useState(data);
     const usersOptions = useAllUsersOptions();
+
     return (
         <Container>
             <PrimaryButtonLarger
@@ -33,7 +35,20 @@ const RolesStep = ({data, setWizardData}: Props) => {
                     itemLayout='horizontal'
                     dataSource={roles}
                     renderItem={(role, index) => (
-                        <Item>
+                        <Item
+                            actions={[
+                                <StyledDeleteAction
+                                    key={`role-${index}-delete`}
+                                    onClick={() => {
+                                        const currentRoles = [...roles.filter((prevRole) => prevRole !== role)];
+                                        setRoles(currentRoles);
+                                        setWizardData((prev: any) => ({...prev, roles: currentRoles}));
+                                    }}
+                                    className={'icon-trash-can-outline'}
+                                    clicked={false}
+                                />,
+                            ]}
+                        >
                             <Meta
                                 avatar={<Avatar icon={<UserOutlined/>}/>}
                             />
@@ -82,6 +97,16 @@ const Container = styled.div`
 
 const Text = styled.div`
     text-align: left;
+`;
+
+const StyledDeleteAction = styled(AutoSizeDeleteIcon)`
+    border-radius: 4px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    display: grid;
+    place-items: center;
 `;
 
 export default RolesStep;

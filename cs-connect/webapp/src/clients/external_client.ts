@@ -32,6 +32,17 @@ export const saveSectionInfo = async (params: SectionInfoParams, url: string): P
     return data;
 };
 
+export const updateSectionInfo = async (params: SectionInfoParams, url: string): Promise<SectionInfo> => {
+    let data = await doPost<SectionInfo>(
+        url,
+        JSON.stringify(params),
+    );
+    if (!data) {
+        data = {id: '', name: ''} as SectionInfo;
+    }
+    return data;
+};
+
 export const fetchGraphData = async (url: string): Promise<GraphData> => {
     let data = await doGet<GraphData>(url);
     if (!data) {

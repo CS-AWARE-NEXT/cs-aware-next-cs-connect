@@ -11,7 +11,7 @@ import {Section, SectionInfo, Widget} from 'src/types/organization';
 import {NameHeader} from 'src/components/backstage/header/header';
 import Sections from 'src/components/backstage/sections/sections';
 import Widgets from 'src/components/backstage/widgets/widgets';
-import {isUrlEqualWithoutQueryParams} from 'src/hooks';
+import {isUrlEqualWithoutQueryParams, useOrganization} from 'src/hooks';
 import {archiveIssueChannels, deleteIssue, getSiteUrl} from 'src/clients';
 import {formatName, formatNameNoLowerCase} from 'src/helpers';
 import {navigateToBackstageOrganization} from 'src/browser_routing';
@@ -25,6 +25,7 @@ type Props = {
     isRhs?: boolean;
     name?: string
     sectionInfo?: SectionInfo;
+    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
     sectionPath?: string;
     sections?: Section[];
     url: string;
@@ -32,6 +33,7 @@ type Props = {
     children?: ReactNode;
     childrenBottom?: boolean;
     deleteProps?: DeleteProps;
+    enableEdit?: boolean;
 };
 
 type DeleteProps = {
@@ -43,6 +45,7 @@ const SectionsWidgetsContainer = ({
     isRhs = false,
     name = '',
     sectionInfo,
+    setSectionInfo,
     sectionPath,
     sections,
     url,
@@ -50,8 +53,10 @@ const SectionsWidgetsContainer = ({
     children = [],
     childrenBottom = true,
     deleteProps,
+    enableEdit = false,
 }: Props) => {
     const organizationId = useContext(OrganizationIdContext);
+    const ecosystem = useOrganization(organizationId);
 
     // This currently suppose that the children are shown for issues,
     // that are placed always as the first section in the ecosystem organization.
@@ -70,6 +75,8 @@ const SectionsWidgetsContainer = ({
                             path={headerPath}
                             name={sectionInfo?.name || name}
                             url={deleteProps?.url}
+                            sectionInfo={sectionInfo}
+                            setSectionInfo={setSectionInfo}
                             onDelete={async () => {
                                 if (sectionInfo && deleteProps) {
                                     await deleteIssue(sectionInfo.id, deleteProps.url);
@@ -77,6 +84,8 @@ const SectionsWidgetsContainer = ({
                                     navigateToBackstageOrganization(organizationId);
                                 }
                             }}
+                            enableEdit={enableEdit}
+                            ecosystem={ecosystem}
                         />
                     </Header>
                     <Main>
@@ -101,4 +110,4 @@ const SectionsWidgetsContainer = ({
     );
 };
 
-export default SectionsWidgetsContainer;
+export default React.memo(SectionsWidgetsContainer);

@@ -8,6 +8,9 @@ import {SemiBoldHeading} from 'src/styles/headings';
 import TextEdit from 'src/components/commons/text_edit';
 
 import DeleteAction from 'src/components/commons/delete_action';
+import EditAction from 'src/components/commons/edit_action';
+
+import {Organization, SectionInfo} from 'src/types/organization';
 
 import {ContextMenu} from './context_menu';
 
@@ -15,11 +18,15 @@ type Props = {
     id: string;
     name: string;
     path: string;
+    ecosystem: Organization;
     url?: string
     onDelete?: () => void
+    enableEdit?: boolean
+    sectionInfo?: SectionInfo
+    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
 };
 
-export const NameHeader = ({id, name, path, url, onDelete}: Props) => {
+export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit = false, sectionInfo, setSectionInfo}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
@@ -60,6 +67,13 @@ export const NameHeader = ({id, name, path, url, onDelete}: Props) => {
                         modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
                         onDelete={onDelete}
                     />}
+                    {enableEdit &&
+                    <StyledEditAction
+                        id='edit-tooltip'
+                        sectionInfo={sectionInfo}
+                        setSectionInfo={setSectionInfo}
+                        ecosystem={ecosystem}
+                    />}
                 </>
             </TextEdit>
         </Container>
@@ -88,6 +102,16 @@ const StyledCopyLink = styled(CopyLink)`
 `;
 
 const StyledDeleteAction = styled(DeleteAction)`
+    border-radius: 4px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    display: grid;
+    place-items: center;
+`;
+
+const StyledEditAction = styled(EditAction)`
     border-radius: 4px;
     font-size: 18px;
     width: 28px;

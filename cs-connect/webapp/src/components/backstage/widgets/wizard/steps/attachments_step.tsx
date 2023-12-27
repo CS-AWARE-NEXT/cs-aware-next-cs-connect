@@ -7,6 +7,7 @@ import {FormattedMessage} from 'react-intl';
 
 import {Attachment} from 'src/types/scenario_wizard';
 import {TextInput} from 'src/components/backstage/widgets/shared';
+import {AutoSizeDeleteIcon} from 'src/components/commons/delete_action';
 
 const {Item} = List;
 const {Meta} = Item;
@@ -23,7 +24,7 @@ export const fillAttachments = (attachments: string[]): Attachment[] => {
 };
 
 const AttachmentsStep = ({data, setWizardData}: Props) => {
-    const [attachements, setAttachements] = useState<string[]>(data);
+    const [attachments, setAttachments] = useState<string[]>(data || []);
 
     return (
         <Container>
@@ -32,7 +33,7 @@ const AttachmentsStep = ({data, setWizardData}: Props) => {
                     type='primary'
                     icon={<LinkOutlined/>}
                     style={{width: '48%', marginLeft: '1%', marginRight: '1%'}}
-                    onClick={() => setAttachements((prev) => ([...prev, '']))}
+                    onClick={() => setAttachments((prev) => ([...prev, '']))}
                 >
                     <FormattedMessage defaultMessage='Add a link'/>
                 </Button>
@@ -47,21 +48,34 @@ const AttachmentsStep = ({data, setWizardData}: Props) => {
             <List
                 style={{padding: '16px'}}
                 itemLayout='horizontal'
-                dataSource={attachements}
-                renderItem={(attachement, index) => (
-                    <Item>
+                dataSource={attachments}
+                renderItem={(attachment, index) => (
+                    <Item
+                        actions={[
+                            <StyledDeleteAction
+                                key={`attachment-${index}-delete`}
+                                onClick={() => {
+                                    const currentAttachments = [...attachments.filter((prevAttachment) => prevAttachment !== attachment)];
+                                    setAttachments(currentAttachments);
+                                    setWizardData((prev: any) => ({...prev, attachments: currentAttachments}));
+                                }}
+                                className={'icon-trash-can-outline'}
+                                clicked={false}
+                            />,
+                        ]}
+                    >
                         <Meta
                             avatar={<Avatar icon={<TagsOutlined/>}/>}
                             title={(
                                 <TextInput
                                     key={`attachment-${index}`}
                                     placeholder={'Insert an attachment'}
-                                    value={attachement}
+                                    value={attachment}
                                     onChange={(e) => {
-                                        const currentAttachements = cloneDeep(attachements);
-                                        currentAttachements[index] = e.target.value;
-                                        setAttachements(currentAttachements);
-                                        setWizardData((prev: any) => ({...prev, attachments: currentAttachements}));
+                                        const currentAttachments = cloneDeep(attachments);
+                                        currentAttachments[index] = e.target.value;
+                                        setAttachments(currentAttachments);
+                                        setWizardData((prev: any) => ({...prev, attachments: currentAttachments}));
                                     }}
                                 />)}
                         />
@@ -76,6 +90,16 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 24px;
+`;
+
+const StyledDeleteAction = styled(AutoSizeDeleteIcon)`
+    border-radius: 4px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    display: grid;
+    place-items: center;
 `;
 
 export default AttachmentsStep;
