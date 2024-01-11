@@ -8,6 +8,7 @@ export enum WidgetType {
     Graph = 'graph',
     PaginatedTable = 'paginated-table',
     List = 'list',
+    News = 'news',
     SingleChannel = 'channel',
     SocialMediaPosts = 'social-media-posts',
     Table = 'table',
