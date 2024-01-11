@@ -5,7 +5,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetIncidents(c *fiber.Ctx) error {
+type IncidentController struct{}
+
+func NewIncidentController() *IncidentController {
+	return &IncidentController{}
+}
+
+func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 
 	// TODO: maybe this will become the new default
@@ -44,23 +50,24 @@ func GetIncidents(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
-func GetIncidentsByOrganizationId(organizationId string) []model.Incident {
+func (ic *IncidentController) GetIncidentsByOrganizationId(organizationId string) []model.Incident {
 	return incidentsMap[organizationId]
 }
 
-func GetIncident(c *fiber.Ctx) error {
+func (ic *IncidentController) GetIncident(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	if organizationId == "4" {
-		return c.JSON(getExtendedIncidentByID(c))
+		return c.JSON(ic.getExtendedIncidentByID(c))
 	}
-	return c.JSON(getIncidentByID(c))
+	return c.JSON(ic.getIncidentByID(c))
 }
 
-func GetIncidentGraph(c *fiber.Ctx) error {
-	return GetGraph(c)
+func (ic *IncidentController) GetIncidentGraph(c *fiber.Ctx) error {
+	graphController := NewGraphController()
+	return graphController.GetGraph(c)
 }
 
-func GetIncidentTable(c *fiber.Ctx) error {
+func (ic *IncidentController) GetIncidentTable(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	incidentId := c.Params("incidentId")
 	if organizationId == "4" {
@@ -77,12 +84,12 @@ func GetIncidentTable(c *fiber.Ctx) error {
 	})
 }
 
-func GetIncidentTextBox(c *fiber.Ctx) error {
+func (ic *IncidentController) GetIncidentTextBox(c *fiber.Ctx) error {
 	incidentId := c.Params("incidentId")
 	return c.JSON(fiber.Map{"text": incidentsTextBoxDataMap[incidentId]})
 }
 
-func getIncidentByID(c *fiber.Ctx) model.Incident {
+func (ic *IncidentController) getIncidentByID(c *fiber.Ctx) model.Incident {
 	organizationId := c.Params("organizationId")
 	incidentId := c.Params("incidentId")
 	for _, incident := range incidentsMap[organizationId] {
@@ -93,7 +100,7 @@ func getIncidentByID(c *fiber.Ctx) model.Incident {
 	return model.Incident{}
 }
 
-func getExtendedIncidentByID(c *fiber.Ctx) model.ExtendedIncident {
+func (ic *IncidentController) getExtendedIncidentByID(c *fiber.Ctx) model.ExtendedIncident {
 	organizationId := c.Params("organizationId")
 	incidentId := c.Params("incidentId")
 	for _, incident := range extendedIncidentsMap[organizationId] {

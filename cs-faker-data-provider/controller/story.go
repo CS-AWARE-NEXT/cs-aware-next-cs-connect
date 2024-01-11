@@ -8,7 +8,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetStories(c *fiber.Ctx) error {
+type StoryController struct{}
+
+func NewStoryController() *StoryController {
+	return &StoryController{}
+}
+
+func (sc *StoryController) GetStories(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	tableData := model.PaginatedTableData{
 		Columns: storiesPaginatedTableData.Columns,
@@ -24,18 +30,18 @@ func GetStories(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
-func GetStory(c *fiber.Ctx) error {
-	return c.JSON(getStoryByID(c))
+func (sc *StoryController) GetStory(c *fiber.Ctx) error {
+	return c.JSON(sc.getStoryByID(c))
 }
 
-func GetStoryTimeline(c *fiber.Ctx) error {
+func (sc *StoryController) GetStoryTimeline(c *fiber.Ctx) error {
 	storyId := c.Params("storyId")
 	return c.JSON(model.TimelineData{
 		Items: storiesTimelineDataMap[storyId],
 	})
 }
 
-func SaveStory(c *fiber.Ctx) error {
+func (sc *StoryController) SaveStory(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	var story model.Story
 	err := json.Unmarshal(c.Body(), &story)
@@ -69,7 +75,7 @@ func SaveStory(c *fiber.Ctx) error {
 	})
 }
 
-func getStoryByID(c *fiber.Ctx) model.Story {
+func (sc *StoryController) getStoryByID(c *fiber.Ctx) model.Story {
 	organizationId := c.Params("organizationId")
 	storyId := c.Params("storyId")
 	for _, story := range storiesMap[organizationId] {
