@@ -14,7 +14,13 @@ import (
 	"golang.org/x/text/language"
 )
 
-func GetExercises(c *fiber.Ctx) error {
+type ExerciseController struct{}
+
+func NewExerciseController() *ExerciseController {
+	return &ExerciseController{}
+}
+
+func (ec *ExerciseController) GetExercises(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 
 	tableData := model.PaginatedTableData{
@@ -31,11 +37,11 @@ func GetExercises(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
-func GetExercise(c *fiber.Ctx) error {
-	return c.JSON(getExerciseByID(c))
+func (ec *ExerciseController) GetExercise(c *fiber.Ctx) error {
+	return c.JSON(ec.getExerciseByID(c))
 }
 
-func GetExerciseAssignment(c *fiber.Ctx) error {
+func (ec *ExerciseController) GetExerciseAssignment(c *fiber.Ctx) error {
 	// organizationId := c.Params("organizationId")
 	exerciseId := c.Params("exerciseId")
 	organizationName := "foggia"
@@ -119,7 +125,7 @@ func GetExerciseAssignment(c *fiber.Ctx) error {
 	})
 }
 
-func getExerciseFromFile(fileName string) (model.SocialMediaPostEntityData, error) {
+func (ec *ExerciseController) getExerciseFromFile(fileName string) (model.SocialMediaPostEntityData, error) {
 	filePath, err := util.GetEmbeddedFilePath(fileName, "*.json")
 	if err != nil {
 		return model.SocialMediaPostEntityData{}, err
@@ -136,34 +142,7 @@ func getExerciseFromFile(fileName string) (model.SocialMediaPostEntityData, erro
 	return socialMediaPostEntityData, nil
 }
 
-func fromExerciseData(
-	socialMediaPostEntityData model.SocialMediaPostEntityData,
-	idNameSpace string,
-) model.SocialMediaPostData {
-	var posts []model.SocialMediaPost
-	for _, post := range socialMediaPostEntityData.Posts {
-		postId := post.ID
-		if idNameSpace != "" {
-			postId = fmt.Sprintf("%s-%s", post.ID, idNameSpace)
-		}
-		posts = append(posts, model.SocialMediaPost{
-			ID:       postId,
-			Title:    post.User.Name,
-			Content:  buildContent(post),
-			Media:    post.Media,
-			Avatar:   post.User.ProfilePicture,
-			Date:     post.Date,
-			Target:   post.AssociatedComponent,
-			URL:      post.URL,
-			Likes:    post.Likes,
-			Replies:  post.Replies,
-			Retweets: post.Retweets,
-		})
-	}
-	return model.SocialMediaPostData{Items: posts}
-}
-
-func getExerciseByID(c *fiber.Ctx) model.Exercise {
+func (ec *ExerciseController) getExerciseByID(c *fiber.Ctx) model.Exercise {
 	organizationId := c.Params("organizationId")
 	exerciseId := c.Params("exerciseId")
 	for _, exercise := range exerciseMap[organizationId] {

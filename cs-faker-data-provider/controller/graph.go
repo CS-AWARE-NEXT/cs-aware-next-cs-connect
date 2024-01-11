@@ -12,10 +12,16 @@ import (
 	"gopkg.in/karalabe/cookiejar.v2/graph/bfs"
 )
 
-func GetGraph(c *fiber.Ctx) error {
+type GraphController struct{}
+
+func NewGraphController() *GraphController {
+	return &GraphController{}
+}
+
+func (gc *GraphController) GetGraph(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	if organizationId > "4" {
-		graphData, err := getGraphFromJson(organizationId)
+		graphData, err := gc.getGraphFromJson(organizationId)
 		if err != nil {
 			return c.JSON(model.GraphData{})
 		}
@@ -24,7 +30,7 @@ func GetGraph(c *fiber.Ctx) error {
 	return c.JSON(graphMap[organizationId])
 }
 
-func getGraphFromJson(organizationId string) (model.GraphData, error) {
+func (gc *GraphController) getGraphFromJson(organizationId string) (model.GraphData, error) {
 	organizationName := "foggia"
 	if organizationId == "6" {
 		organizationName = "larissa"
@@ -51,10 +57,10 @@ func getGraphFromJson(organizationId string) (model.GraphData, error) {
 	if err != nil {
 		return model.GraphData{}, err
 	}
-	return fromCSAwareGraphData(csAwareGraphData), nil
+	return gc.fromCSAwareGraphData(csAwareGraphData), nil
 }
 
-func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphData {
+func (gc *GraphController) fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphData {
 	nodes := []model.GraphNode{}
 	edges := []model.GraphEdge{}
 	for _, csAwareNode := range csAwareGraphData.Objects {
@@ -89,7 +95,7 @@ func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphDa
 		// 	})
 		// }
 	}
-	nodeIndexes, nodeIDs, bfs := getBfs(csAwareGraphData.Objects)
+	nodeIndexes, nodeIDs, bfs := gc.getBfs(csAwareGraphData.Objects)
 	for _, node := range nodes {
 		path := bfs.Path(nodeIndexes[node.ID])
 		if len(path) < 2 {
@@ -115,12 +121,12 @@ func fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphDa
 	}
 }
 
-func getBfs(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string, *bfs.Bfs) {
-	root, count := getRootAndCount(nodes)
+func (gc *GraphController) getBfs(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string, *bfs.Bfs) {
+	root, count := gc.getRootAndCount(nodes)
 	if count < 0 {
 		return nil, nil, nil
 	}
-	nodeIndexes, nodeIDs := nodesToMaps(nodes)
+	nodeIndexes, nodeIDs := gc.nodesToMaps(nodes)
 	g := graph.New(count)
 	for index, node := range nodes {
 		for _, source := range node.Source {
@@ -130,7 +136,7 @@ func getBfs(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string, *bf
 	return nodeIndexes, nodeIDs, bfs.New(g, root)
 }
 
-func getRootAndCount(nodes []model.CSAwareGraphNode) (int, int) {
+func (gc *GraphController) getRootAndCount(nodes []model.CSAwareGraphNode) (int, int) {
 	for index, node := range nodes {
 		if node.Type == "root" {
 			return index, len(nodes)
@@ -144,7 +150,7 @@ func getRootAndCount(nodes []model.CSAwareGraphNode) (int, int) {
 	return -1, -1
 }
 
-func nodesToMaps(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string) {
+func (gc *GraphController) nodesToMaps(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string) {
 	nodeIndexes := make(map[string]int)
 	nodeIDs := make(map[int]string)
 	for index, node := range nodes {

@@ -5,7 +5,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetPolicies(c *fiber.Ctx) error {
+type PolicyController struct{}
+
+func NewPolicyController() *PolicyController {
+	return &PolicyController{}
+}
+
+func (pc *PolicyController) GetPolicies(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	tableData := model.PaginatedTableData{
 		Columns: policiesPaginatedTableData.Columns,
@@ -21,25 +27,25 @@ func GetPolicies(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
-func GetPolicy(c *fiber.Ctx) error {
-	return c.JSON(getPolicyByID(c))
+func (pc *PolicyController) GetPolicy(c *fiber.Ctx) error {
+	return c.JSON(pc.getPolicyByID(c))
 }
 
-func GetPolicyDos(c *fiber.Ctx) error {
+func (pc *PolicyController) GetPolicyDos(c *fiber.Ctx) error {
 	policyId := c.Params("policyId")
 	return c.JSON(model.ListData{
 		Items: policiesDosMap[policyId],
 	})
 }
 
-func GetPolicyDonts(c *fiber.Ctx) error {
+func (pc *PolicyController) GetPolicyDonts(c *fiber.Ctx) error {
 	policyId := c.Params("policyId")
 	return c.JSON(model.ListData{
 		Items: policiesDontsMap[policyId],
 	})
 }
 
-func getPolicyByID(c *fiber.Ctx) model.Policy {
+func (pc *PolicyController) getPolicyByID(c *fiber.Ctx) model.Policy {
 	organizationId := c.Params("organizationId")
 	policyId := c.Params("policyId")
 	for _, policy := range policiesMap[organizationId] {
