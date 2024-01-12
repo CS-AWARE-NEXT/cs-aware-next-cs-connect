@@ -1,7 +1,11 @@
 package controller
 
 import (
+	"encoding/json"
+	"strings"
+
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -45,12 +49,108 @@ func (pc *PolicyController) GetPolicyDonts(c *fiber.Ctx) error {
 	})
 }
 
+func (pc *PolicyController) GetPolicyTemplate(c *fiber.Ctx) error {
+	policy := pc.getPolicyByID(c)
+	return c.JSON(model.PolicyTemplate{
+		Policy:   policy,
+		Purpose:  policiesTemplateMap[policy.ID].Purpose,
+		Elements: policiesTemplateMap[policy.ID].Elements,
+	})
+}
+
+func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	var policy model.Policy
+	err := json.Unmarshal(c.Body(), &policy)
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"error": "Not a valid policy provided",
+		})
+	}
+	if policy.ID == "" {
+		policy.ID = util.GenerateUUID()
+		policiesMap[organizationId] = append(policiesMap[organizationId], policy)
+	} else {
+		splitted := strings.Split(policy.ID, "_")
+		oldID := splitted[0]
+		newID := splitted[1]
+		for i, p := range policiesMap[organizationId] {
+			if p.ID == oldID {
+				policiesMap[organizationId][i] = model.Policy{
+					ID:          newID,
+					Name:        policy.Name,
+					Description: policy.Description,
+				}
+			}
+		}
+		return c.JSON(fiber.Map{
+			"id":   newID,
+			"name": policy.Name,
+		})
+	}
+	return c.JSON(fiber.Map{
+		"id":   policy.ID,
+		"name": policy.Name,
+	})
+}
+
+func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
+	var policyTemplateField model.PolicyTemplateFied
+	err := json.Unmarshal(c.Body(), &policyTemplateField)
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"error": "Not a valid policy template field provided",
+		})
+	}
+
+	_, ok := policiesTemplateMap[policyTemplateField.PolicyID]
+	if !ok {
+		policy := pc.getPolicyByIDFromAllOrgs(policyTemplateField.PolicyID)
+		policiesTemplateMap[policyTemplateField.PolicyID] = model.PolicyTemplate{
+			Policy: model.Policy{
+				ID:          policy.ID,
+				Name:        policy.Name,
+				Description: policy.Description,
+			},
+		}
+	}
+	policyTemplate := policiesTemplateMap[policyTemplateField.PolicyID]
+
+	switch strings.ToLower(policyTemplateField.Field) {
+	case "purpose":
+		policyTemplate.Purpose = policyTemplateField.Value
+	case "elements":
+		policyTemplate.Elements = policyTemplateField.Value
+	default:
+		return c.JSON(fiber.Map{
+			"error": "Not a valid policy template field provided",
+		})
+	}
+	policiesTemplateMap[policyTemplateField.PolicyID] = policyTemplate
+
+	return c.JSON(fiber.Map{
+		"id":   policyTemplate.ID,
+		"name": policyTemplate.Name,
+	})
+}
+
 func (pc *PolicyController) getPolicyByID(c *fiber.Ctx) model.Policy {
 	organizationId := c.Params("organizationId")
 	policyId := c.Params("policyId")
 	for _, policy := range policiesMap[organizationId] {
 		if policy.ID == policyId {
 			return policy
+		}
+	}
+	return model.Policy{}
+}
+
+func (pc *PolicyController) getPolicyByIDFromAllOrgs(id string) model.Policy {
+	for _, policies := range policiesMap {
+		for _, policy := range policies {
+			if policy.ID == id {
+				return policy
+			}
 		}
 	}
 	return model.Policy{}
@@ -93,7 +193,13 @@ var policiesMap = map[string][]model.Policy{
 			Description: "How to securily manange software on devices",
 		},
 	},
+	"5": []model.Policy{},
+	"6": []model.Policy{},
+	"7": []model.Policy{},
+	"8": []model.Policy{},
 }
+
+var policiesTemplateMap = map[string]model.PolicyTemplate{}
 
 var policiesDosMap = map[string][]model.ListItem{
 	"e39edc4b-5f19-4210-a576-a8e679717a86": {

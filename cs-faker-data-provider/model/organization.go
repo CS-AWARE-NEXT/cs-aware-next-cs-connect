@@ -95,6 +95,12 @@ type SocialMedia struct {
 	Description string `json:"description"`
 }
 
+type News struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 type Exercise struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
