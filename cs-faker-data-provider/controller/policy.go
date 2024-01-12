@@ -2,7 +2,6 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
@@ -75,7 +74,6 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 		splitted := strings.Split(policy.ID, "_")
 		oldID := splitted[0]
 		newID := splitted[1]
-		fmt.Println("TESTINGGGGG", oldID, newID)
 		for i, p := range policiesMap[organizationId] {
 			if p.ID == oldID {
 				policiesMap[organizationId][i] = model.Policy{
@@ -105,11 +103,23 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		})
 	}
 
+	_, ok := policiesTemplateMap[policyTemplateField.PolicyID]
+	if !ok {
+		policy := pc.getPolicyByIDFromAllOrgs(policyTemplateField.PolicyID)
+		policiesTemplateMap[policyTemplateField.PolicyID] = model.PolicyTemplate{
+			Policy: model.Policy{
+				ID:          policy.ID,
+				Name:        policy.Name,
+				Description: policy.Description,
+			},
+		}
+	}
 	policyTemplate := policiesTemplateMap[policyTemplateField.PolicyID]
-	switch policyTemplateField.Field {
-	case "Purpose":
+
+	switch strings.ToLower(policyTemplateField.Field) {
+	case "purpose":
 		policyTemplate.Purpose = policyTemplateField.Value
-	case "Elements":
+	case "elements":
 		policyTemplate.Elements = policyTemplateField.Value
 	default:
 		return c.JSON(fiber.Map{
@@ -130,6 +140,17 @@ func (pc *PolicyController) getPolicyByID(c *fiber.Ctx) model.Policy {
 	for _, policy := range policiesMap[organizationId] {
 		if policy.ID == policyId {
 			return policy
+		}
+	}
+	return model.Policy{}
+}
+
+func (pc *PolicyController) getPolicyByIDFromAllOrgs(id string) model.Policy {
+	for _, policies := range policiesMap {
+		for _, policy := range policies {
+			if policy.ID == id {
+				return policy
+			}
 		}
 	}
 	return model.Policy{}
