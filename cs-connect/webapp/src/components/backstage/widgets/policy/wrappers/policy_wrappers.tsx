@@ -4,6 +4,8 @@ import qs from 'qs';
 
 import {SectionContext} from 'src/components/rhs/rhs';
 import Policy from 'src/components/backstage/widgets/policy/policy';
+import {usePolicyTemplateData} from 'src/hooks';
+import {formatUrlWithId} from 'src/helpers';
 
 type Props = {
     name?: string;
@@ -24,7 +26,7 @@ const PolicyWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    const data = {};
+    const data = usePolicyTemplateData(formatUrlWithId(url, sectionIdForUrl));
 
     return (
         <>
