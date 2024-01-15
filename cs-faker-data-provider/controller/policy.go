@@ -118,9 +118,29 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 
 	switch strings.ToLower(policyTemplateField.Field) {
 	case "purpose":
-		policyTemplate.Purpose = policyTemplateField.Value
+		if policyTemplate.Purpose == nil {
+			policyTemplate.Purpose = []string{}
+		}
+		for _, purpose := range policyTemplate.Purpose {
+			if purpose == policyTemplateField.Value {
+				return c.JSON(fiber.Map{
+					"error": "Purpose already exists",
+				})
+			}
+		}
+		policyTemplate.Purpose = append(policyTemplate.Purpose, policyTemplateField.Value)
 	case "elements":
-		policyTemplate.Elements = policyTemplateField.Value
+		if policyTemplate.Elements == nil {
+			policyTemplate.Elements = []string{}
+		}
+		for _, element := range policyTemplate.Elements {
+			if element == policyTemplateField.Value {
+				return c.JSON(fiber.Map{
+					"error": "Element already exists",
+				})
+			}
+		}
+		policyTemplate.Elements = append(policyTemplate.Elements, policyTemplateField.Value)
 	default:
 		return c.JSON(fiber.Map{
 			"error": "Not a valid policy template field provided",

@@ -2,8 +2,8 @@ package model
 
 type PolicyTemplate struct {
 	Policy
-	Purpose  string `json:"purpose"`
-	Elements string `json:"elements"`
+	Purpose  []string `json:"purpose"`
+	Elements []string `json:"elements"`
 }
 
 type PolicyTemplateFied struct {
