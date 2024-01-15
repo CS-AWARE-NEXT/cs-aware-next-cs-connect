@@ -43,6 +43,7 @@ type Plugin struct {
 	platformService *config.PlatformService
 	categoryService *app.CategoryService
 	channelService  *app.ChannelService
+	postService     *app.PostService
 	eventService    *app.EventService
 	userService     *app.UserService
 }
@@ -74,6 +75,7 @@ func (p *Plugin) OnActivate() error {
 	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
 	p.categoryService = app.NewCategoryService(p.API, p.platformService, channelStore, categoryStore, mattermostChannelStore)
 	p.channelService = app.NewChannelService(p.API, channelStore, mattermostChannelStore, p.categoryService, p.platformService)
+	p.postService = app.NewPostService(p.API)
 	p.eventService = app.NewEventService(p.API, p.platformService, p.channelService, p.categoryService, p.botID, p.configuration)
 	p.userService = app.NewUserService(p.API)
 
@@ -96,6 +98,10 @@ func (p *Plugin) OnActivate() error {
 	api.NewChannelHandler(
 		p.handler.APIRouter,
 		p.channelService,
+	)
+	api.NewPostHandler(
+		p.handler.APIRouter,
+		p.postService,
 	)
 	api.NewEventHandler(
 		p.handler.APIRouter,

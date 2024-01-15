@@ -10,13 +10,13 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/app"
 )
 
-// ChannelsHandler is the API handler.
+// ChannelHandler is the API handler.
 type ChannelHandler struct {
 	*ErrorHandler
 	channelService *app.ChannelService
 }
 
-// ChannelHandler returns a new channels api handler
+// NewChannelHandler returns a new channels api handler
 func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *ChannelHandler {
 	handler := &ChannelHandler{
 		ErrorHandler:   &ErrorHandler{},
