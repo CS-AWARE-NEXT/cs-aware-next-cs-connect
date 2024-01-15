@@ -132,6 +132,7 @@ const GraphNodeType: FC<NodeProps & {
     setNodeInfo: Dispatch<SetStateAction<GraphNodeInfo>>;
     setTargetNodeId: (nodeId: string) => void;
     setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
+    hyperlinkPath: string;
 }> = ({
     id,
     data,
@@ -140,6 +141,7 @@ const GraphNodeType: FC<NodeProps & {
     setNodeInfo,
     setTargetNodeId,
     setIsDrawerOpen,
+    hyperlinkPath,
 }) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
@@ -152,7 +154,7 @@ const GraphNodeType: FC<NodeProps & {
     };
 
     const onCopyLinkClick = (path: string, text: string) => {
-        copyToClipboard(formatUrlAsMarkdown(path, text));
+        copyToClipboard(formatUrlAsMarkdown(path, `${hyperlinkPath}.${text}`));
         addToast({content: formatMessage({defaultMessage: 'Copied!'})});
         setOpenDropdown(false);
     };

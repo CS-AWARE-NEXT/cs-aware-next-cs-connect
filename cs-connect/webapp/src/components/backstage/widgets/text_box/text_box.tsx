@@ -5,7 +5,7 @@ import {useIntl} from 'react-intl';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import MarkdownEdit from 'src/components/commons/markdown_edit';
-import {buildQuery} from 'src/hooks';
+import {buildQuery, isReferencedByUrlHash, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
@@ -43,6 +43,7 @@ const TextBox = ({
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const urlHash = useUrlHash();
     const {formatMessage} = useIntl();
     const id = customId || `${idPrefix}${formatName(name)}-${sectionId}-${parentId}-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
@@ -65,6 +66,7 @@ const TextBox = ({
             <MarkdownEdit
                 placeholder={placeholder}
                 value={text}
+                borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : ''}
             />
         </Container>
     );

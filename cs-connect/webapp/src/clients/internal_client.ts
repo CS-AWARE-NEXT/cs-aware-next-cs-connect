@@ -11,6 +11,7 @@ import {
     FetchChannelByIDResult,
     FetchChannelsParams,
     FetchChannelsResult,
+    GetBacklinksResult,
 } from 'src/types/channels';
 
 // import {PLATFORM_CONFIG_CACHE_NAME} from 'src/config/config';
@@ -19,6 +20,7 @@ import {PlatformConfig} from 'src/types/organization';
 import {pluginId} from 'src/manifest';
 import {
     ArchiveIssueChannelsParams,
+    GetBacklinksParams,
     GetUserPropsParams,
     SetUserOrganizationParams,
     UserAddedParams,
@@ -139,6 +141,15 @@ export const getUserProps = async (params: GetUserPropsParams): Promise<UserProp
         data = {orgId: ''} as UserProps;
     }
     return data as UserProps;
+};
+
+export const getBacklinks = async (params: GetBacklinksParams): Promise<GetBacklinksResult> => {
+    const queryParams = qs.stringify(params, {addQueryPrefix: true, indices: false});
+    let data = await doGet(`${apiUrl}/backlinks${queryParams}`);
+    if (!data) {
+        data = [];
+    }
+    return data as GetBacklinksResult;
 };
 
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {

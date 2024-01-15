@@ -12,6 +12,7 @@ type Props = {
     title: string;
     parentId: string;
     sectionId: string;
+    hyperlinkPath: string;
 };
 
 const SocialMediaPostTitle: FC<Props> = ({
@@ -19,6 +20,7 @@ const SocialMediaPostTitle: FC<Props> = ({
     title,
     parentId,
     sectionId,
+    hyperlinkPath,
 }) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
@@ -30,7 +32,7 @@ const SocialMediaPostTitle: FC<Props> = ({
             <TitleText>{title}</TitleText>
             <CopyLink
                 id={id}
-                text={title}
+                text={`${hyperlinkPath}.${title}`}
                 to={buildToForCopy(buildTo(fullUrl, id, query, url))}
                 name={title}
                 area-hidden={true}

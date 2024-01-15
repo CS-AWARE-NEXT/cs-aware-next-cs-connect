@@ -56,3 +56,25 @@ type AddChannelResult struct {
 	ParentID  string `json:"parentId"`
 	SectionID string `json:"sectionId"`
 }
+
+type Backlink struct {
+	ID          string `json:"id"`
+	Message     string `json:"message"`
+	AuthorName  string `json:"authorName"`
+	ChannelName string `json:"channelName"`
+	CreateAt    int64  `json:"createAt"`
+}
+
+type GetBacklinksResult struct {
+	Items []Backlink `json:"items"`
+}
+
+type BacklinkData struct {
+	MarkdownText string
+	MarkdownLink string
+}
+
+type BacklinkEntity struct {
+	PostID    string
+	ChannelID string
+}

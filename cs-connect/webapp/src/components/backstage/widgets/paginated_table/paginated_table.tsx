@@ -3,6 +3,7 @@ import React, {
     useCallback,
     useContext,
     useEffect,
+    useMemo,
     useState,
 } from 'react';
 import styled from 'styled-components';
@@ -34,6 +35,8 @@ import {PARENT_ID_PARAM} from 'src/constants';
 import {saveSectionInfo} from 'src/clients';
 import {SectionUrlContext} from 'src/components/backstage/sections/section_list';
 
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
+
 import RowInputFields from './row_input_fields';
 
 type Props = {
@@ -51,22 +54,26 @@ const {Panel} = Collapse;
 
 const ROW_PER_PAGE = 10;
 
-const iconColumn: PaginatedTableColumn = {
-    title: '',
-    dataIndex: 'icon',
-    key: 'icon',
-    width: '0px',
-    render: (text: string, record: PaginatedTableRow) => (
-        <CopyLink
-            id={record.itemId}
-            text={record.name}
-            to={buildToForCopy(record.to)}
-            name={record.name}
-            area-hidden={true}
-            iconWidth={'1.45em'}
-            iconHeight={'1.45em'}
-        />
-    ),
+const generateIconColumn: (hyperlinkPath: string) => PaginatedTableColumn = (hyperlinkPath: string) => {
+    return {
+        title: '',
+        dataIndex: 'icon',
+        key: 'icon',
+        width: '0px',
+        render: (text: string, record: PaginatedTableRow) => {
+            return (
+                <CopyLink
+                    id={record.itemId}
+                    text={`${hyperlinkPath}.${record.index}`}
+                    to={buildToForCopy(record.to)}
+                    name={record.name}
+                    area-hidden={true}
+                    iconWidth={'1.45em'}
+                    iconHeight={'1.45em'}
+                />
+            );
+        },
+    };
 };
 
 export const fillColumn = (title: string, sortable: boolean | undefined): PaginatedTableColumn => {
@@ -124,6 +131,8 @@ const PaginatedTable = ({
 
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     useEffect(() => {
         setFilteredRows(data.rows || []);
@@ -180,6 +189,10 @@ const PaginatedTable = ({
         setCurrentPage(current);
     }, [urlHash, hash, data]);
 
+    const iconColumn = useMemo(() => {
+        return generateIconColumn(hyperlinkPath);
+    }, [hyperlinkPath]);
+
     return (
         <Container
             id={paginatedTableId}
@@ -218,7 +231,8 @@ const PaginatedTable = ({
                                 row: TableRow,
                             },
                         }}
-                        onRow={(record: PaginatedTableRow) => {
+                        onRow={(record: PaginatedTableRow, index: number | undefined) => {
+                            record.index = index;
                             return {
                                 onClick: record.onClick ? record.onClick : undefined,
                                 pointer,

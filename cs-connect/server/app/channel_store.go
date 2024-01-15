@@ -21,4 +21,8 @@ type ChannelStore interface {
 	AddChannel(sectionID string, params AddChannelParams) (AddChannelResult, error)
 
 	LinkChannelToOrganization(channelID, organizationID string) error
+
+	AddBacklinks(postID string, userID string, channelID string, teamID string, backlinks []BacklinkData) error
+
+	GetBacklinks(elementLinkPart string) ([]string, error)
 }

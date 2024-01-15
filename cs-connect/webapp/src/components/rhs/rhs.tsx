@@ -17,11 +17,12 @@ import RHSWidgets from './rhs_widgets';
 type SectionContextOptions = {
     parentId: string;
     sectionId: string;
+    organizationId: string;
 };
 
 export const IsRhsClosedContext = createContext(true);
 export const FullUrlContext = createContext('');
-export const SectionContext = createContext<SectionContextOptions>({parentId: '', sectionId: ''});
+export const SectionContext = createContext<SectionContextOptions>({parentId: '', sectionId: '', organizationId: ''});
 
 export const ROOT = 'root';
 
@@ -53,7 +54,7 @@ const RHSView = () => {
     const channelByID = useChannelById(channelId);
 
     let wasChannelFound = false;
-    let sectionContextOptions: SectionContextOptions = {parentId: '', sectionId: ''};
+    let sectionContextOptions: SectionContextOptions = {parentId: '', sectionId: '', organizationId: ''};
     if (channelByID) {
         // Solves the problem of switching to an empty RHS after a non-empty one
         wasChannelFound = channelByID !== notFoundWidgetChannel;
@@ -61,6 +62,7 @@ const RHSView = () => {
         sectionContextOptions = {
             parentId: typeof parentIdParam === 'undefined' ? channelByID.parentId : parentIdParam,
             sectionId: typeof sectionIdParam === 'undefined' ? channelByID.sectionId : sectionIdParam,
+            organizationId: wasChannelFound ? channelByID.organizationId : '',
         };
     }
 
@@ -119,6 +121,7 @@ const RHSView = () => {
                             <RHSWidgets
                                 parentId={sectionContextOptions.parentId}
                                 sectionId={sectionContextOptions.sectionId}
+                                organizationId={sectionContextOptions.organizationId}
                             />
                         </ToastProvider>
                     </SectionContext.Provider>

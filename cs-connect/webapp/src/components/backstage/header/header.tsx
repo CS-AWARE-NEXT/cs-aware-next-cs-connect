@@ -3,14 +3,13 @@ import React from 'react';
 import {useIntl} from 'react-intl';
 
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
-import CopyLink from 'src/components/commons/copy_link';
+
 import {SemiBoldHeading} from 'src/styles/headings';
 import TextEdit from 'src/components/commons/text_edit';
 
-import DeleteAction from 'src/components/commons/delete_action';
-import EditAction from 'src/components/commons/edit_action';
-
 import {Organization, SectionInfo} from 'src/types/organization';
+
+import {HyperlinkableActions} from 'src/components/commons/hyperlinkable_actions';
 
 import {ContextMenu} from './context_menu';
 
@@ -54,26 +53,16 @@ export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit
                         name={name}
                         path={path}
                     />
-                    <StyledCopyLink
-                        id='copy-name-link-tooltip'
-                        text={name}
-                        to={path}
-                        tooltipMessage={formatMessage({defaultMessage: 'Copy link'})}
-                    />
-                    {(onDelete && url) &&
-                    <StyledDeleteAction
-                        id='delete-tooltip'
-                        modalTitle={formatMessage({defaultMessage: 'Delete issue'})}
-                        modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
+                    <HyperlinkableActions
+                        name={name}
+                        path={path}
+                        ecosystem={ecosystem}
+                        url={url}
                         onDelete={onDelete}
-                    />}
-                    {enableEdit &&
-                    <StyledEditAction
-                        id='edit-tooltip'
+                        enableEdit={enableEdit}
                         sectionInfo={sectionInfo}
                         setSectionInfo={setSectionInfo}
-                        ecosystem={ecosystem}
-                    />}
+                    />
                 </>
             </TextEdit>
         </Container>
@@ -89,36 +78,6 @@ const Container = styled.div`
     padding: 0 14px 0 20px;
 
     box-shadow: inset 0px -1px 0px rgba(var(--center-channel-color-rgb), 0.16);
-`;
-
-const StyledCopyLink = styled(CopyLink)`
-    border-radius: 4px;
-    font-size: 18px;
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    display: grid;
-    place-items: center;
-`;
-
-const StyledDeleteAction = styled(DeleteAction)`
-    border-radius: 4px;
-    font-size: 18px;
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    display: grid;
-    place-items: center;
-`;
-
-const StyledEditAction = styled(EditAction)`
-    border-radius: 4px;
-    font-size: 18px;
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    display: grid;
-    place-items: center;
 `;
 
 const titleCommon = css`

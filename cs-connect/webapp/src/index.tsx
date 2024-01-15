@@ -23,6 +23,7 @@ import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} fro
 import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
 import LHSView from './components/lhs/lhs';
+import {LinkTooltip} from './components/link_tooltip';
 
 type WindowObject = {
     location: {
@@ -120,6 +121,7 @@ export default class Plugin {
         );
 
         registry.registerChannelHeaderButtonAction(withPlatformOperations(HiddenIcon), () => null, '', '');
+        registry.registerLinkTooltipComponent(LinkTooltip);
 
         registry.registerSlashCommandWillBePostedHook(slashCommandWillBePosted);
         registry.registerMessageWillBePostedHook(messageWillBePosted);

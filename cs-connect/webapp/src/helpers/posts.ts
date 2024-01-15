@@ -92,14 +92,17 @@ const buildHyperlinkFromRhsReference = (
 ): string => {
     const teamName = localStorage.getItem('teamName');
     const channelName = localStorage.getItem('channelName');
-    const {object, widgetHash} = hyperlinkReference;
+    const {object, widgetHash, organization, section} = hyperlinkReference;
     let hyperlink = `${getSiteUrl()}/${teamName}/channels/${channelName}#`;
+
+    // Convert relative references to absolute so that backlinks can be tracked correctly
+    const absoluteReference = `${organization?.name}.${section?.name}.${reference}`;
     if (!widgetHash) {
         hyperlink = `${hyperlink}_${object.id}`;
-        return convertHyperlinkToMarkdown(hyperlink, reference);
+        return convertHyperlinkToMarkdown(hyperlink, absoluteReference);
     }
     hyperlink = `${hyperlink}${widgetHash.hash}`;
-    return convertHyperlinkToMarkdown(hyperlink, widgetHash.value || reference);
+    return convertHyperlinkToMarkdown(hyperlink, widgetHash.value || absoluteReference);
 };
 
 const buildHyperlinkFromObjectPageReference = (

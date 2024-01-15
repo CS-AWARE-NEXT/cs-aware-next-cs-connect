@@ -315,3 +315,37 @@ func (s *channelStore) getOrganizationMembers(channelID, organizationID, teamID 
 
 	return orgUsers, nil
 }
+
+func (s *channelStore) AddBacklinks(postID string, userID string, channelID string, teamID string, backlinks []app.BacklinkData) error {
+	tx, err := s.store.db.Beginx()
+	if err != nil {
+		return errors.Wrap(err, "could not begin transaction")
+	}
+	defer s.store.finalizeTransaction(tx)
+
+	builder := sq.Insert("CSA_Backlinks").
+		Columns("ID", "PostID", "ElementMarkdownPath", "ElementLinkPart", "UserID", "ChannelID", "TeamID")
+	for _, backlink := range backlinks {
+		uuid := util.GenerateUUID()
+		builder = builder.Values(uuid, postID, backlink.MarkdownText, backlink.MarkdownLink, userID, channelID, teamID)
+	}
+
+	if _, err := s.store.execBuilder(tx, builder); err != nil {
+		return errors.Wrap(err, "could not add backlinks")
+	}
+	if err := tx.Commit(); err != nil {
+		return errors.Wrap(err, "could not commit transaction")
+	}
+	return nil
+}
+
+func (s *channelStore) GetBacklinks(elementLinkPart string) ([]string, error) {
+	var postIds []string
+	if err := s.store.selectBuilder(s.store.db, &postIds, s.store.builder.
+		Select("PostID").
+		From("CSA_Backlinks").
+		Where(sq.Eq{"ElementLinkPart": elementLinkPart})); err != nil && err != sql.ErrNoRows {
+		return nil, errors.Wrapf(err, "failed to get backlinks for element with id '%s'", elementLinkPart)
+	}
+	return postIds, nil
+}

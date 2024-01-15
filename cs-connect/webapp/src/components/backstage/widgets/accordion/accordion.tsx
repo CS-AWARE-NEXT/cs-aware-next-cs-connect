@@ -9,6 +9,7 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {buildQuery, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {DOT_PREFIX} from 'src/components/backstage/widgets/chart/charts/line/dots';
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
 const {Panel} = Collapse;
 
@@ -43,6 +44,8 @@ const Accordion = ({
     const urlHash = useUrlHash();
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     // We could need to override default scroll
     // because we need to give the browser the time for content to be rendered.
@@ -127,27 +130,30 @@ const Accordion = ({
                 </Header>}
             {elements && elements.length > 0 ?
 
-                // If you want one of the element to be opened by default, you can do as follows
-                // defaultActiveKey={`${elements[0].id}-panel-key`}
+            // If you want one of the element to be opened by default, you can do as follows
+            // defaultActiveKey={`${elements[0].id}-panel-key`}
+
                 <Collapse
                     accordion={true}
                     defaultActiveKey={defaultActiveKey ?? ''}
                 >
                     {elements.map((element) => (
                         <>
-                            <Panel
-                                key={`${element.id}-panel-key`}
-                                header={element.header}
-                                id={`${element.id}-panel-key`}
-                                forceRender={true}
-                            >
-                                <ChildComponent
-                                    element={element}
-                                    sectionId={sectionId}
-                                    parentId={parentId}
-                                    {...props}
-                                />
-                            </Panel>
+                            <HyperlinkPathContext.Provider value={`${hyperlinkPath}.${element.header}`}>
+                                <Panel
+                                    key={`${element.id}-panel-key`}
+                                    header={element.header}
+                                    id={`${element.id}-panel-key`}
+                                    forceRender={true}
+                                >
+                                    <ChildComponent
+                                        element={element}
+                                        sectionId={sectionId}
+                                        parentId={parentId}
+                                        {...props}
+                                    />
+                                </Panel>
+                            </HyperlinkPathContext.Provider>
                         </>
                     ))}
                 </Collapse> :

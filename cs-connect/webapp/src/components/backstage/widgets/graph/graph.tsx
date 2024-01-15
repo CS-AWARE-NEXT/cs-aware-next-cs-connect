@@ -58,6 +58,8 @@ import withAdditionalProps from 'src/components/hoc/with_additional_props';
 
 import {SelectObject} from 'src/types/object_select';
 
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
+
 import GraphNodeType, {markNodesAndEdges} from './graph_node_type';
 import GraphNodeInfo, {NODE_INFO_ID_PREFIX} from './graph_node_info';
 
@@ -197,6 +199,8 @@ const Graph = ({
     const [targetNode, setTargetNode] = useState<Node | undefined>();
     const [selectedObject, setSelectedObject] = useState<SelectObject|null>(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
     const channelId = useSelector(getCurrentChannelId);
@@ -214,7 +218,7 @@ const Graph = ({
         setViewport({x: 0, y: 0, zoom: 0.6});
     }, [channelId]);
 
-    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo, setTargetNodeId, setIsDrawerOpen})}), []);
+    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo, setTargetNodeId, setIsDrawerOpen, hyperlinkPath})}), [hyperlinkPath]);
 
     const [description, setDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -402,6 +406,7 @@ const Graph = ({
                     info={nodeInfo}
                     sectionId={sectionId}
                     parentId={parentId}
+                    graphName={name}
                 />}
             </Drawer>
             <GraphSidebar
