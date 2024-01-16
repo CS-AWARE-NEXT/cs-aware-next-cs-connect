@@ -52,9 +52,12 @@ func (pc *PolicyController) GetPolicyDonts(c *fiber.Ctx) error {
 func (pc *PolicyController) GetPolicyTemplate(c *fiber.Ctx) error {
 	policy := pc.getPolicyByID(c)
 	return c.JSON(model.PolicyTemplate{
-		Policy:   policy,
-		Purpose:  policiesTemplateMap[policy.ID].Purpose,
-		Elements: policiesTemplateMap[policy.ID].Elements,
+		Policy:                   policy,
+		Purpose:                  policiesTemplateMap[policy.ID].Purpose,
+		Elements:                 policiesTemplateMap[policy.ID].Elements,
+		Need:                     policiesTemplateMap[policy.ID].Need,
+		RolesAndResponsibilities: policiesTemplateMap[policy.ID].RolesAndResponsibilities,
+		References:               policiesTemplateMap[policy.ID].References,
 	})
 }
 
@@ -154,6 +157,42 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 			}
 		}
 		policyTemplate.Elements = append(policyTemplate.Elements, policyTemplateField.Value)
+	case "need":
+		if policyTemplate.Need == nil {
+			policyTemplate.Need = []string{}
+		}
+		for _, need := range policyTemplate.Need {
+			if need == policyTemplateField.Value {
+				return c.JSON(fiber.Map{
+					"error": "Need already exists",
+				})
+			}
+		}
+		policyTemplate.Need = append(policyTemplate.Need, policyTemplateField.Value)
+	case "rolesandresponsibilities":
+		if policyTemplate.RolesAndResponsibilities == nil {
+			policyTemplate.RolesAndResponsibilities = []string{}
+		}
+		for _, role := range policyTemplate.RolesAndResponsibilities {
+			if role == policyTemplateField.Value {
+				return c.JSON(fiber.Map{
+					"error": "Role already exists",
+				})
+			}
+		}
+		policyTemplate.RolesAndResponsibilities = append(policyTemplate.RolesAndResponsibilities, policyTemplateField.Value)
+	case "references":
+		if policyTemplate.References == nil {
+			policyTemplate.References = []string{}
+		}
+		for _, reference := range policyTemplate.References {
+			if reference == policyTemplateField.Value {
+				return c.JSON(fiber.Map{
+					"error": "Reference already exists",
+				})
+			}
+		}
+		policyTemplate.References = append(policyTemplate.References, policyTemplateField.Value)
 	default:
 		return c.JSON(fiber.Map{
 			"error": "Not a valid policy template field provided",
