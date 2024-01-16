@@ -94,6 +94,19 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 	})
 }
 
+func (pc *PolicyController) DeletePolicy(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	policyId := c.Params("policyId")
+	for i, policy := range policiesMap[organizationId] {
+		if policy.ID == policyId {
+			policiesMap[organizationId] = append(policiesMap[organizationId][:i], policiesMap[organizationId][i+1:]...)
+		}
+	}
+	return c.JSON(fiber.Map{
+		"deleted": policyId,
+	})
+}
+
 func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 	var policyTemplateField model.PolicyTemplateFied
 	err := json.Unmarshal(c.Body(), &policyTemplateField)

@@ -88,6 +88,10 @@ func useOrganizationsPolicies(organizations fiber.Router) {
 		log.Printf("GET /:organizationId/policies/:policyId called")
 		return policyController.GetPolicy(c)
 	})
+	policiesWithId.Delete("/", func(c *fiber.Ctx) error {
+		log.Printf("DELETE /:organizationId/policies/:policyId called")
+		return policyController.DeletePolicy(c)
+	})
 	policiesWithId.Get("/dos", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/policies/:policyId/dos called")
 		return policyController.GetPolicyDos(c)
