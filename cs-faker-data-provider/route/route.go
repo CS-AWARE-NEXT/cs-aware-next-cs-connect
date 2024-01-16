@@ -104,6 +104,10 @@ func useOrganizationsPolicies(organizations fiber.Router) {
 		log.Printf("GET /:organizationId/policies/:policyId/template called")
 		return policyController.GetPolicyTemplate(c)
 	})
+	policiesWithId.Post("/template", func(c *fiber.Ctx) error {
+		log.Printf("POST /:organizationId/policies/:policyId/template called")
+		return policyController.SavePolicyTemplate(c)
+	})
 
 	noOrganizationIdPolicy := organizations.Group("/policies")
 	noOrganizationIdPolicy.Put("/template", func(c *fiber.Ctx) error {

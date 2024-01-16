@@ -110,6 +110,22 @@ func (pc *PolicyController) DeletePolicy(c *fiber.Ctx) error {
 	})
 }
 
+func (pc *PolicyController) SavePolicyTemplate(c *fiber.Ctx) error {
+	policyId := c.Params("policyId")
+	newPolicyTemplate := model.PolicyTemplate{}
+	err := json.Unmarshal(c.Body(), &newPolicyTemplate)
+	if err != nil {
+		return c.JSON(fiber.Map{
+			"error": "Not a valid policy template provided",
+		})
+	}
+	policiesTemplateMap[policyId] = newPolicyTemplate
+	return c.JSON(fiber.Map{
+		"id":   newPolicyTemplate.ID,
+		"name": newPolicyTemplate.Name,
+	})
+}
+
 func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 	var policyTemplateField model.PolicyTemplateFied
 	err := json.Unmarshal(c.Body(), &policyTemplateField)
