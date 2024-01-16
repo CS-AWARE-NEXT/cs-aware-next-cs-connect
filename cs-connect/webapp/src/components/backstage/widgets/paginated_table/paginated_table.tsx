@@ -8,6 +8,9 @@ import React, {
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 import {useLocation, useRouteMatch} from 'react-router-dom';
+import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
+import {useSelector} from 'react-redux';
+import {getCurrentUserId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import CopyLink from 'src/components/commons/copy_link';
@@ -18,6 +21,7 @@ import {
     buildTo,
     buildToForCopy,
     isReferencedByUrlHash,
+    useOrganization,
     useUrlHash,
 } from 'src/hooks';
 import {
@@ -31,7 +35,7 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {navigateToUrl} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {PARENT_ID_PARAM} from 'src/constants';
-import {saveSectionInfo} from 'src/clients';
+import {addChannel, saveSectionInfo} from 'src/clients';
 import {SectionUrlContext} from 'src/components/backstage/sections/section_list';
 
 import RowInputFields from './row_input_fields';
@@ -117,10 +121,13 @@ const PaginatedTable = ({
 }: Props) => {
     const {formatMessage} = useIntl();
     const {path} = useRouteMatch();
+    const teamId = useSelector(getCurrentTeamId);
+    const userId = useSelector(getCurrentUserId);
 
     const fullUrl = useContext(FullUrlContext);
     const sectionUrl = useContext(SectionUrlContext);
     const organizationId = useContext(OrganizationIdContext);
+    const organization = useOrganization(organizationId);
 
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
@@ -143,15 +150,23 @@ const PaginatedTable = ({
         setFilteredRows(filtered);
     };
 
-    const handleCreateRow = (row: PaginatedTableRow) => {
-        saveSectionInfo(row, sectionUrl).
-            then((result) => {
-                const basePath = `${formatSectionPath(path, organizationId)}/${formatName(name)}`;
-                navigateToUrl(`${basePath}/${result.id}?${PARENT_ID_PARAM}=${parentId}`);
-            }).
-            catch(() => {
-                // TODO: Do something in case of error
-            });
+    const handleCreateRow = async (row: PaginatedTableRow) => {
+        let savedSectionInfo = await saveSectionInfo(row, sectionUrl);
+        const channel = await addChannel({
+            userId,
+            channelName: formatName(`${organization.name}-${savedSectionInfo.name}`),
+            createPublicChannel: false,
+            parentId,
+            sectionId: `internal-${savedSectionInfo.id}`,
+            teamId,
+            organizationId,
+        });
+        savedSectionInfo = await saveSectionInfo({
+            ...savedSectionInfo,
+            id: `${savedSectionInfo.id}_${channel.channelId}`,
+        }, sectionUrl);
+        const basePath = `${formatSectionPath(path, organizationId)}/${formatName(name)}`;
+        navigateToUrl(`${basePath}/${savedSectionInfo.id}?${PARENT_ID_PARAM}=${parentId}`);
 
         // In case you'd want to add the row, instead of redirect to it
         // setFilteredRows([...filteredRows, row]);
