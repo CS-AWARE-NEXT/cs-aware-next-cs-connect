@@ -105,6 +105,9 @@ func (s *ChannelService) AddBacklinkIfPresent(post *mattermost.Post) {
 	siteURL := *serverConfig.ServiceSettings.SiteURL
 
 	markdownMatches := s.markdownRegex.FindAllStringSubmatch(post.Message, -1)
+	if len(markdownMatches) == 0 {
+		return
+	}
 	backlinksToAdd := []BacklinkData{}
 
 	for _, match := range markdownMatches {
@@ -121,6 +124,10 @@ func (s *ChannelService) AddBacklinkIfPresent(post *mattermost.Post) {
 				backlinksToAdd = append(backlinksToAdd, BacklinkData{MarkdownText: markdownText, MarkdownLink: queryAndFragment})
 			}
 		}
+	}
+
+	if len(backlinksToAdd) == 0 {
+		return
 	}
 
 	err := s.store.AddBacklinks(post.Id, post.UserId, post.ChannelId, channel.TeamId, backlinksToAdd)
