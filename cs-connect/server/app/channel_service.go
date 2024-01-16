@@ -121,6 +121,10 @@ func (s *ChannelService) AddBacklinkIfPresent(post *mattermost.Post) {
 				if parsedURL.Fragment != "" {
 					queryAndFragment = fmt.Sprintf("%s#%s", parsedURL.RawQuery, parsedURL.Fragment)
 				}
+				// This can happen for organization links for example
+				if queryAndFragment == "" {
+					queryAndFragment = parsedURL.Path
+				}
 				backlinksToAdd = append(backlinksToAdd, BacklinkData{MarkdownText: markdownText, MarkdownLink: queryAndFragment})
 			}
 		}
@@ -147,6 +151,9 @@ func (s *ChannelService) GetBacklinks(elementURL string) (GetBacklinksResult, er
 	queryAndFragment := parsedURL.RawQuery
 	if parsedURL.Fragment != "" {
 		queryAndFragment = fmt.Sprintf("%s#%s", parsedURL.RawQuery, parsedURL.Fragment)
+	}
+	if queryAndFragment == "" {
+		queryAndFragment = parsedURL.Path
 	}
 
 	postIds, err := s.store.GetBacklinks(queryAndFragment)

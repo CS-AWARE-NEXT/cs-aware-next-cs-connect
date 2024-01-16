@@ -60,7 +60,7 @@ const BacklinkItem = ({backlink, team}: BacklinkItemProps) => {
             <FormattedMarkdown
                 value={backlink.message}
             />
-            <Timestamp value={new Date(backlink.createAt)}/>
+            <StyledTimestamp value={new Date(backlink.createAt)}/>
         </Card>
     );
 };
@@ -167,6 +167,11 @@ const BacklinksIcon = styled.button<{clicked: boolean, iconWidth?: string, iconH
         background: var(--button-bg-08);
         color: var(--button-bg);
     `}
+`;
+
+const StyledTimestamp = styled(Timestamp)`
+        opacity: 0.6;
+        font-size: .9em;
 `;
 
 export const AutoSizeBacklinksIcon = styled(BacklinksIcon)`
