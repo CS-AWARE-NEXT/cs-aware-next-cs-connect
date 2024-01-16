@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/mattermost/mattermost-server/v6/plugin"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/config"
@@ -82,4 +84,18 @@ func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (
 		s.api.LogWarn("couldn't add channel to organization category", "channelID", addChannelResult.ChannelID, "orgID", params.OrganizationID)
 	}
 	return addChannelResult, nil
+}
+
+func (s *ChannelService) ArchiveChannels(params ArchiveChannelsParams) error {
+	channels, err := s.GetChannelsBySectionID(params.SectionID)
+	if err != nil {
+		return fmt.Errorf("could not fetch channels for section %s", params.SectionID)
+	}
+
+	for _, channel := range channels.Items {
+		if deleteErr := s.api.DeleteChannel(channel.ChannelID); deleteErr != nil {
+			s.api.LogWarn("Failed to delete channel", "channelID", channel)
+		}
+	}
+	return nil
 }

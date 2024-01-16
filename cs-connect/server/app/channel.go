@@ -56,3 +56,7 @@ type AddChannelResult struct {
 	ParentID  string `json:"parentId"`
 	SectionID string `json:"sectionId"`
 }
+
+type ArchiveChannelsParams struct {
+	SectionID string `json:"sectionId"`
+}
