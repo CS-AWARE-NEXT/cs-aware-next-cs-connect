@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useUpdateEffect} from 'react-use';
+import {Tooltip} from 'antd';
 
 import FormattedMarkdown from './formatted_markdown';
 import ShowMore from './show_more';
@@ -11,8 +12,12 @@ export type MarkdownEditProps = {
     className?: string;
     noBorder?: boolean;
     borderColor?: string;
+    pointer?: boolean;
     disabled?: boolean;
     previewDisabled?: boolean;
+    tooltipText?: string;
+
+    onClick?: () => void;
 };
 
 const MarkdownEdit = (props: MarkdownEditProps) => {
@@ -26,25 +31,35 @@ const MarkdownEdit = (props: MarkdownEditProps) => {
     const isEditing = false;
 
     return (
-        <MarkdownEditContainer
-            editing={isEditing}
-            dashed={value === ''}
-            noBorder={props.noBorder}
-            borderColor={props.borderColor}
-            className={props.className}
+        <Tooltip
+            placement='top'
+            title={props.tooltipText || ''}
         >
-            <RenderedText data-testid='rendered-text'>
-                {value ? (
-                    <ShowMore>
-                        <FormattedMarkdown value={value}/>
-                    </ShowMore>
-                ) : (
-                    <PlaceholderText>
-                        <FormattedMarkdown value={props.placeholder}/>
-                    </PlaceholderText>
-                )}
-            </RenderedText>
-        </MarkdownEditContainer>
+            <MarkdownEditContainer
+                editing={isEditing}
+                dashed={value === ''}
+                noBorder={props.noBorder}
+                borderColor={props.borderColor}
+                pointer={props.pointer || false}
+                className={props.className}
+            >
+                <RenderedText
+                    data-testid='rendered-text'
+                    onClick={props.onClick}
+                    style={{cursor: props.pointer ? 'pointer' : 'text'}}
+                >
+                    {value ? (
+                        <ShowMore>
+                            <FormattedMarkdown value={value}/>
+                        </ShowMore>
+                    ) : (
+                        <PlaceholderText>
+                            <FormattedMarkdown value={props.placeholder}/>
+                        </PlaceholderText>
+                    )}
+                </RenderedText>
+            </MarkdownEditContainer>
+        </Tooltip>
     );
 };
 
@@ -87,6 +102,7 @@ const MarkdownEditContainer = styled.div<{
     dashed: boolean;
     noBorder?: boolean;
     borderColor?: string;
+    pointer?: boolean;
 }>`
     position: relative;
     box-sizing: border-box;
@@ -114,6 +130,9 @@ const MarkdownEditContainer = styled.div<{
     border-color: ${(props) => (props.borderColor ? props.borderColor : 'var(--center-channel-color-08)')};
     ${({editing, noBorder}) => (editing || noBorder) && css`
         border-color: transparent;
+    `}
+    ${({pointer}) => (pointer) && css`
+        cursor: pointer;
     `}
 `;
 
