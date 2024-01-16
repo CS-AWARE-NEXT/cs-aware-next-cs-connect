@@ -12,13 +12,13 @@ import (
 
 func UseRoutes(app *fiber.App, context *config.Context) {
 	basePath := app.Group("/cs-data-provider")
-	useOrganizations(basePath)
+	useOrganizations(basePath, context)
 	useEcosystem(basePath, context)
 }
 
 // TODO: /organizations base routes are not used since config file was introduced
 // They were used for the slash command
-func useOrganizations(basePath fiber.Router) {
+func useOrganizations(basePath fiber.Router, context *config.Context) {
 	organizationController := controller.NewOrganizationController()
 
 	organizations := basePath.Group("/organizations")
@@ -36,7 +36,7 @@ func useOrganizations(basePath fiber.Router) {
 	})
 	useOrganizationsIncidents(organizations)
 	useOrganizationsStories(organizations)
-	useOrganizationsPolicies(organizations)
+	useOrganizationsPolicies(organizations, context)
 	useOrganizationsPlaybooks(organizations)
 	useOrganizationsSocialMedia(organizations)
 	useOrganizationsNews(organizations)
@@ -70,8 +70,9 @@ func useOrganizationsIncidents(organizations fiber.Router) {
 	})
 }
 
-func useOrganizationsPolicies(organizations fiber.Router) {
-	policyController := controller.NewPolicyController()
+func useOrganizationsPolicies(organizations fiber.Router, context *config.Context) {
+	policyRepository := context.RepositoriesMap["policies"].(*repository.PolicyRepository)
+	policyController := controller.NewPolicyController(policyRepository)
 
 	policies := organizations.Group("/:organizationId/policies")
 	policies.Get("/", func(c *fiber.Ctx) error {
@@ -92,14 +93,14 @@ func useOrganizationsPolicies(organizations fiber.Router) {
 		log.Printf("DELETE /:organizationId/policies/:policyId called")
 		return policyController.DeletePolicy(c)
 	})
-	policiesWithId.Get("/dos", func(c *fiber.Ctx) error {
-		log.Printf("GET /:organizationId/policies/:policyId/dos called")
-		return policyController.GetPolicyDos(c)
-	})
-	policiesWithId.Get("/donts", func(c *fiber.Ctx) error {
-		log.Printf("GET /:organizationId/policies/:policyId/donts called")
-		return policyController.GetPolicyDonts(c)
-	})
+	// policiesWithId.Get("/dos", func(c *fiber.Ctx) error {
+	// 	log.Printf("GET /:organizationId/policies/:policyId/dos called")
+	// 	return policyController.GetPolicyDos(c)
+	// })
+	// policiesWithId.Get("/donts", func(c *fiber.Ctx) error {
+	// 	log.Printf("GET /:organizationId/policies/:policyId/donts called")
+	// 	return policyController.GetPolicyDonts(c)
+	// })
 	policiesWithId.Get("/template", func(c *fiber.Ctx) error {
 		log.Printf("GET /:organizationId/policies/:policyId/template called")
 		return policyController.GetPolicyTemplate(c)
