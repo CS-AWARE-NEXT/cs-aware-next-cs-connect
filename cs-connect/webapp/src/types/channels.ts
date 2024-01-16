@@ -49,3 +49,8 @@ export const notFoundWidgetChannel: WidgetChannel = {
     sectionId: '',
     deletedAt: 0,
 };
+
+export interface ArchiveChannelsParams {
+    sectionId: string;
+}
+
