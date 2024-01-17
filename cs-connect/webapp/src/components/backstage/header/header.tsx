@@ -21,12 +21,22 @@ type Props = {
     ecosystem: Organization;
     url?: string
     onDelete?: () => void
-    enableEdit?: boolean
+    enableEcosystemEdit?: boolean
     sectionInfo?: SectionInfo
     setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
 };
 
-export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit = false, sectionInfo, setSectionInfo}: Props) => {
+export const NameHeader = ({
+    id,
+    name,
+    path,
+    ecosystem,
+    url,
+    onDelete,
+    enableEcosystemEdit = false,
+    sectionInfo,
+    setSectionInfo,
+}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
@@ -61,19 +71,19 @@ export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit
                         tooltipMessage={formatMessage({defaultMessage: 'Copy link'})}
                     />
                     {(onDelete && url) &&
-                    <StyledDeleteAction
-                        id='delete-tooltip'
-                        modalTitle={formatMessage({defaultMessage: 'Delete issue'})}
-                        modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
-                        onDelete={onDelete}
-                    />}
-                    {enableEdit &&
-                    <StyledEditAction
-                        id='edit-tooltip'
-                        sectionInfo={sectionInfo}
-                        setSectionInfo={setSectionInfo}
-                        ecosystem={ecosystem}
-                    />}
+                        <StyledDeleteAction
+                            id='delete-tooltip'
+                            modalTitle={formatMessage({defaultMessage: 'Delete'})}
+                            modalContent={formatMessage({defaultMessage: 'Are you sure you want to delete? All data will be lost.'})}
+                            onDelete={onDelete}
+                        />}
+                    {enableEcosystemEdit &&
+                        <StyledEditAction
+                            id='edit-tooltip'
+                            sectionInfo={sectionInfo}
+                            setSectionInfo={setSectionInfo}
+                            ecosystem={ecosystem}
+                        />}
                 </>
             </TextEdit>
         </Container>
