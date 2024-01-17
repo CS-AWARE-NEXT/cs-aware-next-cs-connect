@@ -22,9 +22,17 @@ func NewPolicyController(policyRepository *repository.PolicyRepository) *PolicyC
 }
 
 func (pc *PolicyController) GetPolicies(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
 	rows := []model.PaginatedTableRow{}
-	policies, err := pc.policyRepository.GetPolicies()
+	policies, err := pc.policyRepository.GetPoliciesByOrganization(organizationId)
 	if err != nil {
+		log.Printf("Could not get policies: %s", err.Error())
+		if err == util.ErrNotFound {
+			return c.JSON(model.PaginatedTableData{
+				Columns: policyColumns,
+				Rows:    rows,
+			})
+		}
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{
 			"error": "Could not get policies",
@@ -82,9 +90,10 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 		policy.ID = util.GenerateUUID()
 		pc.policyRepository.SavePolicy(model.PolicyTemplate{
 			Policy: model.Policy{
-				ID:          policy.ID,
-				Name:        policy.Name,
-				Description: policy.Description,
+				ID:             policy.ID,
+				Name:           policy.Name,
+				Description:    policy.Description,
+				OrganizationId: policy.OrganizationId,
 			},
 		})
 		policyID = policy.ID
@@ -95,17 +104,19 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 		pc.policyRepository.DeletePolicyByID(oldID)
 		pc.policyRepository.SavePolicy(model.PolicyTemplate{
 			Policy: model.Policy{
-				ID:          newID,
-				Name:        policy.Name,
-				Description: policy.Description,
+				ID:             newID,
+				Name:           policy.Name,
+				Description:    policy.Description,
+				OrganizationId: policy.OrganizationId,
 			},
 		})
 		policyID = newID
 	}
 	return c.JSON(fiber.Map{
-		"id":          policyID,
-		"name":        policy.Name,
-		"description": policy.Description,
+		"id":             policyID,
+		"name":           policy.Name,
+		"description":    policy.Description,
+		"organizationId": policy.OrganizationId,
 	})
 }
 
@@ -226,9 +237,10 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"id":          policyTemplate.ID,
-		"name":        policyTemplate.Name,
-		"description": policyTemplate.Description,
+		"id":             policyTemplate.ID,
+		"name":           policyTemplate.Name,
+		"description":    policyTemplate.Description,
+		"organizationId": policyTemplate.OrganizationId,
 	})
 }
 
@@ -398,7 +410,7 @@ var policyColumns = []model.PaginatedTableColumn{
 	{
 		Title: "Name",
 	},
-	{
-		Title: "Description",
-	},
+	// {
+	// 	Title: "Description",
+	// },
 }

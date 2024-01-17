@@ -24,10 +24,11 @@ func NewPolicyRepository(db *db.DB) *PolicyRepository {
 	}
 }
 
-func (r *PolicyRepository) GetPolicies() ([]model.PolicyTemplate, error) {
+func (r *PolicyRepository) GetPoliciesByOrganization(organizationId string) ([]model.PolicyTemplate, error) {
 	policiesSelect := r.queryBuilder.
 		Select("*").
-		From("CSFDP_Policy")
+		From("CSFDP_Policy").
+		Where(sq.Eq{"OrganizationID": organizationId})
 	var policiesResults []model.PolicyTemplate
 	err := r.db.SelectBuilder(r.db.DB, &policiesResults, policiesSelect)
 	if err == sql.ErrNoRows {
@@ -161,9 +162,10 @@ func (r *PolicyRepository) SavePolicy(policy model.PolicyTemplate) (model.Policy
 	if _, err := r.db.ExecBuilder(tx, sq.
 		Insert("CSFDP_Policy").
 		SetMap(map[string]interface{}{
-			"ID":          policy.ID,
-			"Name":        policy.Name,
-			"Description": policy.Description,
+			"ID":             policy.ID,
+			"Name":           policy.Name,
+			"Description":    policy.Description,
+			"OrganizationID": policy.OrganizationId,
 		})); err != nil {
 		return model.PolicyTemplate{}, errors.Wrap(err, "could not create the new issue")
 	}

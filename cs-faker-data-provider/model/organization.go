@@ -78,9 +78,10 @@ type IncidentWithOrganizationId struct {
 }
 
 type Policy struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID             string `json:"id"`
+	Name           string `json:"name"`
+	Description    string `json:"description"`
+	OrganizationId string `json:"organizationId"`
 }
 
 type Story struct {
