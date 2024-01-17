@@ -48,6 +48,10 @@ export const saveSectionInfo = async (params: SectionInfoParams, url: string): P
     return data;
 };
 
+export const deleteSectionInfo = async (id: string, url: string): Promise<void> => {
+    await doDelete<void>(`${url}/${id}`);
+};
+
 export const updateSectionInfo = async (params: SectionInfoParams, url: string): Promise<SectionInfo> => {
     let data = await doPost<SectionInfo>(
         url,

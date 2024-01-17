@@ -12,9 +12,8 @@ import {NameHeader} from 'src/components/backstage/header/header';
 import Sections from 'src/components/backstage/sections/sections';
 import Widgets from 'src/components/backstage/widgets/widgets';
 import {isUrlEqualWithoutQueryParams, useOrganization} from 'src/hooks';
-import {archiveIssueChannels, deleteIssue, getSiteUrl} from 'src/clients';
+import {getSiteUrl} from 'src/clients';
 import {formatName, formatNameNoLowerCase} from 'src/helpers';
-import {navigateToBackstageOrganization} from 'src/browser_routing';
 
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 
@@ -33,7 +32,9 @@ type Props = {
     children?: ReactNode;
     childrenBottom?: boolean;
     deleteProps?: DeleteProps;
-    enableEdit?: boolean;
+    enableEcosystemEdit?: boolean;
+
+    onDelete?: () => void;
 };
 
 type DeleteProps = {
@@ -53,7 +54,8 @@ const SectionsWidgetsContainer = ({
     children = [],
     childrenBottom = true,
     deleteProps,
-    enableEdit = false,
+    enableEcosystemEdit = false,
+    onDelete,
 }: Props) => {
     const organizationId = useContext(OrganizationIdContext);
     const ecosystem = useOrganization(organizationId);
@@ -77,14 +79,8 @@ const SectionsWidgetsContainer = ({
                             url={deleteProps?.url}
                             sectionInfo={sectionInfo}
                             setSectionInfo={setSectionInfo}
-                            onDelete={async () => {
-                                if (sectionInfo && deleteProps) {
-                                    await deleteIssue(sectionInfo.id, deleteProps.url);
-                                    await archiveIssueChannels({issueId: sectionInfo.id});
-                                    navigateToBackstageOrganization(organizationId);
-                                }
-                            }}
-                            enableEdit={enableEdit}
+                            onDelete={onDelete}
+                            enableEcosystemEdit={enableEcosystemEdit}
                             ecosystem={ecosystem}
                         />
                     </Header>
