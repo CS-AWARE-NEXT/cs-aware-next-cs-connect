@@ -77,6 +77,7 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 			"error": "Not a valid policy provided",
 		})
 	}
+	policyID := ""
 	if policy.ID == "" {
 		policy.ID = util.GenerateUUID()
 		pc.policyRepository.SavePolicy(model.PolicyTemplate{
@@ -86,6 +87,7 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 				Description: policy.Description,
 			},
 		})
+		policyID = policy.ID
 	} else {
 		splitted := strings.Split(policy.ID, "_")
 		oldID := splitted[0]
@@ -98,9 +100,10 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 				Description: policy.Description,
 			},
 		})
+		policyID = newID
 	}
 	return c.JSON(fiber.Map{
-		"id":          policy.ID,
+		"id":          policyID,
 		"name":        policy.Name,
 		"description": policy.Description,
 	})
