@@ -165,6 +165,15 @@ var migrations = []Migration{
 				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Reference")
 			}
 
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy_Tag (
+					Tag TEXT PRIMARY KEY,
+					PolicyID TEXT NOT NULL REFERENCES CSFDP_Policy(ID) ON DELETE CASCADE
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Tag")
+			}
+
 			return nil
 		},
 	},

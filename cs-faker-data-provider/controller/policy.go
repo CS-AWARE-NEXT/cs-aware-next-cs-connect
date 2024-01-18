@@ -222,6 +222,18 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 			}
 		}
 		policyTemplate.References = append(policyTemplate.References, policyTemplateField.Value)
+	case "tags":
+		if policyTemplate.Tags == nil {
+			policyTemplate.Tags = []string{}
+		}
+		for _, tag := range policyTemplate.Tags {
+			if tag == policyTemplateField.Value {
+				return c.JSON(fiber.Map{
+					"error": "Tag already exists",
+				})
+			}
+		}
+		policyTemplate.Tags = append(policyTemplate.Tags, policyTemplateField.Value)
 	default:
 		return c.JSON(fiber.Map{
 			"error": "Not a valid policy template field provided",

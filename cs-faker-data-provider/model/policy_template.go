@@ -7,6 +7,7 @@ type PolicyTemplate struct {
 	Need                     []string `json:"need"`
 	RolesAndResponsibilities []string `json:"rolesAndResponsibilities"`
 	References               []string `json:"references"`
+	Tags                     []string `json:"tags"`
 }
 
 type PolicyTemplateFied struct {

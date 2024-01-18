@@ -44,6 +44,7 @@ func (r *PolicyRepository) GetPoliciesByOrganization(organizationId string) ([]m
 		r.getPolicyWithNeed(&policy)
 		r.getPolicyWithRoles(&policy)
 		r.getPolicyWithReferences(&policy)
+		r.getPolicyWithTags(&policy)
 		policies = append(policies, policy)
 	}
 
@@ -68,6 +69,7 @@ func (r *PolicyRepository) GetPolicyByID(id string) (model.PolicyTemplate, error
 	r.getPolicyWithNeed(&policy)
 	r.getPolicyWithRoles(&policy)
 	r.getPolicyWithReferences(&policy)
+	r.getPolicyWithTags(&policy)
 
 	return policy, nil
 }
@@ -152,6 +154,22 @@ func (r *PolicyRepository) getPolicyWithReferences(policy *model.PolicyTemplate)
 	return nil
 }
 
+func (r *PolicyRepository) getPolicyWithTags(policy *model.PolicyTemplate) error {
+	tagsSelect := r.queryBuilder.
+		Select("Tag").
+		From("CSFDP_Policy_Tag").
+		Where(sq.Eq{"PolicyID": policy.ID})
+	var tags []string
+	err := r.db.SelectBuilder(r.db.DB, &tags, tagsSelect)
+	if err == sql.ErrNoRows {
+		return errors.Wrap(util.ErrNotFound, "no tags found for the section")
+	} else if err != nil {
+		return errors.Wrap(err, "failed to get tags for the section")
+	}
+	policy.Tags = tags
+	return nil
+}
+
 func (r *PolicyRepository) SavePolicy(policy model.PolicyTemplate) (model.PolicyTemplate, error) {
 	tx, err := r.db.DB.Beginx()
 	if err != nil {
@@ -182,6 +200,9 @@ func (r *PolicyRepository) SavePolicy(policy model.PolicyTemplate) (model.Policy
 		return model.PolicyTemplate{}, err
 	}
 	if err := r.savePolicyReferences(tx, policy); err != nil {
+		return model.PolicyTemplate{}, err
+	}
+	if err := r.savePolicyTags(tx, policy); err != nil {
 		return model.PolicyTemplate{}, err
 	}
 	if err := tx.Commit(); err != nil {
@@ -255,6 +276,20 @@ func (r *PolicyRepository) savePolicyReferences(tx *sqlx.Tx, policy model.Policy
 				"PolicyID":  policy.ID,
 			})); err != nil {
 			return errors.Wrap(err, "could not save reference")
+		}
+	}
+	return nil
+}
+
+func (r *PolicyRepository) savePolicyTags(tx *sqlx.Tx, policy model.PolicyTemplate) error {
+	for _, tag := range policy.Tags {
+		if _, err := r.db.ExecBuilder(tx, sq.
+			Insert("CSFDP_Policy_Tag").
+			SetMap(map[string]interface{}{
+				"Tag":      tag,
+				"PolicyID": policy.ID,
+			})); err != nil {
+			return errors.Wrap(err, "could not save tag")
 		}
 	}
 	return nil
