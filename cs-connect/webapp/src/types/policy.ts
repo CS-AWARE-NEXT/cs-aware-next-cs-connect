@@ -5,8 +5,13 @@ export type Policy = {
 };
 
 export type PolicyTemplate = Policy & {
-    purpose: string;
-    elements: string;
+    purpose: string[];
+    elements: string[];
+    need: string[];
+    rolesAndResponsibilities: string[];
+    references: string[];
+    tags: string[];
+    [key: string]: string[];
 };
 
 export type PolicyTemplateField = {
