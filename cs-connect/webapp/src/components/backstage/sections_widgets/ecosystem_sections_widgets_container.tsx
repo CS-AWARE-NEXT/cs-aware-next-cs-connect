@@ -20,6 +20,7 @@ import {
 import {Section, SectionInfo} from 'src/types/organization';
 import {navigateToBackstageOrganization} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {useToaster} from 'src/components/backstage/toast_banner';
 
 type Props = {
     section: Section;
@@ -34,6 +35,23 @@ const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
         setCurrentSectionInfo(sectionInfo);
     }, [sectionInfo]);
 
+    const {add: addToast} = useToaster();
+
+    const onDelete = async () => {
+        if (currentSectionInfo && section) {
+            await deleteIssue(sectionInfo.id, section.url);
+            await archiveIssueChannels({issueId: currentSectionInfo.id});
+            navigateToBackstageOrganization(organizationId);
+        }
+    };
+
+    const onExport = async () => {
+        if (sectionInfo && section) {
+            console.log('Exporting issue', sectionInfo.id, section.url);
+            addToast({content: 'Work in Progress!'});
+        }
+    };
+
     return (
         <SectionsWidgetsContainer
             headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${currentSectionInfo?.id}`}
@@ -42,15 +60,10 @@ const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
             url={url}
             widgets={section.widgets}
             childrenBottom={false}
-            deleteProps={{url: section.url}}
+            actionProps={{url: section.url}}
             enableEcosystemEdit={true}
-            onDelete={async () => {
-                if (currentSectionInfo && section) {
-                    await deleteIssue(sectionInfo.id, section.url);
-                    await archiveIssueChannels({issueId: currentSectionInfo.id});
-                    navigateToBackstageOrganization(organizationId);
-                }
-            }}
+            onDelete={onDelete}
+            onExport={onExport}
         >
             <EcosystemObjectivesWrapper
                 name={formatStringToCapitalize(ecosystemObjectivesWidget)}

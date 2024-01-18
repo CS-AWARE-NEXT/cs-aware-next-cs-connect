@@ -1,4 +1,6 @@
 import React, {ReactNode, createContext, useContext} from 'react';
+import {Alert} from 'antd';
+import {useIntl} from 'react-intl';
 
 import {
     Body,
@@ -31,15 +33,16 @@ type Props = {
     widgets: Widget[];
     children?: ReactNode;
     childrenBottom?: boolean;
-    deleteProps?: DeleteProps;
+    actionProps?: ActionProps;
     enableEcosystemEdit?: boolean;
 
     onDelete?: () => void;
+    onExport?: () => void;
 };
 
-type DeleteProps = {
-    url: string
-}
+type ActionProps = {
+    url: string;
+};
 
 const SectionsWidgetsContainer = ({
     headerPath,
@@ -53,10 +56,13 @@ const SectionsWidgetsContainer = ({
     widgets,
     children = [],
     childrenBottom = true,
-    deleteProps,
+    actionProps,
     enableEcosystemEdit = false,
     onDelete,
+    onExport,
 }: Props) => {
+    const {formatMessage} = useIntl();
+
     const organizationId = useContext(OrganizationIdContext);
     const ecosystem = useOrganization(organizationId);
 
@@ -67,6 +73,34 @@ const SectionsWidgetsContainer = ({
     const showChildren = isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}`) ||
         isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}/${sections ? formatNameNoLowerCase(sections[0]?.name) : ''}`) ||
         isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}/${sections ? formatName(sections[0]?.name) : ''}`);
+
+    if (sectionInfo && sectionInfo.id === '' && sectionInfo.name === '') {
+        return (
+            <Container>
+                <MainWrapper>
+                    <Header>
+                        <NameHeader
+                            id={sectionInfo?.id || name}
+                            path={headerPath}
+                            name='[Deleted]'
+                            sectionInfo={sectionInfo}
+                            ecosystem={ecosystem}
+                        />
+                    </Header>
+                    <Main>
+                        <Body>
+                            <Alert
+                                message={formatMessage({defaultMessage: 'This section has been deleted!'})}
+                                type='info'
+                                style={{marginTop: '24px'}}
+                            />
+                        </Body>
+                    </Main>
+                </MainWrapper>
+            </Container>
+        );
+    }
+
     return (
         <IsRhsContext.Provider value={isRhs}>
             <Container>
@@ -76,10 +110,11 @@ const SectionsWidgetsContainer = ({
                             id={sectionInfo?.id || name}
                             path={headerPath}
                             name={sectionInfo?.name || name}
-                            url={deleteProps?.url}
+                            url={actionProps?.url}
                             sectionInfo={sectionInfo}
                             setSectionInfo={setSectionInfo}
                             onDelete={onDelete}
+                            onExport={onExport}
                             enableEcosystemEdit={enableEcosystemEdit}
                             ecosystem={ecosystem}
                         />
