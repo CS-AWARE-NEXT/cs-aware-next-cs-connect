@@ -17,6 +17,7 @@ import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosyst
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {navigateToBackstageOrganization} from 'src/browser_routing';
 import {formatName} from 'src/helpers';
+import {useToaster} from 'src/components/backstage/toast_banner';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 
@@ -35,14 +36,16 @@ const SectionDetails = () => {
     useScrollIntoView(urlHash);
     useNavHighlighting(SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE, section.name, [parentIdParam]);
 
+    const {add: addToast} = useToaster();
+
     // Loading state
     if (!section) {
         return null;
     }
 
-    let enableDelete = false;
+    let enableActions = false;
     if (section && section.internal) {
-        enableDelete = true;
+        enableActions = true;
     }
 
     const onDelete = async () => {
@@ -50,6 +53,13 @@ const SectionDetails = () => {
             await deleteSectionInfo(sectionInfo.id, section.url);
             await archiveChannels({sectionId: sectionInfo.id});
             navigateToBackstageOrganization(`${organizationId}/${formatName(section.name)}`);
+        }
+    };
+
+    const onExport = async () => {
+        if (sectionInfo && section) {
+            console.log('Exporting section', sectionInfo.id, section.url);
+            addToast({content: 'Work in Progress!'});
         }
     };
 
@@ -66,8 +76,9 @@ const SectionDetails = () => {
                 sections={section.sections}
                 url={url}
                 widgets={section.widgets}
-                deleteProps={enableDelete ? {url: section.url} : undefined}
-                onDelete={enableDelete ? onDelete : undefined}
+                actionProps={enableActions ? {url: section.url} : undefined}
+                onDelete={enableActions ? onDelete : undefined}
+                onExport={enableActions ? onExport : undefined}
             />
     );
 };
