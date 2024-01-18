@@ -41,6 +41,26 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/chart
           - type: channels
+      - name: News
+        id: "26"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news/:id/news
+          - type: channels
+      - name: Policies
+        id: "30"
+        internal: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/policies
+        widgets:
+          - name: System
+            type: graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
+          - name: Components
+            type: policy
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/policies/:id/template
+          - type: channel
   - name: Deyal
     id: "7"
     description: This is the Deyal organization for Larissa workshop
@@ -68,6 +88,26 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/chart
           - type: channels
+      - name: News
+        id: "27"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news/:id/news
+          - type: channels
+      - name: Policies
+        id: "31"
+        internal: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/policies
+        widgets:
+          - name: System
+            type: graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
+          - name: Components
+            type: policy
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/policies/:id/template
+          - type: channel
   - name: Larissa
     id: "6"
     description: This is the Larissa organization for Larissa workshop
@@ -95,6 +135,26 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/chart
           - type: channels
+      - name: News
+        id: "28"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news/:id/news
+          - type: channels
+      - name: Policies
+        id: "32"
+        internal: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/policies
+        widgets:
+          - name: System
+            type: graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
+          - name: Components
+            type: policy
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/policies/:id/template
+          - type: channel
   - name: Foggia
     id: "5"
     description: This is the organization for Foggia workshop
@@ -118,6 +178,26 @@ organizations:
             type: social-media-posts
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media/:id/posts
           - type: channels
+      - name: News
+        id: "29"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news/:id/news
+          - type: channels
+      - name: Policies
+        id: "33"
+        internal: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/policies
+        widgets:
+          - name: System
+            type: graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
+          - name: Components
+            type: policy
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/policies/:id/template
+          - type: channel
       - name: Exercises
         id: "24"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/exercises
@@ -143,26 +223,6 @@ organizations:
           - name: History
             type: table
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/table
-          - type: channel
-      - name: Policies
-        id: "14"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies
-        widgets:
-          - name: Dos
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies/:id/dos
-          - name: Don'ts
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies/:id/donts
-          - type: channel
-      - name: Stories
-        id: "15"
-        internal: true
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/stories
-        widgets:
-          - name: Events
-            type: timeline
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/stories/:id/timeline
           - type: channel
       - name: Playbooks
         id: "19"
@@ -190,20 +250,8 @@ organizations:
             type: table
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/table
           - type: channel
-      - name: Policies
-        id: "4"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/policies
-        widgets:
-          - name: Dos
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/policies/:id/dos
-          - name: Don'ts
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/policies/:id/donts
-          - type: channel
       - name: Stories
         id: "5"
-        internal: true
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/stories
         widgets:
           - name: Events
@@ -229,20 +277,8 @@ organizations:
             type: table
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/table
           - type: channel
-      - name: Policies
-        id: "7"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/policies
-        widgets:
-          - name: Dos
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/policies/:id/dos
-          - name: Don'ts
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/policies/:id/donts
-          - type: channel
       - name: Stories
         id: "8"
-        internal: true
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/stories
         widgets:
           - name: Events
@@ -268,20 +304,8 @@ organizations:
             type: table
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/table
           - type: channel
-      - name: Policies
-        id: "10"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/policies
-        widgets:
-          - name: Dos
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/policies/:id/dos
-          - name: Don'ts
-            type: list
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/policies/:id/donts
-          - type: channel
       - name: Stories
         id: "11"
-        internal: true
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/stories
         widgets:
           - name: Events
