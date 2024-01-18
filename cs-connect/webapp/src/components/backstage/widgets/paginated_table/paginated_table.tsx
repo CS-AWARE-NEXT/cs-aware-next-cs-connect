@@ -23,6 +23,7 @@ import {
     isReferencedByUrlHash,
     useOrganization,
     useUrlHash,
+    useUserProps,
 } from 'src/hooks';
 import {
     formatName,
@@ -37,6 +38,7 @@ import {OrganizationIdContext} from 'src/components/backstage/organizations/orga
 import {PARENT_ID_PARAM} from 'src/constants';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {SectionUrlContext} from 'src/components/backstage/sections/section_list';
+import {ORGANIZATION_ID_ALL} from 'src/types/organization';
 
 import RowInputFields from './row_input_fields';
 
@@ -124,6 +126,8 @@ const PaginatedTable = ({
     const teamId = useSelector(getCurrentTeamId);
     const userId = useSelector(getCurrentUserId);
 
+    const [userProps, _setUserProps] = useUserProps();
+
     const fullUrl = useContext(FullUrlContext);
     const sectionUrl = useContext(SectionUrlContext);
     const organizationId = useContext(OrganizationIdContext);
@@ -151,7 +155,7 @@ const PaginatedTable = ({
     };
 
     const handleCreateRow = async (row: PaginatedTableRow) => {
-        let savedSectionInfo = await saveSectionInfo(row, sectionUrl);
+        let savedSectionInfo = await saveSectionInfo({...row, organizationId}, sectionUrl);
         const channel = await addChannel({
             userId,
             channelName: formatName(`${organization.name}-${savedSectionInfo.name}`),
@@ -249,7 +253,7 @@ const PaginatedTable = ({
                         size='middle'
                     />
                 </>}
-            {internal &&
+            {(internal && (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL))) &&
                 <Collapse>
                     <TablePanel
                         header={formatMessage({defaultMessage: 'Create New'})}
