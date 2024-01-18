@@ -40,7 +40,7 @@ export const exportAction = async (channel: any) => {
         // Emulate a click on an anchor to trigger a browser download
         const link = document.createElement('a');
         link.href = fileURL;
-        link.download = channel.name + '.json';
+        link.download = `${channel.name}.${format}`;
         link.click();
         setTimeout(() => {
             URL.revokeObjectURL(fileURL);
