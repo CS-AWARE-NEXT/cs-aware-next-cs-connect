@@ -39,6 +39,7 @@ import {PARENT_ID_PARAM} from 'src/constants';
 import {addChannel, saveSectionInfo} from 'src/clients';
 import {SectionUrlContext} from 'src/components/backstage/sections/section_list';
 import {ORGANIZATION_ID_ALL} from 'src/types/organization';
+import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
 
 import RowInputFields from './row_input_fields';
 
@@ -128,6 +129,7 @@ const PaginatedTable = ({
 
     const [userProps, _setUserProps] = useUserProps();
 
+    const isEcosystem = useContext(IsEcosystemContext);
     const fullUrl = useContext(FullUrlContext);
     const sectionUrl = useContext(SectionUrlContext);
     const organizationId = useContext(OrganizationIdContext);
@@ -253,7 +255,7 @@ const PaginatedTable = ({
                         size='middle'
                     />
                 </>}
-            {(internal && (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL))) &&
+            {(isEcosystem || (internal && (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)))) &&
                 <Collapse>
                     <TablePanel
                         header={formatMessage({defaultMessage: 'Create New'})}
