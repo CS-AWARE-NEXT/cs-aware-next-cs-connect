@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useUpdateEffect} from 'react-use';
-import {Tooltip} from 'antd';
+import {Dropdown, MenuProps, Tooltip} from 'antd';
 
 import FormattedMarkdown from './formatted_markdown';
 import ShowMore from './show_more';
@@ -12,10 +12,13 @@ export type MarkdownEditProps = {
     className?: string;
     noBorder?: boolean;
     borderColor?: string;
-    pointer?: boolean;
     disabled?: boolean;
     previewDisabled?: boolean;
+    pointer?: boolean;
+
     tooltipText?: string;
+    dropdownItems?: MenuProps['items'];
+    dropdownTrigger?: ('click' | 'hover' | 'contextMenu')[];
 
     onClick?: () => void;
 };
@@ -35,30 +38,63 @@ const MarkdownEdit = (props: MarkdownEditProps) => {
             placement='top'
             title={props.tooltipText || ''}
         >
-            <MarkdownEditContainer
-                editing={isEditing}
-                dashed={value === ''}
-                noBorder={props.noBorder}
-                borderColor={props.borderColor}
-                pointer={props.pointer || false}
-                className={props.className}
-            >
-                <RenderedText
-                    data-testid='rendered-text'
-                    onClick={props.onClick}
-                    style={{cursor: props.pointer ? 'pointer' : 'text'}}
+            {(props.dropdownItems && props.dropdownItems.length > 0) ? (
+                <Dropdown
+                    menu={{items: props.dropdownItems}}
+                    trigger={props.dropdownTrigger || ['contextMenu']}
+                    placement='bottomRight'
                 >
-                    {value ? (
-                        <ShowMore>
-                            <FormattedMarkdown value={value}/>
-                        </ShowMore>
-                    ) : (
-                        <PlaceholderText>
-                            <FormattedMarkdown value={props.placeholder}/>
-                        </PlaceholderText>
-                    )}
-                </RenderedText>
-            </MarkdownEditContainer>
+                    <MarkdownEditContainer
+                        editing={isEditing}
+                        dashed={value === ''}
+                        noBorder={props.noBorder}
+                        borderColor={props.borderColor}
+                        pointer={props.pointer || false}
+                        className={props.className}
+                    >
+                        <RenderedText
+                            data-testid='rendered-text'
+                            onClick={props.onClick}
+                            style={{cursor: props.pointer ? 'pointer' : 'text'}}
+                        >
+                            {value ? (
+                                <ShowMore>
+                                    <FormattedMarkdown value={value}/>
+                                </ShowMore>
+                            ) : (
+                                <PlaceholderText>
+                                    <FormattedMarkdown value={props.placeholder}/>
+                                </PlaceholderText>
+                            )}
+                        </RenderedText>
+                    </MarkdownEditContainer>
+                </Dropdown>
+            ) : (
+                <MarkdownEditContainer
+                    editing={isEditing}
+                    dashed={value === ''}
+                    noBorder={props.noBorder}
+                    borderColor={props.borderColor}
+                    pointer={props.pointer || false}
+                    className={props.className}
+                >
+                    <RenderedText
+                        data-testid='rendered-text'
+                        onClick={props.onClick}
+                        style={{cursor: props.pointer ? 'pointer' : 'text'}}
+                    >
+                        {value ? (
+                            <ShowMore>
+                                <FormattedMarkdown value={value}/>
+                            </ShowMore>
+                        ) : (
+                            <PlaceholderText>
+                                <FormattedMarkdown value={props.placeholder}/>
+                            </PlaceholderText>
+                        )}
+                    </RenderedText>
+                </MarkdownEditContainer>
+            )}
         </Tooltip>
     );
 };

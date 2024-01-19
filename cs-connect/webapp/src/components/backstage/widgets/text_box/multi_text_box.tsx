@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {useIntl} from 'react-intl';
+import {MenuProps} from 'antd';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/rhs';
@@ -11,13 +12,24 @@ import {VerticalSpacer} from 'src/components/backstage/grid';
 
 import {Container, TextBoxStyle} from './text_box';
 
+export type MultiText = {
+    text: string;
+    id?: string;
+
+    pointer?: boolean;
+    tooltipText?: string;
+    onClick?: () => void;
+    dropdownItems?: MenuProps['items'];
+    dropdownTrigger?: ('click' | 'hover' | 'contextMenu')[];
+};
+
 type Props = {
     idPrefix?: string;
     name: string;
     parentId: string;
     sectionId: string;
     style?: TextBoxStyle;
-    text: string[];
+    text: MultiText[];
     customId?: string;
     titleText?: string;
 };
@@ -63,8 +75,13 @@ const MultiTextBox = ({
                     <MarkdownEdit
                         key={`text-${i}`}
                         placeholder={placeholder}
-                        value={txt}
+                        value={txt.text}
                         borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : undefined}
+                        pointer={txt.pointer || false}
+                        tooltipText={txt.tooltipText}
+                        onClick={txt.onClick}
+                        dropdownItems={txt.dropdownItems}
+                        dropdownTrigger={txt.dropdownTrigger}
                     />
                     <VerticalSpacer size={8}/>
                 </>

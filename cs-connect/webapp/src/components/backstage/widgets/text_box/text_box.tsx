@@ -5,7 +5,7 @@ import {useIntl} from 'react-intl';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import MarkdownEdit from 'src/components/commons/markdown_edit';
-import {buildQuery} from 'src/hooks';
+import {buildQuery, isReferencedByUrlHash, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
@@ -46,6 +46,7 @@ const TextBox = ({
     const {formatMessage} = useIntl();
     const id = customId || `${idPrefix}${formatName(name)}-${sectionId}-${parentId}-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
+    const urlHash = useUrlHash();
 
     return (
         <Container
@@ -65,12 +66,13 @@ const TextBox = ({
             <MarkdownEdit
                 placeholder={placeholder}
                 value={text}
+                borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : undefined}
             />
         </Container>
     );
 };
 
-const Container = styled.div<{style: TextBoxStyle}>`
+export const Container = styled.div<{style: TextBoxStyle}>`
     width: ${(props) => (props.style.width ? props.style.width : '100%')};
     height: ${(props) => (props.style.height ? props.style.height : 'auto')};
     display: flex;
