@@ -316,7 +316,7 @@ func (s *channelStore) getOrganizationMembers(channelID, organizationID, teamID 
 	return orgUsers, nil
 }
 
-func (s *channelStore) AddBacklinks(postID string, userID string, channelID string, teamID string, backlinks []app.BacklinkData) error {
+func (s *channelStore) AddBacklinks(postID string, backlinks []app.BacklinkData) error {
 	tx, err := s.store.db.Beginx()
 	if err != nil {
 		return errors.Wrap(err, "could not begin transaction")
@@ -324,10 +324,10 @@ func (s *channelStore) AddBacklinks(postID string, userID string, channelID stri
 	defer s.store.finalizeTransaction(tx)
 
 	builder := sq.Insert("CSA_Backlinks").
-		Columns("ID", "PostID", "ElementMarkdownPath", "ElementLinkPart", "UserID", "ChannelID", "TeamID")
+		Columns("ID", "PostID", "ElementMarkdownPath", "ElementLinkPart")
 	for _, backlink := range backlinks {
 		uuid := util.GenerateUUID()
-		builder = builder.Values(uuid, postID, backlink.MarkdownText, backlink.MarkdownLink, userID, channelID, teamID)
+		builder = builder.Values(uuid, postID, backlink.MarkdownText, backlink.MarkdownLink)
 	}
 
 	if _, err := s.store.execBuilder(tx, builder); err != nil {
@@ -339,13 +339,33 @@ func (s *channelStore) AddBacklinks(postID string, userID string, channelID stri
 	return nil
 }
 
-func (s *channelStore) GetBacklinks(elementLinkPart string) ([]string, error) {
-	var postIds []string
-	if err := s.store.selectBuilder(s.store.db, &postIds, s.store.builder.
-		Select("PostID").
+func (s *channelStore) GetBacklinks(elementLinkPart string) ([]app.BacklinkEntity, error) {
+	var results []app.BacklinkEntity
+	if err := s.store.selectBuilder(s.store.db, &results, s.store.builder.
+		Select("ID", "PostID").
 		From("CSA_Backlinks").
 		Where(sq.Eq{"ElementLinkPart": elementLinkPart})); err != nil && err != sql.ErrNoRows {
 		return nil, errors.Wrapf(err, "failed to get backlinks for element with id '%s'", elementLinkPart)
 	}
-	return postIds, nil
+	return results, nil
+}
+
+func (s *channelStore) DeleteBacklink(id string) error {
+	tx, err := s.store.db.Beginx()
+	if err != nil {
+		return errors.Wrap(err, "could not begin transaction")
+	}
+	defer s.store.finalizeTransaction(tx)
+
+	if _, err := s.store.execBuilder(tx, s.store.builder.
+		Delete("").
+		From("CSA_Backlinks").
+		Where(sq.Eq{"ID": id})); err != nil {
+		return errors.Wrap(err, "could not delete backlink")
+	}
+	if err := tx.Commit(); err != nil {
+		return errors.Wrap(err, "could not commit transaction")
+	}
+
+	return nil
 }

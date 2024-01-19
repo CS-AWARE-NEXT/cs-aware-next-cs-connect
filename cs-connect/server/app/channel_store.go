@@ -22,7 +22,9 @@ type ChannelStore interface {
 
 	LinkChannelToOrganization(channelID, organizationID string) error
 
-	AddBacklinks(postID string, userID string, channelID string, teamID string, backlinks []BacklinkData) error
+	AddBacklinks(postID string, backlinks []BacklinkData) error
 
-	GetBacklinks(elementLinkPart string) ([]string, error)
+	GetBacklinks(elementLinkPart string) ([]BacklinkEntity, error)
+
+	DeleteBacklink(ID string) error
 }

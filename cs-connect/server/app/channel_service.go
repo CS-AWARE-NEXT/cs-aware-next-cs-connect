@@ -96,11 +96,6 @@ func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (
 
 // Checks a post's message for the presence of cs-connect markdown links. In such case, they're added as backlinks.
 func (s *ChannelService) AddBacklinkIfPresent(post *mattermost.Post) {
-	channel, getChannelErr := s.api.GetChannel(post.ChannelId)
-	if getChannelErr != nil {
-		s.api.LogError("failed to add backlinks", "post", post, "err (no channel found for post)", getChannelErr)
-		return
-	}
 	serverConfig := s.api.GetConfig()
 	siteURL := *serverConfig.ServiceSettings.SiteURL
 
@@ -134,14 +129,14 @@ func (s *ChannelService) AddBacklinkIfPresent(post *mattermost.Post) {
 		return
 	}
 
-	err := s.store.AddBacklinks(post.Id, post.UserId, post.ChannelId, channel.TeamId, backlinksToAdd)
+	err := s.store.AddBacklinks(post.Id, backlinksToAdd)
 	if err != nil {
 		s.api.LogError("failed to add backlinks", "backlinks", backlinksToAdd, "post", post, "err", err)
 	}
 }
 
 // Fetches the backlinks of an element identified by its full URL, sorted by most recent first
-func (s *ChannelService) GetBacklinks(elementURL string) (GetBacklinksResult, error) {
+func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBacklinksResult, error) {
 	s.api.LogInfo("Getting backlinks for url", "url", elementURL)
 	parsedURL, err := url.Parse(elementURL)
 	if err != nil {
@@ -156,31 +151,40 @@ func (s *ChannelService) GetBacklinks(elementURL string) (GetBacklinksResult, er
 		queryAndFragment = parsedURL.Path
 	}
 
-	postIds, err := s.store.GetBacklinks(queryAndFragment)
+	dbBacklinks, err := s.store.GetBacklinks(queryAndFragment)
 	if err != nil {
 		return GetBacklinksResult{}, err
 	}
 
 	backlinks := []Backlink{}
-	for _, postID := range postIds {
-		post, err := s.api.GetPost(postID)
+	for _, backlink := range dbBacklinks {
+		post, err := s.api.GetPost(backlink.PostID)
 		if err != nil {
-			s.api.LogWarn("failed to fetch post while fetching backlinks", "elementPath", elementURL, "postID", postID)
+			s.api.LogWarn("failed to fetch post while fetching backlinks", "elementPath", elementURL, "postID", backlink.PostID, "err", err)
+			delErr := s.store.DeleteBacklink(backlink.ID)
+			if delErr != nil {
+				s.api.LogWarn("failed to delete post while fetching backlinks", "elementPath", elementURL, "postID", backlink.PostID, "err", delErr)
+			}
+			continue
+		}
+		// Do not show backlinks from channels the user isn't in
+		_, membershipErr := s.api.GetChannelMember(post.ChannelId, userID)
+		if membershipErr != nil {
 			continue
 		}
 		user, err := s.api.GetUser(post.UserId)
 		if err != nil {
-			s.api.LogWarn("failed to fetch post author while fetching backlinks", "elementPath", elementURL, "postID", postID)
+			s.api.LogWarn("failed to fetch post author while fetching backlinks", "elementPath", elementURL, "postID", backlink.PostID, "err", err)
 			continue
 		}
 		channel, err := s.api.GetChannel(post.ChannelId)
 		if err != nil {
-			s.api.LogWarn("failed to fetch post channel while fetching backlinks", "elementPath", elementURL, "postID", postID)
+			s.api.LogWarn("failed to fetch post channel while fetching backlinks", "elementPath", elementURL, "postID", backlink.PostID, "err", err)
 			continue
 		}
 
 		backlinks = append(backlinks, Backlink{
-			ID:          postID,
+			ID:          backlink.PostID,
 			Message:     post.Message,
 			AuthorName:  user.GetDisplayName(mattermost.ShowNicknameFullName),
 			ChannelName: channel.DisplayName,

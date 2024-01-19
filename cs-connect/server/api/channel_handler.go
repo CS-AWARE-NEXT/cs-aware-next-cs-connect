@@ -81,7 +81,8 @@ func (h *ChannelHandler) addChannel(c *Context, w http.ResponseWriter, r *http.R
 
 func (h *ChannelHandler) getBacklinks(c *Context, w http.ResponseWriter, r *http.Request) {
 	elementURL := r.URL.Query().Get("elementUrl")
-	backlinks, err := h.channelService.GetBacklinks(elementURL)
+	userID := r.Header.Get("Mattermost-User-Id")
+	backlinks, err := h.channelService.GetBacklinks(elementURL, userID)
 	if err != nil {
 		if errors.Is(err, app.ErrNotFound) {
 			h.HandleErrorWithCode(w, c.logger, http.StatusNotFound, "channel not found", err)

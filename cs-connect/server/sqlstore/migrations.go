@@ -104,9 +104,6 @@ var migrations = []Migration{
 					PostID VARCHAR(26) NOT NULL,
 					ElementLinkPart VARCHAR(300) NOT NULL,
 					ElementMarkdownPath VARCHAR(300) NOT NULL,
-					UserID VARCHAR(26) NOT NULL,
-					TeamID VARCHAR(26) NOT NULL,
-					ChannelID VARCHAR(26) NOT NULL,
 					INDEX (ElementID),
 					INDEX (ElementPath)
 				)
@@ -119,10 +116,7 @@ var migrations = []Migration{
 					ID TEXT PRIMARY KEY,
 					PostID VARCHAR(26) NOT NULL,
 					ElementLinkPart VARCHAR(300) NOT NULL,
-					ElementMarkdownPath VARCHAR(300) NOT NULL,
-					UserID VARCHAR(26) NOT NULL,
-					TeamID VARCHAR(26) NOT NULL,
-					ChannelID VARCHAR(26) NOT NULL
+					ElementMarkdownPath VARCHAR(300) NOT NULL
 				);
 
 				CREATE INDEX CSA_Backlinks_Element_ID_idx ON CSA_Backlinks (ElementLinkPart ASC);

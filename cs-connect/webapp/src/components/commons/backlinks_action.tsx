@@ -27,13 +27,7 @@ import {Timestamp} from 'src/webapp_globals';
 import {teamNameSelector} from 'src/selectors';
 
 import {Backlink} from 'src/types/channels';
-
-import FormattedMarkdown from './formatted_markdown';
-
-/* type Props = {
-    post: Post;
-    className: string;
-}; */
+import MarkdownEdit from 'src/components/commons/markdown_edit';
 
 type Props = {
     href: string;
@@ -57,22 +51,25 @@ const BacklinkItem = ({backlink, team}: BacklinkItemProps) => {
                 >{'Jump'}</Button>}
             style={{width: '100%'}}
         >
-            <FormattedMarkdown
+            <MarkdownEdit
                 value={backlink.message}
+                placeholder={''}
+                noBorder={true}
+                opaqueText={true}
             />
             <StyledTimestamp value={new Date(backlink.createAt)}/>
         </Card>
     );
 };
 
-type Attrs = HTMLAttributes<HTMLElement>;
-
-const BacklinksAction: FC<Props & Attrs> = ({href}: Props) => {
+const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props) => {
     const teamId = useSelector(getCurrentTeamId);
     const team = useSelector(teamNameSelector(teamId));
     const [modal, contextHolder] = Modal.useModal();
 
     const showModal = async () => {
+        // Uncomment to avoid users being able to create infinite overlapping modals when checking a link's backlink from the backlink modal
+        // Modal.destroyAll();
         const backlinks = await getBacklinks({elementUrl: href});
 
         const matchList = (elements: Backlink[]) => (
@@ -143,6 +140,7 @@ const BacklinksIcon = styled.button<{clicked: boolean, iconWidth?: string, iconH
 
     border-radius: 4px;
     padding: 0;
+    margin-right: 5px;
     width: ${(props) => (props.iconWidth ? props.iconWidth : '1.5em')};
     height: ${(props) => (props.iconHeight ? props.iconHeight : '1.5em')};
 

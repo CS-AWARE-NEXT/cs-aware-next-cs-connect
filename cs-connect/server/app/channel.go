@@ -75,6 +75,7 @@ type BacklinkData struct {
 }
 
 type BacklinkEntity struct {
+	ID        string
 	PostID    string
 	ChannelID string
 }
