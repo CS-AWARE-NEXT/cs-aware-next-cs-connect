@@ -26,7 +26,8 @@ const PolicyWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    const data = usePolicyTemplateData(formatUrlWithId(url, sectionIdForUrl));
+    const sectionUrl = formatUrlWithId(url, sectionIdForUrl);
+    const data = usePolicyTemplateData(sectionUrl);
 
     return (
         <>
@@ -36,6 +37,7 @@ const PolicyWrapper = ({
                     name={name}
                     sectionId={sectionIdForUrl}
                     parentId={parentId}
+                    sectionUrl={sectionUrl}
                 />}
         </>
     );

@@ -1,4 +1,9 @@
-import React, {FC, useContext} from 'react';
+import React, {
+    FC,
+    useContext,
+    useEffect,
+    useState,
+} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
@@ -11,10 +16,10 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {buildQuery} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {PolicyTemplate} from 'src/types/policy';
-import {postSelector, teamNameSelector} from 'src/selectors';
-import TextBox from 'src/components/backstage/widgets/text_box/text_box';
-import {navigateToUrl} from 'src/browser_routing';
+import {allPostsSelector, teamNameSelector} from 'src/selectors';
 import MultiTextBox from 'src/components/backstage/widgets/text_box/multi_text_box';
+
+import {generatePolicySectionMessages} from './policy_section';
 
 const DESCRIPTION_ID_PREFIX = 'policy-';
 
@@ -23,17 +28,22 @@ type Props = {
     name: string;
     parentId: string;
     sectionId: string;
+    sectionUrl: string;
 };
 
-const navigateToPost = async (teamName: string, postId: string) => {
-    navigateToUrl(`/${teamName}/pl/${postId}`);
-};
+const purpose = 'What is this policy for?';
+const elements = 'What are the targets of this policy?';
+const need = 'Why is this policy important?';
+const rolesAndResponsibilities = 'Who (IT personnel, management, users) does what (+ maintenance of the policy).';
+const references = 'Which standards, laws, and other policies influence this policy.';
+const tags = 'Meaningful tags for the policy.';
 
-const News: FC<Props> = ({
+const Policy: FC<Props> = ({
     data,
     name = '',
     parentId,
     sectionId,
+    sectionUrl,
 }) => {
     const {formatMessage} = useIntl();
 
@@ -50,17 +60,69 @@ const News: FC<Props> = ({
         team = {...team, display_name: 'All Teams', description: 'No team is selected'};
     }
 
-    // TODO: Maybe here we need to perform an internal server to code to use Mattermost server SDK
-    const testIds = ['bap9x5zdftfspf1kphoizgagdr', 'pytxoazhzjrptf5gc8pdpwbuby'];
-    const tests = testIds ? testIds.map((p) => {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const post = useSelector(postSelector(p));
-        console.log({post}, post?.message);
-        return post?.message;
-    }) : ['Purpose is still being defined'];
+    const [template, setTemplate] = useState<PolicyTemplate>(data);
+    useEffect(() => {
+        setTemplate(data);
+    }, [data]);
 
-    const purpose = useSelector(postSelector(data.purpose));
-    const elements = useSelector(postSelector(data.elements));
+    const tooltipText = formatMessage({defaultMessage: 'Right-click to Open Menu'});
+
+    const allPosts = useSelector(allPostsSelector());
+
+    const purposeMessages = generatePolicySectionMessages({
+        template,
+        setTemplate,
+        sectionName: 'purpose',
+        allPosts,
+        team,
+        tooltipText,
+        removeEndpoint: sectionUrl,
+    });
+    const elementsMessages = generatePolicySectionMessages({
+        template,
+        setTemplate,
+        sectionName: 'elements',
+        allPosts,
+        team,
+        tooltipText,
+        removeEndpoint: sectionUrl,
+    });
+    const needMessages = generatePolicySectionMessages({
+        template,
+        setTemplate,
+        sectionName: 'need',
+        allPosts,
+        team,
+        tooltipText,
+        removeEndpoint: sectionUrl,
+    });
+    const rolesMessages = generatePolicySectionMessages({
+        template,
+        setTemplate,
+        sectionName: 'rolesAndResponsibilities',
+        allPosts,
+        team,
+        tooltipText,
+        removeEndpoint: sectionUrl,
+    });
+    const referencesMessages = generatePolicySectionMessages({
+        template,
+        setTemplate,
+        sectionName: 'references',
+        allPosts,
+        team,
+        tooltipText,
+        removeEndpoint: sectionUrl,
+    });
+    const tagsMessages = generatePolicySectionMessages({
+        template,
+        setTemplate,
+        sectionName: 'tags',
+        allPosts,
+        team,
+        tooltipText,
+        removeEndpoint: sectionUrl,
+    });
 
     return (
         <Container
@@ -77,29 +139,65 @@ const News: FC<Props> = ({
                 />
             </Header>
 
-            {tests &&
+            {purposeMessages &&
                 <MultiTextBox
                     idPrefix={DESCRIPTION_ID_PREFIX}
-                    name={'Tests'}
+                    name={formatMessage({defaultMessage: 'Purpose'})}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={tests}
+                    text={purposeMessages && purposeMessages.length > 0 ? purposeMessages :
+                        [{text: formatMessage({defaultMessage: purpose})}]}
                 />}
 
-            <TextBox
-                idPrefix={DESCRIPTION_ID_PREFIX}
-                name={'Purpose'}
-                sectionId={sectionId}
-                parentId={parentId}
-                text={purpose ? purpose.message : 'Purpose is still being defined'}
-            />
-            <TextBox
-                idPrefix={DESCRIPTION_ID_PREFIX}
-                name={'Elements'}
-                sectionId={sectionId}
-                parentId={parentId}
-                text={elements ? elements.message : 'Elements are still being defined'}
-            />
+            {elementsMessages &&
+                <MultiTextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
+                    name={formatMessage({defaultMessage: 'Elements'})}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                    text={elementsMessages && elementsMessages.length > 0 ? elementsMessages :
+                        [{text: formatMessage({defaultMessage: elements})}]}
+                />}
+
+            {needMessages &&
+                <MultiTextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
+                    name={formatMessage({defaultMessage: 'Need'})}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                    text={needMessages && needMessages.length > 0 ? needMessages :
+                        [{text: formatMessage({defaultMessage: need})}]}
+                />}
+
+            {rolesMessages &&
+                <MultiTextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
+                    name={formatMessage({defaultMessage: 'Roles & Responsibilities'})}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                    text={rolesMessages && rolesMessages.length > 0 ? rolesMessages :
+                        [{text: formatMessage({defaultMessage: rolesAndResponsibilities})}]}
+                />}
+
+            {referencesMessages &&
+                <MultiTextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
+                    name={formatMessage({defaultMessage: 'References'})}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                    text={referencesMessages && referencesMessages.length > 0 ? referencesMessages :
+                        [{text: formatMessage({defaultMessage: references})}]}
+                />}
+
+            {tagsMessages &&
+                <MultiTextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
+                    name={formatMessage({defaultMessage: 'Tags'})}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                    text={tagsMessages && tagsMessages.length > 0 ? tagsMessages :
+                        [{text: formatMessage({defaultMessage: tags})}]}
+                />}
         </Container>
     );
 };
@@ -111,4 +209,4 @@ const Container = styled.div`
     margin-top: 24px;
 `;
 
-export default News;
+export default Policy;
