@@ -4,9 +4,10 @@ import React, {
     useEffect,
     useState,
 } from 'react';
-import {FormattedMessage} from 'react-intl';
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
+import {Alert} from 'antd';
+import {useIntl} from 'react-intl';
 
 import {
     buildQuery,
@@ -31,6 +32,8 @@ type Props = {
 
 const RHSWidgets = (props: Props) => {
     const {hash: urlHash} = useLocation();
+    const {formatMessage} = useIntl();
+
     useScrollIntoView(urlHash);
 
     const [parentId, setParentId] = useState('');
@@ -60,6 +63,7 @@ const RHSWidgets = (props: Props) => {
                             parentId={parentId}
                             sectionId={sectionId}
                             sectionInfo={sectionInfo}
+                            section={section}
                         />
                     </IsRhsScrollingContext.Provider>
                 </IsEcosystemRhsContext.Provider>}
@@ -67,10 +71,16 @@ const RHSWidgets = (props: Props) => {
                 <RhsSectionsWidgetsContainer
                     headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
                     sectionInfo={sectionInfo}
+                    section={section}
                     url={fullUrl}
                     widgets={section?.widgets}
                 />}
-            {(!section || !sectionInfo) && <FormattedMessage defaultMessage='The channel is not related to any section.'/>}
+            {(!section || !sectionInfo) &&
+                <Alert
+                    message={formatMessage({defaultMessage: 'The channel is not related to any section.'})}
+                    type='info'
+                    style={{marginTop: '8px'}}
+                />}
         </Container>
     );
 };

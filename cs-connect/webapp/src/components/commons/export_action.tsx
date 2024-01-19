@@ -13,32 +13,32 @@ type Props = {
     modalContent: string;
     iconWidth?: string;
     iconHeight?: string;
-    onDelete: () => void;
+    onExport: () => void;
 };
 
 type Attrs = HTMLAttributes<HTMLElement>;
 
 // Might be worth merging with copylink since the two act in a very similar way
-const DeleteAction: FC<Props & Attrs> = ({
+const ExportAction: FC<Props & Attrs> = ({
     iconWidth,
     iconHeight,
     id,
     modalTitle,
     modalContent,
-    onDelete,
+    onExport,
     ...attrs
 }) => {
     const {formatMessage} = useIntl();
 
-    const deleteAction = async () => {
-        onDelete();
+    const exportAction = async () => {
+        onExport();
     };
 
     const showModal = () => {
         Modal.confirm({
             title: modalTitle,
             content: modalContent,
-            onOk: deleteAction,
+            onOk: exportAction,
             okText: formatMessage({defaultMessage: 'Yes'}),
             cancelText: formatMessage({defaultMessage: 'No'}),
             focusTriggerAfterClose: false,
@@ -55,11 +55,11 @@ const DeleteAction: FC<Props & Attrs> = ({
                 shouldUpdatePosition={true}
                 content={modalTitle}
             >
-                <AutoSizeDeleteIcon
+                <AutoSizeExportIcon
                     onClick={showModal}
                     clicked={false}
                     {...attrs}
-                    className={'icon-trash-can-outline ' + attrs.className}
+                    className={'fa fa-share-square-o ' + attrs.className}
                     iconWidth={iconWidth}
                     iconHeight={iconHeight}
                 />
@@ -68,7 +68,7 @@ const DeleteAction: FC<Props & Attrs> = ({
     );
 };
 
-const DeleteIcon = styled.button<{clicked: boolean, iconWidth?: string, iconHeight?: string}>`
+const ExportIcon = styled.button<{clicked: boolean, iconWidth?: string, iconHeight?: string}>`
     display: inline-block;
 
     border-radius: 4px;
@@ -99,8 +99,8 @@ const DeleteIcon = styled.button<{clicked: boolean, iconWidth?: string, iconHeig
     `}
 `;
 
-export const AutoSizeDeleteIcon = styled(DeleteIcon)`
+export const AutoSizeExportIcon = styled(ExportIcon)`
     font-size: inherit;
 `;
 
-export default styled(DeleteAction)``;
+export default styled(ExportAction)``;

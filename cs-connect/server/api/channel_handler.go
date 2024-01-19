@@ -10,13 +10,13 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/app"
 )
 
-// ChannelsHandler is the API handler.
+// ChannelHandler is the API handler.
 type ChannelHandler struct {
 	*ErrorHandler
 	channelService *app.ChannelService
 }
 
-// ChannelHandler returns a new channels api handler
+// NewChannelHandler returns a new channels api handler
 func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *ChannelHandler {
 	handler := &ChannelHandler{
 		ErrorHandler:   &ErrorHandler{},
@@ -26,6 +26,7 @@ func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *
 	channelsRouter := router.PathPrefix("/channels/{sectionId}").Subrouter()
 	channelsRouter.HandleFunc("", withContext(handler.getChannels)).Methods(http.MethodGet)
 	channelsRouter.HandleFunc("", withContext(handler.addChannel)).Methods(http.MethodPost)
+	channelsRouter.HandleFunc("/archive_channels", withContext(handler.archiveChannels)).Methods(http.MethodPost)
 
 	channelRouter := router.PathPrefix("/channel/{channelId}").Subrouter()
 	channelRouter.HandleFunc("", withContext(handler.getChannelByID)).Methods(http.MethodGet)
@@ -74,4 +75,17 @@ func (h *ChannelHandler) addChannel(c *Context, w http.ResponseWriter, r *http.R
 		return
 	}
 	ReturnJSON(w, result, http.StatusOK)
+}
+
+func (h *ChannelHandler) archiveChannels(c *Context, w http.ResponseWriter, r *http.Request) {
+	var params app.ArchiveChannelsParams
+	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to decode archive channels payload", err)
+		return
+	}
+	if err := h.channelService.ArchiveChannels(params); err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to handle archive channels", err)
+		return
+	}
+	ReturnJSON(w, "", http.StatusOK)
 }

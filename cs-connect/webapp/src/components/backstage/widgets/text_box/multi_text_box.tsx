@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
-import styled from 'styled-components';
 import {useIntl} from 'react-intl';
+import {MenuProps} from 'antd';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext} from 'src/components/rhs/rhs';
@@ -8,12 +8,19 @@ import MarkdownEdit from 'src/components/commons/markdown_edit';
 import {buildQuery, isReferencedByUrlHash, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
+import {VerticalSpacer} from 'src/components/backstage/grid';
 
-export type TextBoxStyle = {
-    height?: string;
-    marginTop?: string;
-    marginRight?: string;
-    width?: string;
+import {Container, TextBoxStyle} from './text_box';
+
+export type MultiText = {
+    text: string;
+    id?: string;
+
+    pointer?: boolean;
+    tooltipText?: string;
+    onClick?: () => void;
+    dropdownItems?: MenuProps['items'];
+    dropdownTrigger?: ('click' | 'hover' | 'contextMenu')[];
 };
 
 type Props = {
@@ -22,12 +29,12 @@ type Props = {
     parentId: string;
     sectionId: string;
     style?: TextBoxStyle;
-    text: string;
+    text: MultiText[];
     customId?: string;
     titleText?: string;
 };
 
-const TextBox = ({
+const MultiTextBox = ({
     idPrefix = '',
     name,
     parentId,
@@ -63,22 +70,24 @@ const TextBox = ({
                     title={name}
                 />
             </Header>
-            <MarkdownEdit
-                placeholder={placeholder}
-                value={text}
-                borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : undefined}
-            />
+            {text.map((txt, i) => (
+                <>
+                    <MarkdownEdit
+                        key={`text-${i}`}
+                        placeholder={placeholder}
+                        value={txt.text}
+                        borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : undefined}
+                        pointer={txt.pointer || false}
+                        tooltipText={txt.tooltipText}
+                        onClick={txt.onClick}
+                        dropdownItems={txt.dropdownItems}
+                        dropdownTrigger={txt.dropdownTrigger}
+                    />
+                    <VerticalSpacer size={8}/>
+                </>
+            ))}
         </Container>
     );
 };
 
-export const Container = styled.div<{style: TextBoxStyle}>`
-    width: ${(props) => (props.style.width ? props.style.width : '100%')};
-    height: ${(props) => (props.style.height ? props.style.height : 'auto')};
-    display: flex;
-    flex-direction: column;
-    margin-top: ${(props) => (props.style.marginTop ? props.style.marginTop : '24px')};
-    margin-top: ${(props) => (props.style.marginRight ? props.style.marginRight : '0')};
-`;
-
-export default TextBox;
+export default MultiTextBox;

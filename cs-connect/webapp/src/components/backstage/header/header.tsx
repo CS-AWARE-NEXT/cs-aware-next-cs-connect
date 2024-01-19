@@ -8,7 +8,8 @@ import {SemiBoldHeading} from 'src/styles/headings';
 import TextEdit from 'src/components/commons/text_edit';
 
 import DeleteAction from 'src/components/commons/delete_action';
-import EditAction from 'src/components/commons/edit_action';
+import EcosystemIssueEditAction from 'src/components/commons/ecosystem_issue_edit_action';
+import ExportAction from 'src/components/commons/export_action';
 
 import {Organization, SectionInfo} from 'src/types/organization';
 
@@ -21,12 +22,24 @@ type Props = {
     ecosystem: Organization;
     url?: string
     onDelete?: () => void
-    enableEdit?: boolean
+    onExport?: () => void
+    enableEcosystemEdit?: boolean
     sectionInfo?: SectionInfo
     setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
 };
 
-export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit = false, sectionInfo, setSectionInfo}: Props) => {
+export const NameHeader = ({
+    id,
+    name,
+    path,
+    ecosystem,
+    url,
+    onDelete,
+    onExport,
+    enableEcosystemEdit = false,
+    sectionInfo,
+    setSectionInfo,
+}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
@@ -61,19 +74,26 @@ export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit
                         tooltipMessage={formatMessage({defaultMessage: 'Copy link'})}
                     />
                     {(onDelete && url) &&
-                    <StyledDeleteAction
-                        id='delete-tooltip'
-                        modalTitle={formatMessage({defaultMessage: 'Delete issue'})}
-                        modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
-                        onDelete={onDelete}
-                    />}
-                    {enableEdit &&
-                    <StyledEditAction
-                        id='edit-tooltip'
-                        sectionInfo={sectionInfo}
-                        setSectionInfo={setSectionInfo}
-                        ecosystem={ecosystem}
-                    />}
+                        <StyledDeleteAction
+                            id='delete-tooltip'
+                            modalTitle={formatMessage({defaultMessage: 'Delete'})}
+                            modalContent={formatMessage({defaultMessage: 'Are you sure you want to delete? All data will be lost.'})}
+                            onDelete={onDelete}
+                        />}
+                    {enableEcosystemEdit &&
+                        <StyledEcosystemIssueEditAction
+                            id='edit-tooltip'
+                            sectionInfo={sectionInfo}
+                            setSectionInfo={setSectionInfo}
+                            ecosystem={ecosystem}
+                        />}
+                    {(onExport && url) &&
+                        <StyledExportAction
+                            id='export-tooltip'
+                            modalTitle={formatMessage({defaultMessage: 'Export'})}
+                            modalContent={formatMessage({defaultMessage: 'Are you sure you want to export?'})}
+                            onExport={onExport}
+                        />}
                 </>
             </TextEdit>
         </Container>
@@ -111,7 +131,17 @@ const StyledDeleteAction = styled(DeleteAction)`
     place-items: center;
 `;
 
-const StyledEditAction = styled(EditAction)`
+const StyledEcosystemIssueEditAction = styled(EcosystemIssueEditAction)`
+    border-radius: 4px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    display: grid;
+    place-items: center;
+`;
+
+const StyledExportAction = styled(ExportAction)`
     border-radius: 4px;
     font-size: 18px;
     width: 28px;

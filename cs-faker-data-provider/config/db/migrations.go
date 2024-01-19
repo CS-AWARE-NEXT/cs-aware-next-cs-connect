@@ -100,8 +100,80 @@ var migrations = []Migration{
 			if _, err := e.Exec(`
 				ALTER TABLE CSFDP_Issue ADD DeleteAt bigint DEFAULT 0;
 			`); err != nil {
-				return errors.Wrapf(err, "failed creating table CSFDP_Issue")
+				return errors.Wrapf(err, "failed updating table CSFDP_Issue")
 			}
+			return nil
+		},
+	},
+	{
+		fromVersion: semver.MustParse("0.3.0"),
+		toVersion:   semver.MustParse("0.4.0"),
+		migrationFunc: func(e sqlx.Ext, db *DB) error {
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy (
+					ID TEXT PRIMARY KEY,
+					Name TEXT NOT NULL,
+					Description TEXT NOT NULL,
+					OrganizationID TEXT NOT NULL
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy")
+			}
+
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy_Purpose (
+					Purpose TEXT PRIMARY KEY,
+					PolicyID TEXT NOT NULL REFERENCES CSFDP_Policy(ID) ON DELETE CASCADE
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Purpose")
+			}
+
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy_Element (
+					Element TEXT PRIMARY KEY,
+					PolicyID TEXT NOT NULL REFERENCES CSFDP_Policy(ID) ON DELETE CASCADE
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Element")
+			}
+
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy_Need (
+					Need TEXT PRIMARY KEY,
+					PolicyID TEXT NOT NULL REFERENCES CSFDP_Policy(ID) ON DELETE CASCADE
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Need")
+			}
+
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy_Role (
+					Role TEXT PRIMARY KEY,
+					PolicyID TEXT NOT NULL REFERENCES CSFDP_Policy(ID) ON DELETE CASCADE
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Role")
+			}
+
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy_Reference (
+					Reference TEXT PRIMARY KEY,
+					PolicyID TEXT NOT NULL REFERENCES CSFDP_Policy(ID) ON DELETE CASCADE
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Reference")
+			}
+
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Policy_Tag (
+					Tag TEXT PRIMARY KEY,
+					PolicyID TEXT NOT NULL REFERENCES CSFDP_Policy(ID) ON DELETE CASCADE
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Policy_Tag")
+			}
+
 			return nil
 		},
 	},

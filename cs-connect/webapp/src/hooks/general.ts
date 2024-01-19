@@ -34,7 +34,9 @@ import {
     fetchListData,
     fetchPaginatedTableData,
     fetchPlaybookData,
+    fetchPolicyTemplate,
     fetchPostData,
+    fetchPostsByIds,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
@@ -67,6 +69,8 @@ import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
+import {PolicyTemplate} from 'src/types/policy';
+import {GetPostsByIdsResult, PostsByIdsParams} from 'src/types/post';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -479,6 +483,50 @@ export const useExerciseData = (url: string): ExerciseAssignment => {
     }, [url]);
 
     return exerciseAssignment as ExerciseAssignment;
+};
+
+export const usePolicyTemplateData = (url: string): PolicyTemplate => {
+    const [policyTemplate, setPolicyTemplate] = useState<PolicyTemplate | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchPolicyTemplateAsync() {
+            const policyTemplateResult = await fetchPolicyTemplate(url);
+            if (!isCanceled) {
+                setPolicyTemplate(policyTemplateResult);
+            }
+        }
+
+        fetchPolicyTemplateAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+
+    return policyTemplate as PolicyTemplate;
+};
+
+export const usePostsByIds = (params: PostsByIdsParams): GetPostsByIdsResult => {
+    const [postsByIds, setPostsByIds] = useState<GetPostsByIdsResult | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchPostsByIdsAsync() {
+            const postsByIdsResult = await fetchPostsByIds(params);
+            if (!isCanceled) {
+                setPostsByIds(postsByIdsResult);
+            }
+        }
+
+        fetchPostsByIdsAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [params.postIds]);
+
+    return postsByIds as GetPostsByIdsResult;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {
