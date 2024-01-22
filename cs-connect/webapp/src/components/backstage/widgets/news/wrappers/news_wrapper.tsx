@@ -11,7 +11,7 @@ type Props = {
 };
 
 const NewsWrapper = ({
-    name = 'Exercise',
+    name = 'News',
     url = '',
 }: Props) => {
     const sectionContextOptions = useContext(SectionContext);
@@ -24,7 +24,7 @@ const NewsWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    const data = {}
+    const data = {};
 
     return (
         <>
