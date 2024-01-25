@@ -60,6 +60,12 @@ export interface Backlink {
     createAt: number,
 }
 
+export interface ChannelCount {
+    name: string,
+    count: number,
+}
+
 export interface GetBacklinksResult {
-    items: Backlink[];
+    items: Backlink[],
+    channelsCount: ChannelCount[]
 }

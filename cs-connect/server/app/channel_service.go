@@ -157,6 +157,7 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 	}
 
 	backlinks := []Backlink{}
+	channelsCountMap := make(map[string]int)
 	for _, backlink := range dbBacklinks {
 		post, err := s.api.GetPost(backlink.PostID)
 		if err != nil {
@@ -190,6 +191,7 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 			ChannelName: channel.DisplayName,
 			CreateAt:    post.CreateAt,
 		})
+		channelsCountMap[channel.Name]++
 	}
 
 	// Most recent first
@@ -197,5 +199,15 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 		return backlinks[i].CreateAt > backlinks[j].CreateAt
 	})
 
-	return GetBacklinksResult{Items: backlinks}, nil
+	channelsCount := []ChannelsCount{}
+	for k, v := range channelsCountMap {
+		channelsCount = append(channelsCount, ChannelsCount{k, v})
+	}
+
+	// Order by count desc
+	sort.Slice(channelsCount, func(i, j int) bool {
+		return channelsCount[i].Count > channelsCount[j].Count
+	})
+
+	return GetBacklinksResult{Items: backlinks, ChannelCount: channelsCount}, nil
 }

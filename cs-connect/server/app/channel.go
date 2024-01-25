@@ -66,7 +66,13 @@ type Backlink struct {
 }
 
 type GetBacklinksResult struct {
-	Items []Backlink `json:"items"`
+	Items        []Backlink      `json:"items"`
+	ChannelCount []ChannelsCount `json:"channelsCount"`
+}
+
+type ChannelsCount struct {
+	Name  string `json:"name"`
+	Count int    `json:"count"`
 }
 
 type BacklinkData struct {

@@ -7,6 +7,8 @@ import {
     List,
     Modal,
     Space,
+    Tabs,
+    TabsProps,
 } from 'antd';
 
 import {useSelector} from 'react-redux';
@@ -21,12 +23,12 @@ import Tooltip from 'src/components/commons/tooltip';
 import {OVERLAY_DELAY} from 'src/constants';
 import {getBacklinks} from 'src/clients';
 
-import {navigateToPost} from 'src/browser_routing';
+import {navigateToChannel, navigateToPost} from 'src/browser_routing';
 import {Timestamp} from 'src/webapp_globals';
 
 import {teamNameSelector} from 'src/selectors';
 
-import {Backlink} from 'src/types/channels';
+import {Backlink, ChannelCount} from 'src/types/channels';
 import MarkdownEdit from 'src/components/commons/markdown_edit';
 
 type Props = {
@@ -72,7 +74,7 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
         // Modal.destroyAll();
         const backlinks = await getBacklinks({elementUrl: href});
 
-        const matchList = (elements: Backlink[]) => (
+        const matchList = (
             <Space
                 direction='vertical'
                 size={16}
@@ -80,7 +82,7 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
             >
                 <List
                     pagination={{position: 'bottom', align: 'start', defaultPageSize: 3, showSizeChanger: true, pageSizeOptions: [3, 5, 10]}}
-                    dataSource={elements}
+                    dataSource={backlinks.items}
                     renderItem={(item: Backlink) => (
                         <Space
                             direction='vertical'
@@ -98,7 +100,57 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
             </Space>
         );
 
-        const content = matchList(backlinks.items);
+        const channelsCountList = (
+            <Space
+                direction='vertical'
+                size={16}
+                style={{width: '100%'}}
+            >
+                <List
+                    pagination={{position: 'bottom', align: 'start', defaultPageSize: 3, showSizeChanger: true, pageSizeOptions: [3, 5, 10]}}
+                    dataSource={backlinks.channelsCount}
+                    renderItem={(item: ChannelCount) => (
+
+                        <List.Item
+                            extra={
+                                <Button
+                                    type={'link'}
+                                    onClick={() => {
+                                        navigateToChannel(team.name, item.name);
+                                    }}
+                                >{'Jump'}</Button>}
+                        >
+                            <List.Item.Meta
+                                title={
+                                    <b>{item.name}</b>
+                                }
+                                description={`${item.count} ${item.count > 1 ? 'mentions' : 'mention'} to the hyperlink`}
+                            />
+                        </List.Item>
+
+                    )}
+                />
+            </Space>
+        );
+
+        const items: TabsProps['items'] = [
+            {
+                key: 'all',
+                label: 'All backlinks',
+                children: matchList,
+            },
+            {
+                key: 'Channels',
+                label: 'Channels',
+                children: channelsCountList,
+            },
+        ];
+        const content = (
+            <Tabs
+                defaultActiveKey='all'
+                items={items}
+            />
+        );
 
         modal.info({
             title: 'Backlinks',
