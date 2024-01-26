@@ -109,9 +109,12 @@ const LHSView = () => {
         setIsPasswordInvalid(false);
     };
 
-    if (userProps && userProps.orgId !== '' && selectedObject !== defaultSelectObject) {
+    if (userProps && userProps.orgId && selectedObject !== defaultSelectObject) {
         return <StyledContainer>{selectedObject.label}</StyledContainer>;
     }
+
+    const filterOption = (input: string, option?: any) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     return (
         <>
@@ -177,9 +180,10 @@ const LHSView = () => {
                 style={{width: '100%'}}
                 placeholder={formatMessage({defaultMessage: 'Search or select'})}
                 optionFilterProp='children'
+                filterOption={filterOption}
 
                 options={options}
-                onChange={(value: any) => setSelectedObject({value, label: value})}
+                onChange={(value: any, option: any) => setSelectedObject({value, label: option.label})}
             />
         </>
     );
