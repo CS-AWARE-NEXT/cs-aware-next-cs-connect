@@ -86,7 +86,7 @@ func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (
 	return addChannelResult, nil
 }
 
-func (s *ChannelService) ExportChannel(channelID string) (*STIXChannel, error) {
+func (s *ChannelService) ExportChannel(channelID string, params ExportChannelParams) (*STIXChannel, error) {
 	s.api.LogInfo("Exporting channel", "channelID", channelID)
 	channel, err := s.api.GetChannel(channelID)
 	if err != nil {
@@ -130,5 +130,5 @@ func (s *ChannelService) ExportChannel(channelID string) (*STIXChannel, error) {
 		page++
 	}
 
-	return ToStixChannel(channel, STIXPosts), nil
+	return ToStixChannel(channel, STIXPosts, params.ReferenceIds), nil
 }

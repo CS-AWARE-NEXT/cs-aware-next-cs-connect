@@ -12,6 +12,8 @@ import {ToastProvider} from 'src/components/backstage/toast_banner';
 import {useChannelById} from 'src/hooks';
 import {notFoundWidgetChannel} from 'src/types/channels';
 
+import {Exporter} from 'src/components/commons/export';
+
 import RHSWidgets from './rhs_widgets';
 
 type SectionContextOptions = {
@@ -117,6 +119,10 @@ const RHSView = () => {
                     <SectionContext.Provider value={sectionContextOptions}>
                         <ToastProvider>
                             <RHSWidgets
+                                parentId={sectionContextOptions.parentId}
+                                sectionId={sectionContextOptions.sectionId}
+                            />
+                            <Exporter
                                 parentId={sectionContextOptions.parentId}
                                 sectionId={sectionContextOptions.sectionId}
                             />

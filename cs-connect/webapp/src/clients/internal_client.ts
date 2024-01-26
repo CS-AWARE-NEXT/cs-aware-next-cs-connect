@@ -128,9 +128,12 @@ export const archiveIssueChannels = async (params: ArchiveIssueChannelsParams): 
     );
 };
 
-export const exportChannel = async (channelId: string, format: string): Promise<Blob> => {
-    const queryParams = qs.stringify({format}, {addQueryPrefix: true, indices: false});
-    const {data} = await doFetchWithBlobResponse(`${apiUrl}/channel/${channelId}/export${queryParams}`, {method: 'get'});
+export const exportChannel = async (channelId: string, format: string, references: string[]): Promise<Blob> => {
+    const body = JSON.stringify({
+        format,
+        references,
+    });
+    const {data} = await doFetchWithBlobResponse(`${apiUrl}/channel/${channelId}/export`, {method: 'POST', body});
     return data;
 };
 

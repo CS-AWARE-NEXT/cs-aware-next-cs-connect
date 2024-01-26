@@ -56,3 +56,8 @@ type AddChannelResult struct {
 	ParentID  string `json:"parentId"`
 	SectionID string `json:"sectionId"`
 }
+
+type ExportChannelParams struct {
+	Format       string   `json:"format"`
+	ReferenceIds []string `json:"references"`
+}

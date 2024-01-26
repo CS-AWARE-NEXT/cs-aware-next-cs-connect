@@ -4,8 +4,6 @@ import React from 'react';
 import {Store} from 'redux';
 import {render} from 'react-dom';
 
-import {getChannel} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/channels';
-
 import {
     DEFAULT_PATH,
     DOCUMENTATION_PATH,
@@ -25,7 +23,9 @@ import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} fro
 import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
 import LHSView from './components/lhs/lhs';
-import {ExportButton, exportAction} from './components/commons/export';
+import {ExportButton} from './components/commons/export';
+import {exportAction} from './actions';
+import PluginReducers from './plugin_reducers';
 
 type WindowObject = {
     location: {
@@ -124,7 +124,7 @@ export default class Plugin {
 
         registry.registerChannelHeaderMenuAction(
             <ExportButton/>,
-            (channelId: string) => exportAction(getChannel(store.getState(), channelId))
+            (channelId: string) => store.dispatch(exportAction(channelId))
         );
 
         registry.registerChannelHeaderButtonAction(withPlatformOperations(HiddenIcon), () => null, '', '');
@@ -134,6 +134,7 @@ export default class Plugin {
         registry.registerMessageWillBeUpdatedHook(messageWillBeUpdated);
 
         registry.registerLeftSidebarHeaderComponent(LHSView);
+        registry.registerReducer(PluginReducers);
 
         // registry.registerMessageWillFormatHook(messageWillFormat);
     }
