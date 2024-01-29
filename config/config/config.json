@@ -24,8 +24,8 @@
         "EnableIncomingWebhooks": true,
         "EnableOutgoingWebhooks": true,
         "EnableCommands": true,
-        "EnablePostUsernameOverride": true,
-        "EnablePostIconOverride": true,
+        "EnablePostUsernameOverride": false,
+        "EnablePostIconOverride": false,
         "GoogleDeveloperKey": "",
         "EnableLinkPreviews": true,
         "EnablePermalinkPreviews": true,
@@ -109,7 +109,7 @@
         "AllowSyncedDrafts": true
     },
     "TeamSettings": {
-        "SiteName": "CS-CONNECT",
+        "SiteName": "Mattermost",
         "MaxUsersPerTeam": 50,
         "EnableJoinLeaveMessageByDefault": true,
         "EnableUserCreation": true,
