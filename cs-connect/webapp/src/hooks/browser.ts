@@ -1,4 +1,9 @@
-import {RefObject, useEffect, useState} from 'react';
+import {
+    RefObject,
+    useEffect,
+    useReducer,
+    useState,
+} from 'react';
 import {useSelector} from 'react-redux';
 import {useLocation} from 'react-router-dom';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
@@ -42,6 +47,7 @@ type ScrollIntoViewPositions = {
 
 export const useScrollIntoView = (hash: string, positions?: ScrollIntoViewPositions) => {
     useCleanUrlHash();
+    const DOMReady = useDOMReadyById(hash);
 
     // When first loading the page, the element with the ID corresponding to the URL
     // hash is not mounted, so the browser fails to automatically scroll to such section.
@@ -49,7 +55,7 @@ export const useScrollIntoView = (hash: string, positions?: ScrollIntoViewPositi
     useEffect(() => {
         const options = buildOptions(positions);
         const previousHash = localStorage.getItem('previousHash');
-        if (hash !== '' || previousHash) {
+        if (DOMReady && (hash !== '' || previousHash)) {
             setTimeout(() => {
                 let urlHash = hash;
                 if (urlHash === '' && previousHash) {
@@ -60,7 +66,7 @@ export const useScrollIntoView = (hash: string, positions?: ScrollIntoViewPositi
                 window.location.hash = '';
             }, 300);
         }
-    }, [hash]);
+    }, [hash, DOMReady]);
 
     useCleanUrlHashOnChannelChange();
 };
@@ -111,17 +117,35 @@ export const useOnScreen = (ref: RefObject<HTMLDivElement | null>, options?: Int
     return isIntersecting;
 };
 
+// How many attempts will we do to check if the DOM has been loaded?
+const MAX_PATIENCE = 1000;
+
+// How much time will we wait between each attempt?
+const DOM_CHECK_INTERVAL_MS = 500;
+
 /**
  * Boilerplate to add a state signalling when a specific DOM node on the Mattermost side of the webapp is ready.
  *
- * The implementation is currently based on a setTimeout, which is the same method used inside the Mattermost source code: https://github.com/mattermost/mattermost/blob/dd1e5bc9d091fef3cf4e9236a3ec652aec49bd10/webapp/channels/src/components/quick_switch_modal/quick_switch_modal.tsx#L109
  * @param id The ID attribute of the DOM element you want to be ready.
  * @returns A state variable that can be used to execute code when the DOM node is ready.
  */
 export const useDOMReadyById = (id: string): boolean => {
     const [DOMReady, setDOMReady] = useState(false);
-    setTimeout(() => {
-        setDOMReady(document.getElementById(id) !== null);
-    });
+
+    // Apparently this is the best way to force an update of the component: https://legacy.reactjs.org/docs/hooks-faq.html#is-there-something-like-forceupdate
+    const [patience, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    if (!DOMReady && id) {
+        if (document.getElementById(id.replace('#', '')) === null) {
+            setTimeout(() => {
+                if (!DOMReady && id && patience < MAX_PATIENCE) {
+                    forceUpdate();
+                }
+            }, DOM_CHECK_INTERVAL_MS);
+        } else {
+            setDOMReady(true);
+        }
+    }
+
     return DOMReady;
 };
