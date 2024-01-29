@@ -77,6 +77,12 @@ func (pc *PolicyController) GetPolicyTemplate(c *fiber.Ctx) error {
 	return pc.GetPolicy(c)
 }
 
+func (pc *PolicyController) GetTenMostCommonPolicies(c *fiber.Ctx) error {
+	return c.JSON(model.ListData{
+		Items: tenMostCommonPolicies,
+	})
+}
+
 func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 	var policy model.Policy
 	err := json.Unmarshal(c.Body(), &policy)
@@ -94,6 +100,7 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 				Name:           policy.Name,
 				Description:    policy.Description,
 				OrganizationId: policy.OrganizationId,
+				Exported:       false,
 			},
 		})
 		policyID = policy.ID
@@ -108,6 +115,7 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 				Name:           policy.Name,
 				Description:    policy.Description,
 				OrganizationId: policy.OrganizationId,
+				Exported:       policy.Exported,
 			},
 		})
 		policyID = newID
@@ -234,6 +242,10 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 			}
 		}
 		policyTemplate.Tags = append(policyTemplate.Tags, policyTemplateField.Value)
+	case "exported":
+		if !policyTemplate.Exported {
+			policyTemplate.Exported = true
+		}
 	default:
 		return c.JSON(fiber.Map{
 			"error": "Not a valid policy template field provided",
@@ -254,6 +266,49 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		"description":    policyTemplate.Description,
 		"organizationId": policyTemplate.OrganizationId,
 	})
+}
+
+var tenMostCommonPolicies = []model.ListItem{
+	{
+		ID:   "93a8af1d-8831-4197-89c0-6d9c9cea8063",
+		Text: `Malware — or malicious software — is any program or code that is created with the intent to do harm to a computer, network or server. [Read more](https://www.crowdstrike.com/cybersecurity-101/malware/).`,
+	},
+	{
+		ID:   "7c608e85-2595-47f8-9395-97e55aa586b2",
+		Text: `A Denial-of-Service (DoS) attack is a malicious, targeted attack that floods a network with false requests in order to disrupt business operations. [Read more](https://www.crowdstrike.com/cybersecurity-101/denial-of-service-dos-attacks/).`,
+	},
+	{
+		ID:   "fe3ab78a-66d0-4079-932a-db0577ce2284",
+		Text: `Phishing is a type of cyberattack that uses email, SMS, phone, social media, and social engineering techniques to entice a victim to share sensitive information or to download a malicious file that will install viruses on their computer or phone. [Read more](https://www.crowdstrike.com/cybersecurity-101/phishing/).`,
+	},
+	{
+		ID:   "aef58afe-d5ae-49de-a3fd-fe2c14ac9c48",
+		Text: `Spoofing is a technique through which a cybercriminal disguises themselves as a known or trusted source to be able to engage with the target and access their systems or devices with the ultimate goal of stealing information, extorting money or installing malware or other harmful software on the device. [Read more](https://www.crowdstrike.com/cybersecurity-101/spoofing-attacks/).`,
+	},
+	{
+		ID:   "458b4ac2-8347-439d-9174-583a5a501d55",
+		Text: `In identity-based attacks valid user’s credentials have been compromised and an adversary is masquerading as that user. Findings show that 80% of all breaches use compromised identities and can take up to 250 days to identify. [Read more](https://www.crowdstrike.com/cybersecurity-101/identity-security/identity-based-attacks/).`,
+	},
+	{
+		ID:   "11815b28-1396-4dfd-b71e-15248653111f",
+		Text: `Code injection attacks consist of an attacker injecting malicious code into a vulnerable computer or network to change its course of action. [Read more](https://www.crowdstrike.com/cybersecurity-101/malicious-code/).`,
+	},
+	{
+		ID:   "c58dc14f-0b22-40ec-bc6c-5829fbeb0ca0",
+		Text: `A supply chain attack is a type of cyberattack that targets a trusted third-party vendor who offers services or software vital to the supply chain. [Read more](https://www.crowdstrike.com/cybersecurity-101/malicious-code/).`,
+	},
+	{
+		ID:   "508f3dd8-6995-4a0b-be90-d5bc2ac26333",
+		Text: `Insider threats are internal actors such as current or former employees that pose danger to an organization because they have direct access to the company network, sensitive data, and intellectual property (IP), as well as knowledge of business processes, company policies or other information that would help carry out such an attack. [Read more](https://www.crowdstrike.com/cybersecurity-101/insider-threats/).`,
+	},
+	{
+		ID:   "bdded11e-395b-46a0-be31-4d3ac72505ef",
+		Text: "DNS Tunneling is a type of cyberattack that leverages domain name system (DNS) queries and responses to bypass traditional security measures and transmit data and code within the network.",
+	},
+	{
+		ID:   "bf400185-76df-4003-973e-124436d19cf3",
+		Text: `An IoT attack is any cyberattack that targets an Internet of Things (IoT) device or network. [Read more](https://www.crowdstrike.com/cybersecurity-101/internet-of-things-iot-security/).`,
+	},
 }
 
 // var policiesMap = map[string][]model.Policy{
