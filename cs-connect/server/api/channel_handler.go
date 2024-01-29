@@ -29,6 +29,7 @@ func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *
 
 	channelRouter := router.PathPrefix("/channel/{channelId}").Subrouter()
 	channelRouter.HandleFunc("", withContext(handler.getChannelByID)).Methods(http.MethodGet)
+	channelRouter.HandleFunc("/export", withContext(handler.exportChannel)).Methods(http.MethodPost)
 
 	return handler
 }
@@ -74,4 +75,32 @@ func (h *ChannelHandler) addChannel(c *Context, w http.ResponseWriter, r *http.R
 		return
 	}
 	ReturnJSON(w, result, http.StatusOK)
+}
+
+func (h *ChannelHandler) exportChannel(c *Context, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	channelID := vars["channelId"]
+	var params app.ExportChannelParams
+	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+		h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "unable to decode export channel data", err)
+		return
+	}
+	stixChannel, err := h.channelService.ExportChannel(channelID, params)
+	if err != nil {
+		if errors.Is(err, app.ErrNotFound) {
+			h.HandleErrorWithCode(w, c.logger, http.StatusNotFound, "channel not found", err)
+		} else {
+			h.HandleError(w, c.logger, err)
+		}
+		return
+	}
+
+	var exporter app.Exporter
+	if params.Format == "json" {
+		exporter = &app.JSON{}
+		exporter.Export(w, stixChannel)
+		return
+	}
+
+	h.HandleErrorWithCode(w, c.logger, http.StatusBadRequest, "missing format", nil)
 }
