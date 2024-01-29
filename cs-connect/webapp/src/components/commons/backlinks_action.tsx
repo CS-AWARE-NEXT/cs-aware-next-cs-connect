@@ -43,7 +43,13 @@ type BacklinkItemProps = {
 const BacklinkItem = ({backlink, team}: BacklinkItemProps) => {
     return (
         <Card
-            title={`${backlink.authorName} | ${backlink.channelName}`}
+            title={
+                <>
+                    {backlink.authorName}
+                    <span style={{fontWeight: '400'}}>{' in '}</span>
+                    {backlink.channelName}
+                </>
+            }
             extra={
                 <Button
                     type={'link'}
