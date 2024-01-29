@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
@@ -18,8 +18,19 @@ import {OrganizationIdContext} from 'src/components/backstage/organizations/orga
 import {navigateToBackstageOrganization} from 'src/browser_routing';
 import {formatName} from 'src/helpers';
 import {useToaster} from 'src/components/backstage/toast_banner';
+import {updatePolicyTemplateFieldAction} from 'src/actions';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
+
+type Refresh = {
+    refresh: boolean;
+    forceRefresh: (() => void) | null;
+};
+
+export const RefreshContext = createContext<Refresh>({
+    refresh: false,
+    forceRefresh: null,
+});
 
 const SectionDetails = () => {
     const {url, path, params: {sectionId}} = useRouteMatch<{sectionId: string}>();
@@ -27,8 +38,13 @@ const SectionDetails = () => {
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const parentIdParam = queryParams.parentId as string;
 
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const forceRefresh = (): void => {
+        setRefresh((prev) => !prev);
+    };
+
     const section = useSection(parentIdParam);
-    const sectionInfo = useSectionInfo(sectionId, section.url);
+    const sectionInfo = useSectionInfo(sectionId, section.url, refresh);
     const isEcosystem = useContext(IsEcosystemContext);
     const organizationId = useContext(OrganizationIdContext);
 
@@ -59,27 +75,37 @@ const SectionDetails = () => {
     const onExport = async () => {
         if (sectionInfo && section) {
             console.log('Exporting section', sectionInfo.id, section.url);
+            updatePolicyTemplateFieldAction({
+                policyId: sectionInfo.id,
+                field: 'exported',
+                value: 'true',
+            }, true);
+            forceRefresh();
             addToast({content: 'Work in Progress!'});
         }
     };
 
     return (
         isEcosystem ?
-            <EcosystemSectionsWidgetsContainer
-                section={section}
-                sectionInfo={sectionInfo}
-            /> :
-            <SectionsWidgetsContainer
-                headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
-                sectionInfo={sectionInfo}
-                sectionPath={path}
-                sections={section.sections}
-                url={url}
-                widgets={section.widgets}
-                actionProps={enableActions ? {url: section.url} : undefined}
-                onDelete={enableActions ? onDelete : undefined}
-                onExport={enableActions ? onExport : undefined}
-            />
+            <RefreshContext.Provider value={{refresh, forceRefresh}}>
+                <EcosystemSectionsWidgetsContainer
+                    section={section}
+                    sectionInfo={sectionInfo}
+                />
+            </RefreshContext.Provider> :
+            <RefreshContext.Provider value={{refresh, forceRefresh}}>
+                <SectionsWidgetsContainer
+                    headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
+                    sectionInfo={sectionInfo}
+                    sectionPath={path}
+                    sections={section.sections}
+                    url={url}
+                    widgets={section.widgets}
+                    actionProps={enableActions ? {url: section.url} : undefined}
+                    onDelete={enableActions ? onDelete : undefined}
+                    onExport={enableActions ? onExport : undefined}
+                />
+            </RefreshContext.Provider>
     );
 };
 
