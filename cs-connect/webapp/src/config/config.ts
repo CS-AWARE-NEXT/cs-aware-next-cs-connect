@@ -2,6 +2,7 @@ import {
     EnvironmentConfig,
     Organization,
     PlatformConfig,
+    Section,
     ShowOptionsConfig,
 } from 'src/types/organization';
 
@@ -72,6 +73,13 @@ export const getOrganizationBySectionName = (name: string): Organization => {
 
 export const getOrganizationBySectionId = (id: string): Organization => {
     return getOrganizations().filter((o) => o.sections.some((s) => s.id === id))[0];
+};
+
+export const getSectionById = (id: string): Section => {
+    return getOrganizations().
+        map((o) => o.sections).
+        flat().
+        filter((s: Section) => s.id === id)[0];
 };
 
 export const getStartSymbol = (): string => {

@@ -57,7 +57,13 @@ type AddChannelResult struct {
 	SectionID string `json:"sectionId"`
 }
 
+type ExportReference struct {
+	SourceName  string   `json:"source_name"`
+	ExternalIds []string `json:"external_ids"`
+	URLs        []string `json:"urls"`
+}
+
 type ExportChannelParams struct {
-	Format       string   `json:"format"`
-	ReferenceIds []string `json:"references"`
+	Format     string            `json:"format"`
+	References []ExportReference `json:"references"`
 }

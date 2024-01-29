@@ -130,5 +130,5 @@ func (s *ChannelService) ExportChannel(channelID string, params ExportChannelPar
 		page++
 	}
 
-	return ToStixChannel(channel, STIXPosts, params.ReferenceIds), nil
+	return ToStixChannel(channel, STIXPosts, params.References), nil
 }

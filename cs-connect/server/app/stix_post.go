@@ -14,6 +14,7 @@ type STIXPost struct {
 	Modified           int64       `json:"modified"`
 	Authors            []string    `json:"authors"`
 	Opinion            string      `json:"opinion"`
+	Labels             []string    `json:"labels"`
 	ExternalReferences []string    `json:"external_references"` // Used for file attachments
 	ObjectRefs         []*STIXPost `json:"object_refs"`
 }
@@ -59,7 +60,10 @@ func ToStixPost(api plugin.API, post *mattermost.Post, withThreadPosts bool, use
 		userName = user.GetDisplayName(mattermost.ShowNicknameFullName)
 	}
 
-	api.LogInfo("stixPost returning", "user", user)
+	labels := []string{}
+	if post.IsPinned {
+		labels = append(labels, "pinned")
+	}
 
 	return &STIXPost{
 		ID:                 post.Id,
@@ -69,6 +73,7 @@ func ToStixPost(api plugin.API, post *mattermost.Post, withThreadPosts bool, use
 		Modified:           post.EditAt,
 		Authors:            []string{userName},
 		Opinion:            post.Message,
+		Labels:             labels,
 		ExternalReferences: fileLinks,
 		ObjectRefs:         stixThreadPosts,
 	}

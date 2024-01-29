@@ -24,6 +24,7 @@ import {
     UserAddedParams,
 } from 'src/types/events';
 import {UserResult} from 'src/types/users';
+import {ExportReference} from 'src/components/commons/export';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
 
@@ -128,7 +129,7 @@ export const archiveIssueChannels = async (params: ArchiveIssueChannelsParams): 
     );
 };
 
-export const exportChannel = async (channelId: string, format: string, references: string[]): Promise<Blob> => {
+export const exportChannel = async (channelId: string, format: string, references: ExportReference[]): Promise<Blob> => {
     const body = JSON.stringify({
         format,
         references,
