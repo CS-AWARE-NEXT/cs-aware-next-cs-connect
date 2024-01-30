@@ -4,11 +4,12 @@ import (
 	"encoding/gob"
 	"fmt"
 	"io"
-	"log"
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config/db"
@@ -52,6 +53,10 @@ func main() {
 	}
 	app := fiber.New()
 	app.Use(cors.New())
+	app.Use(logger.New(logger.Config{
+		Output: mw,
+	}))
+
 	route.UseRoutes(app, config.NewContext(repositoriesMap))
 	config.Shutdown(app)
 

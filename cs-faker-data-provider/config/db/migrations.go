@@ -114,7 +114,8 @@ var migrations = []Migration{
 					ID TEXT PRIMARY KEY,
 					Name TEXT NOT NULL,
 					Description TEXT NOT NULL,
-					OrganizationID TEXT NOT NULL
+					OrganizationID TEXT NOT NULL,
+					Exported BOOLEAN NOT NULL DEFAULT FALSE
 				);
 			`); err != nil {
 				return errors.Wrapf(err, "failed creating table CSFDP_Policy")

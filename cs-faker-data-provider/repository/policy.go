@@ -184,6 +184,7 @@ func (r *PolicyRepository) SavePolicy(policy model.PolicyTemplate) (model.Policy
 			"Name":           policy.Name,
 			"Description":    policy.Description,
 			"OrganizationID": policy.OrganizationId,
+			"Exported":       policy.Exported,
 		})); err != nil {
 		return model.PolicyTemplate{}, errors.Wrap(err, "could not create the new issue")
 	}
