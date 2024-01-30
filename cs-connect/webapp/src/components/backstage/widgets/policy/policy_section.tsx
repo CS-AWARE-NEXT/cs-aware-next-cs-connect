@@ -51,7 +51,7 @@ export const PolicyRemove: FC<RemoveProps> = ({
 
     const remove = async () => {
         let section = template[sectionName];
-        section = section.filter((id) => id !== post.id);
+        section = (section as string[]).filter((id) => id !== post.id);
         template[sectionName] = section;
         await saveSectionInfo(template, removeEndpoint);
         setTemplate({...template});
@@ -88,7 +88,7 @@ export const generatePolicySectionMessages = (options: PolicySectionOptions): Mu
 
     const pointer = true;
 
-    const messages: MultiText[] = template && template[sectionName] ? template[sectionName].
+    const messages: MultiText[] = template && template[sectionName] ? (template[sectionName] as string[]).
         map((section) => {
             const post = allPosts[section];
             return post ? {
