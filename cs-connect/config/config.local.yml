@@ -54,12 +54,15 @@ organizations:
         internal: true
         url: http://localhost:3000/cs-data-provider/organizations/8/policies
         widgets:
-          - name: System
-            type: graph
-            url: http://localhost:3000/cs-data-provider/organizations/8/incidents/:id/graph
           - name: Components
             type: policy
             url: http://localhost:3000/cs-data-provider/organizations/8/policies/:id/template
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/8/incidents/:id/graph
+          - name: Top 10 Most Common Policies
+            type: list
+            url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
   - name: Deyal
     id: "7"
@@ -101,12 +104,15 @@ organizations:
         internal: true
         url: http://localhost:3000/cs-data-provider/organizations/7/policies
         widgets:
-          - name: System
-            type: graph
-            url: http://localhost:3000/cs-data-provider/organizations/7/incidents/:id/graph
           - name: Components
             type: policy
             url: http://localhost:3000/cs-data-provider/organizations/7/policies/:id/template
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/7/incidents/:id/graph
+          - name: Top 10 Most Common Policies
+            type: list
+            url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
   - name: Larissa
     id: "6"
@@ -148,12 +154,15 @@ organizations:
         internal: true
         url: http://localhost:3000/cs-data-provider/organizations/6/policies
         widgets:
-          - name: System
-            type: graph
-            url: http://localhost:3000/cs-data-provider/organizations/6/incidents/:id/graph
           - name: Components
             type: policy
             url: http://localhost:3000/cs-data-provider/organizations/6/policies/:id/template
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/6/incidents/:id/graph
+          - name: Top 10 Most Common Policies
+            type: list
+            url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
   - name: Foggia
     id: "5"
@@ -191,12 +200,15 @@ organizations:
         internal: true
         url: http://localhost:3000/cs-data-provider/organizations/5/policies
         widgets:
-          - name: System
-            type: graph
-            url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
           - name: Components
             type: policy
             url: http://localhost:3000/cs-data-provider/organizations/5/policies/:id/template
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
+          - name: Top 10 Most Common Policies
+            type: list
+            url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
       - name: Exercises
         id: "24"
