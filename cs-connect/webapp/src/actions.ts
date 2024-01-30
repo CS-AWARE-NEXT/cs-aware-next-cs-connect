@@ -37,10 +37,17 @@ export const selectErrorMessageAction = (selectErrorMessage = '') => {
     };
 };
 
-export const updatePolicyTemplateFieldAction = (field: PolicyTemplateField) => {
+export const updatePolicyTemplateFieldAction = (
+    field: PolicyTemplateField,
+    disableTimeout = false,
+) => {
     let url = getEcosystem().sections[0].url;
     url = url.replace('issues', 'organizations/policies/template');
     updatePolicyTemplateField(field, url);
+
+    if (disableTimeout) {
+        return;
+    }
 
     // We take advantage of Mattermost opening Threads after a post submenu is clicked
     // to open the RHS again after the Policy Template is updated, so we fetch RHS content again.
