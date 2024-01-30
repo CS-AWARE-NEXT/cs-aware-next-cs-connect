@@ -11,7 +11,8 @@ export type PolicyTemplate = Policy & {
     rolesAndResponsibilities: string[];
     references: string[];
     tags: string[];
-    [key: string]: string[];
+    exported: boolean | string;
+    [key: string]: string[] | string | boolean;
 };
 
 export type PolicyTemplateField = {

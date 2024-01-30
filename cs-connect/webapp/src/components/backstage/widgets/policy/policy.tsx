@@ -5,13 +5,13 @@ import React, {
     useState,
 } from 'react';
 import styled from 'styled-components';
-import {useIntl} from 'react-intl';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
+import {Tag} from 'antd';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
-import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {buildQuery} from 'src/hooks';
 import {formatName} from 'src/helpers';
@@ -48,7 +48,6 @@ const Policy: FC<Props> = ({
     const {formatMessage} = useIntl();
 
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
-    const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
@@ -138,6 +137,10 @@ const Policy: FC<Props> = ({
                     title={name}
                 />
             </Header>
+
+            {(template && template.exported) ?
+                <Tag color='green'><FormattedMessage defaultMessage='Completed'/></Tag> :
+                <Tag color='blue'><FormattedMessage defaultMessage='On going'/></Tag>}
 
             {purposeMessages &&
                 <MultiTextBox

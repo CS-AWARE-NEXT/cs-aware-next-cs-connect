@@ -196,7 +196,7 @@ export const useSection = (id: string): Section => {
         filter((s: Section) => s.id === id)[0];
 };
 
-export const useSectionInfo = (id: string, url: string): SectionInfo => {
+export const useSectionInfo = (id: string, url: string, refresh = false): SectionInfo => {
     const [info, setInfo] = useState<SectionInfo | {}>({});
 
     useEffect(() => {
@@ -213,7 +213,7 @@ export const useSectionInfo = (id: string, url: string): SectionInfo => {
         return () => {
             isCanceled = true;
         };
-    }, [id]);
+    }, [id, refresh]);
     return info as SectionInfo;
 };
 
@@ -485,7 +485,7 @@ export const useExerciseData = (url: string): ExerciseAssignment => {
     return exerciseAssignment as ExerciseAssignment;
 };
 
-export const usePolicyTemplateData = (url: string): PolicyTemplate => {
+export const usePolicyTemplateData = (url: string, refresh = false): PolicyTemplate => {
     const [policyTemplate, setPolicyTemplate] = useState<PolicyTemplate | {}>({});
 
     useEffect(() => {
@@ -502,7 +502,7 @@ export const usePolicyTemplateData = (url: string): PolicyTemplate => {
         return () => {
             isCanceled = true;
         };
-    }, [url]);
+    }, [url, refresh]);
 
     return policyTemplate as PolicyTemplate;
 };
