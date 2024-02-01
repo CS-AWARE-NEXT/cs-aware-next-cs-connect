@@ -62,7 +62,7 @@ const RHSWidgets = (props: Props) => {
     return (
         <RefreshContext.Provider value={{refresh, forceRefresh}}>
             <Container onScroll={handleScroll}>
-                {(section && sectionInfo && isEcosystem) &&
+                {(section && sectionInfo && isEcosystem && section.isIssues) &&
                     <IsEcosystemRhsContext.Provider value={isEcosystem}>
                         <IsRhsScrollingContext.Provider value={isScrolling}>
                             <EcosystemRhs
@@ -74,7 +74,7 @@ const RHSWidgets = (props: Props) => {
                             />
                         </IsRhsScrollingContext.Provider>
                     </IsEcosystemRhsContext.Provider>}
-                {(section && sectionInfo && !isEcosystem) &&
+                {(section && sectionInfo && (!isEcosystem || !section.isIssues)) &&
                     <RhsSectionsWidgetsContainer
                         headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
                         sectionInfo={sectionInfo}

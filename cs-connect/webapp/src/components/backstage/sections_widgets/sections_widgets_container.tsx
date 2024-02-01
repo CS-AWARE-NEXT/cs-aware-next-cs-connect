@@ -70,6 +70,7 @@ const SectionsWidgetsContainer = ({
     // that are placed always as the first section in the ecosystem organization.
     // Maybe it's needed to add a flag to indicate which is the issues section in the configuration file,
     // the reason is that the section may not be called issues or it may not be the first one
+    // TODO: Retrieve the Issue section by using the isIssues flag on sections
     const showChildren = isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}`) ||
         isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}/${sections ? formatNameNoLowerCase(sections[0]?.name) : ''}`) ||
         isUrlEqualWithoutQueryParams(`${getSiteUrl()}${url}/${sections ? formatName(sections[0]?.name) : ''}`);

@@ -28,6 +28,7 @@ export interface Organization {
 export interface Section {
     id: string;
     internal: boolean;
+    isIssues: boolean;
     name: string;
     url: string;
     sections: Section[];

@@ -11,6 +11,7 @@ organizations:
     sections:
       - name: Ecosystem Issues
         id: "0"
+        isIssues: true
         url: http://localhost:3000/cs-data-provider/issues
         widgets:
           - type: channel
@@ -60,7 +61,7 @@ organizations:
           - name: System
             type: graph
             url: http://localhost:3000/cs-data-provider/organizations/8/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+          - name: Top 10 Most Common Threats
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
@@ -110,7 +111,7 @@ organizations:
           - name: System
             type: graph
             url: http://localhost:3000/cs-data-provider/organizations/7/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+          - name: Top 10 Most Common Threats
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
@@ -160,7 +161,7 @@ organizations:
           - name: System
             type: graph
             url: http://localhost:3000/cs-data-provider/organizations/6/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+          - name: Top 10 Most Common Threats
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
@@ -206,7 +207,7 @@ organizations:
           - name: System
             type: graph
             url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+          - name: Top 10 Most Common Threats
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel

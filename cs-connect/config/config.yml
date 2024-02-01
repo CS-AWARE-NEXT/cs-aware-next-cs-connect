@@ -11,7 +11,8 @@ organizations:
     sections:
       - name: Ecosystem Issues
         id: "0"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/issues
+        isIssues: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/issues
         widgets:
           - type: channel
   - name: 5thYPE
@@ -20,49 +21,49 @@ organizations:
     sections:
       - name: Incidents
         id: "22"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
           - type: channels
       - name: Social Media
         id: "23"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/posts
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/posts
           - name: Posts per Hashtag
             type: chart
             chartType: simple-line
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/chart
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/chart
           - type: channels
       - name: News
         id: "26"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news
         widgets:
           - name: Explore
             type: news
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news/:id/news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news/:id/news
           - type: channels
       - name: Policies
         id: "30"
         internal: true
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/policies
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/policies
         widgets:
           - name: Components
             type: policy
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/policies/:id/template
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/policies/:id/template
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
+          - name: Top 10 Most Common Threats
             type: list
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
   - name: Deyal
     id: "7"
@@ -70,49 +71,49 @@ organizations:
     sections:
       - name: Incidents
         id: "18"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
           - type: channels
       - name: Social Media
         id: "21"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/posts
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/posts
           - name: Posts per Hashtag
             type: chart
             chartType: simple-line
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/chart
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/chart
           - type: channels
       - name: News
         id: "27"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news
         widgets:
           - name: Explore
             type: news
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news/:id/news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news/:id/news
           - type: channels
       - name: Policies
         id: "31"
         internal: true
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/policies
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/policies
         widgets:
           - name: Components
             type: policy
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/policies/:id/template
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/policies/:id/template
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
+          - name: Top 10 Most Common Threats
             type: list
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
   - name: Larissa
     id: "6"
@@ -120,49 +121,49 @@ organizations:
     sections:
       - name: Incidents
         id: "17"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
           - type: channels
       - name: Social Media
         id: "20"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/posts
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/posts
           - name: Posts per Hashtag
             type: chart
             chartType: simple-line
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/chart
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/chart
           - type: channels
       - name: News
         id: "28"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news
         widgets:
           - name: Explore
             type: news
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news/:id/news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news/:id/news
           - type: channels
       - name: Policies
         id: "32"
         internal: true
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/policies
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/policies
         widgets:
           - name: Components
             type: policy
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/policies/:id/template
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/policies/:id/template
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
+          - name: Top 10 Most Common Threats
             type: list
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
   - name: Foggia
     id: "5"
@@ -170,53 +171,53 @@ organizations:
     sections:
       - name: Incidents
         id: "25"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
           - type: channels
       - name: Social Media
         id: "16"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media
         widgets:
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media/:id/posts
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media/:id/posts
           - type: channels
       - name: News
         id: "29"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news
         widgets:
           - name: Explore
             type: news
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news/:id/news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news/:id/news
           - type: channels
       - name: Policies
         id: "33"
         internal: true
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/policies
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/policies
         widgets:
           - name: Components
             type: policy
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/policies/:id/template
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/policies/:id/template
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
-          - name: Top 10 Most Common Policies
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
+          - name: Top 10 Most Common Threats
             type: list
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
       - name: Exercises
         id: "24"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/exercises
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/exercises
         widgets:
           - name: Exercise
             type: exercise
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/exercises/:id/assignment
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/exercises/:id/assignment
           - type: channels
   - name: Demo CS-AWARE EU
     id: "4"
@@ -224,25 +225,25 @@ organizations:
     sections:
       - name: Incidents
         id: "13"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents
         widgets:
           - name: Description
             type: text-box
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/text_box
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/text_box
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/graph
           - name: History
             type: table
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/table
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/table
           - type: channel
       - name: Playbooks
         id: "19"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks
         widgets:
           - name: Detail
             type: cacao-playbook
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks/:id/detail
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks/:id/detail
           - type: channel
   - name: Organization X
     id: "1"
@@ -250,25 +251,25 @@ organizations:
     sections:
       - name: Incidents
         id: "3"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents
         widgets:
           - name: Description
             type: text-box
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/text_box
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/text_box
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/graph
           - name: Observed Data
             type: table
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/table
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/table
           - type: channel
       - name: Stories
         id: "5"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/stories
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/stories
         widgets:
           - name: Events
             type: timeline
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/stories/:id/timeline
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/stories/:id/timeline
           - type: channel
     widgets: []
   - name: Organization Y
@@ -277,25 +278,25 @@ organizations:
     sections:
       - name: Incidents
         id: "6"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents
         widgets:
           - name: Description
             type: text-box
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/text_box
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/text_box
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/graph
           - name: Observed Data
             type: table
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/table
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/table
           - type: channel
       - name: Stories
         id: "8"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/stories
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/stories
         widgets:
           - name: Events
             type: timeline
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/stories/:id/timeline
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/stories/:id/timeline
           - type: channel
     widgets: []
   - name: Organization Z
@@ -304,24 +305,24 @@ organizations:
     sections:
       - name: Incidents
         id: "9"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents
         widgets:
           - name: Description
             type: text-box
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/text_box
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/text_box
           - name: System
             type: graph
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/graph
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/graph
           - name: Observed Data
             type: table
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/table
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/table
           - type: channel
       - name: Stories
         id: "11"
-        url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/stories
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/stories
         widgets:
           - name: Events
             type: timeline
-            url: localhosthttps://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/stories/:id/timeline
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/stories/:id/timeline
           - type: channel
     widgets: []
