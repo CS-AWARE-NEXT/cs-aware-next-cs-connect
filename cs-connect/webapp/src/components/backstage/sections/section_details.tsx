@@ -86,7 +86,7 @@ const SectionDetails = () => {
     };
 
     return (
-        isEcosystem ?
+        (isEcosystem && section && section.isIssues) ?
             <RefreshContext.Provider value={{refresh, forceRefresh}}>
                 <EcosystemSectionsWidgetsContainer
                     section={section}
