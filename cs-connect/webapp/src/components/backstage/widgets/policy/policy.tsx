@@ -139,8 +139,8 @@ const Policy: FC<Props> = ({
             </Header>
 
             {(template && template.exported) ?
-                <Tag color='green'><FormattedMessage defaultMessage='Completed'/></Tag> :
-                <Tag color='blue'><FormattedMessage defaultMessage='On going'/></Tag>}
+                <Tag color='green'><FormattedMessage defaultMessage='Exported'/></Tag> :
+                <Tag color='blue'><FormattedMessage defaultMessage='Ongoing'/></Tag>}
 
             {purposeMessages &&
                 <MultiTextBox
