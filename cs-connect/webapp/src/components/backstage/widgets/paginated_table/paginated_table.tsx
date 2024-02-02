@@ -22,6 +22,7 @@ import {
     buildToForCopy,
     isReferencedByUrlHash,
     useOrganization,
+    useSection,
     useUrlHash,
     useUserProps,
 } from 'src/hooks';
@@ -134,6 +135,7 @@ const PaginatedTable = ({
     const sectionUrl = useContext(SectionUrlContext);
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
+    const section = useSection(parentId);
 
     const [searchText, setSearchText] = useState('');
     const [filteredRows, setFilteredRows] = useState<PaginatedTableRow[]>(data.rows);
@@ -161,7 +163,7 @@ const PaginatedTable = ({
         const channel = await addChannel({
             userId,
             channelName: formatName(`${organization.name}-${savedSectionInfo.name}`),
-            createPublicChannel: false,
+            createPublicChannel: isEcosystem, // if it's ecosystem, it needs to be a public channel
             parentId,
             sectionId: `internal-${savedSectionInfo.id}`,
             teamId,
@@ -255,7 +257,7 @@ const PaginatedTable = ({
                         size='middle'
                     />
                 </>}
-            {(isEcosystem || (internal && (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)))) &&
+            {isSection && ((isEcosystem && section && !section.isIssues) || (internal && (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)))) &&
                 <Collapse>
                     <TablePanel
                         header={formatMessage({defaultMessage: 'Create New'})}
