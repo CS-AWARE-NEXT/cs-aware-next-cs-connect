@@ -3,6 +3,10 @@ import styled from 'styled-components';
 
 import {FormattedMessage} from 'react-intl';
 
+import {useDispatch} from 'react-redux';
+
+import {getChannel} from 'mattermost-webapp/packages/mattermost-redux/src/actions/channels';
+
 import {addChannelErrorMessageAction, channelCreationAction, nameErrorMessageAction} from 'src/actions';
 import {
     setAddChannelErrorMessage,
@@ -25,6 +29,8 @@ import {formatChannelName} from 'src/helpers';
 
 import {ORGANIZATION_ID_ALL} from 'src/types/organization';
 
+import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
+
 import {CreateSingleChannel} from './single_channel_creation';
 
 type Props = {
@@ -41,6 +47,8 @@ const SingleChannelBox = ({parentId, sectionId, teamId, userId}: Props) => {
     const section = useSection(parentId);
     const sectionInfo = useSectionInfo(sectionId, section.url);
     const [userProps, _setUserProps] = useUserProps();
+    const isEcosystem = useContext(IsEcosystemContext);
+    const dispatch = useDispatch();
 
     const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [_, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
@@ -61,13 +69,20 @@ const SingleChannelBox = ({parentId, sectionId, teamId, userId}: Props) => {
         }));
     }, [sectionInfo]);
 
+    // Refresh the redux state of channels, needed when an ecosystem issue is created and the redux state lacks the new related channel
+    useEffect(() => {
+        for (const channel of channels) {
+            dispatch(getChannel(channel.channelId));
+        }
+    }, [channels]);
+
     const cleanErrorMessages = () => {
         dispacthAddChannelErrorMessage(addChannelErrorMessageAction(''));
         dispatchNameErrorMessage(nameErrorMessageAction(''));
     };
 
     return (
-        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)) ? <>
+        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL || isEcosystem)) ? <>
             {(!channels || channels.length < 1) &&
                 <StyledSection>
                     <Setting id={'channel-action'}>

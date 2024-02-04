@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useContext, useReducer} from 'react';
 import styled from 'styled-components';
 import {FormattedMessage, useIntl} from 'react-intl';
 
@@ -17,6 +17,8 @@ import {useChannelsList, useUserProps} from 'src/hooks';
 
 import {ORGANIZATION_ID_ALL} from 'src/types/organization';
 
+import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
+
 import {CreateChannel} from './controls';
 
 type Props = {
@@ -31,6 +33,7 @@ const ChannelBox = ({parentId, sectionId, teamId, userId, organizationId}: Props
     const {formatMessage} = useIntl();
     const channels = useChannelsList({section_id: sectionId, parent_id: parentId});
     const [userProps, _setUserProps] = useUserProps();
+    const isEcosystem = useContext(IsEcosystemContext);
 
     const [addChannelErrorMessage, dispacthAddChannelErrorMessage] = useReducer(setAddChannelErrorMessage, '');
     const [selectErrorMessage, dispatchSelectErrorMessage] = useReducer(setSelectErrorMessage, '');
@@ -52,7 +55,7 @@ const ChannelBox = ({parentId, sectionId, teamId, userId, organizationId}: Props
     };
 
     return (
-        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL)) ? <>
+        (userProps && (userProps.orgId === organizationId || userProps.orgId === ORGANIZATION_ID_ALL || isEcosystem)) ? <>
             <StyledSection>
                 <Setting id={'channel-action'}>
                     <CreateAChannel

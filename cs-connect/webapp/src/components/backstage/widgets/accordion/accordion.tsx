@@ -6,7 +6,7 @@ import {AccordionData} from 'src/types/accordion';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
-import {buildQuery, useUrlHash} from 'src/hooks';
+import {buildQuery, useDOMReadyById, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {DOT_PREFIX} from 'src/components/backstage/widgets/chart/charts/line/dots';
 import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
@@ -46,6 +46,7 @@ const Accordion = ({
     const fullUrl = useContext(FullUrlContext);
     const hyperlinkPathContext = useContext(HyperlinkPathContext);
     const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
+    const isReady = useDOMReadyById(urlHash.substring(1));
 
     // We could need to override default scroll
     // because we need to give the browser the time for content to be rendered.
@@ -109,7 +110,7 @@ const Accordion = ({
                 // }
             }
         }
-    }, [urlHash, elements]);
+    }, [urlHash, elements, isReady]);
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 

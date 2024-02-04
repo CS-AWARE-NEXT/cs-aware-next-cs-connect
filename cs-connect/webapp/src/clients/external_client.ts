@@ -13,8 +13,12 @@ import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
 
+export const getSectionInfoUrl = (id: string, url: string): string => {
+    return `${url}/${id}`;
+};
+
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
-    let data = await doGet<SectionInfo>(`${url}/${id}`);
+    let data = await doGet<SectionInfo>(getSectionInfoUrl(id, url));
     if (!data) {
         data = {id: '', name: ''} as SectionInfo;
     }

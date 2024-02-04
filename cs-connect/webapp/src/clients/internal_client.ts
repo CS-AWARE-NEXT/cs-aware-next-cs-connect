@@ -26,6 +26,7 @@ import {
     UserAddedParams,
 } from 'src/types/events';
 import {UserResult} from 'src/types/users';
+import {ExportReference} from 'src/components/commons/export';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
 
@@ -128,6 +129,15 @@ export const archiveIssueChannels = async (params: ArchiveIssueChannelsParams): 
         `${apiUrl}/events/archive_issue_channels`,
         JSON.stringify(params),
     );
+};
+
+export const exportChannel = async (channelId: string, format: string, references: ExportReference[]): Promise<Blob> => {
+    const body = JSON.stringify({
+        format,
+        references,
+    });
+    const {data} = await doFetchWithBlobResponse(`${apiUrl}/channel/${channelId}/export`, {method: 'POST', body});
+    return data;
 };
 
 export interface UserProps {
@@ -260,3 +270,26 @@ const doFetchWithoutResponse = async (
     });
 };
 
+const doFetchWithBlobResponse = async (
+    url: string,
+    options = {},
+): Promise<{
+    response: Response;
+    data: Blob;
+}> => {
+    const response = await fetch(url, Client4.getOptions(options));
+    let data;
+    if (response.ok) {
+        data = await response.blob();
+        return {
+            response,
+            data,
+        };
+    }
+
+    throw new ClientError(Client4.url, {
+        message: '',
+        status_code: response.status,
+        url,
+    });
+};

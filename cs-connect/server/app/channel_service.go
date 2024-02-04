@@ -8,6 +8,7 @@ import (
 
 	mattermost "github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
+	"github.com/pkg/errors"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/config"
 
@@ -231,4 +232,51 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 	})
 
 	return GetBacklinksResult{Items: backlinks, ChannelCount: channelsCount}, nil
+}
+
+func (s *ChannelService) ExportChannel(channelID string, params ExportChannelParams) (*STIXChannel, error) {
+	s.api.LogInfo("Exporting channel", "channelID", channelID)
+	channel, err := s.api.GetChannel(channelID)
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to call GetChannel during channel export")
+	}
+
+	var STIXPosts []*STIXPost
+	page := 0
+	perPage := 1000
+
+	for {
+		postList, err := s.api.GetPostsForChannel(channelID, page, perPage)
+		if err != nil {
+			return nil, errors.Wrap(err, "unable to call GetPostsForChannel during channel export")
+		}
+
+		if postList.ToSlice() == nil {
+			break
+		}
+
+		STIXPostsPerPage := make([]*STIXPost, 0, len(postList.Order))
+		usersCache := make(map[string]*mattermost.User)
+
+		for _, key := range postList.Order {
+			post := postList.Posts[key]
+
+			// ignore original text for edited messages
+			if post.OriginalId != "" {
+				continue
+			}
+
+			// Ignore thread messages - we'll get them once we find the root message
+			if post.RootId != "" {
+				continue
+			}
+
+			STIXPostsPerPage = append(STIXPostsPerPage, ToStixPost(s.api, post, true, usersCache))
+		}
+
+		STIXPosts = append(STIXPosts, STIXPostsPerPage...)
+		page++
+	}
+
+	return ToStixChannel(channel, STIXPosts, params.References), nil
 }

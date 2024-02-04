@@ -86,3 +86,14 @@ type BacklinkEntity struct {
 	PostID    string
 	ChannelID string
 }
+
+type ExportReference struct {
+	SourceName  string   `json:"source_name"`
+	ExternalIds []string `json:"external_ids"`
+	URLs        []string `json:"urls"`
+}
+
+type ExportChannelParams struct {
+	Format     string            `json:"format"`
+	References []ExportReference `json:"references"`
+}
