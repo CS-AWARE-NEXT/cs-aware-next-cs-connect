@@ -9,6 +9,7 @@ import {
     Space,
     Tabs,
     TabsProps,
+    Tag,
 } from 'antd';
 
 import {useSelector} from 'react-redux';
@@ -48,6 +49,7 @@ const BacklinkItem = ({backlink, team}: BacklinkItemProps) => {
                     {backlink.authorName}
                     <span style={{fontWeight: '400'}}>{' in '}</span>
                     {backlink.channelName}
+                    <Tag style={{marginLeft: '10px'}}>{backlink.sectionName}</Tag>
                 </>
             }
             extra={
@@ -142,7 +144,7 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
         const items: TabsProps['items'] = [
             {
                 key: 'all',
-                label: 'All backlinks',
+                label: 'Messages',
                 children: matchList,
             },
             {
@@ -159,7 +161,7 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
         );
 
         modal.info({
-            title: 'Backlinks',
+            title: 'Used by',
             content,
             focusTriggerAfterClose: false,
             maskClosable: true,

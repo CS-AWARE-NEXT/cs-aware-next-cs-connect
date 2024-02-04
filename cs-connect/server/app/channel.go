@@ -62,6 +62,7 @@ type Backlink struct {
 	Message     string `json:"message"`
 	AuthorName  string `json:"authorName"`
 	ChannelName string `json:"channelName"`
+	SectionName string `json:"sectionName"`
 	CreateAt    int64  `json:"createAt"`
 }
 

@@ -155,6 +155,10 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 	if err != nil {
 		return GetBacklinksResult{}, err
 	}
+	platformConfig, err := s.platformService.GetPlatformConfig()
+	if err != nil {
+		return GetBacklinksResult{}, err
+	}
 
 	backlinks := []Backlink{}
 	channelsCountMap := make(map[string]int)
@@ -183,12 +187,29 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 			s.api.LogWarn("failed to fetch post channel while fetching backlinks", "elementPath", elementURL, "postID", backlink.PostID, "err", err)
 			continue
 		}
+		csConnectChannel, csConnectErr := s.store.GetChannelByID(post.ChannelId)
+		if csConnectErr != nil {
+			s.api.LogWarn("failed to fetch cs-connect post channel while fetching backlinks", "elementPath", elementURL, "postID", backlink.PostID, "err", csConnectErr)
+			continue
+		}
+
+		sectionName := "unknown section"
+		for _, org := range platformConfig.Organizations {
+			if org.ID == csConnectChannel.OrganizationID {
+				for _, section := range org.Sections {
+					if section.ID == csConnectChannel.ParentID {
+						sectionName = section.Name
+					}
+				}
+			}
+		}
 
 		backlinks = append(backlinks, Backlink{
 			ID:          backlink.PostID,
 			Message:     post.Message,
 			AuthorName:  user.GetDisplayName(mattermost.ShowNicknameFullName),
 			ChannelName: channel.DisplayName,
+			SectionName: sectionName,
 			CreateAt:    post.CreateAt,
 		})
 		channelsCountMap[channel.Name]++

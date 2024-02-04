@@ -57,6 +57,7 @@ export interface Backlink {
     message: string,
     authorName: string,
     channelName: string,
+    sectionName: string,
     createAt: number,
 }
 
