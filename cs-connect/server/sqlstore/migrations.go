@@ -104,8 +104,8 @@ var migrations = []Migration{
 					PostID VARCHAR(26) NOT NULL,
 					ElementLinkPart VARCHAR(300) NOT NULL,
 					ElementMarkdownPath VARCHAR(300) NOT NULL,
-					INDEX (ElementID),
-					INDEX (ElementPath)
+					INDEX (ElementLinkPart),
+					INDEX (ElementMarkdownPath)
 				)
 			` + MySQLCharset); err != nil {
 					return errors.Wrapf(err, "failed creating table CSA_Backlinks")
