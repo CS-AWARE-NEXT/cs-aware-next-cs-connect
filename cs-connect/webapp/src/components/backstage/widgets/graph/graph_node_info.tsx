@@ -27,6 +27,7 @@ type Props = {
     info: NodeInfo;
     sectionId: string;
     parentId: string;
+    graphName: string;
 };
 
 const textBoxStyle = {
@@ -39,11 +40,12 @@ const GraphNodeInfo: FC<Props> = ({
     info,
     sectionId,
     parentId,
+    graphName,
 }) => {
     const isRhs = useContext(IsRhsContext);
     const isRhsClosed = useContext(IsRhsClosedContext);
 
-    const {description} = info;
+    const {description, name} = info;
     return (
         <Container>
             <TextBox
@@ -53,7 +55,7 @@ const GraphNodeInfo: FC<Props> = ({
                 text={description ?? EMPTY_NODE_DESCRIPTION}
                 style={textBoxStyle}
                 customId={`${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-widget`}
-                titleText={`${info.name} | Description`}
+                titleText={`${graphName}.${name}.Description`}
             />
             {(isRhs && isRhsClosed) && <VerticalSpacer size={24}/>}
         </Container>

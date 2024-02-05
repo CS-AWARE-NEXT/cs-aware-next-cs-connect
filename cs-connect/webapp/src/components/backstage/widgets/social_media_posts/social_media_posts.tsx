@@ -15,6 +15,8 @@ import {formatName} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {Post} from 'src/types/social_media';
 
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
+
 import SocialMediaPost from './social_media_post';
 
 const POSTS_PER_PAGE = 3;
@@ -37,6 +39,8 @@ const SocialMediaPosts: FC<Props> = ({
     const urlHash = useUrlHash();
     const {hash} = useLocation();
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
 
@@ -84,6 +88,7 @@ const SocialMediaPosts: FC<Props> = ({
                         post={item}
                         parentId={parentId}
                         sectionId={sectionId}
+                        hyperlinkPath={hyperlinkPath}
                     />
                 )}
             />

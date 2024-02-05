@@ -14,6 +14,7 @@ export type MarkdownEditProps = {
     borderColor?: string;
     disabled?: boolean;
     previewDisabled?: boolean;
+    opaqueText?: boolean;
     pointer?: boolean;
 
     tooltipText?: string;
@@ -51,11 +52,13 @@ const MarkdownEdit = (props: MarkdownEditProps) => {
                         borderColor={props.borderColor}
                         pointer={props.pointer || false}
                         className={props.className}
+                        opaqueText={props.opaqueText}
                     >
                         <RenderedText
                             data-testid='rendered-text'
                             onClick={props.onClick}
                             style={{cursor: props.pointer ? 'pointer' : 'text'}}
+                            opaqueText={props.opaqueText}
                         >
                             {value ? (
                                 <ShowMore>
@@ -77,11 +80,13 @@ const MarkdownEdit = (props: MarkdownEditProps) => {
                     borderColor={props.borderColor}
                     pointer={props.pointer || false}
                     className={props.className}
+                    opaqueText={props.opaqueText}
                 >
                     <RenderedText
                         data-testid='rendered-text'
                         onClick={props.onClick}
                         style={{cursor: props.pointer ? 'pointer' : 'text'}}
+                        opaqueText={props.opaqueText}
                     >
                         {value ? (
                             <ShowMore>
@@ -110,15 +115,21 @@ const HoverMenuContainer = styled.div`
     z-index: 1;
 `;
 
-const commonTextStyle = css`
+const commonTextStyle = css<{
+    opaqueText?: boolean
+}>`
     display: block;
     align-items: center;
     border-radius: var(--markdown-textbox-radius, 4px);
     font-size: 14px;
     line-height: 20px;
     font-weight: 400;
-    color: rgba(var(--center-channel-color-rgb), 0.72);
     padding: var(--markdown-textbox-padding, 12px 30px 12px 16px);
+    ${({opaqueText}) => (opaqueText ? css`
+        color: rgba(var(--center-channel-color-rgb), 1);
+    ` : css`
+        color: rgba(var(--center-channel-color-rgb), 0.72);
+    `)}
 
     :hover {
         cursor: text;
@@ -138,6 +149,7 @@ const MarkdownEditContainer = styled.div<{
     dashed: boolean;
     noBorder?: boolean;
     borderColor?: string;
+    opaqueText?: boolean;
     pointer?: boolean;
 }>`
     position: relative;

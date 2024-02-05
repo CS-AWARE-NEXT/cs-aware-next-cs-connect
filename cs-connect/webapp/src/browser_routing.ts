@@ -32,6 +32,15 @@ export const navigateToChannel = async (teamName: string, channelId: string) => 
     navigateToUrl(`/${teamName}/channels/${channelId}`);
 };
 
+/**
+ * Uses the internal Mattermost mechanism to jump to a message, highlighting it.
+ * @param teamName name of a team as it appears in the url of a channel
+ * @param postId ID of the post to jump to
+ */
+export const navigateToPost = async (teamName: string, postId: string) => {
+    navigateToUrl(`/${teamName}/pl/${postId}`);
+};
+
 export const pluginErrorUrl = (type: string) => {
     return pluginUrl(`/error?type=${type}`);
 };

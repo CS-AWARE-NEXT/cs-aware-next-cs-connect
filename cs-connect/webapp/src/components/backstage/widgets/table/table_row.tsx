@@ -18,9 +18,10 @@ type Props = {
     row: TableRowData;
     urlHash: string;
     onClick?: () => void;
+    hyperlinkPath: string;
 };
 
-const TableRow = ({onClick, pointer, query, row, urlHash}: Props) => {
+const TableRow = ({onClick, pointer, query, row, urlHash, hyperlinkPath}: Props) => {
     const fullUrl = useContext(FullUrlContext);
     const {url} = useRouteMatch();
 
@@ -38,7 +39,7 @@ const TableRow = ({onClick, pointer, query, row, urlHash}: Props) => {
         >
             <CopyLink
                 id={itemId}
-                text={name}
+                text={`${hyperlinkPath}.${name}`}
                 to={buildToForCopy(buildTo(fullUrl, itemId, query, url))}
                 name={name}
                 area-hidden={true}

@@ -61,6 +61,36 @@ type ArchiveChannelsParams struct {
 	SectionID string `json:"sectionId"`
 }
 
+type Backlink struct {
+	ID          string `json:"id"`
+	Message     string `json:"message"`
+	AuthorName  string `json:"authorName"`
+	ChannelName string `json:"channelName"`
+	SectionName string `json:"sectionName"`
+	CreateAt    int64  `json:"createAt"`
+}
+
+type GetBacklinksResult struct {
+	Items        []Backlink      `json:"items"`
+	ChannelCount []ChannelsCount `json:"channelsCount"`
+}
+
+type ChannelsCount struct {
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+}
+
+type BacklinkData struct {
+	MarkdownText string
+	MarkdownLink string
+}
+
+type BacklinkEntity struct {
+	ID        string
+	PostID    string
+	ChannelID string
+}
+
 type ExportReference struct {
 	SourceName  string   `json:"source_name"`
 	ExternalIds []string `json:"external_ids"`

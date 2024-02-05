@@ -93,4 +93,39 @@ var migrations = []Migration{
 			return nil
 		},
 	},
+	{
+		fromVersion: semver.MustParse("0.4.0"),
+		toVersion:   semver.MustParse("0.5.0"),
+		migrationFunc: func(e sqlx.Ext, sqlStore *SQLStore) error {
+			if e.DriverName() == model.DatabaseDriverMysql {
+				if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSA_Backlinks (
+					ID TEXT PRIMARY KEY,
+					PostID VARCHAR(26) NOT NULL,
+					ElementLinkPart VARCHAR(300) NOT NULL,
+					ElementMarkdownPath VARCHAR(300) NOT NULL,
+					INDEX (ElementLinkPart),
+					INDEX (ElementMarkdownPath)
+				)
+			` + MySQLCharset); err != nil {
+					return errors.Wrapf(err, "failed creating table CSA_Backlinks")
+				}
+			} else {
+				if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSA_Backlinks (
+					ID TEXT PRIMARY KEY,
+					PostID VARCHAR(26) NOT NULL,
+					ElementLinkPart VARCHAR(300) NOT NULL,
+					ElementMarkdownPath VARCHAR(300) NOT NULL
+				);
+
+				CREATE INDEX CSA_Backlinks_Element_ID_idx ON CSA_Backlinks (ElementLinkPart ASC);
+				CREATE INDEX CSA_Backlinks_Element_Path_idx ON CSA_Backlinks (ElementMarkdownPath ASC);
+				`); err != nil {
+					return errors.Wrapf(err, "failed creating table CSA_Backlinks")
+				}
+			}
+			return nil
+		},
+	},
 }

@@ -17,9 +17,11 @@ import {formatName} from 'src/helpers';
 import {ListData} from 'src/types/list';
 import {CopyLinkMenuItem} from 'src/components/commons/copy_link';
 import FormattedMarkdown from 'src/components/commons/formatted_markdown';
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
 const {Item} = List;
 const {Meta} = Item;
+const MAX_TEXT_LENGTH = 94;
 
 type Props = {
     data: ListData;
@@ -44,10 +46,13 @@ const ItemsList = ({
     const fullUrl = useContext(FullUrlContext);
     const {url} = useRouteMatch();
     const urlHash = useUrlHash();
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     const {items} = data;
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
+    const ellipsedText = (text: string) => (text.length < MAX_TEXT_LENGTH ? text : `${text.substring(0, MAX_TEXT_LENGTH).trim()}...`);
 
     return (
         <Container
@@ -81,19 +86,18 @@ const ItemsList = ({
                                     path={buildToForCopy(buildTo(fullUrl, itemId, ecosystemQuery, url))}
                                     showPlaceholder={false}
                                     svgMarginRight={'0px'}
-                                    text={item.text}
+                                    text={`${hyperlinkPath}.${ellipsedText(item.text)}`}
                                 />,
                             ]}
                             style={{
                                 backgroundColor: isReferencedByUrlHash(urlHash, itemId) ? 'rgb(244, 180, 0)' : 'var(--center-channel-bg)',
                             }}
                         >
-                            {Avatar ?
+                            {Avatar ? (
                                 <Meta
                                     avatar={Avatar}
                                     title={<FormattedMarkdown value={item.text}/>}
-                                /> :
-                                <Meta title={<FormattedMarkdown value={item.text}/>}/>}
+                                />) : <Meta title={<FormattedMarkdown value={item.text}/>}/>}
                         </Item>
                     );
                 }}

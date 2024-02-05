@@ -18,13 +18,14 @@ const EcosystemAccordionChild = ({element}: Props) => {
     const section = useSection(element.parentId);
     const sectionInfo = useSectionInfo(element.id, section?.url);
     const fullUrl = useContext(FullUrlContext);
+    const sectionContextOptions = useContext(SectionContext);
 
     return (
         <>
             {(section && sectionInfo) ? (
                 <>
                     {(sectionInfo.id !== '' && sectionInfo.name !== '') ?
-                        <SectionContext.Provider value={{parentId: element.parentId, sectionId: element.id}}>
+                        <SectionContext.Provider value={{parentId: element.parentId, sectionId: element.id, organizationId: sectionContextOptions.organizationId}}>
                             <RhsSectionsWidgetsContainer
                                 headerPath={`${getSiteUrl()}${fullUrl}#_${sectionInfo.id}`}
                                 sectionInfo={sectionInfo}

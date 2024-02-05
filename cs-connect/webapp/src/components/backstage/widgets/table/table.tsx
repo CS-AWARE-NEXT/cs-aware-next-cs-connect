@@ -7,6 +7,8 @@ import {TableData} from 'src/types/table';
 import {buildQuery} from 'src/hooks';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
+
 import TableHeader from './table_header';
 import TableRow from './table_row';
 
@@ -35,6 +37,8 @@ const Table = ({
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     const {caption, headers, rows} = data;
     const tableIdPrefix = `${id}-${sectionId}-${parentId}`;
@@ -72,6 +76,7 @@ const Table = ({
                         query={isEcosystemRhs ? '' : query}
                         row={row}
                         urlHash={urlHash}
+                        hyperlinkPath={hyperlinkPath}
                     />
                 ))}
                 <Footer>

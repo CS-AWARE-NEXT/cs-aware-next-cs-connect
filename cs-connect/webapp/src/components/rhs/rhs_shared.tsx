@@ -1,7 +1,8 @@
 // Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
 
-import React from 'react';
+import React, {createContext} from 'react';
+
 import styled from 'styled-components';
 
 export const renderView = (props: any): JSX.Element => {
@@ -85,3 +86,4 @@ export const UpdateBody = styled.div`
     padding-right: 6px;
 `;
 
+export const HyperlinkPathContext = createContext('');

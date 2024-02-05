@@ -1,17 +1,12 @@
 import styled, {css} from 'styled-components';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {useIntl} from 'react-intl';
 
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
-import CopyLink from 'src/components/commons/copy_link';
 import {SemiBoldHeading} from 'src/styles/headings';
 import TextEdit from 'src/components/commons/text_edit';
-
-import DeleteAction from 'src/components/commons/delete_action';
-import EcosystemIssueEditAction from 'src/components/commons/ecosystem_issue_edit_action';
-import ExportAction from 'src/components/commons/export_action';
-
 import {Organization, SectionInfo} from 'src/types/organization';
+import {HyperlinkableActions} from 'src/components/commons/hyperlinkable_actions';
 
 import {ContextMenu} from './context_menu';
 
@@ -25,7 +20,7 @@ type Props = {
     onExport?: () => void
     enableEcosystemEdit?: boolean
     sectionInfo?: SectionInfo
-    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
+    setSectionInfo?: Dispatch<SetStateAction<SectionInfo | undefined>>
 };
 
 export const NameHeader = ({
@@ -67,33 +62,17 @@ export const NameHeader = ({
                         name={name}
                         path={path}
                     />
-                    <StyledCopyLink
-                        id='copy-name-link-tooltip'
-                        text={name}
-                        to={path}
-                        tooltipMessage={formatMessage({defaultMessage: 'Copy link'})}
+                    <HyperlinkableActions
+                        name={name}
+                        path={path}
+                        ecosystem={ecosystem}
+                        url={url}
+                        onDelete={onDelete}
+                        onExport={onExport}
+                        enableEcosystemEdit={enableEcosystemEdit}
+                        sectionInfo={sectionInfo}
+                        setSectionInfo={setSectionInfo}
                     />
-                    {(onDelete && url) &&
-                        <StyledDeleteAction
-                            id='delete-tooltip'
-                            modalTitle={formatMessage({defaultMessage: 'Delete'})}
-                            modalContent={formatMessage({defaultMessage: 'Are you sure you want to delete? All data will be lost.'})}
-                            onDelete={onDelete}
-                        />}
-                    {enableEcosystemEdit &&
-                        <StyledEcosystemIssueEditAction
-                            id='edit-tooltip'
-                            sectionInfo={sectionInfo}
-                            setSectionInfo={setSectionInfo}
-                            ecosystem={ecosystem}
-                        />}
-                    {(onExport && url) &&
-                        <StyledExportAction
-                            id='export-tooltip'
-                            modalTitle={formatMessage({defaultMessage: 'Export'})}
-                            modalContent={formatMessage({defaultMessage: 'Are you sure you want to export?'})}
-                            onExport={onExport}
-                        />}
                 </>
             </TextEdit>
         </Container>
@@ -109,46 +88,6 @@ const Container = styled.div`
     padding: 0 14px 0 20px;
 
     box-shadow: inset 0px -1px 0px rgba(var(--center-channel-color-rgb), 0.16);
-`;
-
-const StyledCopyLink = styled(CopyLink)`
-    border-radius: 4px;
-    font-size: 18px;
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    display: grid;
-    place-items: center;
-`;
-
-const StyledDeleteAction = styled(DeleteAction)`
-    border-radius: 4px;
-    font-size: 18px;
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    display: grid;
-    place-items: center;
-`;
-
-const StyledEcosystemIssueEditAction = styled(EcosystemIssueEditAction)`
-    border-radius: 4px;
-    font-size: 18px;
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    display: grid;
-    place-items: center;
-`;
-
-const StyledExportAction = styled(ExportAction)`
-    border-radius: 4px;
-    font-size: 18px;
-    width: 28px;
-    height: 28px;
-    margin-left: 4px;
-    display: grid;
-    place-items: center;
 `;
 
 const titleCommon = css`

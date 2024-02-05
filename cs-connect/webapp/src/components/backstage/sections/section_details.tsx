@@ -6,6 +6,7 @@ import {
     buildQuery,
     useForceDocumentTitle,
     useNavHighlighting,
+    useOrganization,
     useScrollIntoView,
     useSection,
     useSectionInfo,
@@ -14,7 +15,9 @@ import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/
 import EcosystemSectionsWidgetsContainer from 'src/components/backstage//sections_widgets/ecosystem_sections_widgets_container';
 import {archiveChannels, deleteSectionInfo, getSiteUrl} from 'src/clients';
 import {IsEcosystemContext} from 'src/components/backstage/organizations/ecosystem/ecosystem_details';
+
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 import {navigateToBackstageOrganization} from 'src/browser_routing';
 import {formatName} from 'src/helpers';
 import {useToaster} from 'src/components/backstage/toast_banner';
@@ -47,6 +50,8 @@ const SectionDetails = () => {
     const sectionInfo = useSectionInfo(sectionId, section.url, refresh);
     const isEcosystem = useContext(IsEcosystemContext);
     const organizationId = useContext(OrganizationIdContext);
+    const organization = useOrganization(organizationId);
+    const hyperlinkPath = (organization && section && sectionInfo) ? `${organization.name}.${section.name}.${sectionInfo.name}` : '';
 
     useForceDocumentTitle(sectionInfo.name ? (sectionInfo.name) : 'Section');
     useScrollIntoView(urlHash);
@@ -87,25 +92,29 @@ const SectionDetails = () => {
 
     return (
         (isEcosystem && section && section.isIssues) ?
-            <RefreshContext.Provider value={{refresh, forceRefresh}}>
-                <EcosystemSectionsWidgetsContainer
-                    section={section}
-                    sectionInfo={sectionInfo}
-                />
-            </RefreshContext.Provider> :
-            <RefreshContext.Provider value={{refresh, forceRefresh}}>
-                <SectionsWidgetsContainer
-                    headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
-                    sectionInfo={sectionInfo}
-                    sectionPath={path}
-                    sections={section.sections}
-                    url={url}
-                    widgets={section.widgets}
-                    actionProps={enableActions ? {url: section.url} : undefined}
-                    onDelete={enableActions ? onDelete : undefined}
-                    onExport={enableActions ? onExport : undefined}
-                />
-            </RefreshContext.Provider>
+            <HyperlinkPathContext.Provider value={hyperlinkPath}>
+                <RefreshContext.Provider value={{refresh, forceRefresh}}>
+                    <EcosystemSectionsWidgetsContainer
+                        section={section}
+                        sectionInfo={sectionInfo}
+                    />
+                </RefreshContext.Provider>
+            </HyperlinkPathContext.Provider> :
+            <HyperlinkPathContext.Provider value={hyperlinkPath}>
+                <RefreshContext.Provider value={{refresh, forceRefresh}}>
+                    <SectionsWidgetsContainer
+                        headerPath={`${getSiteUrl()}${url}?${buildQuery(section.id, '')}#_${sectionInfo.id}`}
+                        sectionInfo={sectionInfo}
+                        sectionPath={path}
+                        sections={section.sections}
+                        url={url}
+                        widgets={section.widgets}
+                        actionProps={enableActions ? {url: section.url} : undefined}
+                        onDelete={enableActions ? onDelete : undefined}
+                        onExport={enableActions ? onExport : undefined}
+                    />
+                </RefreshContext.Provider>
+            </HyperlinkPathContext.Provider>
     );
 };
 

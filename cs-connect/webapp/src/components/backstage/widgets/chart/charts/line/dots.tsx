@@ -132,7 +132,7 @@ export const ClickableDot: FC<Props> = (props) => {
         const itemId = `dot-${payload.label}-${valueString}-${idStringify(sectionId)}`;
         const name = `${payload.label}`;
         const path = buildToForCopy(buildTo(fullUrl, itemId, ecosystemQuery, url));
-        copyToClipboard(formatUrlAsMarkdown(path, name));
+        copyToClipboard(formatUrlAsMarkdown(path, `${props.hyperlinkPath}.${name}`));
         addToast({content: formatMessage({defaultMessage: 'Copied!'})});
     };
 

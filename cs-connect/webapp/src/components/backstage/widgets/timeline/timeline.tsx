@@ -14,6 +14,8 @@ import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
+
 import {CopyLinkTimelineItem, CopyPosition} from './timeline_item';
 
 type Props = {
@@ -32,6 +34,8 @@ const ItemsTimeline = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
     const urlHash = useUrlHash();
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     const query = buildQuery(parentId, sectionId);
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
@@ -48,6 +52,7 @@ const ItemsTimeline = ({
                     query={isEcosystemRhs ? '' : query}
                     copyPosition={CopyPosition.Left}
                     style={{display: 'inline-block', iconMarginLeft: '0px'}}
+                    hyperlinkPath={hyperlinkPath}
                 />
             ),
             children: (
@@ -56,10 +61,11 @@ const ItemsTimeline = ({
                     item={item}
                     query={isEcosystemRhs ? '' : query}
                     style={{iconMarginRight: '0px'}}
+                    hyperlinkPath={hyperlinkPath}
                 />
             ),
         };
-    })), [data.items, urlHash]);
+    })), [data.items, urlHash, hyperlinkPath]);
 
     return (
         <Container
