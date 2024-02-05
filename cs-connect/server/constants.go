@@ -6,6 +6,6 @@ const (
 	defaultConfigFileName = "config.yml"
 
 	botUsername    = "csawareconnect"
-	botName        = "CS-AWARE CONNECT Bot"
-	botDescription = "A bot account created by the CS-AWARE CONNECT product."
+	botName        = "CS-CONNECT Bot"
+	botDescription = "A bot account created by the CS-CONNECT product."
 )

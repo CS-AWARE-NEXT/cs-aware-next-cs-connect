@@ -4,7 +4,7 @@ const About = () => {
     return (
         <>
             <p>
-                {'CS-AWARE CONNECT is a collaboration platform based on Object-Oriented Collaboration over the Mattermost collaboration system.'}
+                {'CS-CONNECT is a collaboration platform based on Object-Oriented Collaboration over the Mattermost collaboration system.'}
             </p>
             <p>
                 {'Collaboration is centered around objects, where every object consists of data gathered from CRUD RESTful endpoints and view(s) rendered by dedicated widgets. It is possible to move and link between discussion and objects views using an advanced '}<b>{'hyperlinking mechanism'}</b>{', which permit one to uniquely refer to a particular field of an object or to a specific part of a discussion.'}

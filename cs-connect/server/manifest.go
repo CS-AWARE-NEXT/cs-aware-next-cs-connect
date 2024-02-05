@@ -14,8 +14,8 @@ var manifest *model.Manifest
 const manifestStr = `
 {
   "id": "cs-aware-connect",
-  "name": "CS-AWARE CONNECT",
-  "description": "CS-AWARE CONNECT is a plugin for a Cybersecurity-based collaboration platform.",
+  "name": "CS-CONNECT",
+  "description": "CS-CONNECT is a plugin for a Cybersecurity-based collaboration platform.",
   "homepage_url": "https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/",
   "support_url": "https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/issues",
   "release_notes_url": "https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/releases/tag/",
