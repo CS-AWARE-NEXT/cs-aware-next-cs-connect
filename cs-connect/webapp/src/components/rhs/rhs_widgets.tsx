@@ -11,6 +11,7 @@ import {useLocation} from 'react-router-dom';
 import {
     buildQuery,
     useIsSectionFromEcosystem,
+    useOrganization,
     useScrollIntoView,
     useSection,
     useSectionInfo,
@@ -20,6 +21,7 @@ import {getSiteUrl} from 'src/clients';
 
 import {FullUrlContext} from './rhs';
 import EcosystemRhs from './ecosystem/ecosystem_rhs';
+import {HyperlinkPathContext} from './rhs_shared';
 
 export const IsEcosystemRhsContext = createContext(false);
 export const IsRhsScrollingContext = createContext(false);
@@ -27,6 +29,7 @@ export const IsRhsScrollingContext = createContext(false);
 type Props = {
     parentId: string;
     sectionId: string;
+    organizationId: string;
 };
 
 const RHSWidgets = (props: Props) => {
@@ -44,6 +47,9 @@ const RHSWidgets = (props: Props) => {
     const isEcosystem = useIsSectionFromEcosystem(parentId);
     const sectionInfo = useSectionInfo(sectionId, section?.url);
     const fullUrl = useContext(FullUrlContext);
+    const organization = useOrganization(props.organizationId);
+
+    const hyperlinkPath = (organization && section && sectionInfo) ? `${organization.name}.${section.name}.${sectionInfo.name}` : '';
 
     const [isScrolling, setIsScrolling] = useState<boolean>(false);
     const handleScroll = async () => {
@@ -52,25 +58,27 @@ const RHSWidgets = (props: Props) => {
 
     return (
         <Container onScroll={handleScroll}>
-            {(section && sectionInfo && isEcosystem) &&
-                <IsEcosystemRhsContext.Provider value={isEcosystem}>
-                    <IsRhsScrollingContext.Provider value={isScrolling}>
-                        <EcosystemRhs
-                            headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
-                            parentId={parentId}
-                            sectionId={sectionId}
-                            sectionInfo={sectionInfo}
-                        />
-                    </IsRhsScrollingContext.Provider>
-                </IsEcosystemRhsContext.Provider>}
-            {(section && sectionInfo && !isEcosystem) &&
-                <RhsSectionsWidgetsContainer
-                    headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
-                    sectionInfo={sectionInfo}
-                    url={fullUrl}
-                    widgets={section?.widgets}
-                />}
-            {(!section || !sectionInfo) && <FormattedMessage defaultMessage='The channel is not related to any section.'/>}
+            <HyperlinkPathContext.Provider value={hyperlinkPath}>
+                {(section && sectionInfo && isEcosystem) &&
+                    <IsEcosystemRhsContext.Provider value={isEcosystem}>
+                        <IsRhsScrollingContext.Provider value={isScrolling}>
+                            <EcosystemRhs
+                                headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
+                                parentId={parentId}
+                                sectionId={sectionId}
+                                sectionInfo={sectionInfo}
+                            />
+                        </IsRhsScrollingContext.Provider>
+                    </IsEcosystemRhsContext.Provider>}
+                {(section && sectionInfo && !isEcosystem) &&
+                    <RhsSectionsWidgetsContainer
+                        headerPath={`${getSiteUrl()}${fullUrl}?${buildQuery(parentId, sectionId)}#_${sectionInfo.id}`}
+                        sectionInfo={sectionInfo}
+                        url={fullUrl}
+                        widgets={section?.widgets}
+                    />}
+                {(!section || !sectionInfo) && <FormattedMessage defaultMessage='The channel is not related to any section.'/>}
+            </HyperlinkPathContext.Provider>
         </Container>
     );
 };

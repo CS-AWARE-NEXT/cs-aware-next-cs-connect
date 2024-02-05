@@ -11,6 +11,8 @@ import {buildQuery} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
+
 import SimpleLineChart from './charts/line/simple_line';
 
 type Props = {
@@ -28,6 +30,7 @@ const buildChartByType = (
     parentId: string,
     sectionId: string,
     delay: number,
+    hyperlinkPath: string,
 ): JSX.Element => {
     switch (chartType) {
     case ChartType.SimpleLine: {
@@ -43,6 +46,7 @@ const buildChartByType = (
                 parentId={parentId}
                 sectionId={sectionId}
                 delay={delay}
+                hyperlinkPath={hyperlinkPath}
             />);
     }
     case ChartType.NoChart:
@@ -62,6 +66,8 @@ const Chart = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     useEffect(() => {
         // make responsive container appear
@@ -110,7 +116,7 @@ const Chart = ({
                     title={name}
                 />
             </Header>
-            {data && buildChartByType(data, chartType, parentId, sectionId, delay)}
+            {data && buildChartByType(data, chartType, parentId, sectionId, delay, hyperlinkPath)}
         </Container>
     );
 };

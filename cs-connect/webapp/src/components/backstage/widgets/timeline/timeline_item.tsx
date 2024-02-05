@@ -18,6 +18,7 @@ type Props = {
     query: string;
     copyPosition?: CopyPosition;
     style?: CopyLinkTimelineItemStyle;
+    hyperlinkPath: string;
 };
 
 type CopyLinkTimelineItemStyle = {
@@ -33,6 +34,7 @@ export const CopyLinkTimelineItem = ({
     query,
     copyPosition = CopyPosition.Right,
     style,
+    hyperlinkPath,
 }: Props) => {
     const fullUrl = useContext(FullUrlContext);
     const {url} = useRouteMatch();
@@ -51,7 +53,7 @@ export const CopyLinkTimelineItem = ({
             {copyPosition === CopyPosition.Left &&
                 <CopyLink
                     id={itemId}
-                    text={text}
+                    text={`${hyperlinkPath}.${text}`}
                     to={to}
                     name={text}
                     area-hidden={true}
@@ -64,7 +66,7 @@ export const CopyLinkTimelineItem = ({
             {copyPosition === CopyPosition.Right &&
                 <CopyLink
                     id={itemId}
-                    text={text}
+                    text={`${hyperlinkPath}.${text}`}
                     to={to}
                     name={text}
                     area-hidden={true}

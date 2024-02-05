@@ -2,6 +2,7 @@ export interface WidgetChannel {
     channelId: string;
     parentId: string;
     sectionId: string;
+    organizationId: string;
     deletedAt: number;
 }
 
@@ -47,5 +48,25 @@ export const notFoundWidgetChannel: WidgetChannel = {
     channelId: 'not-found',
     parentId: '',
     sectionId: '',
+    organizationId: '',
     deletedAt: 0,
 };
+
+export interface Backlink {
+    id: string,
+    message: string,
+    authorName: string,
+    channelName: string,
+    sectionName: string,
+    createAt: number,
+}
+
+export interface ChannelCount {
+    name: string,
+    count: number,
+}
+
+export interface GetBacklinksResult {
+    items: Backlink[],
+    channelsCount: ChannelCount[]
+}

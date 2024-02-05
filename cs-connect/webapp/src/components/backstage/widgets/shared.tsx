@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import styled, {css} from 'styled-components';
-import React from 'react';
+import React, {useContext} from 'react';
 import {useRouteMatch} from 'react-router-dom';
 import {Input} from 'antd';
 
@@ -10,6 +10,7 @@ import {buildIdForUrlHashReference, buildToForCopy} from 'src/hooks';
 import {BaseInput} from 'src/components/assets/inputs';
 import CopyLink from 'src/components/commons/copy_link';
 import {PrimaryButton} from 'src/components/assets/buttons';
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
 type AnchorLinkTitleProps = {
     fullUrl: string;
@@ -34,12 +35,13 @@ const buildTo = (
 export const AnchorLinkTitle = (props: AnchorLinkTitleProps) => {
     const {url} = useRouteMatch();
     const itemId = buildIdForUrlHashReference('section-link', props.id);
+    const hyperlinkPath = useContext(HyperlinkPathContext);
 
     return (
         <LinkTitle>
             <CopyLink
                 id={itemId}
-                text={props.text}
+                text={`${hyperlinkPath}.${props.text}`}
                 to={buildToForCopy(buildTo(props.fullUrl, props.id, props.query, url))}
                 name={props.title}
                 area-hidden={true}

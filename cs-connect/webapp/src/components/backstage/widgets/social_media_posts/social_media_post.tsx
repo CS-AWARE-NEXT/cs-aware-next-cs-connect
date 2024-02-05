@@ -35,6 +35,7 @@ type Props = {
     post: Post;
     parentId: string;
     sectionId: string;
+    hyperlinkPath: string;
 };
 
 const getAvatarComponent = (
@@ -67,7 +68,7 @@ const getAvatarComponent = (
     );
 };
 
-const SocialMediaPost: FC<Props> = ({post, parentId, sectionId}) => {
+const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) => {
     const {formatMessage} = useIntl();
     const isRhs = useContext(IsRhsContext);
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
@@ -128,7 +129,7 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId}) => {
         return (
             <CopyImage
                 to={buildToForCopy(buildTo(fullUrl, mediaId, query, url))}
-                text={`${post.title}'s media`}
+                text={`${hyperlinkPath}.${post.title}.Media`}
                 imageProps={{
                     id: mediaId,
                     width,
@@ -156,6 +157,7 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId}) => {
                         title={post.title}
                         parentId={parentId}
                         sectionId={sectionId}
+                        hyperlinkPath={hyperlinkPath}
                     />}
             />
             <MarkdownEditWithID

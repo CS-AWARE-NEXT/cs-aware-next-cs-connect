@@ -17,6 +17,7 @@ import {formatName} from 'src/helpers';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
+import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
 type Props = {
     name: string;
@@ -48,6 +49,11 @@ const ObjectSelect: FC<Props> = ({
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
+    const hyperlinkPathContext = useContext(HyperlinkPathContext);
+    let hyperlinkPath = `${hyperlinkPathContext}.${name}`;
+    if (selectedObject) {
+        hyperlinkPath += `.${selectedObject.value}`;
+    }
 
     const id = `${formatName(name)}-${sectionId}-${parentId}`;
     const query = buildQuery(parentId, sectionId);
@@ -98,10 +104,12 @@ const ObjectSelect: FC<Props> = ({
                 options={objects}
                 onChange={(value) => setSelectedObject({value, label: value})}
             />
-            <Object>
-                {children && children}
-                {!children && <Empty/>}
-            </Object>
+            <HyperlinkPathContext.Provider value={hyperlinkPath}>
+                <Object>
+                    {children && children}
+                    {!children && <Empty/>}
+                </Object>
+            </HyperlinkPathContext.Provider>
         </Container>
     );
 };

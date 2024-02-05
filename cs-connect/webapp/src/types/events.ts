@@ -17,3 +17,7 @@ export interface GetUserPropsParams {
 export interface ArchiveIssueChannelsParams {
     issueId: string;
 }
+
+export interface GetBacklinksParams {
+    elementUrl: string;
+}

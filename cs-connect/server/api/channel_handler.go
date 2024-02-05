@@ -31,6 +31,9 @@ func NewChannelHandler(router *mux.Router, channelService *app.ChannelService) *
 	channelRouter.HandleFunc("", withContext(handler.getChannelByID)).Methods(http.MethodGet)
 	channelRouter.HandleFunc("/export", withContext(handler.exportChannel)).Methods(http.MethodPost)
 
+	backlinksRouter := router.PathPrefix("/backlinks").Subrouter()
+	backlinksRouter.HandleFunc("", withContext(handler.getBacklinks)).Methods(http.MethodGet)
+
 	return handler
 }
 
@@ -75,6 +78,22 @@ func (h *ChannelHandler) addChannel(c *Context, w http.ResponseWriter, r *http.R
 		return
 	}
 	ReturnJSON(w, result, http.StatusOK)
+}
+
+func (h *ChannelHandler) getBacklinks(c *Context, w http.ResponseWriter, r *http.Request) {
+	elementURL := r.URL.Query().Get("elementUrl")
+	userID := r.Header.Get("Mattermost-User-Id")
+	backlinks, err := h.channelService.GetBacklinks(elementURL, userID)
+	if err != nil {
+		if errors.Is(err, app.ErrNotFound) {
+			h.HandleErrorWithCode(w, c.logger, http.StatusNotFound, "channel not found", err)
+		} else {
+			h.HandleError(w, c.logger, err)
+		}
+		return
+	}
+
+	ReturnJSON(w, backlinks, http.StatusOK)
 }
 
 func (h *ChannelHandler) exportChannel(c *Context, w http.ResponseWriter, r *http.Request) {

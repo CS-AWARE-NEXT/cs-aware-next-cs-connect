@@ -41,6 +41,7 @@ type Props = {
     parentId: string;
     sectionId: string;
     delay?: number;
+    hyperlinkPath: string;
 };
 
 const SimpleLineChart: FC<Props> = ({
@@ -49,6 +50,7 @@ const SimpleLineChart: FC<Props> = ({
     parentId,
     sectionId,
     delay = 1,
+    hyperlinkPath,
 }) => {
     const isRhs = useContext(IsRhsContext);
 
@@ -137,6 +139,7 @@ const SimpleLineChart: FC<Props> = ({
                                         selectedDot={selectedDot}
                                         parentId={parentId}
                                         sectionId={sectionId}
+                                        hyperlinkPath={hyperlinkPath}
                                     />}
                             />
                         ))}

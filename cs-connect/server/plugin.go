@@ -137,13 +137,8 @@ func (p *Plugin) MessageWillBeUpdated(c *plugin.Context, newPost, oldPost *model
 }
 
 func (p *Plugin) MessageHasBeenPosted(c *plugin.Context, post *model.Post) {
-	// p.API.LogInfo("MessageHasBeenPosted", "post", post)
-	// retrievedPost, err := p.API.GetPost(post.Id)
-	// if err != nil {
-	// 	p.API.LogError("Cannot get post", "postId", post.Id)
-	// 	return
-	// }
-	// p.API.LogInfo("Retrieved post", "post", retrievedPost)
+	p.API.LogInfo("MessageHasBeenPosted", "post", post)
+	p.channelService.AddBacklinkIfPresent(post)
 }
 
 func (p *Plugin) getPluginIDFromManifest() string {
