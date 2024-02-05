@@ -488,7 +488,7 @@ export const useChannelsList = (defaultFetchParams: FetchChannelsParams): Widget
         let isCanceled = false;
         async function fetchChannelsAsync() {
             const channelsReturn = await fetchChannels(defaultFetchParams);
-            if (!isCanceled) {
+            if (!isCanceled && channelsReturn.items) {
                 setChannels(channelsReturn.items);
             }
         }
