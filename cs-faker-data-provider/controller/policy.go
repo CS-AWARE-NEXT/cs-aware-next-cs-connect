@@ -100,7 +100,7 @@ func (pc *PolicyController) SavePolicy(c *fiber.Ctx) error {
 				Name:           policy.Name,
 				Description:    policy.Description,
 				OrganizationId: policy.OrganizationId,
-				Exported:       false,
+				Exported:       "false",
 			},
 		})
 		policyID = policy.ID
@@ -243,9 +243,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		}
 		policyTemplate.Tags = append(policyTemplate.Tags, policyTemplateField.Value)
 	case "exported":
-		if !policyTemplate.Exported {
-			policyTemplate.Exported = true
-		}
+		policyTemplate.Exported = "true"
 	default:
 		return c.JSON(fiber.Map{
 			"error": "Not a valid policy template field provided",

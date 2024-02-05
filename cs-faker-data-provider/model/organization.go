@@ -82,7 +82,7 @@ type Policy struct {
 	Name           string `json:"name"`
 	Description    string `json:"description"`
 	OrganizationId string `json:"organizationId"`
-	Exported       bool   `json:"exported"`
+	Exported       string `json:"exported"`
 }
 
 type Story struct {
