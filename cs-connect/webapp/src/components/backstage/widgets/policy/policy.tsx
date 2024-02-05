@@ -138,7 +138,7 @@ const Policy: FC<Props> = ({
                 />
             </Header>
 
-            {(template && template.exported) ?
+            {(template && template.exported === 'true') ?
                 <Tag color='green'><FormattedMessage defaultMessage='Exported'/></Tag> :
                 <Tag color='blue'><FormattedMessage defaultMessage='Ongoing'/></Tag>}
 
