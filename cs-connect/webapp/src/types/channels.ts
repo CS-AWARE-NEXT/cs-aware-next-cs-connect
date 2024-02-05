@@ -64,6 +64,7 @@ export interface Backlink {
 export interface ChannelCount {
     name: string,
     count: number,
+    sectionName: string,
 }
 
 export interface GetBacklinksResult {
