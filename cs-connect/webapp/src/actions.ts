@@ -1,5 +1,6 @@
 import {
     CHANNEL_CREATION,
+    EXPORT_CHANNEL,
     SET_ADD_CHANNEL_ERROR_MESSAGE,
     SET_NAME_ERROR_MESSAGE,
     SET_SELECT_ERROR_MESSAGE,
@@ -34,6 +35,13 @@ export const selectErrorMessageAction = (selectErrorMessage = '') => {
     return {
         type: SET_SELECT_ERROR_MESSAGE,
         selectErrorMessage,
+    };
+};
+
+export const exportAction = (channelId: string) => {
+    return {
+        type: EXPORT_CHANNEL,
+        channelId,
     };
 };
 

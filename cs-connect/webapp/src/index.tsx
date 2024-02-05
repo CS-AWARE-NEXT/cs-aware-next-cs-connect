@@ -26,6 +26,9 @@ import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
 import LHSView from './components/lhs/lhs';
 import {updatePolicyTemplateFieldAction} from './actions';
+import {ExportButton} from './components/commons/export';
+import {exportAction} from './actions';
+import PluginReducers from './plugin_reducers';
 
 type WindowObject = {
     location: {
@@ -187,6 +190,11 @@ export default class Plugin {
             PRODUCT_DOCUMENTATION,
         );
 
+        registry.registerChannelHeaderMenuAction(
+            <ExportButton/>,
+            (channelId: string) => store.dispatch(exportAction(channelId))
+        );
+
         registry.registerChannelHeaderButtonAction(withPlatformOperations(HiddenIcon), () => null, '', '');
 
         registry.registerSlashCommandWillBePostedHook(slashCommandWillBePosted);
@@ -194,6 +202,8 @@ export default class Plugin {
         registry.registerMessageWillBeUpdatedHook(messageWillBeUpdated);
 
         registry.registerLeftSidebarHeaderComponent(LHSView);
+
+        registry.registerReducer(PluginReducers);
 
         registerPolicyPostMenu(registry, store);
 

@@ -9,6 +9,7 @@ export const CHANNEL_CREATION: string = createActionType('_channel_creation');
 export const SET_ADD_CHANNEL_ERROR_MESSAGE: string = createActionType('_set_add_channel_error_message');
 export const SET_NAME_ERROR_MESSAGE: string = createActionType('_set_name_error_message');
 export const SET_SELECT_ERROR_MESSAGE: string = createActionType('_set_select_error_message');
+export const EXPORT_CHANNEL: string = createActionType('_export_channel');
 
 export interface SetChannelCreationAction {
     type: string;
@@ -28,4 +29,9 @@ export interface SetNameErrorMessageAction {
 export interface SetSelectErrorMessageAction {
     type: string;
     selectErrorMessage: string;
+}
+
+export interface SetExportAction {
+    type: string;
+    channelId: string;
 }

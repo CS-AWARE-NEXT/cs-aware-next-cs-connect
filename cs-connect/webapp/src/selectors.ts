@@ -12,6 +12,8 @@ import {Channel} from 'mattermost-webapp/packages/types/src/channels';
 import {Post} from 'mattermost-webapp/packages/types/src/posts';
 import {IDMappedObjects} from 'mattermost-webapp/packages/types/src/utilities';
 
+import {pluginId} from './manifest';
+
 export const teamNameSelector = (teamId: string) => (state: GlobalState): Team => getTeam(state, teamId);
 export const channelNameSelector = (channelId: string) => (state: GlobalState): Channel => getChannel(state, channelId);
 export const postSelector = (postId: string) => (state: GlobalState): Post => getPost(state, postId);
@@ -19,3 +21,6 @@ export const postsInCurrentChannelSelector = () => (state: GlobalState): PostWit
 
 // IDMappedObjects is a map of objects by id, e.g. postid: post
 export const allPostsSelector = () => (state: GlobalState): IDMappedObjects<Post> => getAllPosts(state);
+
+const getPluginState = (state: any): any => state['plugins-' + pluginId] || {};
+export const exportChannelSelector = (state: any) => getPluginState(state).setExportChannel;

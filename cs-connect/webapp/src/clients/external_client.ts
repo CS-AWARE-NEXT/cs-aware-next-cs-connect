@@ -29,8 +29,12 @@ export const fetchPolicyTemplate = async (url: string): Promise<PolicyTemplate> 
     return data;
 };
 
+export const getSectionInfoUrl = (id: string, url: string): string => {
+    return `${url}/${id}`;
+};
+
 export const fetchSectionInfo = async (id: string, url: string): Promise<SectionInfo> => {
-    let data = await doGet<SectionInfo>(`${url}/${id}`);
+    let data = await doGet<SectionInfo>(getSectionInfoUrl(id, url));
     if (!data) {
         data = {id: '', name: ''} as SectionInfo;
     }
