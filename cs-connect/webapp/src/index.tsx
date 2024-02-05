@@ -25,9 +25,8 @@ import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} fro
 import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
 import LHSView from './components/lhs/lhs';
-import {updatePolicyTemplateFieldAction} from './actions';
+import {exportAction, updatePolicyTemplateFieldAction} from './actions';
 import {ExportButton} from './components/commons/export';
-import {exportAction} from './actions';
 import PluginReducers from './plugin_reducers';
 
 type WindowObject = {
