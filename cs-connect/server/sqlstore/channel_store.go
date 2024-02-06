@@ -201,6 +201,7 @@ func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.
 	channelName := baseChannelName
 	_, channelExists := s.pluginAPI.API.GetChannelByName(params.TeamID, channelName, true)
 	counter := 1
+	// the GetChannelByName call did NOT fail, therefore a channel exists. Try suffixing with a counter until an unique name is found.
 	for channelExists == nil {
 		channelName = fmt.Sprintf("%s-%d", baseChannelName, counter)
 		counter++
@@ -209,6 +210,7 @@ func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.
 			break
 		}
 	}
+	// No unique name has been found, fail
 	if channelExists == nil {
 		return nil, errors.Errorf("couldn't generate an unique channel after %d attempts (base name: %s)", counter, strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")))
 	}
