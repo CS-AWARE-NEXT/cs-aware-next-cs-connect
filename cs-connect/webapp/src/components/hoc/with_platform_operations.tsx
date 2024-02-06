@@ -4,10 +4,17 @@ import {useSelector} from 'react-redux';
 import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
 import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 
-import {useHideOptions, useSuggestions, useUserAdded} from 'src/hooks';
+import {
+    useChannelById,
+    useHideOptions,
+    useSuggestions,
+    useUserAdded,
+} from 'src/hooks';
 import Suggestions from 'src/components/chat/suggestions';
 import {channelNameSelector, teamNameSelector} from 'src/selectors';
 import {getShowOptionsConfig} from 'src/config/config';
+
+import {Exporter} from 'src/components/commons/export';
 
 const withPlatformOperations = (Component: ComponentType): (props: any) => JSX.Element => {
     return (props: any): JSX.Element => {
@@ -32,6 +39,8 @@ const withPlatformOperations = (Component: ComponentType): (props: any) => JSX.E
             localStorage.setItem('channelName', channel.name);
         }, [channelId, teamId]);
 
+        const channelByID = useChannelById(channelId);
+
         return (
             <>
                 <Component {...props}/>
@@ -42,6 +51,11 @@ const withPlatformOperations = (Component: ComponentType): (props: any) => JSX.E
                         />,
                         suggestions,
                     )}
+                {channelByID &&
+                <Exporter
+                    parentId={channelByID.parentId}
+                    sectionId={channelByID.sectionId}
+                />}
             </>
         );
     };
