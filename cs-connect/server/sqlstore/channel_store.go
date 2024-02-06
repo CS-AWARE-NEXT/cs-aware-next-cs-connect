@@ -2,6 +2,8 @@ package sqlstore
 
 import (
 	"database/sql"
+	"fmt"
+	"math"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
@@ -23,6 +25,8 @@ type channelStore struct {
 	queryBuilder sq.StatementBuilderType
 
 	channelsSelect sq.SelectBuilder
+	// how many times shall we attempt generating a channel with a nonunique name by suffixing it with a counter
+	createChannelPatience int
 }
 
 // This is a way to implement interface explicitly
@@ -40,10 +44,11 @@ func NewChannelStore(pluginAPI PluginAPIClient, sqlStore *SQLStore) app.ChannelS
 		From("CSA_Channel")
 
 	return &channelStore{
-		pluginAPI:      pluginAPI,
-		store:          sqlStore,
-		queryBuilder:   sqlStore.builder,
-		channelsSelect: channelsSelect,
+		pluginAPI:             pluginAPI,
+		store:                 sqlStore,
+		queryBuilder:          sqlStore.builder,
+		channelsSelect:        channelsSelect,
+		createChannelPatience: 100,
 	}
 }
 
@@ -196,11 +201,29 @@ func (s *channelStore) createChannel(sectionID string, params app.AddChannelPara
 }
 
 func (s *channelStore) createAndAddChannel(params app.AddChannelParams) (*model.Channel, error) {
+	reservedChars := int(math.Log10(float64(s.createChannelPatience)) + 1)                                                      // number of digits of the patience int
+	baseChannelName := util.Substr(strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")), 0, 64-reservedChars) // Mattermost max length for channel names is 64 chars - reserve 4 for counters
+	channelName := baseChannelName
+	_, channelExists := s.pluginAPI.API.GetChannelByName(params.TeamID, channelName, true)
+	counter := 1
+	// the GetChannelByName call did NOT fail, therefore a channel exists. Try suffixing with a counter until an unique name is found.
+	for channelExists == nil {
+		channelName = fmt.Sprintf("%s-%d", baseChannelName, counter)
+		counter++
+		_, channelExists = s.pluginAPI.API.GetChannelByName(params.TeamID, channelName, true)
+		if counter > s.createChannelPatience {
+			break
+		}
+	}
+	// No unique name has been found, fail
+	if channelExists == nil {
+		return nil, errors.Errorf("couldn't generate an unique channel after %d attempts (base name: %s)", counter, strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")))
+	}
 	channel, err := s.pluginAPI.API.CreateChannel(&model.Channel{
 		TeamId:      params.TeamID,
 		Type:        s.getChannelType(params),
 		DisplayName: params.ChannelName,
-		Name:        strings.ToLower(strings.Join(strings.Fields(params.ChannelName), "-")),
+		Name:        channelName,
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "could not create channel to add")

@@ -125,12 +125,13 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
                                     type={'link'}
                                     onClick={() => {
                                         navigateToChannel(team.name, item.name);
+                                        Modal.destroyAll();
                                     }}
                                 >{'Jump'}</Button>}
                         >
                             <List.Item.Meta
                                 title={
-                                    <b>{item.name}</b>
+                                    <><b>{item.name}</b> <Tag style={{marginLeft: '10px'}}>{item.sectionName}</Tag></>
                                 }
                                 description={`${item.count} ${item.count > 1 ? 'mentions' : 'mention'} to the hyperlink`}
                             />
@@ -166,6 +167,8 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
             focusTriggerAfterClose: false,
             maskClosable: true,
             width: '90vw', // double than the default
+            closable: true,
+
             //bodyStyle: {minHeight: '80vh'}, useful to avoid going to a page with less than 3 elements and seeing the modal getting resized, but a static height gives worse aesthetic effects
         });
     };
@@ -187,9 +190,14 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
                     iconHeight={'28px'}
                 />
             </Tooltip>
-            <FormattedMessage
-                defaultMessage='Show backlinks'
-            />
+            <div
+                onClick={showModal}
+                style={{cursor: 'pointer', display: 'inline-block'}}
+            >
+                <FormattedMessage
+                    defaultMessage='Show backlinks'
+                />
+            </div>
             {contextHolder}
         </>
     );

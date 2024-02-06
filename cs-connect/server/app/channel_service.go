@@ -112,6 +112,7 @@ func (s *ChannelService) ArchiveChannels(params ArchiveChannelsParams) error {
 // Checks a post's message for the presence of cs-connect markdown links. In such case, they're added as backlinks.
 func (s *ChannelService) AddBacklinkIfPresent(post *mattermost.Post) {
 	serverConfig := s.api.GetConfig()
+	// ignore messages containing links not related to cs-connect
 	siteURL := *serverConfig.ServiceSettings.SiteURL
 
 	markdownMatches := s.markdownRegex.FindAllStringSubmatch(post.Message, -1)
@@ -176,7 +177,6 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 	}
 
 	backlinks := []Backlink{}
-	channelsCountMap := make(map[string]int)
 	for _, backlink := range dbBacklinks {
 		post, err := s.api.GetPost(backlink.PostID)
 		if err != nil {
@@ -227,7 +227,6 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 			SectionName: sectionName,
 			CreateAt:    post.CreateAt,
 		})
-		channelsCountMap[channel.Name]++
 	}
 
 	// Most recent first
@@ -235,9 +234,18 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 		return backlinks[i].CreateAt > backlinks[j].CreateAt
 	})
 
-	channelsCount := []ChannelsCount{}
-	for k, v := range channelsCountMap {
-		channelsCount = append(channelsCount, ChannelsCount{k, v})
+	channelsCountMap := make(map[string]*ChannelsCount)
+	for _, backlink := range backlinks {
+		if count, found := channelsCountMap[backlink.ChannelName]; found {
+			count.Count++
+		} else {
+			channelsCountMap[backlink.ChannelName] = &ChannelsCount{backlink.ChannelName, 1, backlink.SectionName}
+		}
+	}
+
+	channelsCount := []*ChannelsCount{}
+	for _, count := range channelsCountMap {
+		channelsCount = append(channelsCount, count)
 	}
 
 	// Order by count desc
