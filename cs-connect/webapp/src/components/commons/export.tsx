@@ -75,6 +75,7 @@ export const Exporter = ({parentId, sectionId}: Props) => {
             URL.revokeObjectURL(fileURL);
         }, 0);
         dispatch(exportAction(''));
+        setOpen(false);
     };
 
     const onCancel = () => {
