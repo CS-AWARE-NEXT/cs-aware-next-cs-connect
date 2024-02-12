@@ -12,6 +12,7 @@ import {channelNameSelector, teamNameSelector} from 'src/selectors';
 import {ToastProvider} from 'src/components/backstage/toast_banner';
 import {useChannelById} from 'src/hooks';
 import {notFoundWidgetChannel} from 'src/types/channels';
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 
 import RHSWidgets from './rhs_widgets';
 
@@ -127,13 +128,15 @@ const RHSView = () => {
             <FullUrlContext.Provider value={fullUrl}>
                 <IsRhsClosedContext.Provider value={closed}>
                     <SectionContext.Provider value={sectionContextOptions}>
-                        <ToastProvider>
-                            <RHSWidgets
-                                parentId={sectionContextOptions.parentId}
-                                sectionId={sectionContextOptions.sectionId}
-                                organizationId={sectionContextOptions.organizationId}
-                            />
-                        </ToastProvider>
+                        <OrganizationIdContext.Provider value={sectionContextOptions.organizationId}>
+                            <ToastProvider>
+                                <RHSWidgets
+                                    parentId={sectionContextOptions.parentId}
+                                    sectionId={sectionContextOptions.sectionId}
+                                    organizationId={sectionContextOptions.organizationId}
+                                />
+                            </ToastProvider>
+                        </OrganizationIdContext.Provider>
                     </SectionContext.Provider>
                 </IsRhsClosedContext.Provider>
             </FullUrlContext.Provider>
