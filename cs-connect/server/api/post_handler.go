@@ -24,6 +24,7 @@ func NewPostHandler(router *mux.Router, postService *app.PostService) *PostHandl
 
 	channelsRouter := router.PathPrefix("/posts").Subrouter()
 	channelsRouter.HandleFunc("", withContext(handler.getPostsByIds)).Methods(http.MethodPost)
+	channelsRouter.HandleFunc("/{teamId}", withContext(handler.getPostsForTeam)).Methods(http.MethodGet)
 
 	return handler
 }
@@ -35,6 +36,17 @@ func (h *PostHandler) getPostsByIds(c *Context, w http.ResponseWriter, r *http.R
 		return
 	}
 	posts, err := h.postService.GetPostsByIds(params)
+	if err != nil {
+		h.HandleError(w, c.logger, err)
+		return
+	}
+	ReturnJSON(w, posts, http.StatusOK)
+}
+
+func (h *PostHandler) getPostsForTeam(c *Context, w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	teamID := vars["teamId"]
+	posts, err := h.postService.GetPostsForTeam(teamID)
 	if err != nil {
 		h.HandleError(w, c.logger, err)
 		return

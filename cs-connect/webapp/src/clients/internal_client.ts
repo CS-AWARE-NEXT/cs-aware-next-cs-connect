@@ -28,7 +28,12 @@ import {
 } from 'src/types/events';
 import {UserResult} from 'src/types/users';
 import {ExportReference} from 'src/components/commons/export';
-import {GetPostsByIdsResult, PostsByIdsParams} from 'src/types/post';
+import {
+    GetPostsByIdsResult,
+    GetPostsForTeamResult,
+    PostsByIdsParams,
+    PostsForTeamParams,
+} from 'src/types/post';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
 
@@ -108,6 +113,14 @@ export const fetchPostsByIds = async (params: PostsByIdsParams): Promise<GetPost
     );
     if (!data) {
         data = {posts: {}} as GetPostsByIdsResult;
+    }
+    return data;
+};
+
+export const fetchPostsForTeam = async (params: PostsForTeamParams): Promise<GetPostsForTeamResult> => {
+    let data = await doGet<GetPostsForTeamResult>(`${apiUrl}/posts/${params.teamId}`);
+    if (!data) {
+        data = {posts: {}} as GetPostsForTeamResult;
     }
     return data;
 };

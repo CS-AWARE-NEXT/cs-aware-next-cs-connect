@@ -37,6 +37,7 @@ import {
     fetchPolicyTemplate,
     fetchPostData,
     fetchPostsByIds,
+    fetchPostsForTeam,
     fetchSectionInfo,
     fetchTableData,
     fetchTextBoxData,
@@ -70,7 +71,12 @@ import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
 import {PolicyTemplate} from 'src/types/policy';
-import {GetPostsByIdsResult, PostsByIdsParams} from 'src/types/post';
+import {
+    GetPostsByIdsResult,
+    GetPostsForTeamResult,
+    PostsByIdsParams,
+    PostsForTeamParams,
+} from 'src/types/post';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -527,6 +533,28 @@ export const usePostsByIds = (params: PostsByIdsParams): GetPostsByIdsResult => 
     }, [params.postIds]);
 
     return postsByIds as GetPostsByIdsResult;
+};
+
+export const usePostsForTeam = (params: PostsForTeamParams): GetPostsForTeamResult => {
+    const [postsForTeam, setPostsForTeam] = useState<GetPostsForTeamResult | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchPostsForTeamAsync() {
+            const postsForTeamResult = await fetchPostsForTeam(params);
+            if (!isCanceled) {
+                setPostsForTeam(postsForTeamResult);
+            }
+        }
+
+        fetchPostsForTeamAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [params.teamId]);
+
+    return postsForTeam as GetPostsForTeamResult;
 };
 
 export const useChannelsList = (defaultFetchParams: FetchChannelsParams): WidgetChannel[] => {

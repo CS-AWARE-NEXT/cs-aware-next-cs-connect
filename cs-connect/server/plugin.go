@@ -75,7 +75,7 @@ func (p *Plugin) OnActivate() error {
 	p.platformService = config.NewPlatformService(p.API, configFileName, defaultConfigFileName)
 	p.categoryService = app.NewCategoryService(p.API, p.platformService, channelStore, categoryStore, mattermostChannelStore)
 	p.channelService = app.NewChannelService(p.API, channelStore, mattermostChannelStore, p.categoryService, p.platformService)
-	p.postService = app.NewPostService(p.API)
+	p.postService = app.NewPostService(p.API, p.channelService)
 	p.eventService = app.NewEventService(p.API, p.platformService, p.channelService, p.categoryService, p.botID, p.configuration)
 	p.userService = app.NewUserService(p.API)
 
