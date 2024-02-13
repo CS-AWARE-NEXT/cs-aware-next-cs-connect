@@ -13,11 +13,12 @@ import {Tag} from 'antd';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
-import {buildQuery} from 'src/hooks';
+import {buildQuery, usePostsForTeam} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {PolicyTemplate} from 'src/types/policy';
 import {allPostsSelector, teamNameSelector} from 'src/selectors';
 import MultiTextBox from 'src/components/backstage/widgets/text_box/multi_text_box';
+import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 import {generatePolicySectionMessages} from './policy_section';
 
@@ -46,8 +47,8 @@ const Policy: FC<Props> = ({
     sectionUrl,
 }) => {
     const {formatMessage} = useIntl();
-
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
+    const isRhs = useContext(IsRhsContext);
     const fullUrl = useContext(FullUrlContext);
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
@@ -66,14 +67,27 @@ const Policy: FC<Props> = ({
 
     const tooltipText = formatMessage({defaultMessage: 'Right-click to Open Menu'});
 
-    const allPosts = useSelector(allPostsSelector());
-
+    // Both selector and API call, see the if below for the reason
+    // that uses https://developers.mattermost.com/integrate/reference/server/server-reference/#API.GetPostsForChannel
+    // to get all posts for a channel and call it for each channel in the user's team
+    // using https://developers.mattermost.com/integrate/reference/server/server-reference/#API.GetChannelsForTeamForUser
+    // or https://developers.mattermost.com/integrate/reference/server/server-reference/#API.GetChannelsForTeamForUser
+    // check also if you need to use https://developers.mattermost.com/integrate/reference/server/server-reference/#API.GetPostThread
+    // to get posts that are replies to another post, you can use the post.ReplyCount field to check if a post has replies
+    let allPosts = useSelector(allPostsSelector());
+    const {posts} = usePostsForTeam({teamId});
+    if (!isRhs) {
+        // if it is not in RHS we must use server-side props because users won't have access to posts from channels they're not into
+        // in RHS we can use Mattermost selector posts because we need interactivity and users need only the posts in the channel
+        allPosts = posts;
+    }
     const purposeMessages = generatePolicySectionMessages({
         template,
         setTemplate,
         sectionName: 'purpose',
         allPosts,
         team,
+        isRhs,
         tooltipText,
         removeEndpoint: sectionUrl,
     });
@@ -83,6 +97,7 @@ const Policy: FC<Props> = ({
         sectionName: 'elements',
         allPosts,
         team,
+        isRhs,
         tooltipText,
         removeEndpoint: sectionUrl,
     });
@@ -92,6 +107,7 @@ const Policy: FC<Props> = ({
         sectionName: 'need',
         allPosts,
         team,
+        isRhs,
         tooltipText,
         removeEndpoint: sectionUrl,
     });
@@ -101,6 +117,7 @@ const Policy: FC<Props> = ({
         sectionName: 'rolesAndResponsibilities',
         allPosts,
         team,
+        isRhs,
         tooltipText,
         removeEndpoint: sectionUrl,
     });
@@ -110,6 +127,7 @@ const Policy: FC<Props> = ({
         sectionName: 'references',
         allPosts,
         team,
+        isRhs,
         tooltipText,
         removeEndpoint: sectionUrl,
     });
@@ -119,6 +137,7 @@ const Policy: FC<Props> = ({
         sectionName: 'tags',
         allPosts,
         team,
+        isRhs,
         tooltipText,
         removeEndpoint: sectionUrl,
     });

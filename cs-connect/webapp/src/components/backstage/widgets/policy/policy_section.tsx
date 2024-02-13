@@ -2,13 +2,12 @@ import React, {Dispatch, FC, SetStateAction} from 'react';
 import {Post} from 'mattermost-webapp/packages/types/src/posts';
 import {Team} from 'mattermost-webapp/packages/types/src/teams';
 import {useIntl} from 'react-intl';
-import {IDMappedObjects} from 'mattermost-webapp/packages/types/src/utilities';
 
 import {navigateToUrl} from 'src/browser_routing';
 import {MultiText} from 'src/components/backstage/widgets/text_box/multi_text_box';
 import {PolicyTemplate} from 'src/types/policy';
-
 import {saveSectionInfo} from 'src/clients';
+import {IDMappedPosts} from 'src/types/post';
 
 type JumpProps = {
     post: Post;
@@ -68,9 +67,10 @@ type PolicySectionOptions = {
     template: PolicyTemplate,
     setTemplate: Dispatch<SetStateAction<PolicyTemplate>>;
     sectionName: string,
-    allPosts: IDMappedObjects<Post>,
+    allPosts?: IDMappedPosts,
     team: Team,
     tooltipText: string,
+    isRhs: boolean,
 
     removeEndpoint: string,
 };
@@ -82,16 +82,25 @@ export const generatePolicySectionMessages = (options: PolicySectionOptions): Mu
         sectionName,
         allPosts,
         team,
+        isRhs,
         tooltipText,
         removeEndpoint,
     } = options;
 
     const pointer = true;
 
+    if (!allPosts) {
+        return [];
+    }
+
     const messages: MultiText[] = template && template[sectionName] ? (template[sectionName] as string[]).
         map((section) => {
             const post = allPosts[section];
-            return post ? {
+            if (!post) {
+                return {text: ''};
+            }
+
+            const message = {
                 text: post.message,
                 id: post.id,
                 pointer,
@@ -120,7 +129,34 @@ export const generatePolicySectionMessages = (options: PolicySectionOptions): Mu
                         key: `${post.id}-remove`,
                     },
                 ],
-            } : {text: ''};
+            };
+
+            if (!isRhs) {
+                // do not allow remove when in backstage
+                message.dropdownItems = message.dropdownItems.filter((item) => item.key !== `${post.id}-remove`);
+            }
+
+            return message;
+
+            // In case you want to allow removing posts from the policy only for the user who created the post
+            // const isPostFromCurrentUser = post.user_id === userId;
+            // if (isPostFromCurrentUser) {
+            //     if (message.dropdownItems) {
+            //         message.dropdownItems.push({
+            //             label: (
+            //                 <PolicyRemove
+            //                     template={template}
+            //                     setTemplate={setTemplate}
+            //                     sectionName={sectionName}
+            //                     post={post}
+            //                     removeEndpoint={removeEndpoint}
+            //                 />
+            //             ),
+            //             danger: true,
+            //             key: `${post.id}-remove`,
+            //         });
+            //     }
+            // }
         }).
         filter((message) => message.text !== '') : [];
     return messages;
