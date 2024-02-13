@@ -335,6 +335,7 @@ const Graph = ({
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
+            marginBottom={(isRhs && isRhsClosed) ? '0px' : '42px'}
         >
             <GraphContainer
                 id={id}
@@ -434,12 +435,12 @@ const GraphContainer = styled.div<{width: string, height: string}>`
     margin-bottom: 24px;
 `;
 
-const Container = styled.div<{containerDirection: string}>`
+const Container = styled.div<{containerDirection: string, marginBottom: string}>`
     width: 100%;
     display: flex;
     flex-direction: ${(props) => props.containerDirection};
     margin-top: 24px;
-    margin-bottom: 36px;
+    margin-bottom: ${(props) => props.marginBottom};
 `;
 
 const GraphSidebar = styled.div<{width: string, noMargin: boolean}>`

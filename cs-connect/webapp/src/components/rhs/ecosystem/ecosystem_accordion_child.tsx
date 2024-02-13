@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {useIntl} from 'react-intl';
+import {Alert} from 'antd';
 
 import {useSection, useSectionInfo} from 'src/hooks';
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
@@ -12,6 +13,8 @@ type Props = {
 };
 
 const EcosystemAccordionChild = ({element}: Props) => {
+    const {formatMessage} = useIntl();
+
     const section = useSection(element.parentId);
     const sectionInfo = useSectionInfo(element.id, section?.url);
     const fullUrl = useContext(FullUrlContext);
@@ -19,15 +22,30 @@ const EcosystemAccordionChild = ({element}: Props) => {
 
     return (
         <>
-            {(section && sectionInfo) ?
-                <SectionContext.Provider value={{parentId: element.parentId, sectionId: element.id, organizationId: sectionContextOptions.organizationId}}>
-                    <RhsSectionsWidgetsContainer
-                        headerPath={`${getSiteUrl()}${fullUrl}#_${sectionInfo.id}`}
-                        sectionInfo={sectionInfo}
-                        url={fullUrl}
-                        widgets={section?.widgets}
-                    />
-                </SectionContext.Provider> : <FormattedMessage defaultMessage='The channel is not related to any section.'/>}
+            {(section && sectionInfo) ? (
+                <>
+                    {(sectionInfo.id !== '' && sectionInfo.name !== '') ?
+                        <SectionContext.Provider value={{parentId: element.parentId, sectionId: element.id, organizationId: sectionContextOptions.organizationId}}>
+                            <RhsSectionsWidgetsContainer
+                                headerPath={`${getSiteUrl()}${fullUrl}#_${sectionInfo.id}`}
+                                sectionInfo={sectionInfo}
+                                section={section}
+                                url={fullUrl}
+                                widgets={section?.widgets}
+                            />
+                        </SectionContext.Provider> :
+                        <Alert
+                            message={formatMessage({defaultMessage: 'This section has been deleted!'})}
+                            type='info'
+                            style={{marginTop: '8px'}}
+                        />}
+                </>
+            ) : (
+                <Alert
+                    message={formatMessage({defaultMessage: 'The channel is not related to any section.'})}
+                    type='info'
+                    style={{marginTop: '8px'}}
+                />)}
         </>
     );
 };

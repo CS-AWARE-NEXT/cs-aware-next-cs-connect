@@ -1,7 +1,7 @@
 import React, {FC, HTMLAttributes} from 'react';
 import styled, {css} from 'styled-components';
-
 import {
+    Alert,
     Button,
     Card,
     List,
@@ -11,24 +11,17 @@ import {
     TabsProps,
     Tag,
 } from 'antd';
-
 import {useSelector} from 'react-redux';
-
 import {getCurrentTeamId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/teams';
-
-import {FormattedMessage} from 'react-intl';
-
+import {FormattedMessage, useIntl} from 'react-intl';
 import {Team} from 'mattermost-webapp/packages/types/src/teams';
 
 import Tooltip from 'src/components/commons/tooltip';
 import {OVERLAY_DELAY} from 'src/constants';
 import {getBacklinks} from 'src/clients';
-
 import {navigateToChannel, navigateToPost} from 'src/browser_routing';
 import {Timestamp} from 'src/webapp_globals';
-
 import {teamNameSelector} from 'src/selectors';
-
 import {Backlink, ChannelCount} from 'src/types/channels';
 import MarkdownEdit from 'src/components/commons/markdown_edit';
 
@@ -73,6 +66,7 @@ const BacklinkItem = ({backlink, team}: BacklinkItemProps) => {
 };
 
 const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props) => {
+    const {formatMessage} = useIntl();
     const teamId = useSelector(getCurrentTeamId);
     const team = useSelector(teamNameSelector(teamId));
     const [modal, contextHolder] = Modal.useModal();
@@ -142,6 +136,14 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
             </Space>
         );
 
+        const usersCountList = (
+            <Alert
+                message={formatMessage({defaultMessage: 'Work in progress!'})}
+                type='warning'
+                style={{marginTop: '8px', marginBottom: '8px'}}
+            />
+        );
+
         const items: TabsProps['items'] = [
             {
                 key: 'all',
@@ -153,7 +155,13 @@ const BacklinksAction: FC<Props & HTMLAttributes<HTMLElement>> = ({href}: Props)
                 label: 'Channels',
                 children: channelsCountList,
             },
+            {
+                key: 'Users',
+                label: 'Users',
+                children: usersCountList,
+            },
         ];
+
         const content = (
             <Tabs
                 defaultActiveKey='all'

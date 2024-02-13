@@ -12,6 +12,22 @@ import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
+import {PolicyTemplate, PolicyTemplateField} from 'src/types/policy';
+
+export const updatePolicyTemplateField = async (params: PolicyTemplateField, url: string): Promise<void> => {
+    await doPut<void>(
+        url,
+        JSON.stringify(params),
+    );
+};
+
+export const fetchPolicyTemplate = async (url: string): Promise<PolicyTemplate> => {
+    let data = await doGet<PolicyTemplate>(url);
+    if (!data) {
+        data = {} as PolicyTemplate;
+    }
+    return data;
+};
 
 export const getSectionInfoUrl = (id: string, url: string): string => {
     return `${url}/${id}`;
@@ -34,6 +50,10 @@ export const saveSectionInfo = async (params: SectionInfoParams, url: string): P
         data = {id: '', name: ''} as SectionInfo;
     }
     return data;
+};
+
+export const deleteSectionInfo = async (id: string, url: string): Promise<void> => {
+    await doDelete<void>(`${url}/${id}`);
 };
 
 export const updateSectionInfo = async (params: SectionInfoParams, url: string): Promise<SectionInfo> => {

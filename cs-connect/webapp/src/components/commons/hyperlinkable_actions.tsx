@@ -7,7 +7,8 @@ import {useIntl} from 'react-intl';
 
 import CopyLink from 'src/components/commons/copy_link';
 import DeleteAction from 'src/components/commons/delete_action';
-import EditAction from 'src/components/commons/edit_action';
+import EcosystemIssueEditAction from 'src/components/commons/ecosystem_issue_edit_action';
+import ExportAction from 'src/components/commons/export_action';
 import {Organization, SectionInfo} from 'src/types/organization';
 
 import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
@@ -16,14 +17,25 @@ type Props = {
     name: string;
     path: string;
     ecosystem: Organization;
-    url?: string
-    onDelete?: () => void
-    enableEdit?: boolean
-    sectionInfo?: SectionInfo
-    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
+    url?: string;
+    onDelete?: () => void;
+    onExport?: () => void;
+    enableEcosystemEdit?: boolean;
+    sectionInfo?: SectionInfo;
+    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>;
 };
 
-export const HyperlinkableActions = ({name, path, ecosystem, url, onDelete, enableEdit = false, sectionInfo, setSectionInfo}: Props) => {
+export const HyperlinkableActions = ({
+    name,
+    path,
+    ecosystem,
+    url,
+    onDelete,
+    onExport,
+    enableEcosystemEdit = false,
+    sectionInfo,
+    setSectionInfo,
+}: Props) => {
     const {formatMessage} = useIntl();
     const hyperlinkPath = useContext(HyperlinkPathContext);
 
@@ -42,13 +54,20 @@ export const HyperlinkableActions = ({name, path, ecosystem, url, onDelete, enab
                 modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
                 onDelete={onDelete}
             />}
-            {enableEdit &&
-            <StyledEditAction
+            {enableEcosystemEdit &&
+            <StyledEcosystemIssueEditAction
                 id='edit-tooltip'
                 sectionInfo={sectionInfo}
                 setSectionInfo={setSectionInfo}
                 ecosystem={ecosystem}
             />}
+            {(onExport && url) &&
+                <StyledExportAction
+                    id='export-tooltip'
+                    modalTitle={formatMessage({defaultMessage: 'Export'})}
+                    modalContent={formatMessage({defaultMessage: 'Are you sure you want to export?'})}
+                    onExport={onExport}
+                />}
         </>
     );
 };
@@ -73,7 +92,17 @@ const StyledDeleteAction = styled(DeleteAction)`
     place-items: center;
 `;
 
-const StyledEditAction = styled(EditAction)`
+const StyledExportAction = styled(ExportAction)`
+    border-radius: 4px;
+    font-size: 18px;
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+    display: grid;
+    place-items: center;
+`;
+
+const StyledEcosystemIssueEditAction = styled(EcosystemIssueEditAction)`
     border-radius: 4px;
     font-size: 18px;
     width: 28px;

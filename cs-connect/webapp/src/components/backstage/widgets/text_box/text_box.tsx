@@ -43,10 +43,11 @@ const TextBox = ({
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
-    const urlHash = useUrlHash();
+
     const {formatMessage} = useIntl();
     const id = customId || `${idPrefix}${formatName(name)}-${sectionId}-${parentId}-widget`;
     const placeholder = formatMessage({defaultMessage: 'There\'s no text to show'});
+    const urlHash = useUrlHash();
 
     return (
         <Container
@@ -66,13 +67,13 @@ const TextBox = ({
             <MarkdownEdit
                 placeholder={placeholder}
                 value={text}
-                borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : ''}
+                borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : undefined}
             />
         </Container>
     );
 };
 
-const Container = styled.div<{style: TextBoxStyle}>`
+export const Container = styled.div<{style: TextBoxStyle}>`
     width: ${(props) => (props.style.width ? props.style.width : '100%')};
     height: ${(props) => (props.style.height ? props.style.height : 'auto')};
     display: flex;

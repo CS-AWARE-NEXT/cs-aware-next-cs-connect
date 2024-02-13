@@ -57,6 +57,10 @@ type AddChannelResult struct {
 	SectionID string `json:"sectionId"`
 }
 
+type ArchiveChannelsParams struct {
+	SectionID string `json:"sectionId"`
+}
+
 type Backlink struct {
 	ID          string `json:"id"`
 	Message     string `json:"message"`

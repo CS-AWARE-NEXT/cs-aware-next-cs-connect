@@ -8,6 +8,7 @@ import qs from 'qs';
 import {
     AddChannelParams,
     AddChannelResult,
+    ArchiveChannelsParams,
     FetchChannelByIDResult,
     FetchChannelsParams,
     FetchChannelsResult,
@@ -27,6 +28,12 @@ import {
 } from 'src/types/events';
 import {UserResult} from 'src/types/users';
 import {ExportReference} from 'src/components/commons/export';
+import {
+    GetPostsByIdsResult,
+    GetPostsForTeamResult,
+    PostsByIdsParams,
+    PostsForTeamParams,
+} from 'src/types/post';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
 
@@ -99,6 +106,25 @@ export const fetchChannelById = async (channelId: string): Promise<FetchChannelB
     return data;
 };
 
+export const fetchPostsByIds = async (params: PostsByIdsParams): Promise<GetPostsByIdsResult> => {
+    let data = await doPost<GetPostsByIdsResult>(
+        `${apiUrl}/posts`,
+        JSON.stringify(params),
+    );
+    if (!data) {
+        data = {posts: {}} as GetPostsByIdsResult;
+    }
+    return data;
+};
+
+export const fetchPostsForTeam = async (params: PostsForTeamParams): Promise<GetPostsForTeamResult> => {
+    let data = await doGet<GetPostsForTeamResult>(`${apiUrl}/posts/${params.teamId}`);
+    if (!data) {
+        data = {posts: {}} as GetPostsForTeamResult;
+    }
+    return data;
+};
+
 export const addChannel = async (params: AddChannelParams): Promise<AddChannelResult> => {
     let data = await doPost<AddChannelResult>(
         `${apiUrl}/channels/${params.sectionId}`,
@@ -127,6 +153,13 @@ export const setUserOrganization = async (params: SetUserOrganizationParams): Pr
 export const archiveIssueChannels = async (params: ArchiveIssueChannelsParams): Promise<void> => {
     await doPost(
         `${apiUrl}/events/archive_issue_channels`,
+        JSON.stringify(params),
+    );
+};
+
+export const archiveChannels = async (params: ArchiveChannelsParams): Promise<void> => {
+    await doPost(
+        `${apiUrl}/channels/${params.sectionId}/archive_channels`,
         JSON.stringify(params),
     );
 };

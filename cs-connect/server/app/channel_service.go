@@ -95,6 +95,20 @@ func (s *ChannelService) AddChannel(sectionID string, params AddChannelParams) (
 	return addChannelResult, nil
 }
 
+func (s *ChannelService) ArchiveChannels(params ArchiveChannelsParams) error {
+	channels, err := s.GetChannelsBySectionID(params.SectionID)
+	if err != nil {
+		return fmt.Errorf("could not fetch channels for section %s", params.SectionID)
+	}
+
+	for _, channel := range channels.Items {
+		if deleteErr := s.api.DeleteChannel(channel.ChannelID); deleteErr != nil {
+			s.api.LogWarn("Failed to delete channel", "channelID", channel)
+		}
+	}
+	return nil
+}
+
 // Checks a post's message for the presence of cs-connect markdown links. In such case, they're added as backlinks.
 func (s *ChannelService) AddBacklinkIfPresent(post *mattermost.Post) {
 	serverConfig := s.api.GetConfig()
@@ -238,6 +252,8 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 	sort.Slice(channelsCount, func(i, j int) bool {
 		return channelsCount[i].Count > channelsCount[j].Count
 	})
+
+	// TODO: add user backlinks here similar to channel backlinks
 
 	return GetBacklinksResult{Items: backlinks, ChannelCount: channelsCount}, nil
 }

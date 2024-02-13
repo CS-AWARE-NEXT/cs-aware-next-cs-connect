@@ -3,6 +3,8 @@ import {GlobalState} from '@mattermost/types/store';
 import React from 'react';
 import {Store} from 'redux';
 import {render} from 'react-dom';
+import {FormattedMessage} from 'react-intl';
+import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
 
 import {
     DEFAULT_PATH,
@@ -23,9 +25,9 @@ import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} fro
 import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
 import LHSView from './components/lhs/lhs';
+import {exportAction, updatePolicyTemplateFieldAction} from './actions';
 import {LinkTooltip} from './components/link_tooltip';
 import {ExportButton} from './components/commons/export';
-import {exportAction} from './actions';
 import PluginReducers from './plugin_reducers';
 
 type WindowObject = {
@@ -71,6 +73,71 @@ const getSiteURLFromWindowObject = (obj: WindowObject): string => {
 
 const getSiteURL = (): string => {
     return getSiteURLFromWindowObject(window);
+};
+
+const registerPolicyPostMenu = (registry: any, store: Store<GlobalState>) => {
+    // eslint-disable-next-line no-unused-vars
+    const {
+        id,
+        rootRegisterMenuItem: policyRegisterMenuItem,
+    } = registry.registerPostDropdownSubMenuAction(
+        <FormattedMessage defaultMessage='Add to Policy'/>,
+    );
+
+    policyRegisterMenuItem(
+        <FormattedMessage defaultMessage='Purpose'/>,
+        (postId: string) =>
+            updatePolicyTemplateFieldAction({
+                policyId: getCurrentChannelId(store.getState()),
+                field: 'purpose',
+                value: postId,
+            }),
+    );
+    policyRegisterMenuItem(
+        <FormattedMessage defaultMessage='Elements'/>,
+        (postId: string) =>
+            updatePolicyTemplateFieldAction({
+                policyId: getCurrentChannelId(store.getState()),
+                field: 'elements',
+                value: postId,
+            }),
+    );
+    policyRegisterMenuItem(
+        <FormattedMessage defaultMessage='Need'/>,
+        (postId: string) =>
+            updatePolicyTemplateFieldAction({
+                policyId: getCurrentChannelId(store.getState()),
+                field: 'need',
+                value: postId,
+            }),
+    );
+    policyRegisterMenuItem(
+        <FormattedMessage defaultMessage='Roles & Responsibilities'/>,
+        (postId: string) =>
+            updatePolicyTemplateFieldAction({
+                policyId: getCurrentChannelId(store.getState()),
+                field: 'rolesandresponsibilities',
+                value: postId,
+            }),
+    );
+    policyRegisterMenuItem(
+        <FormattedMessage defaultMessage='References'/>,
+        (postId: string) =>
+            updatePolicyTemplateFieldAction({
+                policyId: getCurrentChannelId(store.getState()),
+                field: 'references',
+                value: postId,
+            }),
+    );
+    policyRegisterMenuItem(
+        <FormattedMessage defaultMessage='Tags'/>,
+        (postId: string) =>
+            updatePolicyTemplateFieldAction({
+                policyId: getCurrentChannelId(store.getState()),
+                field: 'tags',
+                value: postId,
+            }),
+    );
 };
 
 export default class Plugin {
@@ -136,7 +203,10 @@ export default class Plugin {
         registry.registerMessageWillBeUpdatedHook(messageWillBeUpdated);
 
         registry.registerLeftSidebarHeaderComponent(LHSView);
+
         registry.registerReducer(PluginReducers);
+
+        registerPolicyPostMenu(registry, store);
 
         // registry.registerMessageWillFormatHook(messageWillFormat);
     }
