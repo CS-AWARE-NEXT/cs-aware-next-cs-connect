@@ -253,6 +253,8 @@ func (s *ChannelService) GetBacklinks(elementURL string, userID string) (GetBack
 		return channelsCount[i].Count > channelsCount[j].Count
 	})
 
+	// TODO: add user backlinks here similar to channel backlinks
+
 	return GetBacklinksResult{Items: backlinks, ChannelCount: channelsCount}, nil
 }
 
