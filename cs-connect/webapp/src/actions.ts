@@ -51,6 +51,9 @@ export const updatePolicyTemplateFieldAction = (
 ) => {
     let url = getEcosystem().sections[0].url;
     url = url.replace('issues', 'organizations/policies/template');
+
+    // TODO: Add a check for posts in a way that posts it displays an error
+    // in case users try to add a message not containing only text.
     updatePolicyTemplateField(field, url);
 
     if (disableTimeout) {
