@@ -168,6 +168,9 @@ func useOrganizationsNews(organizations fiber.Router) {
 	newsWithId.Get("/", func(c *fiber.Ctx) error {
 		return newsController.GetNews(c)
 	})
+	newsWithId.Get("/news", func(c *fiber.Ctx) error {
+		return newsController.GetNewsPosts(c)
+	})
 }
 
 func useOrganizationsExercises(organizations fiber.Router) {
