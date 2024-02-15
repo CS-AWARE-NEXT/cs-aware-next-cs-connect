@@ -57,6 +57,17 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	if search == "" {
 		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
 	}
+
+	limit := c.Query("limit")
+	if limit == "" {
+		limit = "10"
+	}
+	limitInt, err := strconv.Atoi(limit)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{"error": "limit parameter is not a number"})
+	}
+
 	offset := c.Query("offset")
 	if offset == "" {
 		offset = "0"
@@ -73,7 +84,7 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 		Keywords:       keywords,
 		TargetLanguage: "en",
 		Offset:         offsetInt,
-		Limit:          10,
+		Limit:          limitInt,
 		NewerThan:      "2021-12-13T13:57:11.819492600Z",
 	})
 	if err != nil {
@@ -128,7 +139,10 @@ func (nc *NewsController) fromNewsPosts(
 			URL:     postId,
 		})
 	}
-	return model.SocialMediaPostData{Items: posts}
+	return model.SocialMediaPostData{
+		TotalCount: newsPosts.PageInfo.TotalCount,
+		Items:      posts,
+	}
 }
 
 func (nc *NewsController) buildContent(title string, text string) string {
@@ -137,6 +151,9 @@ func (nc *NewsController) buildContent(title string, text string) string {
 	// if len(text) > 5000 {
 	// 	textContent = fmt.Sprintf("%s...", strings.TrimSpace(text[:1000]))
 	// }
+	if title == "" {
+		return textContent
+	}
 	return fmt.Sprintf("### %s\n\n%s", title, textContent)
 }
 

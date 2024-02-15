@@ -230,7 +230,10 @@ func (sc *SocialMediaController) fromSocialMediaPostEntityData(
 			Retweets: post.Retweets,
 		})
 	}
-	return model.SocialMediaPostData{Items: posts}
+	return model.SocialMediaPostData{
+		TotalCount: len(posts),
+		Items:      posts,
+	}
 }
 
 func (sc *SocialMediaController) buildContent(post model.SocialMediaPostEntity) string {
