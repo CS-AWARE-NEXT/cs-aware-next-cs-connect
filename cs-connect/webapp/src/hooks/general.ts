@@ -32,6 +32,7 @@ import {
     fetchExerciseData,
     fetchGraphData,
     fetchListData,
+    fetchNewsPostData,
     fetchPaginatedTableData,
     fetchPlaybookData,
     fetchPolicyTemplate,
@@ -77,6 +78,7 @@ import {
     PostsByIdsParams,
     PostsForTeamParams,
 } from 'src/types/post';
+import {NewsError, NewsPostData, NewsQuery} from 'src/types/news';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -446,6 +448,41 @@ export const usePostData = (url: string): PostData => {
         };
     }, [url]);
     return postData as PostData;
+};
+
+export const useNewsPostData = (url: string, query: NewsQuery): NewsPostData | NewsError => {
+    const {search, offset, limit} = query;
+    const [newsPostData, setNewsPostData] = useState<NewsPostData | {}>({});
+    const [newsError, setNewsError] = useState<NewsError | null>(null);
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchNewsPostDataAsync() {
+            try {
+                const newsPostDataResult = await fetchNewsPostData(`${url}?search=${search}&offset=${offset}&limit=${limit}`);
+                if (!isCanceled) {
+                    setNewsPostData(newsPostDataResult);
+                    setNewsError(null);
+                }
+            } catch (err: any) {
+                if (!isCanceled) {
+                    setNewsPostData({});
+                    setNewsError({message: JSON.parse(err.message)});
+                }
+            }
+        }
+
+        fetchNewsPostDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url, search, offset]);
+
+    if (newsError) {
+        return newsError as NewsError;
+    }
+    return newsPostData as NewsPostData;
 };
 
 export const useChartData = (url: string, chartType: ChartType | undefined): ChartData => {

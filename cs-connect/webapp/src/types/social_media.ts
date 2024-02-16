@@ -1,4 +1,5 @@
 export type PostData = {
+    totalCount: number;
     items: Post[];
 };
 
