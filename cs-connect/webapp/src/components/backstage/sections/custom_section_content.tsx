@@ -24,8 +24,6 @@ type Props = {
 const CustomSectionContent = ({section, customView}: Props) => {
     const ecosystemGraphUrl = buildEcosystemGraphUrl(section.url, false);
     const isEcosystemGraphEnabled = getSystemConfig().ecosystemGraph;
-    // eslint-disable-next-line no-console
-    console.log('custom view', section, ecosystemGraphUrl);
 
     if (customView === 'ecosystem-graph') {
         return (
