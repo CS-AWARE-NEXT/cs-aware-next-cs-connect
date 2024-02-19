@@ -1,6 +1,7 @@
 import {
     Edge,
     Handle,
+    MarkerType,
     Node,
     NodeProps,
     Position,
@@ -46,9 +47,16 @@ export const buildNodeUrl = (options: GraphSectionOptions) => {
     return nodeUrl;
 };
 
-export const fillEdges = (edges: Edge[]) => {
+export const fillEdges = (edges: Edge[], withArrow?: boolean) => {
     const filledEdges: Edge[] = [];
     edges.forEach((edge) => {
+        if (withArrow) {
+            edge.markerEnd = {
+                type: MarkerType.Arrow,
+                height: 20,
+                width: 20,
+            };
+        }
         filledEdges.push({
             ...edge,
             type: edgeType,
@@ -87,7 +95,7 @@ export const markNodesAndEdges = (nodes: Node[], edges: Edge[], targetNode: Node
 
         edges.map((edge) => {
             if (edge.source === targetNode.id || edge.target === targetNode.id) {
-                edge.style = {stroke: '#1BC41B', strokeWidth: 2};
+                edge.style = {...edge.style, stroke: '#1BC41B', strokeWidth: 2};
                 if (edge.source === targetNode.id) {
                     nodeIdsToMark.push(edge.target);
                 } else {
@@ -129,10 +137,11 @@ export const markNodesAndEdges = (nodes: Node[], edges: Edge[], targetNode: Node
 // background: 'rgb(var(--button-bg-rgb), 0.4)',
 // border: '1px solid rgb(var(--button-bg-rgb), 0.2)',
 const GraphNodeType: FC<NodeProps & {
-    setNodeInfo: Dispatch<SetStateAction<GraphNodeInfo>>;
-    setTargetNodeId: (nodeId: string) => void;
-    setIsDrawerOpen: Dispatch<SetStateAction<boolean>>;
-    hyperlinkPath: string;
+    setNodeInfo?: Dispatch<SetStateAction<GraphNodeInfo>>;
+    setTargetNodeId?: (nodeId: string) => void;
+    setIsDrawerOpen?: Dispatch<SetStateAction<boolean>>;
+    hyperlinkPath?: string;
+    onNodeClick?: (id: string) => void;
 }> = ({
     id,
     data,
@@ -142,27 +151,11 @@ const GraphNodeType: FC<NodeProps & {
     setTargetNodeId,
     setIsDrawerOpen,
     hyperlinkPath,
+    onNodeClick,
 }) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
     const [openDropdown, setOpenDropdown] = useState<boolean>(false);
-
-    const onInfoClick = () => {
-        setIsDrawerOpen(true);
-        setNodeInfo({name: data.label, description: data.description, nodeId: id});
-        setOpenDropdown(false);
-    };
-
-    const onCopyLinkClick = (path: string, text: string) => {
-        copyToClipboard(formatUrlAsMarkdown(path, `${hyperlinkPath}.${text}`));
-        addToast({content: formatMessage({defaultMessage: 'Copied!'})});
-        setOpenDropdown(false);
-    };
-
-    const onViewConnectionsClick = () => {
-        setTargetNodeId(id);
-        setOpenDropdown(false);
-    };
 
     const getClassName = () => {
         let className = 'round-rectangle';
@@ -195,6 +188,74 @@ const GraphNodeType: FC<NodeProps & {
         return className;
     };
 
+    let content = (
+        <NodeContents
+            className={getClassName()}
+            style={{pointerEvents: 'visibleStroke', cursor: 'pointer'}}
+            onClick={() => {
+                if (onNodeClick) {
+                    onNodeClick(id);
+                }
+            }}
+        >
+            <span
+                style={{
+                    color: 'white',
+                    fontSize: 'bold',
+                    textAlign: 'center',
+                }}
+            >{data.label}</span>
+        </NodeContents>
+    );
+    if (setNodeInfo && setTargetNodeId && setIsDrawerOpen && hyperlinkPath) {
+        const onInfoClick = () => {
+            setIsDrawerOpen(true);
+            setNodeInfo({name: data.label, description: data.description, nodeId: id});
+            setOpenDropdown(false);
+        };
+
+        const onCopyLinkClick = (path: string, text: string) => {
+            copyToClipboard(formatUrlAsMarkdown(path, `${hyperlinkPath}.${text}`));
+            addToast({content: formatMessage({defaultMessage: 'Copied!'})});
+            setOpenDropdown(false);
+        };
+
+        const onViewConnectionsClick = () => {
+            setTargetNodeId(id);
+            setOpenDropdown(false);
+        };
+
+        content = (
+            <GraphNodeInfoDropdown
+                open={openDropdown}
+                setOpen={setOpenDropdown}
+                onInfoClick={onInfoClick}
+                onCopyLinkClick={() => onCopyLinkClick(path, data.label)}
+                onViewConnectionsClick={onViewConnectionsClick}
+            >
+                <StyledDropdownMenuItem
+                    className={getClassName()}
+                    hasHover={false}
+                    onClick={() => {
+                        setTargetNodeId(id);
+                    }}
+                    onContextMenu={(e: any) => {
+                        e.preventDefault();
+                        setOpenDropdown(!openDropdown);
+                    }}
+                >
+                    <span
+                        style={{
+                            color: 'white',
+                            fontSize: 'bold',
+                            textAlign: 'center',
+                        }}
+                    >{data.label}</span>
+                </StyledDropdownMenuItem>
+            </GraphNodeInfoDropdown>
+        );
+    }
+
     const path = `${data.url}#${id}-${data.sectionId}-${data.parentId}`;
     return (
         <GraphNodeContainer>
@@ -204,36 +265,8 @@ const GraphNodeType: FC<NodeProps & {
             />
             <NodeContainer
                 id={`${id}-${data.sectionId}-${data.parentId}`}
-                className={`parent-${getClassName()}`} // Used to properly outline masked nodes such as clouds and networks
-            >
-                <GraphNodeInfoDropdown
-                    open={openDropdown}
-                    setOpen={setOpenDropdown}
-                    onInfoClick={onInfoClick}
-                    onCopyLinkClick={() => onCopyLinkClick(path, data.label)}
-                    onViewConnectionsClick={onViewConnectionsClick}
-                >
-                    <StyledDropdownMenuItem
-                        className={getClassName()}
-                        hasHover={false}
-                        onClick={() => {
-                            setTargetNodeId(id);
-                        }}
-                        onContextMenu={(e: any) => {
-                            e.preventDefault();
-                            setOpenDropdown(!openDropdown);
-                        }}
-                    >
-                        <span
-                            style={{
-                                color: 'white',
-                                fontSize: 'bold',
-                                textAlign: 'center',
-                            }}
-                        >{data.label}</span>
-                    </StyledDropdownMenuItem>
-                </GraphNodeInfoDropdown>
-            </NodeContainer>
+                className={`parent-${getClassName()}`}
+            >{content}</NodeContainer>
             <Handle
                 type={'source'}
                 position={sourcePosition || Position.Right}
@@ -248,5 +281,15 @@ const GraphNodeType: FC<NodeProps & {
 // const NodeContainer = styled.div<{isUrlHashed?: boolean, kind?: string, noBorder?: boolean}>``;
 const NodeContainer = styled.div``;
 const GraphNodeContainer = styled.div``;
+const NodeContents = styled.div<{svgMarginRight?: string}>`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        margin-right: ${(props) => (props.svgMarginRight ? props.svgMarginRight : '11px')};
+        fill: rgb(var(--center-channel-color-rgb), 0.56);
+    }
+`;
 
 export default GraphNodeType;

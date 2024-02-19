@@ -12,6 +12,10 @@ import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
+import {EcosystemGraph} from 'src/types/ecosystem_graph';
+
+// Is there really no existing list of consts for status codes?
+const HTTP_STATUS_CODE_CONFLICT = 409;
 
 export const getSectionInfoUrl = (id: string, url: string): string => {
     return `${url}/${id}`;
@@ -134,6 +138,48 @@ export const fetchExerciseData = async (url: string): Promise<ExerciseAssignment
 export const deleteIssue = async (id: string, url: string): Promise<null> => {
     const data = await doDelete(`${url}/${id}`);
     return data;
+};
+
+export const fetchEcosystemGraphData = async (url: string): Promise<EcosystemGraph> => {
+    let data = await doGet<EcosystemGraph>(url);
+    if (!data) {
+        data = {} as EcosystemGraph;
+    }
+    return data;
+};
+
+/**
+ * Refresh the lock required to edit the ecosystem graph.
+ *
+ * @param url Base url for ecosystem graphs (see buildEcosystemGraphUrl).
+ * @param userID The owner of the lock (for example, the Mattermost user ID).
+ * @param lockDelay Time in minutes to keep the resource locked for. Cannot exceed a const defined on the data provider (currently set to 30 minutes).
+ * @param mappedData Data to use to update the ecosystem graph if it can be successfully locked.
+ * @returns true if the lock has been successfully acquired, false otherwise.
+ */
+export const refreshEcosystemGraphLock = async (url: string, userID: string, lockDelay: number, mappedData?: EcosystemGraph): Promise<boolean> => {
+    try {
+        await doPost<string>(`${url}/lock`, mappedData ? JSON.stringify({userID, lockDelay, ...mappedData}) : JSON.stringify({userID, lockDelay}));
+    } catch (e: unknown) {
+        if (e instanceof ClientError) {
+            if (e.status_code === HTTP_STATUS_CODE_CONFLICT) {
+                return false;
+            }
+        } else {
+            throw e;
+        }
+    }
+    return true;
+};
+
+/**
+ * Drop a resource lock owned by some user.
+ * @param url Base url for ecosystem graphs (see buildEcosystemGraphUrl).
+ * @param userID The owner of the lock (for example, the Mattermost user ID).
+ * @returns An error message if something went wrong, undefined on success.
+ */
+export const dropEcosystemGraphLock = async (url: string, userID: string): Promise<string|undefined> => {
+    return doPost<string>(`${url}/drop_lock`, JSON.stringify({userID}));
 };
 
 const doGet = async <TData = any>(url: string): Promise<TData | undefined> => {

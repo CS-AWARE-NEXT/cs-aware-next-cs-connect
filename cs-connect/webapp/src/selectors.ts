@@ -11,3 +11,4 @@ export const channelNameSelector = (channelId: string) => (state: GlobalState): 
 
 const getPluginState = (state: any): any => state['plugins-' + pluginId] || {};
 export const exportChannelSelector = (state: any) => getPluginState(state).setExportChannel;
+export const editEcosystemGraphSelector = (state: any) => getPluginState(state).editEcosystemGraph;

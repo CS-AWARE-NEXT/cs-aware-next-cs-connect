@@ -38,3 +38,11 @@ export const buildQuery = (parentId: string, sectionId: string | undefined) => {
     }
     return query;
 };
+
+export const buildEcosystemGraphUrl = (issues_url: string, append_last_path: boolean) => {
+    let url = issues_url;
+    if (append_last_path) {
+        url = `${url}/ecosystem_graph`;
+    }
+    return url;
+};

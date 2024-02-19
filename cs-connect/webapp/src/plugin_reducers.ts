@@ -1,6 +1,11 @@
 import {combineReducers} from 'redux';
 
-import {EXPORT_CHANNEL, SetExportAction} from './action_types';
+import {
+    EDIT_ECOSYSTEM_GRAPH,
+    EXPORT_CHANNEL,
+    EditEcosystemGraphAction,
+    SetExportAction,
+} from './action_types';
 
 // Reducers that work off the Mattermost provided plugin store. Those get registered in the Mattermost registry.
 export const setExportChannel = (
@@ -15,6 +20,19 @@ export const setExportChannel = (
     }
 };
 
+export const editEcosystemGraph = (
+    state = '',
+    {type, visible}: EditEcosystemGraphAction,
+): {visible: boolean}|string => {
+    switch (type) {
+    case EDIT_ECOSYSTEM_GRAPH:
+        return {visible}; // new object to always trigger a refresh
+    default:
+        return state;
+    }
+};
+
 export default combineReducers({
     setExportChannel,
+    editEcosystemGraph,
 });

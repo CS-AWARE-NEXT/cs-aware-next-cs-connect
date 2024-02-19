@@ -22,9 +22,15 @@ import {
     ecosystemOutcomesWidget,
     ecosystemRolesWidget,
 } from 'src/constants';
-import {getOrganizationById} from 'src/config/config';
+import {getOrganizationById, getSystemConfig} from 'src/config/config';
 
-import {useOrganization} from 'src/hooks';
+import {buildEcosystemGraphUrl, useOrganization, useSection} from 'src/hooks';
+
+import EcosystemGraphWrapper from 'src/components/backstage/widgets/graph/wrappers/ecosystem_graph_wrapper';
+
+import {EcosystemGraphEditor} from 'src/components/commons/ecosystem_graph_edit';
+
+import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 
 import EcosystemAccordionChild from './ecosystem_accordion_child';
 
@@ -42,6 +48,9 @@ const EcosystemRhs = ({
     sectionInfo,
 }: Props) => {
     const ecosystem = useOrganization(parentId);
+    const issues = useSection(parentId);
+    const isEcosystemGraphEnabled = getSystemConfig().ecosystemGraph;
+    const ecosystemGraphUrl = buildEcosystemGraphUrl(issues.url, true);
     const [currentSectionInfo, setCurrentSectionInfo] = useState<SectionInfo | undefined>(sectionInfo);
     const elements = (currentSectionInfo && currentSectionInfo.elements) ? currentSectionInfo.elements.map((element: any) => ({
         ...element,
@@ -52,49 +61,63 @@ const EcosystemRhs = ({
         setCurrentSectionInfo(sectionInfo);
     }, [sectionInfo]);
 
+    // IsRhs needed to use the correct style for the graphs
     return (
-        <Container>
-            <MainWrapper>
-                <Header>
-                    <NameHeader
-                        id={currentSectionInfo?.id || ''}
-                        path={headerPath}
-                        name={currentSectionInfo?.name || ''}
-                        enableEdit={true}
-                        sectionInfo={currentSectionInfo}
-                        setSectionInfo={setCurrentSectionInfo}
-                        ecosystem={ecosystem}
-                    />
-                </Header>
-                <Main>
-                    <Body>
-                        <EcosystemObjectivesWrapper
-                            name={formatStringToCapitalize(ecosystemObjectivesWidget)}
-                            objectives={currentSectionInfo?.objectivesAndResearchArea}
+        <IsRhsContext.Provider value={true}>
+            <Container>
+                <MainWrapper>
+                    <Header>
+                        <NameHeader
+                            id={currentSectionInfo?.id || ''}
+                            path={headerPath}
+                            name={currentSectionInfo?.name || ''}
+                            enableEdit={true}
+                            sectionInfo={currentSectionInfo}
+                            setSectionInfo={setCurrentSectionInfo}
+                            ecosystem={ecosystem}
                         />
-                        <EcosystemOutcomesWrapper
-                            name={formatStringToCapitalize(ecosystemOutcomesWidget)}
-                            outcomes={currentSectionInfo?.outcomes}
-                        />
-                        <EcosystemRolesWrapper
-                            name={formatStringToCapitalize(ecosystemRolesWidget)}
-                            roles={currentSectionInfo?.roles}
-                        />
-                        <Accordion
-                            name={formatStringToCapitalize(ecosystemElementsWidget)}
-                            childComponent={EcosystemAccordionChild}
-                            elements={elements}
-                            parentId={parentId}
-                            sectionId={sectionId}
-                        />
-                        <EcosystemAttachmentsWrapper
-                            name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
-                            attachments={currentSectionInfo?.attachments}
-                        />
-                    </Body>
-                </Main>
-            </MainWrapper>
-        </Container>
+                    </Header>
+                    <Main>
+                        <Body>
+                            <EcosystemObjectivesWrapper
+                                name={formatStringToCapitalize(ecosystemObjectivesWidget)}
+                                objectives={currentSectionInfo?.objectivesAndResearchArea}
+                            />
+                            <EcosystemOutcomesWrapper
+                                name={formatStringToCapitalize(ecosystemOutcomesWidget)}
+                                outcomes={currentSectionInfo?.outcomes}
+                            />
+                            <EcosystemRolesWrapper
+                                name={formatStringToCapitalize(ecosystemRolesWidget)}
+                                roles={currentSectionInfo?.roles}
+                            />
+                            {isEcosystemGraphEnabled && (
+                                <EcosystemGraphWrapper
+                                    name='Ecosystem graph'
+                                    url={ecosystemGraphUrl}
+                                />)}
+                            <Accordion
+                                name={formatStringToCapitalize(ecosystemElementsWidget)}
+                                childComponent={EcosystemAccordionChild}
+                                elements={elements}
+                                parentId={parentId}
+                                sectionId={sectionId}
+                            />
+                            <EcosystemAttachmentsWrapper
+                                name={formatStringToCapitalize(ecosystemAttachmentsWidget)}
+                                attachments={currentSectionInfo?.attachments}
+                            />
+                        </Body>
+                    </Main>
+                </MainWrapper>
+                {isEcosystemGraphEnabled &&
+                <EcosystemGraphEditor
+                    parentId={parentId}
+                    sectionId={sectionId}
+                />
+                }
+            </Container>
+        </IsRhsContext.Provider>
     );
 };
 

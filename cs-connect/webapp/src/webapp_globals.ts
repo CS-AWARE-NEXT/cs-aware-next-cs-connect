@@ -24,3 +24,11 @@ export const {
     // @ts-ignore
 } = global.Components ?? {};
 
+/* // https://github.com/mattermost/mattermost/blob/62f616dfbf47b25a153c26379fb62a72ef9f95bb/webapp/channels/src/plugins/export.js#L102
+// hidden APIs that allow reusing Mattermost websocket client to contact the server
+export const {
+    useWebSocketClient,
+
+    // @ts-ignore
+} = global.ProductApi ?? {};
+ */

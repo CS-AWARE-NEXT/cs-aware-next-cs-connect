@@ -35,12 +35,13 @@ type Organization struct {
 }
 
 type Section struct {
-	ID       string    `json:"id" yaml:"id"`
-	Internal bool      `json:"internal" yaml:"internal"`
-	Name     string    `json:"name" yaml:"name"`
-	URL      string    `json:"url" yaml:"url"`
-	Sections []Section `json:"sections" yaml:"sections"`
-	Widgets  []Widget  `json:"widgets" yaml:"widgets"`
+	ID         string    `json:"id" yaml:"id"`
+	Internal   bool      `json:"internal" yaml:"internal"`
+	Name       string    `json:"name" yaml:"name"`
+	URL        string    `json:"url" yaml:"url"`
+	CustomView string    `json:"customView" yaml:"customView"`
+	Sections   []Section `json:"sections" yaml:"sections"`
+	Widgets    []Widget  `json:"widgets" yaml:"widgets"`
 }
 
 type Widget struct {

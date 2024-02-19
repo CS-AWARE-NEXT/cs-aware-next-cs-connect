@@ -164,12 +164,19 @@ func useOrganizationsExercises(organizations fiber.Router) {
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {
 	issueRepository := context.RepositoriesMap["issues"].(*repository.IssueRepository)
+	ecosystemGraphRepository := context.RepositoriesMap["ecosystemGraph"].(*repository.EcosystemGraphRepository)
+	cacheRepository := context.RepositoriesMap["cache"].(*repository.CacheRepository)
 	issueController := controller.NewIssueController(issueRepository)
+	ecosystemGraphController := controller.NewEcosystemGraphController(ecosystemGraphRepository, cacheRepository)
 
 	ecosystem := basePath.Group("/issues")
 	ecosystem.Get("/", func(c *fiber.Ctx) error {
 		log.Printf("GET /issues called")
 		return issueController.GetIssues(c)
+	})
+	ecosystem.Get("/ecosystem_graph", func(c *fiber.Ctx) error {
+		log.Printf("GET /ecosystem_graph called")
+		return ecosystemGraphController.GetEcosystemGraph(c)
 	})
 	ecosystem.Get("/:issueId", func(c *fiber.Ctx) error {
 		log.Printf("GET /issues/:issueId called")
@@ -178,6 +185,14 @@ func useEcosystem(basePath fiber.Router, context *config.Context) {
 	ecosystem.Post("/", func(c *fiber.Ctx) error {
 		log.Printf("POST /issues called")
 		return issueController.SaveIssue(c)
+	})
+	ecosystem.Post("/ecosystem_graph/lock", func(c *fiber.Ctx) error {
+		log.Printf("POST /ecosystem_graph/lock called")
+		return ecosystemGraphController.RefreshLockEcosystemGraph(c)
+	})
+	ecosystem.Post("/ecosystem_graph/drop_lock", func(c *fiber.Ctx) error {
+		log.Printf("POST /ecosystem_graph/drop_lock called")
+		return ecosystemGraphController.DropLockEcosystemGraph(c)
 	})
 	ecosystem.Post("/:issueId", func(c *fiber.Ctx) error {
 		log.Printf("POST /issues/:issueId called")

@@ -27,6 +27,7 @@ export const TOKEN_SEPARATOR = '.';
 export const PRODUCT_ICON = 'power-plug-outline';
 export const PRODUCT_NAME = pluginName;
 export const PRODUCT_DOCUMENTATION = 'Documentation';
+export const ECOSYSTEM_GRAPH_EDIT_LABEL = 'Ecosystem Graph';
 
 export const DEFAULT_PATH = pluginId;
 export const ORGANIZATIONS_PATH = 'organizations';

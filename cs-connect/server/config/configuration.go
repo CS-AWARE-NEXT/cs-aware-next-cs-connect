@@ -19,7 +19,11 @@ func NewMattermostConfig(api plugin.API) *MattermostConfig {
 }
 
 type Configuration struct {
-	AdminPassword string
+	AdminPassword               string
+	EcosystemGraph              bool
+	EcosystemGraphAutosave      bool
+	EcosystemGraphAutosaveDelay int
+	EcosystemGraphRSB           bool
 }
 
 func (c *Configuration) Clone() *Configuration {
@@ -47,4 +51,13 @@ func (p *MattermostConfig) SetConfiguration(configuration *Configuration) {
 	}
 
 	p.configuration = configuration
+}
+
+func (c *Configuration) ToPublicConfiguration() map[string]interface{} {
+	return map[string]interface{}{
+		"ecosystemGraph":              c.EcosystemGraph,
+		"ecosystemGraphAutoSave":      c.EcosystemGraphAutosave,
+		"ecosystemGraphAutoSaveDelay": c.EcosystemGraphAutosaveDelay,
+		"ecosystemGraphRSB":           c.EcosystemGraphRSB,
+	}
 }

@@ -30,6 +30,7 @@ export interface Section {
     internal: boolean;
     name: string;
     url: string;
+    customView?: string;
     sections: Section[];
     widgets: Widget[];
 }

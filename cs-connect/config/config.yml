@@ -14,6 +14,10 @@ organizations:
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/issues
         widgets:
           - type: channel
+      - name: Ecosystem Graph
+        id: "1"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/issues/ecosystem_graph
+        customView: ecosystem-graph
   - name: 5thYPE
     id: "8"
     description: This is the 5thYPE organization for Larissa workshop
