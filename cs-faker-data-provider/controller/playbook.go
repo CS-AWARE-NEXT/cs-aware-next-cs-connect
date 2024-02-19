@@ -12,7 +12,13 @@ import (
 	"github.com/openplaybooks/libcacao/objects/workflow/start"
 )
 
-func GetPlaybooks(c *fiber.Ctx) error {
+type PlaybookController struct{}
+
+func NewPlaybookController() *PlaybookController {
+	return &PlaybookController{}
+}
+
+func (pc *PlaybookController) GetPlaybooks(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	tableData := model.PaginatedTableData{
 		Columns: storiesPaginatedTableData.Columns,
@@ -28,13 +34,13 @@ func GetPlaybooks(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
-func GetPlaybook(c *fiber.Ctx) error {
-	return c.JSON(getPlaybookByID(c))
+func (pc *PlaybookController) GetPlaybook(c *fiber.Ctx) error {
+	return c.JSON(pc.getPlaybookByID(c))
 }
 
 // Playbooks are from https://github.com/openplaybooks/libcacao/tree/master
 // Consider that playbook_processing_summary is added as playbook_complexity, that's the only difference
-func getPlaybookByID(c *fiber.Ctx) playbook.Playbook {
+func (pc *PlaybookController) getPlaybookByID(c *fiber.Ctx) playbook.Playbook {
 	p := playbook.New()
 	p.Name = "Find Malware FuzzyPanda"
 	p.Description = "This playbook will look for FuzzyPanda on the network and in a SIEM"

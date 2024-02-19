@@ -15,6 +15,8 @@ import CacaoPlaybookWrapper from './cacao_playbook/wrappers/playbook_wrapper';
 import SocialMediaPostsWrapper from './social_media_posts/wrappers/social_media_posts_wrapper';
 import ChartWrapper from './chart/wrappers/chart_wrapper';
 import ExerciseWrapper from './exercise/wrappers/exercise_wrapper';
+import NewsWrapper from './news/wrappers/news_wrapper';
+import PolicyWrapper from './policy/wrappers/policy_wrappers';
 import {WidgetType} from './widget_types';
 
 type Props = {
@@ -39,8 +41,12 @@ const buildWidgetByType = (
         return <ExerciseWrapper {...props}/>;
     case WidgetType.PaginatedTable:
         return <PaginatedTableWrapper {...props}/>;
+    case WidgetType.Policy:
+        return <PolicyWrapper {...props}/>;
     case WidgetType.List:
         return <ListWrapper {...props}/>;
+    case WidgetType.News:
+        return <NewsWrapper {...props}/>;
     case WidgetType.SocialMediaPosts:
         return <SocialMediaPostsWrapper {...props}/>;
     case WidgetType.Table:

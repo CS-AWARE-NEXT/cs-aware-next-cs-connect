@@ -3,11 +3,9 @@ import {Modal} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 
-import styled from 'styled-components';
-
 import {editEcosystemGraphSelector} from 'src/selectors';
 
-import EcosystemGraphWrapper from 'src/components/backstage/widgets/graph/wrappers/ecosystem_graph_wrapper';
+import {StyledEcosystemGraphWrapper} from 'src/components/backstage/widgets/graph/wrappers/ecosystem_graph_wrapper';
 import {buildEcosystemGraphUrl, useSection} from 'src/hooks';
 import {editEcosystemgraphAction} from 'src/actions';
 
@@ -17,7 +15,7 @@ type Props = {
 };
 
 // Modal based ecosystem graph
-export const EcosystemGraphEditor = ({parentId, sectionId}: Props) => {
+const EcosystemGraphEditor = ({parentId, sectionId}: Props) => {
     const reduxAction = useSelector(editEcosystemGraphSelector);
     const [modalVisible, setModalVisible] = useState(false);
     const dispatch = useDispatch();
@@ -59,6 +57,4 @@ export const EcosystemGraphEditor = ({parentId, sectionId}: Props) => {
     );
 };
 
-const StyledEcosystemGraphWrapper = styled(EcosystemGraphWrapper)`
-height: 100%;
-`;
+export default EcosystemGraphEditor;

@@ -308,7 +308,7 @@ const EditableGraph = ({
         const parentNodeIds = existingNodes.map((node) => node.id);
 
         // Prevent infinite loop if the parent data contains no change
-        if (currentNodeIds.length === parentNodeIds.length && currentNodeIds.every((value, index) => value === parentNodeIds[index])) {
+        if (currentNodeIds.length !== 0 && currentNodeIds.length === parentNodeIds.length && currentNodeIds.every((value, index) => value === parentNodeIds[index])) {
             return;
         }
 

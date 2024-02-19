@@ -175,12 +175,17 @@ func (s *channelStore) createChannel(sectionID string, params app.AddChannelPara
 	if err != nil {
 		return app.AddChannelResult{}, errors.Wrap(err, "could not add new channel")
 	}
+	// TODO: this is a hack for internal sections
+	actualSectionID := params.SectionID
+	if strings.HasPrefix(actualSectionID, "internal-") {
+		actualSectionID = channel.Id
+	}
 	if _, err := s.store.execBuilder(tx, sq.
 		Insert("CSA_Channel").
 		SetMap(map[string]interface{}{
 			"ChannelID":      channel.Id,
 			"ParentID":       params.ParentID,
-			"SectionID":      sectionID,
+			"SectionID":      actualSectionID,
 			"OrganizationID": params.OrganizationID,
 		})); err != nil {
 		return app.AddChannelResult{}, errors.Wrap(err, "could not add new channel to section")

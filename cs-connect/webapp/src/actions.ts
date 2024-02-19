@@ -6,7 +6,10 @@ import {
     SET_NAME_ERROR_MESSAGE,
     SET_SELECT_ERROR_MESSAGE,
 } from './action_types';
+import {updatePolicyTemplateField} from './clients';
+import {getEcosystem} from './config/config';
 import {ChannelCreation} from './types/channels';
+import {PolicyTemplateField} from './types/policy';
 
 export const channelCreationAction = (channelCreation: ChannelCreation) => {
     return {
@@ -48,4 +51,27 @@ export const editEcosystemgraphAction = (visible: boolean) => {
         type: EDIT_ECOSYSTEM_GRAPH,
         visible,
     };
+};
+
+export const updatePolicyTemplateFieldAction = (
+    field: PolicyTemplateField,
+    disableTimeout = false,
+) => {
+    let url = getEcosystem().sections[0].url;
+    url = url.replace('issues', 'organizations/policies/template');
+
+    // TODO: Add a check for posts in a way that posts it displays an error
+    // in case users try to add a message not containing only text.
+    updatePolicyTemplateField(field, url);
+
+    if (disableTimeout) {
+        return;
+    }
+
+    // We take advantage of Mattermost opening Threads after a post submenu is clicked
+    // to open the RHS again after the Policy Template is updated, so we fetch RHS content again.
+    setTimeout(() => {
+        const openRhsButton = document.getElementById('open-product-rhs')?.parentElement;
+        openRhsButton?.click();
+    });
 };

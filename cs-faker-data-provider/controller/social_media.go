@@ -12,7 +12,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetAllSocialMedia(c *fiber.Ctx) error {
+type SocialMediaController struct{}
+
+func NewSocialMediaController() *SocialMediaController {
+	return &SocialMediaController{}
+}
+
+func (sc *SocialMediaController) GetAllSocialMedia(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 
 	tableData := model.PaginatedTableData{
@@ -29,12 +35,12 @@ func GetAllSocialMedia(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
-func GetSocialMedia(c *fiber.Ctx) error {
-	return c.JSON(getSocialMediaByID(c))
+func (sc *SocialMediaController) GetSocialMedia(c *fiber.Ctx) error {
+	return c.JSON(sc.getSocialMediaByID(c))
 }
 
 // Avatar: `https://xsgames.co/randomusers/avatar.php?g=pixel&key=${i}`,
-func GetSocialMediaPosts(c *fiber.Ctx) error {
+func (sc *SocialMediaController) GetSocialMediaPosts(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	organizationName := ""
 	if organizationId == "6" {
@@ -51,18 +57,18 @@ func GetSocialMediaPosts(c *fiber.Ctx) error {
 	if organizationName != "" {
 		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
 	}
-	socialMedia := getSocialMediaByID(c)
+	socialMedia := sc.getSocialMediaByID(c)
 	if strings.Contains(socialMedia.Name, "Sample Twitter") {
 		fileName = "sample-posts.json"
 	}
 
-	if socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName); err == nil {
-		return c.JSON(fromSocialMediaPostEntityData(socialMediaEntities, organizationName))
+	if socialMediaEntities, err := sc.getSocialMediaEntitiesFromFile(fileName); err == nil {
+		return c.JSON(sc.fromSocialMediaPostEntityData(socialMediaEntities, organizationName))
 	}
 	return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
 }
 
-func GetSocialMediaPostsPerHashtagChart(c *fiber.Ctx) error {
+func (sc *SocialMediaController) GetSocialMediaPostsPerHashtagChart(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	organizationName := ""
 	if organizationId == "6" {
@@ -78,12 +84,12 @@ func GetSocialMediaPostsPerHashtagChart(c *fiber.Ctx) error {
 	if organizationName != "" {
 		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
 	}
-	socialMedia := getSocialMediaByID(c)
+	socialMedia := sc.getSocialMediaByID(c)
 	if strings.Contains(socialMedia.Name, "Sample Twitter") {
 		fileName = "sample-posts.json"
 	}
 
-	socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName)
+	socialMediaEntities, err := sc.getSocialMediaEntitiesFromFile(fileName)
 	if err != nil {
 		return c.JSON(model.SimpleLineChartData{LineData: []model.SimpleLineChartValue{}})
 	}
@@ -129,7 +135,7 @@ func GetSocialMediaPostsPerHashtagChart(c *fiber.Ctx) error {
 	return c.JSON(chartData)
 }
 
-func GetSocialMediaPostsPerComponentChart(c *fiber.Ctx) error {
+func (sc *SocialMediaController) GetSocialMediaPostsPerComponentChart(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	organizationName := ""
 	if organizationId == "6" {
@@ -145,12 +151,12 @@ func GetSocialMediaPostsPerComponentChart(c *fiber.Ctx) error {
 	if organizationName != "" {
 		fileName = fmt.Sprintf("%s-%s", organizationName, fileName)
 	}
-	socialMedia := getSocialMediaByID(c)
+	socialMedia := sc.getSocialMediaByID(c)
 	if strings.Contains(socialMedia.Name, "Sample Twitter") {
 		fileName = "sample-posts.json"
 	}
 
-	socialMediaEntities, err := getSocialMediaEntitiesFromFile(fileName)
+	socialMediaEntities, err := sc.getSocialMediaEntitiesFromFile(fileName)
 	if err != nil {
 		return c.JSON(model.SimpleLineChartData{LineData: []model.SimpleLineChartValue{}})
 	}
@@ -183,7 +189,7 @@ func GetSocialMediaPostsPerComponentChart(c *fiber.Ctx) error {
 	return c.JSON(chartData)
 }
 
-func getSocialMediaEntitiesFromFile(fileName string) (model.SocialMediaPostEntityData, error) {
+func (sc *SocialMediaController) getSocialMediaEntitiesFromFile(fileName string) (model.SocialMediaPostEntityData, error) {
 	filePath, err := util.GetEmbeddedFilePath(fileName, "*.json")
 	if err != nil {
 		return model.SocialMediaPostEntityData{}, err
@@ -200,7 +206,7 @@ func getSocialMediaEntitiesFromFile(fileName string) (model.SocialMediaPostEntit
 	return socialMediaPostEntityData, nil
 }
 
-func fromSocialMediaPostEntityData(
+func (sc *SocialMediaController) fromSocialMediaPostEntityData(
 	socialMediaPostEntityData model.SocialMediaPostEntityData,
 	idNameSpace string,
 ) model.SocialMediaPostData {
@@ -213,7 +219,7 @@ func fromSocialMediaPostEntityData(
 		posts = append(posts, model.SocialMediaPost{
 			ID:       postId,
 			Title:    post.User.Name,
-			Content:  buildContent(post),
+			Content:  sc.buildContent(post),
 			Media:    post.Media,
 			Avatar:   post.User.ProfilePicture,
 			Date:     post.Date,
@@ -226,7 +232,8 @@ func fromSocialMediaPostEntityData(
 	}
 	return model.SocialMediaPostData{Items: posts}
 }
-func buildContent(post model.SocialMediaPostEntity) string {
+
+func (sc *SocialMediaController) buildContent(post model.SocialMediaPostEntity) string {
 	content := fmt.Sprintf("%s\n\n", post.Content)
 	for _, hashtag := range post.Hashtags {
 		content = fmt.Sprintf("%s#%s ", content, hashtag)
@@ -235,7 +242,7 @@ func buildContent(post model.SocialMediaPostEntity) string {
 	return content
 }
 
-func getSocialMediaByID(c *fiber.Ctx) model.SocialMedia {
+func (sc *SocialMediaController) getSocialMediaByID(c *fiber.Ctx) model.SocialMedia {
 	organizationId := c.Params("organizationId")
 	socialMediaId := c.Params("socialMediaId")
 	for _, socialMedia := range socialMediaMap[organizationId] {

@@ -24,7 +24,7 @@ type Props = {
 type Attrs = HTMLAttributes<HTMLElement>;
 
 // Might be worth merging with copylink since the two act in a very similar way
-const EditAction: FC<Props & Attrs> = ({
+const EcosystemIssueEditAction: FC<Props & Attrs> = ({
     iconWidth,
     iconHeight,
     id,
@@ -113,4 +113,4 @@ const AutoSizeEditIcon = styled(EditIcon)`
     font-size: inherit;
 `;
 
-export default styled(EditAction)``;
+export default styled(EcosystemIssueEditAction)``;

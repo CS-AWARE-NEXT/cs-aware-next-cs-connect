@@ -13,6 +13,8 @@ import {getCurrentUserId} from 'mattermost-webapp/packages/mattermost-redux/src/
 
 import {useSelector} from 'react-redux';
 
+import styled from 'styled-components';
+
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
 import Graph, {getLayoutedElements} from 'src/components/backstage/widgets/graph/graph';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
@@ -180,5 +182,9 @@ const EcosystemGraphWrapper = ({
         )
     );
 };
+
+export const StyledEcosystemGraphWrapper = styled(EcosystemGraphWrapper)`
+height: 100%;
+`;
 
 export default EcosystemGraphWrapper;

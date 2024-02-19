@@ -4,13 +4,15 @@ import {getCurrentTeamId} from 'mattermost-redux/selectors/entities/teams';
 import qs from 'qs';
 import {useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {FormattedMessage} from 'react-intl';
+import {useIntl} from 'react-intl';
 import styled from 'styled-components';
+import {Alert} from 'antd';
 
 import {channelNameSelector, teamNameSelector} from 'src/selectors';
 import {ToastProvider} from 'src/components/backstage/toast_banner';
 import {useChannelById} from 'src/hooks';
 import {notFoundWidgetChannel} from 'src/types/channels';
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 
 import RHSWidgets from './rhs_widgets';
 
@@ -37,6 +39,7 @@ const RHSView = () => {
         setClosed((prevClosed) => !prevClosed);
     };
 
+    const {formatMessage} = useIntl();
     const {search} = useLocation();
     const queryParams = qs.parse(search, {ignoreQueryPrefix: true});
     const sectionIdParam = queryParams.sectionId as string;
@@ -100,14 +103,22 @@ const RHSView = () => {
     if (!wasChannelFound) {
         return (
             <Container>
-                <FormattedMessage defaultMessage='The channel is not related to any data.'/>
+                <Alert
+                    message={formatMessage({defaultMessage: 'The channel is not related to any data.'})}
+                    type='info'
+                    style={{marginTop: '8px'}}
+                />
             </Container>
         );
     }
     if (channelByID.deletedAt !== 0) {
         return (
             <Container>
-                <FormattedMessage defaultMessage='The data related to this channel has been deleted.'/>
+                <Alert
+                    message={formatMessage({defaultMessage: 'The data related to this channel has been deleted.'})}
+                    type='info'
+                    style={{marginTop: '8px'}}
+                />
             </Container>
         );
     }
@@ -117,13 +128,15 @@ const RHSView = () => {
             <FullUrlContext.Provider value={fullUrl}>
                 <IsRhsClosedContext.Provider value={closed}>
                     <SectionContext.Provider value={sectionContextOptions}>
-                        <ToastProvider>
-                            <RHSWidgets
-                                parentId={sectionContextOptions.parentId}
-                                sectionId={sectionContextOptions.sectionId}
-                                organizationId={sectionContextOptions.organizationId}
-                            />
-                        </ToastProvider>
+                        <OrganizationIdContext.Provider value={sectionContextOptions.organizationId}>
+                            <ToastProvider>
+                                <RHSWidgets
+                                    parentId={sectionContextOptions.parentId}
+                                    sectionId={sectionContextOptions.sectionId}
+                                    organizationId={sectionContextOptions.organizationId}
+                                />
+                            </ToastProvider>
+                        </OrganizationIdContext.Provider>
                     </SectionContext.Provider>
                 </IsRhsClosedContext.Provider>
             </FullUrlContext.Provider>

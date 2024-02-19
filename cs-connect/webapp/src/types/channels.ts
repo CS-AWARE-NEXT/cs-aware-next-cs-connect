@@ -52,6 +52,10 @@ export const notFoundWidgetChannel: WidgetChannel = {
     deletedAt: 0,
 };
 
+export interface ArchiveChannelsParams {
+    sectionId: string;
+}
+
 export interface Backlink {
     id: string,
     message: string,

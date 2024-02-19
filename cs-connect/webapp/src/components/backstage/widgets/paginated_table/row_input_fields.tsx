@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import React, {ChangeEvent, useCallback, useState} from 'react';
 
 import {PaddedErrorMessage} from 'src/components/commons/messages';
-import {formatStringToCapitalize} from 'src/helpers';
+import {formatStringToCapitalize, isNameCorrect} from 'src/helpers';
 import {PaginatedTableColumn, PaginatedTableRow} from 'src/types/paginated_table';
 import {PrimaryButtonLarger} from 'src/components/backstage/widgets/shared';
 
@@ -46,6 +46,16 @@ const RowInputFields = ({columns, createRow}: Props) => {
         if (!allKeysNotEmpty) {
             setErrors(addRowErrors);
             return;
+        }
+
+        // Usually the name property is used also for creating channels related to the newly created objects
+        // thus we enforce a name that is compatible with Mattermost channels' name rules
+        if (inputValues.name) {
+            const nameError = isNameCorrect(inputValues.name);
+            if (nameError !== '') {
+                setErrors({name: nameError});
+                return;
+            }
         }
 
         createRow(inputValues);

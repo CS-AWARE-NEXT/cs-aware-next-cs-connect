@@ -78,9 +78,11 @@ type IncidentWithOrganizationId struct {
 }
 
 type Policy struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID             string `json:"id"`
+	Name           string `json:"name"`
+	Description    string `json:"description"`
+	OrganizationId string `json:"organizationId"`
+	Exported       string `json:"exported"`
 }
 
 type Story struct {
@@ -90,6 +92,12 @@ type Story struct {
 }
 
 type SocialMedia struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type News struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`

@@ -7,7 +7,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func GetOrganizations(c *fiber.Ctx) error {
+type OrganizationController struct{}
+
+func NewOrganizationController() *OrganizationController {
+	return &OrganizationController{}
+}
+
+func (oc *OrganizationController) GetOrganizations(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"totalCount": 4,
 		"pageCount":  1,
@@ -16,11 +22,11 @@ func GetOrganizations(c *fiber.Ctx) error {
 	})
 }
 
-func GetOrganizationsNoPage(c *fiber.Ctx) error {
+func (oc *OrganizationController) GetOrganizationsNoPage(c *fiber.Ctx) error {
 	return c.JSON(organizations)
 }
 
-func GetOrganization(c *fiber.Ctx) error {
+func (oc *OrganizationController) GetOrganization(c *fiber.Ctx) error {
 	id := c.Params("organizationId")
 	index, err := strconv.Atoi(id)
 	if err != nil {

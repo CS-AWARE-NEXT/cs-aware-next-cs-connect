@@ -1,14 +1,11 @@
 import styled, {css} from 'styled-components';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {useIntl} from 'react-intl';
 
 import {PrimaryButton, TertiaryButton} from 'src/components/assets/buttons';
-
 import {SemiBoldHeading} from 'src/styles/headings';
 import TextEdit from 'src/components/commons/text_edit';
-
 import {Organization, SectionInfo} from 'src/types/organization';
-
 import {HyperlinkableActions} from 'src/components/commons/hyperlinkable_actions';
 
 import {ContextMenu} from './context_menu';
@@ -20,12 +17,24 @@ type Props = {
     ecosystem: Organization;
     url?: string
     onDelete?: () => void
-    enableEdit?: boolean
+    onExport?: () => void
+    enableEcosystemEdit?: boolean
     sectionInfo?: SectionInfo
-    setSectionInfo?: React.Dispatch<React.SetStateAction<SectionInfo | undefined>>
+    setSectionInfo?: Dispatch<SetStateAction<SectionInfo | undefined>>
 };
 
-export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit = false, sectionInfo, setSectionInfo}: Props) => {
+export const NameHeader = ({
+    id,
+    name,
+    path,
+    ecosystem,
+    url,
+    onDelete,
+    onExport,
+    enableEcosystemEdit = false,
+    sectionInfo,
+    setSectionInfo,
+}: Props) => {
     const {formatMessage} = useIntl();
 
     return (
@@ -59,7 +68,8 @@ export const NameHeader = ({id, name, path, ecosystem, url, onDelete, enableEdit
                         ecosystem={ecosystem}
                         url={url}
                         onDelete={onDelete}
-                        enableEdit={enableEdit}
+                        onExport={onExport}
+                        enableEcosystemEdit={enableEcosystemEdit}
                         sectionInfo={sectionInfo}
                         setSectionInfo={setSectionInfo}
                     />
