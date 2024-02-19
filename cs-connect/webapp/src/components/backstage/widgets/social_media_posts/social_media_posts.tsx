@@ -14,10 +14,9 @@ import {buildQuery, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {Post} from 'src/types/social_media';
-
 import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
-import SocialMediaPost from './social_media_post';
+import SocialMediaPost, {PostOptions} from './social_media_post';
 
 const POSTS_PER_PAGE = 3;
 
@@ -26,6 +25,8 @@ type Props = {
     name: string;
     parentId: string;
     sectionId: string;
+    perPage?: number;
+    postOptions?: PostOptions;
 };
 
 const SocialMediaPosts: FC<Props> = ({
@@ -33,6 +34,8 @@ const SocialMediaPosts: FC<Props> = ({
     name,
     parentId,
     sectionId,
+    perPage = POSTS_PER_PAGE,
+    postOptions,
 }) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
@@ -56,7 +59,7 @@ const SocialMediaPosts: FC<Props> = ({
         if (index < 0) {
             return;
         }
-        const current = Math.ceil((index + 1) / POSTS_PER_PAGE);
+        const current = Math.ceil((index + 1) / perPage);
         setCurrentPage(current);
     }, [urlHash, hash, data]);
 
@@ -80,7 +83,7 @@ const SocialMediaPosts: FC<Props> = ({
                 pagination={{
                     current: currentPage,
                     onChange: (page) => setCurrentPage(page),
-                    pageSize: POSTS_PER_PAGE,
+                    pageSize: perPage,
                 }}
                 dataSource={data}
                 renderItem={(item: any) => (
@@ -89,6 +92,7 @@ const SocialMediaPosts: FC<Props> = ({
                         parentId={parentId}
                         sectionId={sectionId}
                         hyperlinkPath={hyperlinkPath}
+                        options={postOptions}
                     />
                 )}
             />
