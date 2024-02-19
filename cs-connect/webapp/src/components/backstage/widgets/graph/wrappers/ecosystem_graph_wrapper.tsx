@@ -24,7 +24,7 @@ import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph
 
 import EditableGraph from 'src/components/backstage/widgets/graph/editable_graph';
 import {dropEcosystemGraphLock, refreshEcosystemGraphLock} from 'src/clients';
-import {EcosystemGraph, LockStatus} from 'src/types/ecosystem_graph';
+import {LockStatus} from 'src/types/ecosystem_graph';
 import {getSystemConfig} from 'src/config/config';
 import {useEcosystemGraphData} from 'src/hooks';
 import Loading from 'src/components/commons/loading';
@@ -96,27 +96,32 @@ const EcosystemGraphWrapper = ({
     }, [serverGraphData]);
 
     // Refresh lock and persist the graph
-    const updateGraph = useCallback(() => {
+    const refreshLockAndUpdateGraph = useCallback((manual?: boolean) => {
         if (editable && isEditing) {
-            const mappedData: EcosystemGraph = {
-                nodes: updatedDataRef.current.nodes.map((node) => ({
-                    id: node.id,
-                    name: node.data.label,
-                    description: node.data.description,
-                    type: node.data.kind,
-                })),
-                edges: updatedDataRef.current.edges.map((edge) => ({
-                    id: edge.id,
-                    sourceNodeID: edge.source,
-                    destinationNodeID: edge.target,
-                    kind: edge.data.kind,
-                })),
-            };
+            let mappedData;
+            if (systemConfig.ecosystemGraphAutoSave || manual) {
+                mappedData = {
+                    nodes: updatedDataRef.current.nodes.map((node) => ({
+                        id: node.id,
+                        name: node.data.label,
+                        description: node.data.description,
+                        type: node.data.kind,
+                    })),
+                    edges: updatedDataRef.current.edges.map((edge) => ({
+                        id: edge.id,
+                        sourceNodeID: edge.source,
+                        destinationNodeID: edge.target,
+                        kind: edge.data.kind,
+                    })),
+                };
+            }
             (async () => {
                 const lockAcquired = await refreshEcosystemGraphLock(url, userID, systemConfig.ecosystemGraphAutoSaveDelay, mappedData);
                 setLockStatus(lockAcquired ? LockStatus.Acquired : LockStatus.Busy);
                 if (lockAcquired) {
-                    setServerGraphData(mappedData);
+                    if (systemConfig.ecosystemGraphAutoSave || manual) {
+                        setServerGraphData(mappedData);
+                    }
                 } else {
                     setIsEditing(false);
                 }
@@ -134,20 +139,20 @@ const EcosystemGraphWrapper = ({
                 if (!lockAcquired) {
                     setIsEditing(false);
                 }
-                if (lockAcquired && systemConfig.ecosystemGraphAutoSave) {
-                    intervalID = window.setInterval(updateGraph, systemConfig.ecosystemGraphAutoSaveDelay * 1000 * 60);
+                if (lockAcquired) {
+                    intervalID = window.setInterval(refreshLockAndUpdateGraph, systemConfig.ecosystemGraphAutoSaveDelay * 1000 * 60);
                 }
             })();
         }
         return () => {
             if (editable && isEditing) {
                 // Perform a final save
-                updateGraph();
+                refreshLockAndUpdateGraph();
                 clearInterval(intervalID);
                 dropEcosystemGraphLock(url, userID);
             }
         };
-    }, [updateGraph, editable, isEditing]);
+    }, [refreshLockAndUpdateGraph, editable, isEditing]);
 
     useEffect(() => {
         updatedDataRef.current = updatedData;
@@ -163,7 +168,9 @@ const EcosystemGraphWrapper = ({
                         existingEdges={updatedData.edges}
                         setUpdatedData={setUpdatedData}
                         setIsEditing={setIsEditing}
-                        triggerUpdate={updateGraph}
+                        triggerUpdate={() => {
+                            refreshLockAndUpdateGraph(true);
+                        }}
                         lockStatus={lockStatus}
                         resetLockStatus={resetLockStatus}
                         refreshNodeInternals={refreshNodeInternals}
@@ -183,6 +190,9 @@ const EcosystemGraphWrapper = ({
     );
 };
 
+// This is specifically used in the EcosystemGraphEditor which embeds the graph in a modal.
+// But if you move this definition there, it apparently creates a circular dependency breaking everything.
+// I'm honestly not sure why this being here prevents the problem, blame React/Webpack/JavaScript
 export const StyledEcosystemGraphWrapper = styled(EcosystemGraphWrapper)`
 height: 100%;
 `;
