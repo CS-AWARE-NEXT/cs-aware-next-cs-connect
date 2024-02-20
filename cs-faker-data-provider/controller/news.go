@@ -161,29 +161,29 @@ var newsMap = map[string][]model.News{
 	"5": {
 		{
 			ID:          "969b347f-89c0-4f5c-826c-510ae483b58e",
-			Name:        "News from Social Media",
-			Description: "Look for what's new on Social Media",
+			Name:        "Online News",
+			Description: "Look for what's new online",
 		},
 	},
 	"6": {
 		{
 			ID:          "bb839490-8306-4ea1-8bff-bed135ac8016",
-			Name:        "News from Social Media",
-			Description: "Look for what's new on Social Media",
+			Name:        "Online News",
+			Description: "Look for what's new online",
 		},
 	},
 	"7": {
 		{
 			ID:          "96f88d4f-5728-49c2-a97a-e8722860a600",
-			Name:        "News from Social Media",
-			Description: "Look for what's new on Social Media",
+			Name:        "Online News",
+			Description: "Look for what's new online",
 		},
 	},
 	"8": {
 		{
 			ID:          "c625ac03-08cd-408b-b86e-10b6adf71036",
-			Name:        "News from Social Media",
-			Description: "Look for what's new on Social Media",
+			Name:        "Online News",
+			Description: "Look for what's new online",
 		},
 	},
 }
