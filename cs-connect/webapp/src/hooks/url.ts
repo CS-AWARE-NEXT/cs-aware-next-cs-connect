@@ -10,6 +10,18 @@ export const isReferencedByUrlHash = (urlHash: string, id: string): boolean => {
     return urlHash === `#${id}`;
 };
 
+export const isValidUrl = (url?: string): boolean => {
+    if (!url) {
+        return false;
+    }
+    try {
+        const _ = new URL(url);
+        return true;
+    } catch (error) {
+        return false;
+    }
+};
+
 export const buildIdForUrlHashReference = (prefix: string, id: string): string => {
     return `${prefix}-${id}`;
 };

@@ -13,6 +13,7 @@ import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
 import {PolicyTemplate, PolicyTemplateField} from 'src/types/policy';
+import {NewsPostData} from 'src/types/news';
 
 export const updatePolicyTemplateField = async (params: PolicyTemplateField, url: string): Promise<void> => {
     await doPut<void>(
@@ -127,6 +128,14 @@ export const fetchPostData = async (url: string): Promise<PostData> => {
     let data = await doGet<PostData>(url);
     if (!data) {
         data = {} as PostData;
+    }
+    return data;
+};
+
+export const fetchNewsPostData = async (url: string): Promise<NewsPostData> => {
+    let data = await doGet<NewsPostData>(url);
+    if (!data) {
+        data = {} as NewsPostData;
     }
     return data;
 };

@@ -1,6 +1,11 @@
-import React, {FC, useContext} from 'react';
+import React, {
+    Dispatch,
+    FC,
+    SetStateAction,
+    useContext,
+} from 'react';
 import styled from 'styled-components';
-import {Input} from 'antd';
+import {Alert, Input} from 'antd';
 import {SearchProps} from 'antd/es/input';
 import {useIntl} from 'react-intl';
 
@@ -12,26 +17,33 @@ import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_w
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {buildQuery} from 'src/hooks';
 import {formatName} from 'src/helpers';
+import {NewsError, NewsPostData, NewsQuery} from 'src/types/news';
+
+import NewsPosts from './news_posts';
 
 const {Search} = Input;
 
 type Props = {
-    data: any;
+    data: NewsPostData | NewsError;
     name: string;
+    query: NewsQuery;
+    setQuery: Dispatch<SetStateAction<NewsQuery>>;
     parentId: string;
     sectionId: string;
 };
 
-const onSearch: SearchProps['onSearch'] = (
-    value: string,
-    event?: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>,
-) => {
-    console.log(value);
+const calcTotalItems = (data: NewsPostData): number => {
+    if (!data.totalCount) {
+        return 1;
+    }
+    return data.totalCount === 0 ? 1 : data.totalCount;
 };
 
 const News: FC<Props> = ({
     data,
     name = '',
+    query,
+    setQuery,
     parentId,
     sectionId,
 }) => {
@@ -43,6 +55,38 @@ const News: FC<Props> = ({
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
+
+    const onSearch: SearchProps['onSearch'] = (
+        value: string,
+        event?: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>,
+    ) => {
+        setQuery({...query, search: value});
+    };
+
+    const hasErrorOccurred = 'message' in data;
+    const Body = hasErrorOccurred ?
+        (
+            <Alert
+                message={'An error occurred when requesting your news.\nPlease try again or report the error.'}
+                type='warning'
+                style={{marginTop: '24px'}}
+            />
+        ) :
+        (
+            <NewsPosts
+                data={data.items}
+                name={name}
+                sectionId={sectionId}
+                parentId={parentId}
+                perPage={query.limit ? parseInt(query.limit, 10) : 10}
+                total={calcTotalItems(data)}
+                postOptions={{
+                    noHyperlinking: true,
+                    noActions: true,
+                }}
+                setQuery={setQuery}
+            />
+        );
 
     return (
         <Container
@@ -68,7 +112,7 @@ const News: FC<Props> = ({
                     size='middle'
                     onSearch={onSearch}
                     style={{
-                        width: isRhs ? '100%' : 'calc(50% - 48px)',
+                        width: isRhs ? '90%' : 'calc(50% - 48px)',
                     }}
                 />
 
@@ -85,6 +129,7 @@ const News: FC<Props> = ({
                     />
                 </Tooltip> */}
             </HorizontalContainer>
+            {Body}
         </Container>
     );
 };

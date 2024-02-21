@@ -1,9 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {SectionContext} from 'src/components/rhs/rhs';
 import News from 'src/components/backstage/widgets/news/news';
+import {NewsQuery} from 'src/types/news';
+import {useNewsPostData} from 'src/hooks';
 
 type Props = {
     name?: string;
@@ -24,7 +26,13 @@ const NewsWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    const data = {};
+    const [query, setQuery] = useState<NewsQuery>({
+        search: '',
+        offset: '0',
+        limit: '10',
+    });
+
+    const data = useNewsPostData(url, query);
 
     return (
         <>
@@ -32,6 +40,8 @@ const NewsWrapper = ({
                 <News
                     data={data}
                     name={name}
+                    query={query}
+                    setQuery={setQuery}
                     sectionId={sectionIdForUrl}
                     parentId={parentId}
                 />}

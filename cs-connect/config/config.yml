@@ -42,6 +42,14 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/chart
           - type: channels
+      - name: News
+        id: "26"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news/:id/news
+          - type: channels
       - name: Policies
         id: "30"
         internal: true
@@ -83,6 +91,14 @@ organizations:
             type: chart
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/chart
+          - type: channels
+      - name: News
+        id: "27"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news/:id/news
           - type: channels
       - name: Policies
         id: "31"
@@ -126,6 +142,14 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/chart
           - type: channels
+      - name: News
+        id: "28"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news/:id/news
+          - type: channels
       - name: Policies
         id: "32"
         internal: true
@@ -163,6 +187,14 @@ organizations:
           - name: Posts
             type: social-media-posts
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media/:id/posts
+          - type: channels
+      - name: News
+        id: "29"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news
+        widgets:
+          - name: Explore
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news/:id/news
           - type: channels
       - name: Policies
         id: "33"
@@ -213,84 +245,19 @@ organizations:
             type: cacao-playbook
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks/:id/detail
           - type: channel
-  - name: Organization X
-    id: "1"
-    description: This is the X organization
-    sections:
-      - name: Incidents
-        id: "3"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents
+      - name: Policies
+        id: "34"
+        internal: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies
         widgets:
-          - name: Description
-            type: text-box
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/text_box
+          - name: Components
+            type: policy
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/policies/:id/template
           - name: System
             type: graph
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/graph
-          - name: Observed Data
-            type: table
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/incidents/:id/table
-          - type: channel
-      - name: Stories
-        id: "5"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/stories
-        widgets:
-          - name: Events
-            type: timeline
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/1/stories/:id/timeline
-          - type: channel
-    widgets: []
-  - name: Organization Y
-    id: "2"
-    description: This is the Y organization
-    sections:
-      - name: Incidents
-        id: "6"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents
-        widgets:
-          - name: Description
-            type: text-box
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/text_box
-          - name: System
-            type: graph
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/graph
-          - name: Observed Data
-            type: table
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/incidents/:id/table
-          - type: channel
-      - name: Stories
-        id: "8"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/stories
-        widgets:
-          - name: Events
-            type: timeline
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/2/stories/:id/timeline
-          - type: channel
-    widgets: []
-  - name: Organization Z
-    id: "3"
-    description: This is the Z organization
-    sections:
-      - name: Incidents
-        id: "9"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents
-        widgets:
-          - name: Description
-            type: text-box
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/text_box
-          - name: System
-            type: graph
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/graph
-          - name: Observed Data
-            type: table
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/incidents/:id/table
-          - type: channel
-      - name: Stories
-        id: "11"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/stories
-        widgets:
-          - name: Events
-            type: timeline
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/3/stories/:id/timeline
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/graph
+          - name: Top 10 Most Common Threats
+            type: list
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
     widgets: []

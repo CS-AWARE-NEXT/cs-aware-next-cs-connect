@@ -50,8 +50,8 @@ export const HyperlinkableActions = ({
             {(onDelete && url) &&
             <StyledDeleteAction
                 id='delete-tooltip'
-                modalTitle={formatMessage({defaultMessage: 'Delete issue'})}
-                modalContent={formatMessage({defaultMessage: 'Do you really want to delete this issue?'})}
+                modalTitle={formatMessage({defaultMessage: 'Delete'})}
+                modalContent={formatMessage({defaultMessage: 'Are you sure you want to delete?'})}
                 onDelete={onDelete}
             />}
             {enableEcosystemEdit &&

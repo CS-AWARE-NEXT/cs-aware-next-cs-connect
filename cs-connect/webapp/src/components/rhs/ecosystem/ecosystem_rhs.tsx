@@ -24,7 +24,7 @@ import {
 } from 'src/constants';
 import {getOrganizationById} from 'src/config/config';
 import {useToaster} from 'src/components/backstage/toast_banner';
-import {useOrganization} from 'src/hooks';
+import {getSection, useOrganization} from 'src/hooks';
 
 import EcosystemAccordionChild from './ecosystem_accordion_child';
 
@@ -46,8 +46,12 @@ const EcosystemRhs = ({
     const {add: addToast} = useToaster();
     const ecosystem = useOrganization(parentId);
     const [currentSectionInfo, setCurrentSectionInfo] = useState<SectionInfo | undefined>(sectionInfo);
+
+    // the second filter is to filter out elements with deleted parent sections,
+    // which can happen when a section is deleted or a whole organization is deleted
     const elements = (currentSectionInfo && currentSectionInfo.elements) ? currentSectionInfo.elements.
         filter((element: any) => element.id !== '' && element.name !== '').
+        filter((element: any) => element.parentId !== '' && getSection(element.parentId)).
         map((element: any) => ({
             ...element,
             header: `${getOrganizationById(element.organizationId).name} - ${element.name}`,
