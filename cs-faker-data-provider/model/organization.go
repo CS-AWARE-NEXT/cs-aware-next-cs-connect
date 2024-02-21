@@ -85,6 +85,12 @@ type Policy struct {
 	Exported       string `json:"exported"`
 }
 
+type Bundle struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
 type Story struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
