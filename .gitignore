@@ -7,6 +7,9 @@
 # Jetbrains
 .idea/
 
+# Air
+tmp/
+
 config/logs
 config/plugins
 
