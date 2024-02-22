@@ -1,7 +1,8 @@
 export enum WidgetType {
     Accordion = 'accordion',
-    CacaoPlaybook = 'cacao-playbook',
 
+    Bundle = 'bundle',
+    CacaoPlaybook = 'cacao-playbook',
     Channels = 'channels',
     Chart = 'chart',
     Exercise = 'exercise',
