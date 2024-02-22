@@ -4,7 +4,7 @@ export type BundleData = {
     objects: BundleObject[];
 };
 
-type BundleObject = {
+export type BundleObject = {
     type: string;
     spec_version: string;
     id: string;
@@ -18,13 +18,13 @@ type BundleObject = {
     valid_from?: string;
     malware_types?: string[];
     is_family?: boolean;
-    kill_chain_phases?: KillChainPhases[];
+    kill_chain_phases?: KillChainPhase[];
     relationship_type?: string;
     source_ref?: string;
     target_ref?: string;
 };
 
-type KillChainPhases = {
+export type KillChainPhase = {
     kill_chain_name: string;
     phase_name: string;
 };
