@@ -14,6 +14,7 @@ import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
 import {PolicyTemplate, PolicyTemplateField} from 'src/types/policy';
 import {NewsPostData} from 'src/types/news';
+import {BundleData} from 'src/types/bundles';
 
 export const updatePolicyTemplateField = async (params: PolicyTemplateField, url: string): Promise<void> => {
     await doPut<void>(
@@ -26,6 +27,14 @@ export const fetchPolicyTemplate = async (url: string): Promise<PolicyTemplate> 
     let data = await doGet<PolicyTemplate>(url);
     if (!data) {
         data = {} as PolicyTemplate;
+    }
+    return data;
+};
+
+export const fetchBundle = async (url: string): Promise<BundleData> => {
+    let data = await doGet<BundleData>(url);
+    if (!data) {
+        data = {} as BundleData;
     }
     return data;
 };
