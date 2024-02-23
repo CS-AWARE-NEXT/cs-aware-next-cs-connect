@@ -171,14 +171,15 @@ const LHSView = () => {
                         </Button>
                     </Form.Item>
                 </Form>
-
             </Modal>
+
+            {/* Placeholder will never appear because the defaultSelectObject sets a value already */}
             <StyledSelect
                 value={selectedObject.value}
                 disabled={disabled}
                 showSearch={true}
                 style={{width: '100%'}}
-                placeholder={formatMessage({defaultMessage: 'Search or select'})}
+                placeholder={formatMessage({defaultMessage: 'Select your organization'})}
                 optionFilterProp='children'
                 filterOption={filterOption}
 
