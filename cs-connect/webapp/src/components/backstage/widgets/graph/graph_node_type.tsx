@@ -175,6 +175,12 @@ const GraphNodeType: FC<NodeProps & {
         case 'firewall':
             className = 'network';
             break;
+        case 'rectangle':
+            className = 'rectangle';
+            break;
+        case 'oval':
+            className = 'oval';
+            break;
         default:
             className = 'round-rectangle';
         }

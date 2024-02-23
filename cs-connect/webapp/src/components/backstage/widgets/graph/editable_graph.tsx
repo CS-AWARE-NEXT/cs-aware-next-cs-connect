@@ -26,6 +26,7 @@ import ReactFlow, {
 } from 'reactflow';
 
 import {
+    Alert,
     Button,
     Divider,
     Drawer,
@@ -38,8 +39,6 @@ import {Content} from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 
 import styled from 'styled-components';
-
-import {HelpIcon} from '@mattermost/compass-icons/components';
 
 import withAdditionalProps from 'src/components/hoc/with_additional_props';
 
@@ -56,6 +55,10 @@ export const EDGE_TYPE_SUPPLIED_BY = 'supplied-by';
 const minimapStyle = {
     height: 90,
     width: 180,
+};
+
+const hideOptions = {
+    hideAttribution: true,
 };
 
 type NodeSelectionData = {
@@ -119,6 +122,7 @@ const EditableGraph = ({
     const updateNodeInternals = useUpdateNodeInternals();
     const editEnabled = lockStatus === LockStatus.Acquired;
     const [helpDrawerOpen, setHelpDrawerOpen] = useState(false);
+    const [savedTooltipOpen, setSavedTooltipOpen] = useState(false);
 
     const [nodeSelectionData, setNodeSelectionData] = useState<NodeSelectionData>(defaultNodeSelectionData);
     const [edgeSelectionData, setEdgeSelectionData] = useState<EdgeSelectionData>(defaultEdgeSelectionData);
@@ -127,6 +131,17 @@ const EditableGraph = ({
     useEffect(() => {
         updateNodeInternals(nodes.map((node) => node.id));
     }, [refreshNodeInternals]);
+
+    const save = useCallback(() => {
+        setSavedTooltipOpen(true);
+        const timeoutID = setTimeout(() => {
+            setSavedTooltipOpen(false);
+        }, 2000);
+        triggerUpdate();
+        return () => {
+            clearTimeout(timeoutID);
+        };
+    }, [triggerUpdate]);
 
     // Highlight clicked nodes (and disable the highlight on all the other elements)
     const onNodeClick = useCallback((id: string) => {
@@ -425,7 +440,7 @@ const EditableGraph = ({
         >
             <Content>
                 <Drawer
-                    title={'Ecosystem graph help'}
+                    title={'Ecosystem Graph Help'}
                     open={helpDrawerOpen}
                     onClose={() => setHelpDrawerOpen(false)}
                 >
@@ -467,11 +482,12 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                     edgeTypes={edgeTypes}
                     fitView={true}
                     onlyRenderVisibleElements={false}
+                    proOptions={hideOptions}
                 >
                     <Background/>
                     <Controls>
                         <ControlButton onClick={() => setHelpDrawerOpen(true)}>
-                            <HelpIcon/>
+                            <i className='icon fa fa-info'/>
                         </ControlButton>
                     </Controls>
                     <MiniMap
@@ -483,7 +499,7 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
             </Content>
             <Sider
                 theme={'light'}
-                style={{paddingLeft: '15px'}}
+                style={{paddingLeft: '15px', overflow: 'scroll'}}
             >
                 {!editEnabled && (
                     <Tooltip title={lockStatus === LockStatus.Busy ? 'The ecosystem graph is being edited by someone else. Try again in a few minutes.' : ''}>
@@ -501,22 +517,33 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                 )}
                 {editEnabled && (
                     <>
-                        <StyledButton
-                            type='primary'
-                            block={true}
-                            onClick={() => {
-                                triggerUpdate();
-                            }}
+                        <Tooltip
+                            title='Saved!'
+                            trigger='click'
+                            open={savedTooltipOpen}
                         >
-                            {'Save'}
-                        </StyledButton>
-                        <InputLabel>{'You are now editing the ecosystem graph. When you are finished, click the Save button to make changes persistent.'}</InputLabel>
+                            <StyledButton
+                                type='primary'
+                                block={true}
+                                onClick={save}
+                            >
+                                {'Save'}
+                            </StyledButton>
+                        </Tooltip>
+                        <Alert
+                            message='You are in edit mode'
+                            description='Rememeber to save when you are finished.'
+                            type='info'
+                            showIcon={true}
+                            style={{marginTop: '10px'}}
+                        />
                     </>
                 )}
                 <Divider/>
                 {nodeSelectionData !== defaultNodeSelectionData && (
                     <>
-                        <InputLabel>{'Node Name'}</InputLabel>
+                        <InputLabel><i className='icon fa fa-info-circle'/> {'Node Info'}</InputLabel>
+                        <InputLabel>{'Name'}</InputLabel>
                         <Input
                             placeholder='Name'
                             value={nodeSelectionData.label}
@@ -525,7 +552,7 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                                 updateNodeData({label: e.target.value});
                             }}
                         />
-                        <InputLabel>{'Node Description'}</InputLabel>
+                        <InputLabel>{'Description'}</InputLabel>
                         <Input
                             placeholder='Description'
                             value={nodeSelectionData.description}
@@ -534,17 +561,19 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                                 updateNodeData({description: e.target.value});
                             }}
                         />
-                        <InputLabel>{'Node Type'}</InputLabel>
+                        <InputLabel>{'Type'}</InputLabel>
                         <Select
                             defaultValue='default'
                             value={nodeSelectionData.kind}
                             style={{width: '100%'}}
                             disabled={!editEnabled}
                             options={[
-                                {value: 'default', label: 'default'},
-                                {value: 'database', label: 'database'},
-                                {value: 'cloud', label: 'cloud'},
-                                {value: 'network', label: 'network'},
+                                {value: 'default', label: 'Default'},
+                                {value: 'database', label: 'Database'},
+                                {value: 'cloud', label: 'Cloud'},
+                                {value: 'network', label: 'Network'},
+                                {value: 'rectangle', label: 'Rectangle'},
+                                {value: 'oval', label: 'Oval'},
                             ]}
                             onChange={(value) => {
                                 updateNodeData({kind: value});
@@ -555,6 +584,7 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                             danger={true}
                             block={true}
                             disabled={!editEnabled || nodeSelectionData.id === 'root'}
+                            style={{position: 'sticky', bottom: 0}}
                             onClick={() => {
                                 updateNodeData({delete: true});
                             }}
@@ -565,7 +595,8 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                 )}
                 {edgeSelectionData !== defaultEdgeSelectionData && (
                     <>
-                        <InputLabel>{'Edge Kind'}</InputLabel>
+                        <InputLabel><i className='icon fa fa-info-circle'/> {'Edge Info'}</InputLabel>
+                        <InputLabel>{'Kind'}</InputLabel>
                         <Select
                             defaultValue={EDGE_TYPE_MANAGED_BY}
                             value={edgeSelectionData.kind}
@@ -584,6 +615,7 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                             danger={true}
                             block={true}
                             disabled={!editEnabled}
+                            style={{position: 'sticky', bottom: 0}}
                             onClick={() => {
                                 updateEdgeData({delete: true});
                             }}
@@ -593,7 +625,11 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                     </>
                 )}
                 {nodeSelectionData === defaultNodeSelectionData && edgeSelectionData === defaultEdgeSelectionData && (
-                    <InputLabel>{'Select a node or an edge to view or edit its information.'}</InputLabel>
+                    <Alert
+                        message='Select a node or an edge to view or edit its information.'
+                        type='info'
+                        showIcon={true}
+                    />
                 )}
             </Sider>
         </Layout>

@@ -58,6 +58,7 @@
     border-radius: 100% / calc(var(--r) * 2);
 
     font-size: bold;
+    padding: 2px;
 }
 
 .round-rectangle:hover {
@@ -75,6 +76,7 @@
     border-style: outset;
 
     font-size: bold;
+    padding: 2px;
 }
 
 .hyperlinked-round-rectangle:hover {
@@ -91,6 +93,7 @@
     border-style: outset;
 
     font-size: bold;
+    padding: 2px;
 }
 
 .marked-round-rectangle:hover {
@@ -251,4 +254,100 @@
     top: -2px;
     left: -2px;
     z-index: -1;
+}
+
+
+.rectangle {
+    /* this variable will define how much ci*/
+    --r: 0px;
+
+    max-width: 300px;
+    background: rgba(#369, 0.8);
+    border-radius: 100% / calc(var(--r) * 2);
+
+    font-size: bold;
+    padding: 2px;
+}
+
+.rectangle:hover {
+    background: rgba(#33AA99, 0.8);
+}
+
+.hyperlinked-rectangle {
+    /* this variable will define how much ci*/
+    --r: 0px;
+
+    max-width: 300px;
+    background: #F4B400;
+    border-radius: 100% / calc(var(--r) * 2);
+    border-color: #1BC41B;
+    border-style: outset;
+
+    font-size: bold;
+    padding: 2px;
+}
+
+.hyperlinked-rectangle:hover {
+    background: rgba(#33AA99, 0.8);
+}
+
+.marked-rectangle {
+    --r: 0px;
+
+    max-width: 300px;
+    background: rgba(#369, 0.8);
+    border-radius: 100% / calc(var(--r) * 2);
+    border-color: #1BC41B;
+    border-style: outset;
+
+    font-size: bold;
+    padding: 2px;
+}
+
+.marked-rectangle:hover {
+    background: rgba(#33AA99, 0.8);
+}
+
+
+.oval {
+    max-width: 300px;
+    background: rgba(#369, 0.8);
+    border-radius: 100%;
+
+    font-size: bold;
+    padding: 2px;
+}
+
+.oval:hover {
+    background: rgba(#33AA99, 0.8);
+}
+
+.hyperlinked-oval {
+    max-width: 300px;
+    background: #F4B400;
+    border-radius: 100%;
+    border-color: #1BC41B;
+    border-style: outset;
+
+    font-size: bold;
+    padding: 2px;
+}
+
+.hyperlinked-oval:hover {
+    background: rgba(#33AA99, 0.8);
+}
+
+.marked-oval {
+    max-width: 300px;
+    background: rgba(#369, 0.8);
+    border-radius: 100%;
+    border-color: #1BC41B;
+    border-style: outset;
+
+    font-size: bold;
+    padding: 2px;
+}
+
+.marked-oval:hover {
+    background: rgba(#33AA99, 0.8);
 }
