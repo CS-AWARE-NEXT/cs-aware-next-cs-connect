@@ -260,4 +260,12 @@ organizations:
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
+      - name: Bundles
+        id: "35"
+        url: http://localhost:3000/cs-data-provider/organizations/4/bundles
+        widgets:
+          - name: Relationship
+            type: bundle
+            url: http://localhost:3000/cs-data-provider/organizations/4/bundles/:id/content
+          - type: channel
     widgets: []

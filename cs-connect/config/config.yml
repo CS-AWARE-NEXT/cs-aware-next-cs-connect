@@ -260,4 +260,12 @@ organizations:
             type: list
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
+      - name: Bundles
+        id: "35"
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/bundles
+        widgets:
+          - name: Relationship
+            type: bundle
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/bundles/:id/content
+          - type: channel
     widgets: []
