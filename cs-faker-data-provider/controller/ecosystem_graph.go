@@ -3,8 +3,10 @@ package controller
 import (
 	"encoding/json"
 
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/pkg/errors"
 )
@@ -24,8 +26,30 @@ func NewEcosystemGraphController(ecosystemGraphRepository *repository.EcosystemG
 func (egc *EcosystemGraphController) GetEcosystemGraph(c *fiber.Ctx) error {
 	if ecosystemGraph, err := egc.ecosystemGraphRepository.GetEcosystemGraph(); err == nil {
 		return c.JSON(ecosystemGraph)
+	} else if err == util.ErrNotFound {
+		// Attempt retrieving a default graph from a json file
+		if ecosystemGraph, err := egc.getEcosystemGraphFromFile("ecosystem-graph.json"); err == nil {
+			return c.JSON(ecosystemGraph)
+		}
 	}
 	return c.JSON(model.EcosystemGraphData{})
+}
+
+func (egc *EcosystemGraphController) getEcosystemGraphFromFile(fileName string) (model.EcosystemGraphData, error) {
+	filePath, err := util.GetEmbeddedFilePath(fileName, "*.json")
+	if err != nil {
+		return model.EcosystemGraphData{}, err
+	}
+	content, err := data.Data.ReadFile(filePath)
+	if err != nil {
+		return model.EcosystemGraphData{}, err
+	}
+	var ecosystemGraphData model.EcosystemGraphData
+	err = json.Unmarshal(content, &ecosystemGraphData)
+	if err != nil {
+		return model.EcosystemGraphData{}, err
+	}
+	return ecosystemGraphData, nil
 }
 
 func (egc *EcosystemGraphController) RefreshLockEcosystemGraph(c *fiber.Ctx) error {

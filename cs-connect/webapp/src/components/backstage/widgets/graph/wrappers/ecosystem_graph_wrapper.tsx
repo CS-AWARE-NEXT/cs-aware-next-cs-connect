@@ -35,6 +35,7 @@ type Props = {
     className?: string;
     url: string;
     refreshNodeInternals?: Record<string, never>,
+    setEditMode?: React.Dispatch<React.SetStateAction<boolean>>,
 };
 
 const EcosystemGraphWrapper = ({
@@ -43,6 +44,7 @@ const EcosystemGraphWrapper = ({
     className,
     url,
     refreshNodeInternals,
+    setEditMode,
 }: Props) => {
     const fullUrl = useContext(FullUrlContext);
     const sectionContextOptions = useContext(SectionContext);
@@ -74,6 +76,12 @@ const EcosystemGraphWrapper = ({
     const resetLockStatus = useCallback(() => {
         setLockStatus(LockStatus.NotRequested);
     }, []);
+
+    useEffect(() => {
+        if (setEditMode) {
+            setEditMode(isEditing);
+        }
+    }, [isEditing]);
 
     // Fill non persistent node and edge metadata for nodes and edges loaded from the data provider
     useEffect(() => {

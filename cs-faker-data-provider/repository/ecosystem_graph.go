@@ -28,8 +28,8 @@ func (r *EcosystemGraphRepository) GetEcosystemGraph() (*model.EcosystemGraphDat
 		From("CSFDP_Ecosystem_Graph_Nodes")
 	var nodes []*model.EcosystemGraphNode
 	err := r.db.SelectBuilder(r.db.DB, &nodes, nodesSelect)
-	if err == sql.ErrNoRows {
-		return nil, errors.Wrap(util.ErrNotFound, "no ecosystem nodes found for the section")
+	if len(nodes) == 0 {
+		return nil, util.ErrNotFound
 	} else if err != nil {
 		return nil, errors.Wrap(err, "failed to get ecosystem nodes for the section")
 	}
