@@ -55,7 +55,7 @@ const EcosystemGraphEditor = ({parentId, sectionId}: Props) => {
                 closeIcon={systemConfig.ecosystemGraphAutoSave ? null : (
                     <Popconfirm
                         title='Close Ecosystem Graph'
-                        description='Do you want to close without saving the ecosystem graph?'
+                        description='Do you want to close the ecosystem graph without saving it?'
                         onConfirm={() => {
                             setPopConfirmVisible(false);
                             setModalVisible(false);
@@ -81,7 +81,7 @@ const EcosystemGraphEditor = ({parentId, sectionId}: Props) => {
                     name='Edit ecosystem graph'
                     editable={true}
                     url={ecosystemGraphUrl}
-                    refreshNodeInternals={refreshNodeInternals}
+                    refreshNodeInternalsParent={refreshNodeInternals}
                     setEditMode={setIsEditing}
                 />
             </Modal>

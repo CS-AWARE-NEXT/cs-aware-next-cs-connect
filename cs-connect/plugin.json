@@ -45,7 +45,7 @@
 			"key": "ecosystemGraphAutosaveDelay",
 			"display_name": "Ecosystem graph auto save delay",
 			"type": "number",
-			"help_text": "Interval delay in minutes specifying when the auto save should trigger for ecosystem graphs. This setting does nothing if the auto save setting is off. Max value is 30.",
+			"help_text": "Interval delay in minutes specifying when the auto save should trigger for ecosystem graphs. This setting does nothing if the auto save setting is off. Max value is 30, min is 1. Only integer values are allowed.",
             "default": 5
         },
 		{

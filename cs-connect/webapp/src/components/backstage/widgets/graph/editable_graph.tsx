@@ -30,6 +30,7 @@ import {
     Button,
     Divider,
     Drawer,
+    Dropdown,
     Input,
     Layout,
     Select,
@@ -45,6 +46,8 @@ import withAdditionalProps from 'src/components/hoc/with_additional_props';
 import {uuidv4} from 'src/helpers/uuid';
 
 import {LockStatus} from 'src/types/ecosystem_graph';
+
+import {getSystemConfig} from 'src/config/config';
 
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
@@ -75,10 +78,14 @@ type GraphData = {
     nodes: Node[],
     edges: Edge[],
 }
+enum SaveType {
+    Save,
+    SaveAndClose,
+    CloseWithoutSaving,
+}
 
 const defaultNodeSelectionData = {id: '', label: '', description: '', kind: ''};
 const defaultEdgeSelectionData = {id: '', kind: ''};
-const RESET_LOCK_DELAY = 60000; // 1 minute
 
 /**
  * className: used to style the graph through styled-components
@@ -88,7 +95,6 @@ const RESET_LOCK_DELAY = 60000; // 1 minute
  * setIsEditing: allows notifying the parent that the user wants to enable the edit mode. The parent can run validation checks such as locking mechanisms before allowing editing the graph.
  * triggerUpdate: allows notifying the parent that its current updated data should be persisted. This callback is associated to a Save button.
  * lockStatus: Toggles the status of the edit button, disabling it if the lock cannot be acquired.
- * resetLockStatus: resets the lock to NotRequested
  * refreshNodeInternals: exposes a simplified proxy of React Flow updateNodeInternals in case the parent container has some animation. This must be called on any animation end (such as for modals), else edges will render incorrectly and will not connect to node anchors.
  */
 type Props = {
@@ -97,9 +103,8 @@ type Props = {
     existingEdges: Edge[],
     setUpdatedData: React.Dispatch<React.SetStateAction<GraphData>>,
     setIsEditing: React.Dispatch<React.SetStateAction<boolean>>,
-    triggerUpdate: () => void,
+    triggerUpdate: (save: boolean, close: boolean) => void,
     lockStatus: LockStatus,
-    resetLockStatus: () => void,
     refreshNodeInternals?: Record<string, never>,
 };
 
@@ -111,33 +116,63 @@ const EditableGraph = ({
     setIsEditing,
     triggerUpdate,
     lockStatus,
-    resetLockStatus,
     refreshNodeInternals,
 }: Props) => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const store = useStoreApi();
     const connectingNodeId = useRef<string | null>(null);
-    const {screenToFlowPosition, flowToScreenPosition, setViewport} = useReactFlow();
+    const {screenToFlowPosition, setViewport} = useReactFlow();
     const updateNodeInternals = useUpdateNodeInternals();
     const editEnabled = lockStatus === LockStatus.Acquired;
     const [helpDrawerOpen, setHelpDrawerOpen] = useState(false);
     const [savedTooltipOpen, setSavedTooltipOpen] = useState(false);
+    const [resetNodes, setResetNodes] = useState(false);
 
     const [nodeSelectionData, setNodeSelectionData] = useState<NodeSelectionData>(defaultNodeSelectionData);
     const [edgeSelectionData, setEdgeSelectionData] = useState<EdgeSelectionData>(defaultEdgeSelectionData);
+    const systemConfig = getSystemConfig();
+    const saveActions = systemConfig.ecosystemGraphAutoSave ? [
+        {
+            key: '1',
+            label: 'Save and stop editing',
+        },
+    ] : [
+        {
+            key: '1',
+            label: 'Save and stop editing',
+        },
+        {
+            key: '2',
+            label: 'Stop editing without saving',
+        },
+    ];
 
     // Refresh node internals if the parent finished some animation
     useEffect(() => {
         updateNodeInternals(nodes.map((node) => node.id));
+        setResetNodes(true);
     }, [refreshNodeInternals]);
 
-    const save = useCallback(() => {
+    const save = useCallback((saveType: SaveType) => {
         setSavedTooltipOpen(true);
         const timeoutID = setTimeout(() => {
             setSavedTooltipOpen(false);
         }, 2000);
-        triggerUpdate();
+
+        switch (saveType) {
+        case SaveType.Save:
+            triggerUpdate(true, false);
+            break;
+        case SaveType.SaveAndClose:
+            triggerUpdate(true, true);
+            break;
+        case SaveType.CloseWithoutSaving:
+            triggerUpdate(false, true);
+            setNodeSelectionData(defaultNodeSelectionData);
+            setEdgeSelectionData(defaultEdgeSelectionData);
+            break;
+        }
         return () => {
             clearTimeout(timeoutID);
         };
@@ -323,12 +358,13 @@ const EditableGraph = ({
         const parentNodeIds = existingNodes.map((node) => node.id);
 
         // Prevent infinite loop if the parent data contains no change
-        if (currentNodeIds.length !== 0 && currentNodeIds.length === parentNodeIds.length && currentNodeIds.every((value, index) => value === parentNodeIds[index])) {
+        if (!resetNodes && (currentNodeIds.length !== 0 && currentNodeIds.length === parentNodeIds.length && currentNodeIds.every((value, index) => value === parentNodeIds[index]))) {
             return;
         }
 
         // Allow updates from parent if the graph is empty
-        if (nodes.length < 2) {
+        if (nodes.length < 2 || resetNodes) {
+            setResetNodes(false);
             if (existingNodes.length) {
                 setNodes(existingNodes);
                 setEdges(existingEdges);
@@ -351,7 +387,7 @@ const EditableGraph = ({
                 setUpdatedData({nodes: [startingNode], edges: []});
             }
         }
-    }, [existingNodes, existingEdges, editEnabled]);
+    }, [existingNodes, existingEdges, editEnabled, resetNodes]);
 
     const updateNodeData = useCallback((newData) => {
         if (!editEnabled) {
@@ -419,19 +455,6 @@ const EditableGraph = ({
             kind: newData.kind || '',
         });
     }, [edgeSelectionData, setEdges, editEnabled]);
-
-    // Re-enable the edit button after a delay if it was disabled due to the lock being busy
-    useEffect(() => {
-        let timeoutID: NodeJS.Timeout;
-        if (lockStatus === LockStatus.Busy) {
-            timeoutID = setTimeout(() => {
-                resetLockStatus();
-            }, RESET_LOCK_DELAY);
-        }
-        return () => {
-            clearTimeout(timeoutID);
-        };
-    }, [lockStatus]);
 
     return (
         <Layout
@@ -517,23 +540,38 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                 )}
                 {editEnabled && (
                     <>
-                        <Tooltip
-                            title='Saved!'
-                            trigger='click'
-                            open={savedTooltipOpen}
-                        >
-                            <StyledButton
-                                type='primary'
-                                block={true}
-                                onClick={save}
-                            >
-                                {'Save'}
-                            </StyledButton>
-                        </Tooltip>
+
+                        <StyledDropdownButton
+                            type='primary'
+
+                            onClick={() => save(SaveType.Save)}
+                            menu={{items: saveActions,
+                                onClick: (e) => {
+                                    switch (e.key) {
+                                    case '1':
+                                        save(SaveType.SaveAndClose);
+                                        break;
+                                    case '2':
+                                        save(SaveType.CloseWithoutSaving);
+                                        break;
+                                    }
+                                }}}
+                            buttonsRender={([leftButton, rightButton]) => [
+                                <Tooltip
+                                    key={'leftButton'}
+                                    title='Saved!'
+                                    trigger='click'
+                                    open={savedTooltipOpen}
+                                >
+                                    {React.cloneElement(leftButton as React.ReactElement<any, string>, {block: true})}
+                                </Tooltip>,
+                                rightButton,
+                            ]}
+                        >{'Save'}</StyledDropdownButton>
                         <Alert
                             message='You are in edit mode'
                             description='Rememeber to save when you are finished.'
-                            type='info'
+                            type='warning'
                             showIcon={true}
                             style={{marginTop: '10px'}}
                         />
@@ -637,6 +675,11 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
 };
 
 const StyledButton = styled(Button)`
+	margin-top: 10px;
+	border-radius: 0px;
+`;
+
+const StyledDropdownButton = styled(Dropdown.Button)`
 	margin-top: 10px;
 	border-radius: 0px;
 `;
