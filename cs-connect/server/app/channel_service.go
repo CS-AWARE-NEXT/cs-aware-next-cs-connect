@@ -32,7 +32,7 @@ func NewChannelService(api plugin.API, store ChannelStore, mattermostChannelStor
 		mattermostChannelStore: mattermostChannelStore,
 		categoryService:        categoryService,
 		platformService:        platformService,
-		markdownRegex:          regexp.MustCompile(`\[(.*)\]\(([^\(]+)\)`),
+		markdownRegex:          regexp.MustCompile(`\[(.*?)\]\(([^\(]+)\)`),
 	}
 }
 
