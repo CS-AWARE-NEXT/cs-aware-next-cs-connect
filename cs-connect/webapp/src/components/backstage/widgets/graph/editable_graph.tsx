@@ -610,8 +610,8 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                                 {value: 'database', label: 'Database'},
                                 {value: 'cloud', label: 'Cloud'},
                                 {value: 'network', label: 'Network'},
-                                {value: 'rectangle', label: 'Rectangle'},
-                                {value: 'oval', label: 'Oval'},
+                                {value: 'rectangle', label: 'Organization'},
+                                {value: 'oval', label: 'Service'},
                             ]}
                             onChange={(value) => {
                                 updateNodeData({kind: value});
