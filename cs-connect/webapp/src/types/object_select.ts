@@ -3,9 +3,8 @@ export type SelectObject = {
     label: string;
 };
 
-// This will appear in the select as the first option,
-// helping users get a hint of what to do with the select
+// Used in various places such as playbook selects and the organization selector
 export const defaultSelectObject = {
-    value: 'Select your organization',
-    label: 'Select your organization',
+    value: '',
+    label: '',
 };
