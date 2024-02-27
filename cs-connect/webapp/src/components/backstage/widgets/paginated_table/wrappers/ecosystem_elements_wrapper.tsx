@@ -36,6 +36,12 @@ const EcosystemElementsWrapper = ({
     useEffect(() => {
         const rows = elements ? elements.map((element) => {
             const parentSection = getSection(element.parentId);
+
+            // parentSection not found because it has been deleted
+            // we will filter rows with empty id after this map, in the filter function
+            if (!parentSection) {
+                return {id: ''};
+            }
             const pathWithoutSectionName = removeSectionNameFromPath(path, formatName(section.name));
             const basePath = `${formatSectionPath(pathWithoutSectionName, element.organizationId)}/${formatName(parentSection.name)}`;
             const row: PaginatedTableRow = {
@@ -48,7 +54,7 @@ const EcosystemElementsWrapper = ({
                 ...fillRow(row, '', url, buildQuery(parentId, sectionId)),
                 onClick: () => navigateToUrl(`${basePath}/${element.id}?${PARENT_ID_PARAM}=${element.parentId}`),
             };
-        }) : [];
+        }).filter((row) => row.id !== '') : [];
         const columns = ecosystemElementsFields.map((field) => {
             return fillColumn(field, WITH_SORTER);
         });

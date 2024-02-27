@@ -88,6 +88,42 @@ const getSiteURL = (): string => {
 };
 
 const registerPolicyPostMenu = (registry: any, store: Store<GlobalState>) => {
+    // const {
+    //     rootRegisterMenuItem: policyRegisterMenuItem,
+    // } = registry.registerPostDropdownSubMenuAction(
+    //     <FormattedMessage defaultMessage='Add to Policy'/>,
+    //     () => console.log(''),
+    //     async (id: string) => {
+    //         console.log('filtering');
+    //         const channelId = getCurrentChannelId(store.getState());
+    //         if (!channelId) {
+    //             console.log('not showing because no channel id was found');
+    //             return false;
+    //         }
+    //         const channelByID = await fetchChannelById(channelId);
+    //         if (!channelByID) {
+    //             console.log('not showing because channel by id was not found');
+    //             return false;
+    //         }
+    //         const {channel} = channelByID;
+    //         const channelWasNotFound = channel === notFoundWidgetChannel;
+    //         if (channelWasNotFound) {
+    //             console.log('not showing because channel was not found');
+    //             return false;
+    //         }
+    //         const section = getSectionById(channel.sectionId);
+    //         if (!section) {
+    //             console.log('not showing because section was not found', section);
+    //             return false;
+    //         }
+    //         if (!formatStringToLowerCase(section.name).includes('policies')) {
+    //             console.log('not showing because section is not policies');
+    //             return false;
+    //         }
+    //         return true;
+    //     },
+    // );
+
     // eslint-disable-next-line no-unused-vars
     const {
         id,

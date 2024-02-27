@@ -7,12 +7,15 @@ import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {buildQuery, buildTo, buildToForCopy} from 'src/hooks';
 import CopyLink from 'src/components/commons/copy_link';
 
+import {PostOptions} from './social_media_post';
+
 type Props = {
     id: string;
     title: string;
     parentId: string;
     sectionId: string;
     hyperlinkPath: string;
+    postOptions?: PostOptions;
 };
 
 const SocialMediaPostTitle: FC<Props> = ({
@@ -21,24 +24,27 @@ const SocialMediaPostTitle: FC<Props> = ({
     parentId,
     sectionId,
     hyperlinkPath,
+    postOptions,
 }) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
     const {url} = useRouteMatch();
     const query = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
+    const shouldAllowCopy = !postOptions || !postOptions.noHyperlinking;
 
     return (
         <Title>
             <TitleText>{title}</TitleText>
-            <CopyLink
-                id={id}
-                text={`${hyperlinkPath}.${title}`}
-                to={buildToForCopy(buildTo(fullUrl, id, query, url))}
-                name={title}
-                area-hidden={true}
-                iconWidth={'1.45em'}
-                iconHeight={'1.45em'}
-            />
+            {shouldAllowCopy &&
+                <CopyLink
+                    id={id}
+                    text={`${hyperlinkPath}.${title}`}
+                    to={buildToForCopy(buildTo(fullUrl, id, query, url))}
+                    name={title}
+                    area-hidden={true}
+                    iconWidth={'1.45em'}
+                    iconHeight={'1.45em'}
+                />}
         </Title>
     );
 };

@@ -203,11 +203,15 @@ const PlaceholderText = styled.span`
 type MarkdownEditWithIDProps = {
     textBoxProps: MarkdownEditProps;
     id: string;
+    opaqueText?: boolean;
 };
 
-export const MarkdownEditWithID = ({textBoxProps, id}: MarkdownEditWithIDProps) => (
+export const MarkdownEditWithID = ({textBoxProps, id, opaqueText}: MarkdownEditWithIDProps) => (
     <div id={id}>
-        <MarkdownEdit {...textBoxProps}/>
+        <MarkdownEdit
+            opaqueText={opaqueText}
+            {...textBoxProps}
+        />
     </div>
 );
 

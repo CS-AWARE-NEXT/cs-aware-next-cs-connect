@@ -1,7 +1,8 @@
 package model
 
 type SocialMediaPostData struct {
-	Items []SocialMediaPost `json:"items"`
+	TotalCount int               `json:"totalCount"`
+	Items      []SocialMediaPost `json:"items"`
 }
 
 type SocialMediaPost struct {

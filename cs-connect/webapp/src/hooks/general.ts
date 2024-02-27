@@ -26,6 +26,7 @@ import {
 import {
     UserProps,
     fetchAllUsers,
+    fetchBundle,
     fetchChannelById,
     fetchChannels,
     fetchChartData,
@@ -33,6 +34,7 @@ import {
     fetchExerciseData,
     fetchGraphData,
     fetchListData,
+    fetchNewsPostData,
     fetchPaginatedTableData,
     fetchPlaybookData,
     fetchPolicyTemplate,
@@ -79,6 +81,8 @@ import {
     PostsByIdsParams,
     PostsForTeamParams,
 } from 'src/types/post';
+import {NewsError, NewsPostData, NewsQuery} from 'src/types/news';
+import {BundleData} from 'src/types/bundles';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -477,6 +481,41 @@ export const usePostData = (url: string): PostData => {
     return postData as PostData;
 };
 
+export const useNewsPostData = (url: string, query: NewsQuery): NewsPostData | NewsError => {
+    const {search, offset, limit} = query;
+    const [newsPostData, setNewsPostData] = useState<NewsPostData | {}>({});
+    const [newsError, setNewsError] = useState<NewsError | null>(null);
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchNewsPostDataAsync() {
+            try {
+                const newsPostDataResult = await fetchNewsPostData(`${url}?search=${search}&offset=${offset}&limit=${limit}`);
+                if (!isCanceled) {
+                    setNewsPostData(newsPostDataResult);
+                    setNewsError(null);
+                }
+            } catch (err: any) {
+                if (!isCanceled) {
+                    setNewsPostData({});
+                    setNewsError({message: JSON.parse(err.message)});
+                }
+            }
+        }
+
+        fetchNewsPostDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url, search, offset]);
+
+    if (newsError) {
+        return newsError as NewsError;
+    }
+    return newsPostData as NewsPostData;
+};
+
 export const useChartData = (url: string, chartType: ChartType | undefined): ChartData => {
     const [chartData, setChartData] = useState<ChartData | {}>({});
 
@@ -540,6 +579,28 @@ export const usePolicyTemplateData = (url: string, refresh = false): PolicyTempl
     }, [url, refresh]);
 
     return policyTemplate as PolicyTemplate;
+};
+
+export const useBundleData = (url: string): BundleData => {
+    const [policyTemplate, setPolicyTemplate] = useState<BundleData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchBundleAsync() {
+            const bundleResult = await fetchBundle(url);
+            if (!isCanceled) {
+                setPolicyTemplate(bundleResult);
+            }
+        }
+
+        fetchBundleAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+
+    return policyTemplate as BundleData;
 };
 
 export const usePostsByIds = (params: PostsByIdsParams): GetPostsByIdsResult => {

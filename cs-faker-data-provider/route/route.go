@@ -33,6 +33,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsStories(organizations)
 	useOrganizationsPolicies(organizations, context)
 	useOrganizationsPlaybooks(organizations)
+	useOrganizationsBundles(organizations)
 	useOrganizationsSocialMedia(organizations)
 	useOrganizationsNews(organizations)
 	useOrganizationsExercises(organizations)
@@ -138,6 +139,22 @@ func useOrganizationsPlaybooks(organizations fiber.Router) {
 	})
 }
 
+func useOrganizationsBundles(organizations fiber.Router) {
+	bundleController := controller.NewBundleController()
+
+	bundles := organizations.Group("/:organizationId/bundles")
+	bundles.Get("/", func(c *fiber.Ctx) error {
+		return bundleController.GetBundles(c)
+	})
+	bundleWithId := bundles.Group("/:bundleId")
+	bundleWithId.Get("/", func(c *fiber.Ctx) error {
+		return bundleController.GetBundle(c)
+	})
+	bundleWithId.Get("/content", func(c *fiber.Ctx) error {
+		return bundleController.GetBundleContent(c)
+	})
+}
+
 func useOrganizationsSocialMedia(organizations fiber.Router) {
 	socialMediaController := controller.NewSocialMediaController()
 
@@ -167,6 +184,9 @@ func useOrganizationsNews(organizations fiber.Router) {
 	newsWithId := news.Group("/:newsId")
 	newsWithId.Get("/", func(c *fiber.Ctx) error {
 		return newsController.GetNews(c)
+	})
+	newsWithId.Get("/news", func(c *fiber.Ctx) error {
+		return newsController.GetNewsPosts(c)
 	})
 }
 

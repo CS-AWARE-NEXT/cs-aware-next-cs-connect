@@ -140,21 +140,21 @@ const Accordion = ({
                 >
                     {elements.map((element) => (
                         <>
-                            <HyperlinkPathContext.Provider value={`${hyperlinkPath}.${element.header}`}>
-                                <Panel
-                                    key={`${element.id}-panel-key`}
-                                    header={element.header}
-                                    id={`${element.id}-panel-key`}
-                                    forceRender={true}
-                                >
+                            <Panel
+                                key={`${element.id}-panel-key`}
+                                header={element.header}
+                                id={`${element.id}-panel-key`}
+                                forceRender={true}
+                            >
+                                <HyperlinkPathContext.Provider value={`${hyperlinkPath}.${element.header}`}>
                                     <ChildComponent
                                         element={element}
                                         sectionId={sectionId}
                                         parentId={parentId}
                                         {...props}
                                     />
-                                </Panel>
-                            </HyperlinkPathContext.Provider>
+                                </HyperlinkPathContext.Provider>
+                            </Panel>
                         </>
                     ))}
                 </Collapse> :

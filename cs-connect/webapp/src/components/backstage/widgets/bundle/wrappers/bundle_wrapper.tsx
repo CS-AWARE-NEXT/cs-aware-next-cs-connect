@@ -1,19 +1,19 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
 import {SectionContext} from 'src/components/rhs/rhs';
-import News from 'src/components/backstage/widgets/news/news';
-import {NewsQuery} from 'src/types/news';
-import {useNewsPostData} from 'src/hooks';
+import {useBundleData} from 'src/hooks';
+import {formatUrlWithId} from 'src/helpers';
+import Bundle from 'src/components/backstage/widgets/bundle/bundle';
 
 type Props = {
     name?: string;
     url?: string;
 };
 
-const NewsWrapper = ({
-    name = 'News',
+const BundleWrapper = ({
+    name = 'Bundle',
     url = '',
 }: Props) => {
     const sectionContextOptions = useContext(SectionContext);
@@ -26,22 +26,14 @@ const NewsWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    const [query, setQuery] = useState<NewsQuery>({
-        search: '',
-        offset: '0',
-        limit: '10',
-    });
-
-    const data = useNewsPostData(url, query);
+    const data = useBundleData(formatUrlWithId(url, sectionIdForUrl));
 
     return (
         <>
             {data &&
-                <News
+                <Bundle
                     data={data}
                     name={name}
-                    query={query}
-                    setQuery={setQuery}
                     sectionId={sectionIdForUrl}
                     parentId={parentId}
                 />}
@@ -49,4 +41,4 @@ const NewsWrapper = ({
     );
 };
 
-export default NewsWrapper;
+export default BundleWrapper;

@@ -24,7 +24,7 @@ import {
 } from 'src/constants';
 import {getOrganizationById, getSystemConfig} from 'src/config/config';
 import {useToaster} from 'src/components/backstage/toast_banner';
-import {buildEcosystemGraphUrl, useOrganization, useSection} from 'src/hooks';
+import {buildEcosystemGraphUrl, getSection, useOrganization, useSection} from 'src/hooks';
 
 import EcosystemGraphWrapper from 'src/components/backstage/widgets/graph/wrappers/ecosystem_graph_wrapper';
 
@@ -55,8 +55,12 @@ const EcosystemRhs = ({
     const isEcosystemGraphEnabled = getSystemConfig().ecosystemGraph;
     const ecosystemGraphUrl = buildEcosystemGraphUrl(issues.url, true);
     const [currentSectionInfo, setCurrentSectionInfo] = useState<SectionInfo | undefined>(sectionInfo);
+
+    // the second filter is to filter out elements with deleted parent sections,
+    // which can happen when a section is deleted or a whole organization is deleted
     const elements = (currentSectionInfo && currentSectionInfo.elements) ? currentSectionInfo.elements.
         filter((element: any) => element.id !== '' && element.name !== '').
+        filter((element: any) => element.parentId !== '' && getSection(element.parentId)).
         map((element: any) => ({
             ...element,
             header: `${getOrganizationById(element.organizationId).name} - ${element.name}`,

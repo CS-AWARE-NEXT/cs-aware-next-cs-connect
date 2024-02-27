@@ -14,6 +14,8 @@ import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
 import {EcosystemGraph} from 'src/types/ecosystem_graph';
 import {PolicyTemplate, PolicyTemplateField} from 'src/types/policy';
+import {NewsPostData} from 'src/types/news';
+import {BundleData} from 'src/types/bundles';
 
 // Is there really no existing list of consts for status codes?
 const HTTP_STATUS_CODE_CONFLICT = 409;
@@ -29,6 +31,14 @@ export const fetchPolicyTemplate = async (url: string): Promise<PolicyTemplate> 
     let data = await doGet<PolicyTemplate>(url);
     if (!data) {
         data = {} as PolicyTemplate;
+    }
+    return data;
+};
+
+export const fetchBundle = async (url: string): Promise<BundleData> => {
+    let data = await doGet<BundleData>(url);
+    if (!data) {
+        data = {} as BundleData;
     }
     return data;
 };
@@ -131,6 +141,14 @@ export const fetchPostData = async (url: string): Promise<PostData> => {
     let data = await doGet<PostData>(url);
     if (!data) {
         data = {} as PostData;
+    }
+    return data;
+};
+
+export const fetchNewsPostData = async (url: string): Promise<NewsPostData> => {
+    let data = await doGet<NewsPostData>(url);
+    if (!data) {
+        data = {} as NewsPostData;
     }
     return data;
 };

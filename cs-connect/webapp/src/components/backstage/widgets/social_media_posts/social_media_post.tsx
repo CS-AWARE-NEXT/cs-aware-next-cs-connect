@@ -1,6 +1,11 @@
 import React, {FC, useContext} from 'react';
 import {useRouteMatch} from 'react-router-dom';
-import {Avatar as AntdAvatar, List, Space} from 'antd';
+import {
+    Avatar as AntdAvatar,
+    List,
+    Space,
+    Tooltip,
+} from 'antd';
 import {
     LikeOutlined,
     MessageOutlined,
@@ -20,6 +25,7 @@ import {
     buildTo,
     buildToForCopy,
     isReferencedByUrlHash,
+    isValidUrl,
     useUrlHash,
 } from 'src/hooks';
 import {CopyImage} from 'src/components/commons/copy_link';
@@ -31,44 +37,28 @@ import SocialMediaPostTitle from './social_media_post_title';
 const Item = List.Item;
 const Meta = Item.Meta;
 
+export type PostOptions = {
+    noHyperlinking?: boolean;
+    noActions?: boolean;
+};
+
 type Props = {
     post: Post;
     parentId: string;
     sectionId: string;
     hyperlinkPath: string;
+    viewOnExternalSiteText?: string;
+    options?: PostOptions;
 };
 
-const getAvatarComponent = (
-    avatar: string | undefined,
-    hint: string,
-    href: string | undefined,
-    tooltipMessage: string | undefined,
-): JSX.Element => {
-    // Default antd size
-    const size = 55;
-    const avatarComponent = avatar ? (
-        <AntdAvatar
-            size={size}
-            src={avatar}
-        />
-    ) : (
-        <Avatar
-            size={`${size}px`}
-            name={hint}
-            round={true}
-        />
-    );
-    return (
-        <HrefTooltip
-            title={tooltipMessage ?? ''}
-            href={href ?? ''}
-        >
-            {avatarComponent}
-        </HrefTooltip>
-    );
-};
-
-const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) => {
+const SocialMediaPost: FC<Props> = ({
+    post,
+    parentId,
+    sectionId,
+    viewOnExternalSiteText,
+    hyperlinkPath,
+    options,
+}) => {
     const {formatMessage} = useIntl();
     const isRhs = useContext(IsRhsContext);
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
@@ -76,16 +66,17 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) 
     const {url} = useRouteMatch();
     const urlHash = useUrlHash();
 
+    // TODO: the #smp- prefhix should become generic at some point
     const postId = `smp-${post.id}-`;
     const mediaId = `${postId}media`;
     const query = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
 
     const href = post.url ?? '';
-    const viewOnTwitter = formatMessage({defaultMessage: 'View on Twitter'});
+    const viewOnExternalSite = viewOnExternalSiteText || formatMessage({defaultMessage: 'View on Twitter'});
 
-    const actions = [
+    const actions = options?.noActions ? [] : [
         <HrefTooltip
-            title={viewOnTwitter}
+            title={viewOnExternalSite}
             href={href}
             key={`${postId}like`}
         >
@@ -95,7 +86,7 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) 
             />
         </HrefTooltip>,
         <HrefTooltip
-            title={viewOnTwitter}
+            title={viewOnExternalSite}
             href={href}
             key={`${postId}message`}
         >
@@ -105,7 +96,7 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) 
             />
         </HrefTooltip>,
         <HrefTooltip
-            title={viewOnTwitter}
+            title={viewOnExternalSite}
             href={href}
             key={`${postId}share`}
         >
@@ -121,6 +112,48 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) 
             {post.target && <><NodeIndexOutlined/> {post.target}</>}
         </Target>,
     ];
+
+    const getAvatarComponent = (
+        avatar: string | undefined,
+        hint: string,
+        avatarHref: string | undefined,
+        tooltipMessage: string | undefined,
+    ): JSX.Element => {
+        // Default antd size
+        const size = 55;
+        const avatarComponent = avatar ? (
+            <AntdAvatar
+                size={size}
+                src={avatar}
+            />
+        ) : (
+            <Avatar
+                size={`${size}px`}
+                name={hint}
+                round={true}
+            />
+        );
+
+        if (!isValidUrl(avatarHref)) {
+            return (
+                <Tooltip
+                    title={formatMessage({defaultMessage: 'External Site is not Available'})}
+                    placement='top'
+                >
+                    <span>{avatarComponent}</span>
+                </Tooltip>
+            );
+        }
+
+        return (
+            <HrefTooltip
+                title={tooltipMessage ?? ''}
+                href={avatarHref ?? ''}
+            >
+                {avatarComponent}
+            </HrefTooltip>
+        );
+    };
 
     const getMediaComponent = (width: string | number): JSX.Element | null => {
         if (!post.media) {
@@ -149,7 +182,7 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) 
             extra={isRhs ? null : getMediaComponent(300)}
         >
             <Meta
-                avatar={getAvatarComponent(post.avatar, post.title, href, viewOnTwitter)}
+                avatar={getAvatarComponent(post.avatar, post.title, href, viewOnExternalSite)}
                 description={post.date}
                 title={
                     <SocialMediaPostTitle
@@ -158,10 +191,12 @@ const SocialMediaPost: FC<Props> = ({post, parentId, sectionId, hyperlinkPath}) 
                         parentId={parentId}
                         sectionId={sectionId}
                         hyperlinkPath={hyperlinkPath}
+                        postOptions={options}
                     />}
             />
             <MarkdownEditWithID
                 id={`${postId}content`}
+                opaqueText={true}
                 textBoxProps={{
                     value: post.content,
                     placeholder: '',
