@@ -26,6 +26,7 @@ import {
 import {
     UserProps,
     fetchAllUsers,
+    fetchBundle,
     fetchChannelById,
     fetchChannels,
     fetchChartData,
@@ -79,6 +80,7 @@ import {
     PostsForTeamParams,
 } from 'src/types/post';
 import {NewsError, NewsPostData, NewsQuery} from 'src/types/news';
+import {BundleData} from 'src/types/bundles';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -548,6 +550,28 @@ export const usePolicyTemplateData = (url: string, refresh = false): PolicyTempl
     }, [url, refresh]);
 
     return policyTemplate as PolicyTemplate;
+};
+
+export const useBundleData = (url: string): BundleData => {
+    const [policyTemplate, setPolicyTemplate] = useState<BundleData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchBundleAsync() {
+            const bundleResult = await fetchBundle(url);
+            if (!isCanceled) {
+                setPolicyTemplate(bundleResult);
+            }
+        }
+
+        fetchBundleAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+
+    return policyTemplate as BundleData;
 };
 
 export const usePostsByIds = (params: PostsByIdsParams): GetPostsByIdsResult => {

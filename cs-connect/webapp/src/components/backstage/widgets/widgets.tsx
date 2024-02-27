@@ -17,6 +17,7 @@ import ChartWrapper from './chart/wrappers/chart_wrapper';
 import ExerciseWrapper from './exercise/wrappers/exercise_wrapper';
 import NewsWrapper from './news/wrappers/news_wrapper';
 import PolicyWrapper from './policy/wrappers/policy_wrappers';
+import BundleWrapper from './bundle/wrappers/bundle_wrapper';
 import {WidgetType} from './widget_types';
 
 type Props = {
@@ -31,6 +32,8 @@ const buildWidgetByType = (
     const props = {key, name, url, chartType, index};
 
     switch (type) {
+    case WidgetType.Bundle:
+        return <BundleWrapper {...props}/>;
     case WidgetType.CacaoPlaybook:
         return <CacaoPlaybookWrapper {...props}/>;
     case WidgetType.Chart:
