@@ -419,15 +419,21 @@ const EditableGraph = ({
             // and update the nodes store so that the changes are permanent
             setNodes((nds) => {
                 let result = nds;
+                let ancestor_id: string|undefined;
                 if (newData.delete) {
+                    ancestor_id = result.find((n) => n.id === node.id)?.parentNode;
                     result = result.filter((n) => n.id !== node.id);
                 }
                 result.forEach((n) => {
                     if (n.id === node.id) {
                         n.data = {...n.data, ...newData};
                     }
-                    if (n.parentNode === node.id) {
-                        delete n.parentNode;
+                    if (newData.delete && n.parentNode === node.id) {
+                        if (ancestor_id) {
+                            n.parentNode = ancestor_id;
+                        } else {
+                            delete n.parentNode;
+                        }
                     }
                 });
                 setUpdatedData((updatedData) => ({nodes: [...result], edges: updatedData.edges.filter((e) => !newData.delete || (e.source !== node.id && e.target !== node.id))}));
