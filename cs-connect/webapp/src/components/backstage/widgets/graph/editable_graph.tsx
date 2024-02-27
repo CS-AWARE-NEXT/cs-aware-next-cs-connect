@@ -426,6 +426,9 @@ const EditableGraph = ({
                     if (n.id === node.id) {
                         n.data = {...n.data, ...newData};
                     }
+                    if (n.parentNode === node.id) {
+                        delete n.parentNode;
+                    }
                 });
                 setUpdatedData((updatedData) => ({nodes: [...result], edges: updatedData.edges.filter((e) => !newData.delete || (e.source !== node.id && e.target !== node.id))}));
                 return [...result];

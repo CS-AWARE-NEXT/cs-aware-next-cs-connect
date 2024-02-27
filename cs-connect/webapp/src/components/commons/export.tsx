@@ -42,7 +42,7 @@ export const Exporter = ({parentId, sectionId}: Props) => {
     const sectionInfo = useSectionInfo(sectionId, section?.url);
 
     useEffect(() => {
-        if (exportData.channelId) {
+        if (exportData?.channelId) {
             setOpen(true);
         }
     }, [exportData]);
