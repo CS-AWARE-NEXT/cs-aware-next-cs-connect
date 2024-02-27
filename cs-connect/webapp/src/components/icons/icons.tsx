@@ -5,6 +5,10 @@ export const InfoIcon = () => (
     <i className='icon fa fa-info-circle'/>
 );
 
+export const EcosystemGraphEditIcon = () => (
+    <i className='icon fa fa-pencil'/>
+);
+
 export const HiddenIcon = () => (
     <i
         id='hidden-icon'

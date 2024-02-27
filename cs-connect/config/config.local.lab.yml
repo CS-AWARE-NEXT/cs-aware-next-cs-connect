@@ -15,6 +15,10 @@ organizations:
         url: http://www.isislab.it:3000/cs-data-provider/issues
         widgets:
           - type: channel
+      - name: Ecosystem Graph
+        id: "1"
+        url: http://www.isislab.it:3000/cs-data-provider/issues/ecosystem_graph
+        customView: ecosystem-graph
   - name: 5thYPE
     id: "8"
     description: This is the 5thYPE organization for Larissa workshop

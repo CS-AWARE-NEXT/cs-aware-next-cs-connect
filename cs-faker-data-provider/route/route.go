@@ -208,17 +208,29 @@ func useOrganizationsExercises(organizations fiber.Router) {
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {
 	issueRepository := context.RepositoriesMap["issues"].(*repository.IssueRepository)
+	ecosystemGraphRepository := context.RepositoriesMap["ecosystemGraph"].(*repository.EcosystemGraphRepository)
+	cacheRepository := context.RepositoriesMap["cache"].(*repository.CacheRepository)
 	issueController := controller.NewIssueController(issueRepository)
+	ecosystemGraphController := controller.NewEcosystemGraphController(ecosystemGraphRepository, cacheRepository)
 
 	ecosystem := basePath.Group("/issues")
 	ecosystem.Get("/", func(c *fiber.Ctx) error {
 		return issueController.GetIssues(c)
+	})
+	ecosystem.Get("/ecosystem_graph", func(c *fiber.Ctx) error {
+		return ecosystemGraphController.GetEcosystemGraph(c)
 	})
 	ecosystem.Get("/:issueId", func(c *fiber.Ctx) error {
 		return issueController.GetIssue(c)
 	})
 	ecosystem.Post("/", func(c *fiber.Ctx) error {
 		return issueController.SaveIssue(c)
+	})
+	ecosystem.Post("/ecosystem_graph/lock", func(c *fiber.Ctx) error {
+		return ecosystemGraphController.RefreshLockEcosystemGraph(c)
+	})
+	ecosystem.Post("/ecosystem_graph/drop_lock", func(c *fiber.Ctx) error {
+		return ecosystemGraphController.DropLockEcosystemGraph(c)
 	})
 	ecosystem.Post("/:issueId", func(c *fiber.Ctx) error {
 		return issueController.UpdateIssue(c)

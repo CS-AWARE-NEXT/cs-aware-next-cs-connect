@@ -28,6 +28,7 @@ import {
 } from 'src/types/events';
 import {UserResult} from 'src/types/users';
 import {ExportReference} from 'src/components/commons/export';
+import {SystemConfig} from 'src/types/config';
 import {
     GetPostsByIdsResult,
     GetPostsForTeamResult,
@@ -78,6 +79,20 @@ export const loadPlatformConfig = async (
     }
 
     // await putCacheResponse(PLATFORM_CONFIG_CACHE_NAME, url, config);
+    setConfig(config);
+};
+
+export const loadSystemConfig = async (
+    path: string,
+    setConfig: (config: SystemConfig) => void,
+): Promise<void> => {
+    const url = `${apiUrl}${path}`;
+
+    const config = await doGet<SystemConfig>(url);
+    if (!config) {
+        return;
+    }
+
     setConfig(config);
 };
 

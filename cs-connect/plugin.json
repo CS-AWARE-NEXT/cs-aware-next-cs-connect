@@ -26,6 +26,34 @@
             "display_name": "Admin password",
             "type": "text",
             "help_text": "A standard base64 encoded password used to select the \"All\" option from the organization dropdown, to be able to view all channels."
-        }]
+        },
+        {
+			"key": "ecosystemGraph",
+			"display_name": "Show ecosystem graph",
+			"type": "bool",
+			"help_text": "Toggle whether this environment should show the ecosystem graph at all or not. Turning this off will hide the graph from the RHS and from the channel header / rightmost bar. In the backstage, the ecosystem graph will be soft disabled - to completely remove it, remove the ecosystem graph section from the platform config.",
+			"default": true
+		},
+        {
+			"key": "ecosystemGraphAutosave",
+			"display_name": "Enable ecosystem graph auto save",
+			"type": "bool",
+			"help_text": "Toggle the auto save feature when users edit the ecosystem graph.",
+            "default": true
+		},
+		{
+			"key": "ecosystemGraphAutosaveDelay",
+			"display_name": "Ecosystem graph auto save delay",
+			"type": "number",
+			"help_text": "Interval delay in minutes specifying when the auto save should trigger for ecosystem graphs. This setting does nothing if the auto save setting is off. Max value is 30, min is 1. Only integer values are allowed.",
+            "default": 5
+        },
+		{
+			"key": "ecosystemGraphRSB",
+			"display_name": "Enable ecosystem graph modal interaction through right side button",
+			"type": "bool",
+			"help_text": "Specifies whether to show a button in the channel header / rightmost Mattermost sidebar to allow editing the ecosystem graph from the main stage.",
+            "default": false
+		}]
     }
 }

@@ -94,6 +94,7 @@ func (p *Plugin) OnActivate() error {
 	api.NewConfigHandler(
 		p.handler.APIRouter,
 		p.platformService,
+		p.configuration,
 	)
 	api.NewChannelHandler(
 		p.handler.APIRouter,
@@ -181,6 +182,8 @@ func (p *Plugin) OnConfigurationChange() error {
 	}
 
 	p.configuration.SetConfiguration(configuration)
+
+	p.API.PublishWebSocketEvent("config_update", configuration.ToPublicConfiguration(), &model.WebsocketBroadcast{})
 
 	return nil
 }

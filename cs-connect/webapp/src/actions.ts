@@ -1,5 +1,6 @@
 import {
     CHANNEL_CREATION,
+    EDIT_ECOSYSTEM_GRAPH,
     EXPORT_CHANNEL,
     SET_ADD_CHANNEL_ERROR_MESSAGE,
     SET_NAME_ERROR_MESSAGE,
@@ -42,6 +43,13 @@ export const exportAction = (channelId: string) => {
     return {
         type: EXPORT_CHANNEL,
         channelId,
+    };
+};
+
+export const editEcosystemgraphAction = (visible: boolean) => {
+    return {
+        type: EDIT_ECOSYSTEM_GRAPH,
+        visible,
     };
 };
 

@@ -178,4 +178,34 @@ var migrations = []Migration{
 			return nil
 		},
 	},
+	{
+		fromVersion: semver.MustParse("0.4.0"),
+		toVersion:   semver.MustParse("0.5.0"),
+		migrationFunc: func(e sqlx.Ext, db *DB) error {
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Ecosystem_Graph_Nodes (
+					ID TEXT PRIMARY KEY,
+					Name TEXT,
+					Description TEXT,
+					Type TEXT
+				);
+
+				CREATE TABLE IF NOT EXISTS CSFDP_Ecosystem_Graph_Edges (
+					ID TEXT PRIMARY KEY,
+					SourceNodeID TEXT NOT NULL REFERENCES CSFDP_Ecosystem_Graph_Nodes(ID),
+					DestinationNodeID TEXT NOT NULL REFERENCES CSFDP_Ecosystem_Graph_Nodes(ID),
+					Kind TEXT
+				);
+
+				CREATE TABLE IF NOT EXISTS CSFDP_Locks (
+					Key TEXT PRIMARY KEY,
+					ExpiresAt integer NOT NULL,
+					Owner TEXT NOT NULL
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Attachment")
+			}
+			return nil
+		},
+	},
 }

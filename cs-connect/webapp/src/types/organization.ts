@@ -31,6 +31,7 @@ export interface Section {
     isIssues: boolean;
     name: string;
     url: string;
+    customView?: string;
     sections: Section[];
     widgets: Widget[];
 }

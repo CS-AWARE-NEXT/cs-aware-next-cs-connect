@@ -30,6 +30,7 @@ import {
     fetchChannelById,
     fetchChannels,
     fetchChartData,
+    fetchEcosystemGraphData,
     fetchExerciseData,
     fetchGraphData,
     fetchListData,
@@ -72,6 +73,7 @@ import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
+import {EcosystemGraph} from 'src/types/ecosystem_graph';
 import {PolicyTemplate} from 'src/types/policy';
 import {
     GetPostsByIdsResult,
@@ -227,7 +229,7 @@ export const useSectionInfo = (id: string, url: string, refresh = false): Sectio
     return info as SectionInfo;
 };
 
-export const useSectionData = ({id, name, url}: Section): PaginatedTableData => {
+export const useSectionData = ({id, name, customView, url}: Section): PaginatedTableData => {
     const [sectionData, setSectionData] = useState<PaginatedTableData>({columns: [], rows: []});
     const {path, url: routeUrl} = useRouteMatch();
     const organizationId = useContext(OrganizationIdContext);
@@ -252,7 +254,10 @@ export const useSectionData = ({id, name, url}: Section): PaginatedTableData => 
             }
         }
 
-        fetchSectionDataAsync();
+        // sections with custom views also need specialized custom data loading, so in such case the hook does nothing
+        if (!customView) {
+            fetchSectionDataAsync();
+        }
 
         return () => {
             isCanceled = true;
@@ -293,6 +298,30 @@ export const useGraphData = (
         };
     }, [url, hash]);
     return graphData as GraphData;
+};
+
+// Fetch ecosystem graph node and edges.
+export const useEcosystemGraphData = (
+    url: string,
+): [EcosystemGraph | undefined, React.Dispatch<React.SetStateAction<EcosystemGraph | undefined>>] => {
+    const [graphData, setGraphData] = useState<EcosystemGraph | undefined>(undefined);
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchGraphDataAsync() {
+            const graphDataResult = await fetchEcosystemGraphData(url);
+            if (!isCanceled) {
+                setGraphData(graphDataResult);
+            }
+        }
+
+        fetchGraphDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return [graphData, setGraphData];
 };
 
 export const useTableData = (url: string): TableData => {

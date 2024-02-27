@@ -38,7 +38,6 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
 
     const onExport = async () => {
         if (sectionInfo && section) {
-            console.log('Exporting section', sectionInfo.id, section.url);
             updatePolicyTemplateFieldAction({
                 policyId: sectionInfo.id,
                 field: 'exported',

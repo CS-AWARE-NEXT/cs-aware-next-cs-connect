@@ -1,3 +1,4 @@
+import {SystemConfig} from 'src/types/config';
 import {
     EnvironmentConfig,
     Organization,
@@ -7,6 +8,7 @@ import {
 } from 'src/types/organization';
 
 export const DEFAULT_PLATFORM_CONFIG_PATH = '/configs/platform';
+export const DEFAULT_SYSTEM_CONFIG_PATH = '/configs/system_console';
 export const PLATFORM_CONFIG_CACHE_NAME = 'platform-config-cache';
 
 export const END_SYMBOL = ')';
@@ -23,6 +25,12 @@ let platformConfig: PlatformConfig = {
     environmentConfig: {},
     organizations: [],
 };
+let systemConfig: SystemConfig = {
+    ecosystemGraph: true,
+    ecosystemGraphAutoSave: true,
+    ecosystemGraphAutoSaveDelay: 5,
+    ecosystemGraphRSB: false,
+};
 
 let symbol = '';
 let pattern: RegExp | null = null;
@@ -37,6 +45,17 @@ export const setPlatformConfig = (config: PlatformConfig) => {
         return;
     }
     platformConfig = config;
+};
+
+export const getSystemConfig = (): SystemConfig => {
+    return systemConfig;
+};
+
+export const setSystemConfig = (config: SystemConfig) => {
+    if (!config) {
+        return;
+    }
+    systemConfig = config;
 };
 
 export const getEnvironmentConfig = (): EnvironmentConfig => {

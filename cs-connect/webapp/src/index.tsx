@@ -9,23 +9,35 @@ import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/s
 import {
     DEFAULT_PATH,
     DOCUMENTATION_PATH,
+    ECOSYSTEM_GRAPH_EDIT_LABEL,
     PRODUCT_DOCUMENTATION,
     PRODUCT_ICON,
     PRODUCT_NAME,
 } from 'src/constants';
-import {DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig} from 'src/config/config';
-import {loadPlatformConfig, setSiteUrl} from 'src/clients';
+import {
+    DEFAULT_PLATFORM_CONFIG_PATH,
+    DEFAULT_SYSTEM_CONFIG_PATH,
+    getSystemConfig,
+    setPlatformConfig,
+    setSystemConfig,
+} from 'src/config/config';
+import {loadPlatformConfig, loadSystemConfig, setSiteUrl} from 'src/clients';
 import Backstage from 'src/components/backstage/backstage';
-import {HiddenIcon, InfoIcon, RHSIcon} from 'src/components/icons';
+import {
+    EcosystemGraphEditIcon,
+    HiddenIcon,
+    InfoIcon,
+    RHSIcon,
+} from 'src/components/icons';
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import RHSView from 'src/components/rhs/rhs';
-import {pluginId} from 'src/manifest';
+import manifest, {pluginId} from 'src/manifest';
 
 import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} from './hooks';
 import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
 import LHSView from './components/lhs/lhs';
-import {exportAction, updatePolicyTemplateFieldAction} from './actions';
+import {editEcosystemgraphAction, exportAction, updatePolicyTemplateFieldAction} from './actions';
 import {LinkTooltip} from './components/link_tooltip';
 import {ExportButton} from './components/commons/export';
 import PluginReducers from './plugin_reducers';
@@ -197,6 +209,8 @@ export default class Plugin {
 
         const enableTeamSidebar = true;
         const enableAppBarComponent = true;
+        const enableEcosystemGraph = getSystemConfig().ecosystemGraph;
+        const enableRSEcosystemGraphEdit = getSystemConfig().ecosystemGraphRSB;
 
         registry.registerProduct(
             `/${DEFAULT_PATH}`,
@@ -226,6 +240,15 @@ export default class Plugin {
             PRODUCT_DOCUMENTATION,
         );
 
+        if (enableEcosystemGraph && enableRSEcosystemGraphEdit) {
+            registry.registerChannelHeaderButtonAction(
+                <EcosystemGraphEditIcon/>,
+                () => store.dispatch(editEcosystemgraphAction(true)),
+                ECOSYSTEM_GRAPH_EDIT_LABEL,
+                ECOSYSTEM_GRAPH_EDIT_LABEL,
+            );
+        }
+
         registry.registerChannelHeaderMenuAction(
             <ExportButton/>,
             (channelId: string) => store.dispatch(exportAction(channelId))
@@ -241,6 +264,13 @@ export default class Plugin {
         registry.registerLeftSidebarHeaderComponent(LHSView);
 
         registry.registerReducer(PluginReducers);
+
+        registry.registerWebSocketEventHandler(
+            'custom_' + manifest.id + '_config_update',
+            (message: any) => {
+                setSystemConfig(message.data);
+            },
+        );
 
         registerPolicyPostMenu(registry, store);
 
@@ -258,9 +288,11 @@ export default class Plugin {
         setSiteUrl(siteUrl);
         Client4.setUrl(siteUrl);
 
-        loadPlatformConfig(DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig);
-
-        this.doRegistrations(registry, store);
+        loadPlatformConfig(DEFAULT_PLATFORM_CONFIG_PATH, setPlatformConfig).then(() => {
+            loadSystemConfig(DEFAULT_SYSTEM_CONFIG_PATH, setSystemConfig).then(() => {
+                this.doRegistrations(registry, store);
+            });
+        });
     }
 }
 

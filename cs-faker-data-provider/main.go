@@ -48,8 +48,10 @@ func main() {
 	}
 
 	repositoriesMap := map[string]interface{}{
-		"issues":   repository.NewIssueRepository(db),
-		"policies": repository.NewPolicyRepository(db),
+		"issues":         repository.NewIssueRepository(db),
+		"cache":          repository.NewCacheRepository(db),
+		"ecosystemGraph": repository.NewEcosystemGraphRepository(db),
+		"policies":       repository.NewPolicyRepository(db),
 	}
 	app := fiber.New()
 	app.Use(cors.New())

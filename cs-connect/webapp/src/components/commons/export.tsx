@@ -34,7 +34,7 @@ type Props = {
 export const Exporter = ({parentId, sectionId}: Props) => {
     const exportData = useSelector(exportChannelSelector);
     const [format, setFormat] = useState('json');
-    const channel = useSelector(channelNameSelector(exportData.channelId));
+    const channel = useSelector(channelNameSelector(exportData?.channelId));
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const section = useSection(parentId);
