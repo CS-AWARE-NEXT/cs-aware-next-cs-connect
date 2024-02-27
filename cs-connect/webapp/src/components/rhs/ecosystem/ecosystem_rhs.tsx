@@ -24,7 +24,12 @@ import {
 } from 'src/constants';
 import {getOrganizationById, getSystemConfig} from 'src/config/config';
 import {useToaster} from 'src/components/backstage/toast_banner';
-import {buildEcosystemGraphUrl, getSection, useOrganization, useSection} from 'src/hooks';
+import {
+    buildEcosystemGraphUrl,
+    getSection,
+    useOrganization,
+    useSection,
+} from 'src/hooks';
 
 import EcosystemGraphWrapper from 'src/components/backstage/widgets/graph/wrappers/ecosystem_graph_wrapper';
 
