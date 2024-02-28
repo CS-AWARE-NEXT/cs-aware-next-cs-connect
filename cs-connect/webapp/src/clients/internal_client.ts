@@ -35,6 +35,7 @@ import {
     PostsByIdsParams,
     PostsForTeamParams,
 } from 'src/types/post';
+import {formatChannelName} from 'src/helpers';
 
 // import {getCachedResponse, putCacheResponse} from './cache';
 
@@ -141,6 +142,11 @@ export const fetchPostsForTeam = async (params: PostsForTeamParams): Promise<Get
 };
 
 export const addChannel = async (params: AddChannelParams): Promise<AddChannelResult> => {
+    // Always check if the channel name is compliant with mattermost rules
+    const body = params;
+    if (body.channelName) {
+        body.channelName = formatChannelName(body.channelName);
+    }
     let data = await doPost<AddChannelResult>(
         `${apiUrl}/channels/${params.sectionId}`,
         JSON.stringify(params),
