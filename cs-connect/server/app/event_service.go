@@ -128,7 +128,12 @@ func (s *EventService) SetOrganizations(params SetOrganizationParams) error {
 		return errors.Wrap(userErr, "could not fetch user to set orgID prop")
 	}
 	if orgID, found := user.GetProp("orgId"); found && orgID != "" {
-		return fmt.Errorf("couldn't set organization for user %s: the user already has an organization seleted", params.UserID)
+		// Ensure the organization still exists. If the organization was deleted, allow the user to change organization.
+		for _, org := range platformConfig.Organizations {
+			if org.ID == orgID {
+				return fmt.Errorf("couldn't set organization for user %s: the user already has an organization selected", params.UserID)
+			}
+		}
 	}
 
 	// Custom getter to properly fetch private channels for the team as well
