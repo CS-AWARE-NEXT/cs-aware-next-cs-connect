@@ -115,7 +115,7 @@ const EcosystemRhs = ({
                             />
                             {isEcosystemGraphEnabled && (
                                 <EcosystemGraphWrapper
-                                    name='Ecosystem graph'
+                                    name='Ecosystem Graph'
                                     url={ecosystemGraphUrl}
                                 />)}
                             <Accordion

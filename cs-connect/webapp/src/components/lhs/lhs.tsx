@@ -35,6 +35,11 @@ const LHSView = () => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [form] = Form.useForm();
 
+    // Do not consider user props referring to a deleted organization
+    const isUserOrgIDValid = () => {
+        return userProps ? (userProps.orgId === ORGANIZATION_ID_ALL || organizations.find((org) => org.id === userProps.orgId)) : false;
+    };
+
     useEffect(() => {
         if (organizations.length && !options) {
             const orgs = organizations.map((org: Organization) => ({value: org.id, label: org.name}));
@@ -62,7 +67,7 @@ const LHSView = () => {
     }, [userProps]);
 
     useEffect(() => {
-        if (selectedObject === defaultSelectObject || (userProps && userProps.orgId === selectedObject.value)) {
+        if (selectedObject === defaultSelectObject || (isUserOrgIDValid() && (userProps.orgId === selectedObject.value))) {
             return;
         }
 
@@ -109,7 +114,7 @@ const LHSView = () => {
         setIsPasswordInvalid(false);
     };
 
-    if (userProps && userProps.orgId && selectedObject !== defaultSelectObject) {
+    if (isUserOrgIDValid() && selectedObject !== defaultSelectObject) {
         return <StyledContainer>{selectedObject.label}</StyledContainer>;
     }
 

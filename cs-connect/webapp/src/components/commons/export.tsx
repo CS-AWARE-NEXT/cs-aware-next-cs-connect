@@ -54,10 +54,14 @@ export const Exporter = ({parentId, sectionId}: Props) => {
             urls: [getSectionInfoUrl(sectionId, section?.url)],
         }];
         if (isEcosystem && sectionInfo.elements) {
+            // Remove elements related to deleted organizations
+            const filteredElements = sectionInfo.
+                elements.
+                filter((el: any) => getSectionById(el.parentId) !== undefined);
             references.push({
                 source_name: 'support technology data',
-                external_ids: sectionInfo.elements.map((el: any) => el.id),
-                urls: sectionInfo.elements.map((el: any) => {
+                external_ids: filteredElements.map((el: any) => el.id),
+                urls: filteredElements.map((el: any) => {
                     const elementSection = getSectionById(el.parentId);
                     return getSectionInfoUrl(el.id, elementSection.url);
                 }),

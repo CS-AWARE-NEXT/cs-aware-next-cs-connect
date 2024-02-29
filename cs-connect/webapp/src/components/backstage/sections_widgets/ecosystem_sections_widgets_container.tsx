@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useRouteMatch} from 'react-router-dom';
 
-import {buildQuery} from 'src/hooks';
+import {buildEcosystemGraphUrl, buildQuery, useSection} from 'src/hooks';
 import {formatStringToCapitalize} from 'src/helpers';
 import SectionsWidgetsContainer from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {archiveIssueChannels, deleteIssue, getSiteUrl} from 'src/clients';
@@ -21,6 +21,9 @@ import {Section, SectionInfo} from 'src/types/organization';
 import {navigateToBackstageOrganization} from 'src/browser_routing';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {useToaster} from 'src/components/backstage/toast_banner';
+import {getSystemConfig} from 'src/config/config';
+
+import EcosystemGraphWrapper from 'src/components/backstage/widgets/graph/wrappers/ecosystem_graph_wrapper';
 
 type Props = {
     section: Section;
@@ -30,7 +33,11 @@ type Props = {
 const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
     const organizationId = useContext(OrganizationIdContext);
     const {url} = useRouteMatch<{sectionId: string}>();
+    const issues = useSection(section.id);
     const [currentSectionInfo, setCurrentSectionInfo] = useState<SectionInfo | undefined>(sectionInfo);
+    const isEcosystemGraphEnabled = getSystemConfig().ecosystemGraph;
+    const ecosystemGraphUrl = buildEcosystemGraphUrl(issues.url, true);
+
     useEffect(() => {
         setCurrentSectionInfo(sectionInfo);
     }, [sectionInfo]);
@@ -76,6 +83,11 @@ const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
                 name={formatStringToCapitalize(ecosystemRolesWidget)}
                 roles={currentSectionInfo?.roles}
             />
+            {isEcosystemGraphEnabled && (
+                <EcosystemGraphWrapper
+                    name='Ecosystem Graph'
+                    url={ecosystemGraphUrl}
+                />)}
             <EcosystemElementsWrapper
                 name={formatStringToCapitalize(ecosystemElementsWidget)}
                 elements={currentSectionInfo?.elements}
