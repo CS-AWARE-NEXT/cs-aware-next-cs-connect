@@ -12,5 +12,6 @@ tmp/
 
 config/logs
 config/plugins
+cs-connect-packages
 
 node_modules
