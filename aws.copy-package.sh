@@ -17,3 +17,7 @@ scp -i ~/.ssh/isislab/cs-connect-demo.cs-aware.eu \
     $HOST_TEMP_PACKAGE \
     ubuntu@cs-connect-demo.cs-aware.eu:/home/ubuntu/cs-aware-next-cs-connect/cs-connect/docker/package/$PACKAGE_NAME
 echo "Remote copy completed."
+
+echo "Removing temporary package."
+rm -r $HOST_TEMP_PACKAGE
+echo "Temporary package removed."

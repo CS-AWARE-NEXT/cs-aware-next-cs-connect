@@ -21,3 +21,7 @@ echo "Remote copy completed."
 echo "Copying pluging from $HOST_TEMP_PACKAGE to $HOST_PACKAGE."
 cp -r $HOST_TEMP_PACKAGE $HOST_PACKAGE
 echo "Copy completed."
+
+echo "Removing temporary package."
+rm -r $HOST_TEMP_PACKAGE
+echo "Temporary package removed."
