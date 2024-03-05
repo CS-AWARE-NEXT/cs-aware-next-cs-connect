@@ -78,7 +78,7 @@ const EcosystemGraphEditor = ({parentId, sectionId}: Props) => {
                 }}
             >
                 <StyledEcosystemGraphWrapper
-                    name='Edit ecosystem graph'
+                    name='Edit Ecosystem Graph'
                     editable={true}
                     url={ecosystemGraphUrl}
                     refreshNodeInternalsParent={refreshNodeInternals}

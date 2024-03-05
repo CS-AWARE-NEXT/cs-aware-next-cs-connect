@@ -89,16 +89,18 @@ const DESCRIPTION_ID_PREFIX = 'graph-';
 const GRAP_RANK_SEP = 85;
 
 // This is the style for the dashboard
-const defaultGraphStyle: GraphStyle = {
-    containerDirection: 'row',
-    graphWidth: '75%',
-    graphHeight: '50vh',
-    textBoxStyle: {
-        height: '5vh',
-        marginTop: '72px',
+const defaultGraphStyle = (isDescriptionProvided: boolean): GraphStyle => {
+    return {
+        containerDirection: 'row',
+        graphWidth: isDescriptionProvided ? '75%' : '100%',
+        graphHeight: '50vh',
+        textBoxStyle: {
+            height: '5vh',
+            marginTop: '72px',
 
         // width: '25%',
-    },
+        },
+    };
 };
 
 const rhsGraphStyle: GraphStyle = {
@@ -317,7 +319,7 @@ const Graph = ({
     // }, []);
 
     // const graphStyle = getGraphStyle();
-    const graphStyle = (isRhsClosed && isRhs) ? rhsGraphStyle : defaultGraphStyle;
+    const graphStyle = (isRhsClosed && isRhs) ? rhsGraphStyle : defaultGraphStyle(isDescriptionProvided(description));
     const graphSidebarStyle = (isRhsClosed && isRhs) ? rhsGraphSidebarStyle : defaultGraphSidebarStyle;
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
@@ -335,7 +337,7 @@ const Graph = ({
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
-            marginBottom={(isRhs && isRhsClosed) ? '0px' : '42px'}
+            marginBottom={(isRhs && isRhsClosed && isDescriptionProvided(description)) ? '0px' : '42px'}
         >
             <GraphContainer
                 id={id}
@@ -410,21 +412,21 @@ const Graph = ({
                     graphName={name}
                 />}
             </Drawer>
+            {isDescriptionProvided(description) &&
             <GraphSidebar
                 width={graphSidebarStyle.width}
                 noMargin={(isRhsClosed && isRhs) ?? false}
             >
-                {isDescriptionProvided(description) &&
-                    <TextBox
-                        idPrefix={DESCRIPTION_ID_PREFIX}
-                        name={description.name}
-                        sectionId={sectionId}
-                        style={graphStyle.textBoxStyle}
-                        parentId={parentId}
-                        text={description.text}
-                    />
-                }
+                <TextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
+                    name={description.name}
+                    sectionId={sectionId}
+                    style={graphStyle.textBoxStyle}
+                    parentId={parentId}
+                    text={description.text}
+                />
             </GraphSidebar>
+            }
         </Container>
     );
 };
