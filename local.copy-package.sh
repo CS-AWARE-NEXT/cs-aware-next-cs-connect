@@ -18,6 +18,6 @@ ssh tiziano@www.isislab.it \
 scp tiziano@www.isislab.it:/home/tiziano/packages/$PACKAGE_NAME $HOST_TEMP_PACKAGE
 echo "Remote copy completed."
 
-echo "Copying pluging from $HOST_TEMP_PACKAGE to $HOST_PLUGIN_DIR."
-cp -r $HOST_TEMP_PACKAGE $HOST_PLUGIN_DIR
+echo "Copying pluging from $HOST_TEMP_PACKAGE to $HOST_PACKAGE."
+cp -r $HOST_TEMP_PACKAGE $HOST_PACKAGE
 echo "Copy completed."
