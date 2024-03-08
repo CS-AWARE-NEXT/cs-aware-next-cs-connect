@@ -55,9 +55,32 @@ sudo docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile
 ./build.sh {VERSION}
 ```
 7) Navigate to the `/opt/cs-connect` directory.
-8) Edit the docker-compose.yml file with sudo (`sudo vim the docker-compose.yml`) to upgrade the versions of the cs-connect and/or faker images according to the versions chosen previously.
+8) Edit the docker-compose.yml file with sudo (`sudo vim docker-compose.yml`) to upgrade the versions of the cs-connect and/or faker images according to the versions chosen previously.
 9) Update the environment:
 ```sh
 sudo docker-compose up -d
 ```
 10) Clean up the images that aren't needed anymore. Keep an eye out for the <none> image generated while updating the faker module image, which should also be deleted.
+
+# Deploy on local machine with the locally packaged cs-connect plugin
+1) Build the cs-connect package locally as instructed in [its README](cs-connect/README.md). Be sure to use the correct config passed as argument. This is required due to the AWS machine not being powerful enough for the build step.
+2) Copy the packaged plugin to the local machine with the `local.copy-package.sh` script. The script assumes the user has access to the `www.isislab.it` machine used for development.
+3) Execute a git pull. This isn't required to update the cs-connect plugin, but it is required if you want to update the cs-faker-data-provider, since the latter is built directly on the local machine.
+4) Change the working directory to cs-connect and run the following command, after updating the version according to the change done:
+```sh
+docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile . 
+```
+5) If needed, update the faker module by navigating to its directory and executing the following script with the proper version, based on the changes done:
+```sh
+./build.sh {VERSION}
+```
+6) Edit the docker-compose.yml file with sudo (`vim docker-compose.yml`) to upgrade the versions of the cs-connect and/or faker images according to the versions chosen previously.
+7) Run or Uudate the environment:
+```sh
+bash start.sh -p
+```
+8) Clean up the images that aren't needed anymore. Keep an eye out for the <none> image generated while updating the faker module image, which should also be deleted.
+9) Undeploy using:
+```sh
+docker compose down
+```
