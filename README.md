@@ -75,12 +75,13 @@ docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile .
 ./build.sh {VERSION}
 ```
 6) Edit the docker-compose.yml file with sudo (`vim docker-compose.yml`) to upgrade the versions of the cs-connect and/or faker images according to the versions chosen previously.
-7) Run or Uudate the environment:
+7) Delete the `cs-aware-connect` plugin under the `config/plugins` folder.
+8) Run or Uudate the environment:
 ```sh
 bash start.sh -p
 ```
-8) Clean up the images that aren't needed anymore. Keep an eye out for the <none> image generated while updating the faker module image, which should also be deleted.
-9) Undeploy using:
+9) Clean up the images that aren't needed anymore. Keep an eye out for the <none> image generated while updating the faker module image, which should also be deleted.
+10) Undeploy using:
 ```sh
 docker compose down
 ```
