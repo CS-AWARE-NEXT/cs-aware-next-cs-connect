@@ -19,7 +19,16 @@ type STIXPost struct {
 	ObjectRefs         []*STIXPost `json:"object_refs"`
 }
 
-func ToStixPost(api plugin.API, post *mattermost.Post, withThreadPosts bool, usersCache map[string]*mattermost.User) *STIXPost {
+func ToStixPost(
+	api plugin.API,
+	post *mattermost.Post,
+	withThreadPosts bool,
+	pinnedOnly bool,
+	usersCache map[string]*mattermost.User,
+) *STIXPost {
+	if pinnedOnly && !post.IsPinned {
+		return nil
+	}
 	stixThreadPosts := []*STIXPost{}
 	if withThreadPosts {
 		threadPostList, err := api.GetPostThread(post.Id)
@@ -30,7 +39,8 @@ func ToStixPost(api plugin.API, post *mattermost.Post, withThreadPosts bool, use
 
 			stixThreadPosts = make([]*STIXPost, 0, len(threadPosts))
 			for _, threadPost := range threadPosts {
-				stixThreadPosts = append(stixThreadPosts, ToStixPost(api, threadPost, false, usersCache))
+				// we always want to include posts in the thread even if they are not pinned
+				stixThreadPosts = append(stixThreadPosts, ToStixPost(api, threadPost, false, false, usersCache))
 			}
 		}
 	}

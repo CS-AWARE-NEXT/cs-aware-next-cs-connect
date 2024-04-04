@@ -100,5 +100,6 @@ type ExportReference struct {
 
 type ExportChannelParams struct {
 	Format     string            `json:"format"`
+	PinnedOnly bool              `json:"pinnedOnly"`
 	References []ExportReference `json:"references"`
 }
