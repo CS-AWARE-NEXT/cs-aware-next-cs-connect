@@ -34,6 +34,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsPolicies(organizations, context)
 	useOrganizationsPlaybooks(organizations)
 	useOrganizationsBundles(organizations)
+	useOrganizationsExpertConsultancies(organizations)
 	useOrganizationsSocialMedia(organizations)
 	useOrganizationsNews(organizations)
 	useOrganizationsExercises(organizations)
@@ -152,6 +153,22 @@ func useOrganizationsBundles(organizations fiber.Router) {
 	})
 	bundleWithId.Get("/content", func(c *fiber.Ctx) error {
 		return bundleController.GetBundleContent(c)
+	})
+}
+
+func useOrganizationsExpertConsultancies(organizations fiber.Router) {
+	expertConsultancyController := controller.NewExpertConsultancyController()
+
+	expertConsultancies := organizations.Group("/:organizationId/expert_consultancies")
+	expertConsultancies.Get("/", func(c *fiber.Ctx) error {
+		return expertConsultancyController.GetExpertConsultancies(c)
+	})
+	expertConsultancyWithId := expertConsultancies.Group("/:expertConsultancyId")
+	expertConsultancyWithId.Get("/", func(c *fiber.Ctx) error {
+		return expertConsultancyController.GetExpertConsultancy(c)
+	})
+	expertConsultancyWithId.Get("/info", func(c *fiber.Ctx) error {
+		return expertConsultancyController.GetInfo(c)
 	})
 }
 
