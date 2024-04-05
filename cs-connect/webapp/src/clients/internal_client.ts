@@ -185,9 +185,15 @@ export const archiveChannels = async (params: ArchiveChannelsParams): Promise<vo
     );
 };
 
-export const exportChannel = async (channelId: string, format: string, references: ExportReference[]): Promise<Blob> => {
+export const exportChannel = async (
+    channelId: string,
+    format: string,
+    pinnedOnly: boolean,
+    references: ExportReference[],
+): Promise<Blob> => {
     const body = JSON.stringify({
         format,
+        pinnedOnly,
         references,
     });
     const {data} = await doFetchWithBlobResponse(`${apiUrl}/channel/${channelId}/export`, {method: 'POST', body});

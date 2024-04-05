@@ -1,11 +1,13 @@
-import {Modal, Select} from 'antd';
+import {
+    Checkbox,
+    CheckboxProps,
+    Modal,
+    Select,
+} from 'antd';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-
 import styled from 'styled-components';
-
 import {ModalBody} from 'react-bootstrap';
-
 import {useDispatch, useSelector} from 'react-redux';
 
 import {exportChannel, getSectionInfoUrl} from 'src/clients';
@@ -34,6 +36,7 @@ type Props = {
 export const Exporter = ({parentId, sectionId}: Props) => {
     const exportData = useSelector(exportChannelSelector);
     const [format, setFormat] = useState('json');
+    const [pinnedOnly, setPinnedOnly] = useState(false);
     const channel = useSelector(channelNameSelector(exportData?.channelId));
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
@@ -55,9 +58,7 @@ export const Exporter = ({parentId, sectionId}: Props) => {
         }];
         if (isEcosystem && sectionInfo.elements) {
             // Remove elements related to deleted organizations
-            const filteredElements = sectionInfo.
-                elements.
-                filter((el: any) => getSectionById(el.parentId) !== undefined);
+            const filteredElements = sectionInfo.elements.filter((el: any) => getSectionById(el.parentId) !== undefined);
             references.push({
                 source_name: 'support technology data',
                 external_ids: filteredElements.map((el: any) => el.id),
@@ -67,7 +68,7 @@ export const Exporter = ({parentId, sectionId}: Props) => {
                 }),
             });
         }
-        const data = await exportChannel(channel.id, format, references);
+        const data = await exportChannel(channel.id, format, pinnedOnly, references);
         const fileURL = window.URL.createObjectURL(data);
 
         // Emulate a click on an anchor to trigger a browser download
@@ -87,6 +88,10 @@ export const Exporter = ({parentId, sectionId}: Props) => {
         dispatch(exportAction(''));
     };
 
+    const onChange: CheckboxProps['onChange'] = (e) => {
+        setPinnedOnly(e.target.checked);
+    };
+
     return (
         <Modal
             title={'Export'}
@@ -99,8 +104,9 @@ export const Exporter = ({parentId, sectionId}: Props) => {
             maskClosable={true}
         >
             <ModalBody>
-                <div>
-                    <Text>{'Select the format of the exported file.'}</Text>
+                <Container>
+                    <Text>{'Select the format for the export.'}</Text>
+                    <Checkbox onChange={onChange}>{'Pinned only'}</Checkbox>
                     <Select
                         id={'export-select-format'}
                         defaultValue={format}
@@ -112,11 +118,18 @@ export const Exporter = ({parentId, sectionId}: Props) => {
                             {value: 'json', label: 'JSON/STIX'},
                         ]}
                     />
-                </div>
+                </Container>
             </ModalBody>
         </Modal>
     );
 };
+
+const Container = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 24px;
+`;
 
 const Text = styled.div`
     text-align: left;

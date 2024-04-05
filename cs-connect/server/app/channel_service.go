@@ -295,7 +295,11 @@ func (s *ChannelService) ExportChannel(channelID string, params ExportChannelPar
 				continue
 			}
 
-			STIXPostsPerPage = append(STIXPostsPerPage, ToStixPost(s.api, post, true, usersCache))
+			STIXPost := ToStixPost(s.api, post, true, params.PinnedOnly, usersCache)
+			// post can be nil if pinned only is true and the post is not pinned
+			if STIXPost != nil {
+				STIXPostsPerPage = append(STIXPostsPerPage, STIXPost)
+			}
 		}
 
 		STIXPosts = append(STIXPosts, STIXPostsPerPage...)
