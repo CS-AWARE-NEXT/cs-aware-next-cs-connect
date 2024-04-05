@@ -173,33 +173,6 @@ organizations:
     id: "5"
     description: This is the organization for Foggia workshop
     sections:
-      # - name: Incidents
-      #   id: "25"
-      #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents
-      #   widgets:
-      #     - name: System
-      #       type: graph
-      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
-      #     - type: channels
-      # - name: Social Media
-      #   id: "16"
-      #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media
-      #   widgets:
-      #     - name: System
-      #       type: graph
-      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
-      #     - name: Posts
-      #       type: social-media-posts
-      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/social_media/:id/posts
-      #     - type: channels
-      # - name: News
-      #   id: "29"
-      #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news
-      #   widgets:
-      #     - name: Explore
-      #       type: news
-      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/news/:id/news
-      #     - type: channels
       - name: Policies
         id: "33"
         internal: true
@@ -208,9 +181,6 @@ organizations:
           - name: Components
             type: policy
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/policies/:id/template
-          # - name: System
-          #   type: graph
-          #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/5/incidents/:id/graph
           - name: Top 10 Most Common Threats
             type: list
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/policies/ten_most_common
