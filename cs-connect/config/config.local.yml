@@ -173,33 +173,33 @@ organizations:
     id: "5"
     description: This is the organization for Foggia workshop
     sections:
-      - name: Incidents
-        id: "25"
-        url: http://localhost:3000/cs-data-provider/organizations/5/incidents
-        widgets:
-          - name: System
-            type: graph
-            url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
-          - type: channels
-      - name: Social Media
-        id: "16"
-        url: http://localhost:3000/cs-data-provider/organizations/5/social_media
-        widgets:
-          - name: System
-            type: graph
-            url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
-          - name: Posts
-            type: social-media-posts
-            url: http://localhost:3000/cs-data-provider/organizations/5/social_media/:id/posts
-          - type: channels
-      - name: News
-        id: "29"
-        url: http://localhost:3000/cs-data-provider/organizations/5/news
-        widgets:
-          - name: Explore
-            type: news
-            url: http://localhost:3000/cs-data-provider/organizations/5/news/:id/news
-          - type: channels
+      # - name: Incidents
+      #   id: "25"
+      #   url: http://localhost:3000/cs-data-provider/organizations/5/incidents
+      #   widgets:
+      #     - name: System
+      #       type: graph
+      #       url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
+      #     - type: channels
+      # - name: Social Media
+      #   id: "16"
+      #   url: http://localhost:3000/cs-data-provider/organizations/5/social_media
+      #   widgets:
+      #     - name: System
+      #       type: graph
+      #       url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
+      #     - name: Posts
+      #       type: social-media-posts
+      #       url: http://localhost:3000/cs-data-provider/organizations/5/social_media/:id/posts
+      #     - type: channels
+      # - name: News
+      #   id: "29"
+      #   url: http://localhost:3000/cs-data-provider/organizations/5/news
+      #   widgets:
+      #     - name: Explore
+      #       type: news
+      #       url: http://localhost:3000/cs-data-provider/organizations/5/news/:id/news
+      #     - type: channels
       - name: Policies
         id: "33"
         internal: true
@@ -208,18 +208,26 @@ organizations:
           - name: Components
             type: policy
             url: http://localhost:3000/cs-data-provider/organizations/5/policies/:id/template
-          - name: System
-            type: graph
-            url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
+          # - name: System
+          #   type: graph
+          #   url: http://localhost:3000/cs-data-provider/organizations/5/incidents/:id/graph
           - name: Top 10 Most Common Threats
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
-      - name: Exercises
+      - name: Expert Consultancy
+        id: "36"
+        url: http://localhost:3000/cs-data-provider/organizations/5/expert_consultancies
+        widgets:
+          - name: What I Can Do Here
+            type: text-box
+            url: http://localhost:3000/cs-data-provider/organizations/5/expert_consultancies/:id/info
+          - type: channel
+      - name: Education and Training
         id: "24"
         url: http://localhost:3000/cs-data-provider/organizations/5/exercises
         widgets:
-          - name: Exercise
+          - name: Task
             type: exercise
             url: http://localhost:3000/cs-data-provider/organizations/5/exercises/:id/assignment
           - type: channels
