@@ -16,6 +16,9 @@ type Assignment struct {
 	RegistrationAccessProcessName string   `json:"registrationAccessProcessName"`
 	RegistrationAccessProcess     []string `json:"registrationAccessProcess"`
 
+	RegistrationName string   `json:"registrationName"`
+	Registration     []string `json:"registration"`
+
 	AttackName  string   `json:"attackName"`
 	AttackParts []string `json:"attackParts"`
 

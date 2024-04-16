@@ -149,8 +149,12 @@ func (ec *ExerciseController) ParseCourseIntoAssignment(assignment *model.Assign
 				assignment.DescriptionName = caser.String(col)
 				continue
 			}
-			if strings.Contains(strings.ToLower(col), "processo di registrazione") {
+			if strings.Contains(strings.ToLower(col), "procedura di registrazione") {
 				assignment.RegistrationAccessProcessName = caser.String(col)
+				continue
+			}
+			if col == "Registrazione" {
+				assignment.RegistrationName = caser.String(col)
 				continue
 			}
 			if strings.Contains(strings.ToLower(col), "domande riflessive") {
@@ -178,6 +182,10 @@ func (ec *ExerciseController) ParseCourseIntoAssignment(assignment *model.Assign
 			}
 			if assignment.InstructionName != "" {
 				assignment.Instructions = append(assignment.Instructions, col)
+				continue
+			}
+			if assignment.RegistrationName != "" {
+				assignment.Registration = append(assignment.Registration, col)
 				continue
 			}
 			if assignment.RegistrationAccessProcessName != "" {
