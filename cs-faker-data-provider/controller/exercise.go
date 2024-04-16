@@ -237,7 +237,22 @@ var exerciseMap = map[string][]model.Exercise{
 		{
 			ID:          "80ab809d-0539-4980-9f9c-0d46252761b1",
 			Name:        "Concetti di base",
-			Description: "Questo canale ti supporta nell&#39;apprendimento degli argomenti di base della sicurezza informatica offrendo materiale didattico sviluppato dalla Austrian Computer Society (OCG).",
+			Description: "Questo canale ti supporta nell'apprendimento degli argomenti di base della sicurezza informatica offrendo materiale didattico sviluppato dalla Austrian Computer Society (OCG).",
+		},
+		{
+			ID:          "17748102-23b8-41bf-981e-4c5cc8c75466",
+			Name:        "Minacce, attacchi, vulnerabilità e malware",
+			Description: "Questo canale ti supporta nell'apprendimento degli argomenti di base della sicurezza informatica offrendo materiale didattico sviluppato dalla Austrian Computer Society (OCG).",
+		},
+		{
+			ID:          "028969d3-cc00-4409-a830-aec30d8b3491",
+			Name:        "Utilizzo sicuro del servizio",
+			Description: "Questo canale ti supporta nell'apprendimento degli argomenti di base della sicurezza informatica offrendo materiale didattico sviluppato dalla Austrian Computer Society (OCG).",
+		},
+		{
+			ID:          "9530157e-8915-48b1-abac-358119ec599f",
+			Name:        "Controllo degli accessi",
+			Description: "Questo canale ti supporta nell'apprendimento degli argomenti di base della sicurezza informatica offrendo materiale didattico sviluppato dalla Austrian Computer Society (OCG).",
 		},
 	},
 }
