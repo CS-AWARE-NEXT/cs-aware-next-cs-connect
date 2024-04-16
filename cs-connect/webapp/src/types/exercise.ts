@@ -16,6 +16,9 @@ export type Assignment = {
     registrationAccessProcessName: string;
     registrationAccessProcess: string[];
 
+    registrationName: string;
+    registration: string[];
+
     attackName: string;
     attackParts: string[];
 

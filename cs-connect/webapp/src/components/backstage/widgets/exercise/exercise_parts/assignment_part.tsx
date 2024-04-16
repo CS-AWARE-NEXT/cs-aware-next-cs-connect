@@ -40,6 +40,10 @@ const AssignmentPart = ({
         id: `registration-access-${index}`,
         text: part,
     })) ?? [];
+    const registrationItems = data?.registration?.map((part: string, index: number) => ({
+        id: `registration-${index}`,
+        text: part,
+    })) ?? [];
     const attackItems = data?.attackParts?.map((part: string, index: number) => ({
         id: `attack-${index}`,
         text: part,
@@ -78,13 +82,6 @@ const AssignmentPart = ({
                     sectionId={sectionId}
                     parentId={parentId}
                 />}
-            {(instructionsItems && instructionsItems.length > 0) &&
-                <ItemsList
-                    data={{items: instructionsItems ?? []}}
-                    name={data?.instructionName ?? ''}
-                    sectionId={sectionId}
-                    parentId={parentId}
-                />}
             {(registrationAccessItems && registrationAccessItems.length > 0) &&
                 <ItemsList
                     data={{items: registrationAccessItems ?? []}}
@@ -92,10 +89,24 @@ const AssignmentPart = ({
                     sectionId={sectionId}
                     parentId={parentId}
                 />}
+            {(registrationItems && registrationItems.length > 0) &&
+                <ItemsList
+                    data={{items: registrationItems ?? []}}
+                    name={data?.registrationName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
             {(attackItems && attackItems.length > 0) &&
                 <ItemsList
                     data={{items: attackItems ?? []}}
                     name={data?.attackName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
+            {(instructionsItems && instructionsItems.length > 0) &&
+                <ItemsList
+                    data={{items: instructionsItems ?? []}}
+                    name={data?.instructionName ?? ''}
                     sectionId={sectionId}
                     parentId={parentId}
                 />}
