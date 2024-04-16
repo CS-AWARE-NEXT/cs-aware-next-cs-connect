@@ -32,12 +32,24 @@ const AssignmentPart = ({
         id: `desc-${index}`,
         text: part,
     })) ?? [];
+    const instructionsItems = data?.instructions?.map((part: string, index: number) => ({
+        id: `instruction-${index}`,
+        text: part,
+    })) ?? [];
+    const registrationAccessItems = data?.registrationAccessProcess?.map((part: string, index: number) => ({
+        id: `registration-access-${index}`,
+        text: part,
+    })) ?? [];
     const attackItems = data?.attackParts?.map((part: string, index: number) => ({
         id: `attack-${index}`,
         text: part,
     })) ?? [];
     const questionsItems = data?.questions?.map((part: string, index: number) => ({
         id: `question-${index}`,
+        text: part,
+    })) ?? [];
+    const openQuestionsItems = data?.openQuestions?.map((part: string, index: number) => ({
+        id: `open-question-${index}`,
         text: part,
     })) ?? [];
     const educationItems = data?.educationMaterial?.map((part: string, index: number) => ({
@@ -66,6 +78,20 @@ const AssignmentPart = ({
                     sectionId={sectionId}
                     parentId={parentId}
                 />}
+            {(instructionsItems && instructionsItems.length > 0) &&
+                <ItemsList
+                    data={{items: instructionsItems ?? []}}
+                    name={data?.instructionName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
+            {(registrationAccessItems && registrationAccessItems.length > 0) &&
+                <ItemsList
+                    data={{items: registrationAccessItems ?? []}}
+                    name={data?.registrationAccessProcessName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
             {(attackItems && attackItems.length > 0) &&
                 <ItemsList
                     data={{items: attackItems ?? []}}
@@ -77,6 +103,13 @@ const AssignmentPart = ({
                 <ItemsList
                     data={{items: questionsItems ?? []}}
                     name={data?.questionName ?? ''}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                />}
+            {(openQuestionsItems && openQuestionsItems.length > 0) &&
+                <ItemsList
+                    data={{items: openQuestionsItems ?? []}}
+                    name={data?.openQuestionName ?? ''}
                     sectionId={sectionId}
                     parentId={parentId}
                 />}
