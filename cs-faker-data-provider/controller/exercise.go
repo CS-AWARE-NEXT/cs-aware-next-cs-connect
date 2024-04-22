@@ -251,7 +251,7 @@ var exerciseMap = map[string][]model.Exercise{
 		},
 		{
 			ID:          "9530157e-8915-48b1-abac-358119ec599f",
-			Name:        "Controllo degli accessi",
+			Name:        "Controllo accessi",
 			Description: "Questo canale ti supporta nell'apprendimento degli argomenti di base della sicurezza informatica offrendo materiale didattico sviluppato dalla Austrian Computer Society (OCG).",
 		},
 	},
