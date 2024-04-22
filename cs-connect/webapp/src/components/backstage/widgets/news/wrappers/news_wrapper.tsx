@@ -2,9 +2,10 @@ import React, {useContext, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-import {SectionContext} from 'src/components/rhs/rhs';
 import News from 'src/components/backstage/widgets/news/news';
 import {NewsQuery} from 'src/types/news';
+import {SectionContext} from 'src/components/rhs/rhs';
+import {formatUrlWithId} from 'src/helpers';
 import {useNewsPostData} from 'src/hooks';
 
 type Props = {
@@ -32,7 +33,7 @@ const NewsWrapper = ({
         limit: '10',
     });
 
-    const data = useNewsPostData(url, query);
+    const data = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), query);
 
     return (
         <>
