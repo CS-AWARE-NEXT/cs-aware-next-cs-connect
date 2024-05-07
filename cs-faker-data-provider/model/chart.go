@@ -13,3 +13,17 @@ type SimpleLineChartValue struct {
 type LineColor struct {
 	NumberOfPosts string `json:"numberOfPosts"`
 }
+
+type SimpleBarChartData struct {
+	BarData  []SimpleBarChartValue `json:"barData"`
+	BarColor BarColor              `json:"barColor"`
+}
+
+type SimpleBarChartValue struct {
+	Label         string  `json:"label"`
+	NumberOfPosts float64 `json:"numberOfPosts"`
+}
+
+type BarColor struct {
+	NumberOfPosts string `json:"numberOfPosts"`
+}
