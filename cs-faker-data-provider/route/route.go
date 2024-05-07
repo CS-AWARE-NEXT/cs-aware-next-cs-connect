@@ -235,6 +235,12 @@ func useOrganizationsCharts(organizations fiber.Router) {
 	chartsWithId.Get("/", func(c *fiber.Ctx) error {
 		return chartController.GetChart(c)
 	})
+	chartsWithId.Get("/line_chart", func(c *fiber.Ctx) error {
+		return chartController.GetSocialMediaPostsPerComponentLineChart(c)
+	})
+	chartsWithId.Get("/bar_chart", func(c *fiber.Ctx) error {
+		return chartController.GetSocialMediaPostsPerComponentBarChart(c)
+	})
 }
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {
