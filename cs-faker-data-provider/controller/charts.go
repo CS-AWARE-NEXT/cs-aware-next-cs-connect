@@ -87,6 +87,28 @@ func (scc *ChartController) GetSocialMediaPostsPerComponentLineChart(c *fiber.Ct
 		LineColor: model.LineColor{
 			NumberOfPosts: "#1DA1F2",
 		},
+		ReferenceLines: []model.ReferenceLine{
+			{
+				X:      lines[1].Label,
+				Stroke: "red",
+				Label:  "",
+			},
+			{
+				X:      lines[2].Label,
+				Stroke: "red",
+				Label:  "",
+			},
+			{
+				X:      lines[4].Label,
+				Stroke: "red",
+				Label:  "",
+			},
+			{
+				X:      lines[5].Label,
+				Stroke: "red",
+				Label:  "",
+			},
+		},
 	}
 	return c.JSON(chartData)
 }
