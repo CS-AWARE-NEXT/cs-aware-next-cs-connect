@@ -36,12 +36,16 @@ export const valueStringify = (value: string | number): string => {
     return `${value}`.replace('.', 'dot');
 };
 
+export const labelStringify = (value: string | number): string => {
+    return `${value}`.replace('.', 'dot').replace(' ', 'wsp');
+};
+
 export const idStringify = (id: string): string => {
     return `${id}`.replaceAll('-', 'hpn');
 };
 
 const isDotSelected = (selectedDot: LineDot, label: string, value: number): boolean => {
-    return selectedDot.label === label && valueStringify(selectedDot.value) === valueStringify(value);
+    return labelStringify(selectedDot.label) === labelStringify(label) && valueStringify(selectedDot.value) === valueStringify(value);
 };
 
 const getMsWithDelay = (delay: number, isEcosystemRhs: boolean): number => {
@@ -74,7 +78,7 @@ export const Dot: FC<Props> = (props) => {
                 setColor(originalColor);
                 return;
             }
-            const isSelected = isDotSelected(selectedDot, payload.label, value);
+            const isSelected = isDotSelected(selectedDot, labelStringify(payload.label), value);
             setOpen(isSelected);
             setColor(isSelected ? '#F4B400' : originalColor);
         }, ms); // timeout has to be higher than the one for scrolling, otherwise the tooltip won't be in the right position after scroll
@@ -85,7 +89,7 @@ export const Dot: FC<Props> = (props) => {
     }, [isRhsClosed, selectedDot, urlHash]);
 
     useEffect(() => {
-        const isSelected = isDotSelected(selectedDot, payload.label, value);
+        const isSelected = isDotSelected(selectedDot, labelStringify(payload.label), value);
         if (!isSelected) {
             return;
         }
@@ -99,7 +103,7 @@ export const Dot: FC<Props> = (props) => {
             open={open}
         >
             <DotCircle
-                id={`dot-${payload.label}-${valueStringify(value)}-${idStringify(sectionId)}`}
+                id={`dot-${labelStringify(payload.label)}-${valueStringify(value)}-${idStringify(sectionId)}`}
                 cx={cx}
                 cy={cy}
                 r={4}
@@ -124,12 +128,12 @@ export const ClickableDot: FC<Props> = (props) => {
     const [,, valueString] = dotStringify(cx, cy, value);
 
     useEffect(() => {
-        const isSelected = isDotSelected(selectedDot, payload.label, value);
+        const isSelected = isDotSelected(selectedDot, labelStringify(payload.label), value);
         setColor(isSelected ? '#F4B400' : originalColor);
     }, [selectedDot]);
 
     const handleDotClick = (event: any) => {
-        const itemId = `dot-${payload.label}-${valueString}-${idStringify(sectionId)}`;
+        const itemId = `dot-${labelStringify(payload.label)}-${valueString}-${idStringify(sectionId)}`;
         const name = `${payload.label}`;
         const path = buildToForCopy(buildTo(fullUrl, itemId, ecosystemQuery, url));
         copyToClipboard(formatUrlAsMarkdown(path, `${props.hyperlinkPath}.${name}`));
