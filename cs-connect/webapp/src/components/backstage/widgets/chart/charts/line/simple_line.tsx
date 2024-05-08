@@ -10,6 +10,7 @@ import {
     Legend,
     Line,
     LineChart,
+    ReferenceLine,
     ResponsiveContainer,
     Tooltip,
     XAxis,
@@ -20,6 +21,7 @@ import {
     LineColor,
     LineDot,
     SimpleLineChartData,
+    SimpleReferenceLine,
     defaultDot,
     isDefaultDot,
 } from 'src/types/charts';
@@ -38,6 +40,7 @@ import {
 type Props = {
     lineData: SimpleLineChartData[];
     lineColor: LineColor;
+    referenceLines?: SimpleReferenceLine[];
     parentId: string;
     sectionId: string;
     delay?: number;
@@ -47,6 +50,7 @@ type Props = {
 const SimpleLineChart: FC<Props> = ({
     lineData,
     lineColor,
+    referenceLines = [],
     parentId,
     sectionId,
     delay = 1,
@@ -88,7 +92,6 @@ const SimpleLineChart: FC<Props> = ({
     // Another solution to keep the animation is to set the line key to Math.random()_key,
     // but this causes problem for subsequiental re-rendering for the hyperlinking mechanism
     // isRhs ? key : `${Math.random()}_${key}` is used to solve the problem of dots not appearing on first rendering in the dashboard
-    // All of the above comments are solved but now the hyperlink does no work in the dashboard
     return (
         <div
             ref={ref}
@@ -117,6 +120,17 @@ const SimpleLineChart: FC<Props> = ({
                         <YAxis/>
                         <Tooltip/>
                         <Legend/>
+                        {(referenceLines && referenceLines.length > 0) && referenceLines.map((line) => (
+                            <ReferenceLine
+                                key={line.x}
+                                x={line.x}
+                                stroke={line.stroke}
+                                label={{
+                                    value: line.label,
+                                    position: 'insideTop',
+                                }}
+                            />
+                        ))}
                         {keys.map((key) => (
                             <Line
                                 key={isRhs ? key : `${Math.random()}_${key}`}
