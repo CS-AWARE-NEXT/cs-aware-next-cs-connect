@@ -21,5 +21,6 @@ export enum WidgetType {
 export enum ChartType {
     NoChart = '',
 
+    SimpleBar = 'simple-bar',
     SimpleLine = 'simple-line',
 }

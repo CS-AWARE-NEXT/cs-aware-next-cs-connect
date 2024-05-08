@@ -1,7 +1,7 @@
 import React, {useContext, useEffect} from 'react';
 import styled from 'styled-components';
 
-import {ChartData, LineColor, SimpleLineChartData} from 'src/types/charts';
+import {ChartData, SimpleBarChartType, SimpleLineChartType} from 'src/types/charts';
 
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
@@ -14,6 +14,7 @@ import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
 import SimpleLineChart from './charts/line/simple_line';
+import SimpleBarChart from './charts/bar/simple_bar';
 
 type Props = {
     name: string;
@@ -34,15 +35,24 @@ const buildChartByType = (
 ): JSX.Element => {
     switch (chartType) {
     case ChartType.SimpleLine: {
-        const {lineData, lineColor} = data as {
-            chartType: ChartType.SimpleLine;
-            lineData: SimpleLineChartData[];
-            lineColor: LineColor;
-        };
+        const {lineData, lineColor, referenceLines} = data as SimpleLineChartType;
         return (
             <SimpleLineChart
                 lineData={lineData}
                 lineColor={lineColor}
+                referenceLines={referenceLines}
+                parentId={parentId}
+                sectionId={sectionId}
+                delay={delay}
+                hyperlinkPath={hyperlinkPath}
+            />);
+    }
+    case ChartType.SimpleBar: {
+        const {barData, barColor} = data as SimpleBarChartType;
+        return (
+            <SimpleBarChart
+                barData={barData}
+                barColor={barColor}
                 parentId={parentId}
                 sectionId={sectionId}
                 delay={delay}
