@@ -38,58 +38,133 @@ const ChartWrapper = ({
     }
 
     // Debug data useful to verify whether the widget displays correctly.
-    // const data: ChartData = {
-    //     chartType,
-    //     lineData: [
-    //         {
-    //             label: 'Page A',
-    //             uv: 4000,
-    //             pv: 2400,
-    //             xv: 2000,
-    //         },
-    //         {
-    //             label: 'Page B',
-    //             uv: 9000,
-    //             pv: 1398,
-    //             xv: 2000,
-    //         },
-    //         {
-    //             label: 'Page C',
-    //             uv: 2000,
-    //             pv: 9800,
-    //             xv: -2000,
-    //         },
-    //         {
-    //             label: 'Page D',
-    //             uv: 2780,
-    //             pv: -3908,
-    //             xv: 2000,
-    //         },
-    //         {
-    //             label: 'Page E',
-    //             uv: 1890,
-    //             pv: 4800,
-    //             xv: 2000,
-    //         },
-    //         {
-    //             label: 'Page F',
-    //             uv: 2390,
-    //             pv: 3800,
-    //             xv: 2000,
-    //         },
-    //         {
-    //             label: 'Page G',
-    //             uv: 3490,
-    //             pv: 4300,
-    //             xv: 2000,
-    //         },
-    //     ],
-    //     lineColor: {
-    //         uv: '#8884d8',
-    //         pv: '#82ca9d',
-    //         xv: '#890089',
+    // const values = [
+    //     {
+    //         label: 'Page A',
+    //         uv: 4000,
+    //         pv: 2400,
+    //         xv: 2000,
     //     },
+    //     {
+    //         label: 'Page B',
+    //         uv: 9000,
+    //         pv: 1398,
+    //         xv: 2000,
+    //     },
+    //     {
+    //         label: 'Page C',
+    //         uv: 2000,
+    //         pv: 9800,
+    //         xv: -2000,
+    //     },
+    //     {
+    //         label: 'Page D',
+    //         uv: 2780,
+    //         pv: -3908,
+    //         xv: 2000,
+    //     },
+    //     {
+    //         label: 'Page E',
+    //         uv: 1890,
+    //         pv: 4800,
+    //         xv: 2000,
+    //     },
+    //     {
+    //         label: 'Page F',
+    //         uv: 2390,
+    //         pv: 3800,
+    //         xv: 2000,
+    //     },
+    //     {
+    //         label: 'Page G',
+    //         uv: 3490,
+    //         pv: 4300,
+    //         xv: 2000,
+    //     },
+    // ];
+
+    // const singleValues = [
+    //     {
+    //         label: 'Page A',
+    //         uv: 4000,
+    //     },
+    //     {
+    //         label: 'Page B',
+    //         uv: 9000,
+    //     },
+    //     {
+    //         label: 'Page C',
+    //         uv: 2000,
+    //     },
+    //     {
+    //         label: 'Page D',
+    //         uv: 2780,
+    //     },
+    //     {
+    //         label: 'Page E',
+    //         uv: 1890,
+    //     },
+    //     {
+    //         label: 'Page F',
+    //         uv: 2390,
+    //     },
+    //     {
+    //         label: 'Page G',
+    //         uv: 3490,
+    //     },
+    // ];
+
+    // const referenceLines = [
+    //     {
+    //         x: 'Page C',
+    //         label: '',
+    //         stroke: 'red',
+    //     },
+    //     {
+    //         x: 'Page D',
+    //         label: '',
+    //         stroke: 'red',
+    //     },
+    //     {
+    //         x: 'Page E',
+    //         label: '',
+    //         stroke: 'red',
+    //     },
+    //     {
+    //         x: 'Page F',
+    //         label: '',
+    //         stroke: 'red',
+    //     },
+    // ];
+
+    // const colors = {
+    //     uv: '#8884d8',
+    //     pv: '#82ca9d',
+    //     xv: '#890089',
     // };
+
+    // let data: any = {
+    //     chartType,
+    //     lineData: values,
+    //     lineColor: colors,
+    // };
+
+    // if (chartType === ChartType.SimpleLine) {
+    //     data = {
+    //         chartType,
+    //         lineData: values,
+    //         lineColor: colors,
+    //         referenceLines,
+    //     };
+    // }
+
+    // if (chartType === ChartType.SimpleBar) {
+    //     data = {
+    //         chartType,
+    //         barData: values,
+    //         barColor: colors,
+    //     };
+    // }
 
     return (
         <Chart
