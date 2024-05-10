@@ -10,6 +10,9 @@
 # Air
 tmp/
 
+# scripts
+scripts/csv/files
+
 config/logs
 config/plugins
 cs-connect-packages
