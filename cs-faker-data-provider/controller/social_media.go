@@ -26,11 +26,7 @@ func (sc *SocialMediaController) GetAllSocialMedia(c *fiber.Ctx) error {
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, socialMedia := range socialMediaMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          socialMedia.ID,
-			Name:        socialMedia.Name,
-			Description: socialMedia.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(socialMedia))
 	}
 	return c.JSON(tableData)
 }

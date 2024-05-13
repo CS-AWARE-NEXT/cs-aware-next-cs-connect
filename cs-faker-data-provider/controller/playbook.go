@@ -25,11 +25,7 @@ func (pc *PlaybookController) GetPlaybooks(c *fiber.Ctx) error {
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, playbook := range playbooksMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          playbook.ID,
-			Name:        playbook.Name,
-			Description: playbook.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(playbook))
 	}
 	return c.JSON(tableData)
 }

@@ -21,11 +21,7 @@ func (sc *StoryController) GetStories(c *fiber.Ctx) error {
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, story := range storiesMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          story.ID,
-			Name:        story.Name,
-			Description: story.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(story))
 	}
 	return c.JSON(tableData)
 }

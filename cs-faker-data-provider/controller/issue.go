@@ -90,7 +90,7 @@ func (ic *IssueController) UpdateIssue(c *fiber.Ctx) error {
 		})
 	}
 
-	oldIssue, err := ic.issueRepository.GetIssueByID(id)
+	oldIssue, _ := ic.issueRepository.GetIssueByID(id)
 
 	updatedIssue, err := ic.issueRepository.UpdateIssue(id, fillIssue(issue, &oldIssue))
 	if err != nil {

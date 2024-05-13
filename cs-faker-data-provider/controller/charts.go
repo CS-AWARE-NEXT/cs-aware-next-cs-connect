@@ -26,11 +26,7 @@ func (cc *ChartController) GetCharts(c *fiber.Ctx) error {
 	}
 	log.Printf("Charts for organization %s: %v", organizationId, chartsMap[organizationId])
 	for _, chart := range chartsMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          chart.ID,
-			Name:        chart.Name,
-			Description: chart.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(chart))
 	}
 	return c.JSON(tableData)
 }
@@ -177,7 +173,7 @@ func (cc *ChartController) getChartByID(c *fiber.Ctx) model.Chart {
 }
 
 var chartsMap = map[string][]model.Chart{
-	"4": {
+	"9": {
 		{
 			ID:          "922e8e53-ffe8-4887-ae21-543674ad30d9",
 			Name:        "Number of Posts",
