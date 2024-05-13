@@ -38,6 +38,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsSocialMedia(organizations)
 	useOrganizationsNews(organizations)
 	useOrganizationsExercises(organizations)
+	useOrganizationsCharts(organizations)
 }
 
 func useOrganizationsIncidents(organizations fiber.Router) {
@@ -220,6 +221,25 @@ func useOrganizationsExercises(organizations fiber.Router) {
 	})
 	exerciseWithId.Get("/assignment", func(c *fiber.Ctx) error {
 		return exerciseController.GetExerciseAssignment(c)
+	})
+}
+
+func useOrganizationsCharts(organizations fiber.Router) {
+	chartController := controller.NewChartController()
+
+	charts := organizations.Group("/:organizationId/charts")
+	charts.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts(c)
+	})
+	chartsWithId := charts.Group("/:chartId")
+	chartsWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart(c)
+	})
+	chartsWithId.Get("/line_chart", func(c *fiber.Ctx) error {
+		return chartController.GetSocialMediaPostsPerComponentLineChart(c)
+	})
+	chartsWithId.Get("/bar_chart", func(c *fiber.Ctx) error {
+		return chartController.GetSocialMediaPostsPerComponentBarChart(c)
 	})
 }
 

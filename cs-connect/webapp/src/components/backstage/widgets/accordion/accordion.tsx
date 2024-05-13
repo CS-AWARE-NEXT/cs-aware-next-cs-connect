@@ -9,6 +9,7 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {buildQuery, useDOMReadyById, useUrlHash} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {DOT_PREFIX} from 'src/components/backstage/widgets/chart/charts/line/dots';
+import {CELL_PREFIX} from 'src/components/backstage/widgets/chart/charts/bar/simple_bar';
 import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
 const {Panel} = Collapse;
@@ -85,6 +86,18 @@ const Accordion = ({
                     const selectorParts = selector.split('-');
                     const selectorSectionId = selectorParts[selectorParts.length - 1];
                     const chartElements = panel?.querySelectorAll(`#chart-container-${selectorSectionId}`);
+                    if (chartElements && chartElements.length > 0) {
+                        const header = panel.querySelector('.ant-collapse-header') as HTMLElement;
+                        if (header && !panel.classList.contains('ant-collapse-item-active')) {
+                            header.click();
+                        }
+                    }
+                }
+
+                if (selector.includes(CELL_PREFIX) && !opened) {
+                    const selectorParts = selector.split('-');
+                    const selectorSectionId = selectorParts[selectorParts.length - 1];
+                    const chartElements = panel?.querySelectorAll(`#bar-chart-container-${selectorSectionId}`);
                     if (chartElements && chartElements.length > 0) {
                         const header = panel.querySelector('.ant-collapse-header') as HTMLElement;
                         if (header && !panel.classList.contains('ant-collapse-item-active')) {
