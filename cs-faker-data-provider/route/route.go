@@ -241,6 +241,42 @@ func useOrganizationsCharts(organizations fiber.Router) {
 	chartsWithId.Get("/bar_chart", func(c *fiber.Ctx) error {
 		return chartController.GetSocialMediaPostsPerComponentBarChart(c)
 	})
+
+	charts6 := organizations.Group("/:organizationId/charts6")
+	charts6.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts6(c)
+	})
+	charts6WithId := charts6.Group("/:chartId")
+	charts6WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart6(c)
+	})
+	charts6WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart6Data(c)
+	})
+
+	charts3 := organizations.Group("/:organizationId/charts3")
+	charts3.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts3(c)
+	})
+	charts3WithId := charts3.Group("/:chartId")
+	charts3WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart3(c)
+	})
+	charts3WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart3Data(c)
+	})
+
+	charts2 := organizations.Group("/:organizationId/charts2")
+	charts2.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts2(c)
+	})
+	charts2WithId := charts2.Group("/:chartId")
+	charts2WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart2(c)
+	})
+	charts2WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart2Data(c)
+	})
 }
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {
