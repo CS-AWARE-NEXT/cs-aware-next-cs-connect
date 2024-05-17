@@ -138,6 +138,23 @@ const SimpleBarChart: FC<Props> = ({
                             height={25}
                             stroke='#8884d8'
                         />
+                        {/* How to add reference lines in simple bar */}
+                        {/* <ReferenceLine
+                            key={'pa'}
+                            x={'Page B'}
+                            stroke={'red'}
+                            isFront={true}
+                            alwaysShow={true}
+                            strokeWidth={3}
+                        />
+                        <ReferenceLine
+                            key={'pe'}
+                            x={'Page E'}
+                            stroke={'red'}
+                            isFront={true}
+                            alwaysShow={true}
+                            strokeWidth={3}
+                        /> */}
                         {keys.map((key) => (
                             <Bar
                                 key={isRhs ? key : `${Math.random()}_${key}`}
