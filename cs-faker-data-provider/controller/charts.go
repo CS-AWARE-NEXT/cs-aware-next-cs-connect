@@ -87,28 +87,6 @@ func (scc *ChartController) GetSocialMediaPostsPerComponentLineChart(c *fiber.Ct
 		LineColor: model.LineColor{
 			NumberOfPosts: "#1DA1F2",
 		},
-		ReferenceLines: []model.ReferenceLine{
-			{
-				X:      lines[1].Label,
-				Stroke: "red",
-				Label:  "",
-			},
-			{
-				X:      lines[2].Label,
-				Stroke: "red",
-				Label:  "",
-			},
-			{
-				X:      lines[4].Label,
-				Stroke: "red",
-				Label:  "",
-			},
-			{
-				X:      lines[5].Label,
-				Stroke: "red",
-				Label:  "",
-			},
-		},
 	}
 	return c.JSON(chartData)
 }
@@ -579,7 +557,7 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 		}
 		periode := row[7]
 		hConso := row[5]
-		hConsoFloat, err := strconv.ParseFloat(row[5], 64)
+		hConsoFloat, err := strconv.ParseFloat(row[1], 64)
 		if err != nil {
 			log.Printf("Skipped row %d because failed ParseFloat of hConso with error: %v", i, err)
 			continue
@@ -633,10 +611,56 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 		}
 	}
 
-	sort.Sort(model.ByLabel(lines))
-	log.Printf("Lines: %v", lines)
+	aggregatedBYHConso := make(map[string]model.SimpleLineChart1Value)
+	for _, line := range lines {
+		lineValue, ok := aggregatedBYHConso[line.Label]
+		if !ok {
+			aggregatedBYHConso[line.Label] = line
+			continue
+		}
+		if line.Periode2023 != 0 {
+			lineValue.Periode2023 = line.Periode2023
+		}
+		if line.Challenge != 0 {
+			lineValue.Challenge = line.Challenge
+		}
+		if line.Ecowatt != 0 {
+			lineValue.Ecowatt = line.Ecowatt
+		}
+		aggregatedBYHConso[line.Label] = lineValue
+	}
 
-	lineData.LineData = lines
+	aggregatedLines := []model.SimpleLineChart1Value{}
+	for _, line := range aggregatedBYHConso {
+		aggregatedLines = append(aggregatedLines, line)
+	}
+
+	sort.Sort(model.ByLabel(aggregatedLines))
+	log.Printf("Lines: %v", aggregatedLines)
+
+	lineData.LineData = aggregatedLines
+	lineData.ReferenceLines = []model.ReferenceLine{
+		{
+			X:      "7",
+			Stroke: "red",
+			Label:  "",
+		},
+		{
+			X:      "11",
+			Stroke: "red",
+			Label:  "",
+		},
+		{
+			X:      "18",
+			Stroke: "red",
+			Label:  "",
+		},
+		{
+			X:      "20",
+			Stroke: "red",
+			Label:  "",
+		},
+	}
 	return c.JSON(lineData)
 }
 
