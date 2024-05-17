@@ -1,5 +1,7 @@
 package model
 
+import "strconv"
+
 type SimpleLineChartData struct {
 	LineData       []SimpleLineChartValue `json:"lineData"`
 	LineColor      LineColor              `json:"lineColor"`
@@ -95,4 +97,24 @@ type HConsoMap = map[string]HConsoValue
 type HConsoValue struct {
 	TotalPuissance float64 `json:"totalPuissance"`
 	Count          int32   `json:"count"`
+}
+
+// ByLabel implements sort.Interface for []SimpleLineChart1Value based on the Label field.
+type ByLabel []SimpleLineChart1Value
+
+func (a ByLabel) Len() int {
+	return len(a)
+}
+
+func (a ByLabel) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+func (a ByLabel) Less(i, j int) bool {
+	labelI, errI := strconv.Atoi(a[i].Label)
+	labelJ, errJ := strconv.Atoi(a[j].Label)
+	if errI != nil || errJ != nil {
+		return a[i].Label < a[j].Label
+	}
+	return labelI < labelJ
 }

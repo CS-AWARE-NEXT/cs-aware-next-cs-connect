@@ -587,7 +587,7 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 
 		hConsoMap, ok := periodeMap[periode]
 		if !ok {
-			log.Printf("2023: %v", periodeMap["2023"], "is not ok")
+			log.Printf("2023: %v", periodeMap["2023"])
 			hConsoMap = make(model.HConsoMap)
 			periodeMap[periode] = hConsoMap
 		}
@@ -633,7 +633,7 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 		}
 	}
 
-	// TODO: sort lines here
+	sort.Sort(model.ByLabel(lines))
 	log.Printf("Lines: %v", lines)
 
 	lineData.LineData = lines
