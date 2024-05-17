@@ -11,8 +11,24 @@ type SimpleLineChartValue struct {
 	NumberOfPosts float64 `json:"numberOfPosts"`
 }
 
+type SimpleLineChart1Data struct {
+	LineData       []SimpleLineChart1Value `json:"lineData"`
+	LineColor      LineColor               `json:"lineColor"`
+	ReferenceLines []ReferenceLine         `json:"referenceLines"`
+}
+
+type SimpleLineChart1Value struct {
+	Label       string `json:"label"`
+	Periode2023 int64  `json:"2023"`
+	Challenge   int64  `json:"challenge"`
+	Ecowatt     int64  `json:"ecowatt"`
+}
+
 type LineColor struct {
 	NumberOfPosts string `json:"numberOfPosts"`
+	Periode2023   string `json:"2023"`
+	Challenge     string `json:"challenge"`
+	Ecowatt       string `json:"ecowatt"`
 }
 
 type ReferenceLine struct {
@@ -27,9 +43,8 @@ type SimpleBarChartData struct {
 }
 
 type SimpleBarChartValue struct {
-	Label                     string  `json:"label"`
-	NumberOfPosts             float64 `json:"numberOfPosts"`
-	DureeMoyenneDeRechargeMin string  `json:"dureeMoyenneDeRechargeMin"`
+	Label         string  `json:"label"`
+	NumberOfPosts float64 `json:"numberOfPosts"`
 }
 
 type SimpleBarChart6Data struct {
@@ -49,8 +64,8 @@ type SimpleBarChart3Data struct {
 
 type SimpleBarChart3Value struct {
 	Label                       string `json:"label"`
-	HCPercentageConsummationkWH string `json:"hcPercentageConsummationkWH"`
-	HPPercentageConsummationkWH string `json:"hpPercentageConsummationkWH"`
+	HCPercentageConsummationkWH string `json:"HCPercentageConsummationkWH"`
+	HPPercentageConsummationkWH string `json:"HPPercentageConsummationkWH"`
 }
 
 type SimpleBarChart2Data struct {
@@ -60,15 +75,24 @@ type SimpleBarChart2Data struct {
 
 type SimpleBarChart2Value struct {
 	Label             string `json:"label"`
-	HCConsummationkWH string `json:"hcConsummationkWH"`
-	HPConsummationkWH string `json:"hpConsummationkWH"`
+	HCConsummationkWH string `json:"HCConsummationkWH"`
+	HPConsummationkWH string `json:"HPConsummationkWH"`
 }
 
 type BarColor struct {
 	NumberOfPosts               string `json:"numberOfPosts"`
 	DureeMoyenneDeRechargeMin   string `json:"dureeMoyenneDeRechargeMin"`
-	HCPercentageConsummationkWH string `json:"hcPercentageConsummationkWH"`
-	HPPercentageConsummationkWH string `json:"hpPercentageConsummationkWH"`
-	HCConsummationkWH           string `json:"hcConsummationkWH"`
-	HPConsummationkWH           string `json:"hpConsummationkWH"`
+	HCPercentageConsummationkWH string `json:"HCPercentageConsummationkWH"`
+	HPPercentageConsummationkWH string `json:"HPPercentageConsummationkWH"`
+	HCConsummationkWH           string `json:"HCConsummationkWH"`
+	HPConsummationkWH           string `json:"HPConsummationkWH"`
+}
+
+type PeriodeMap = map[string]HConsoMap
+
+type HConsoMap = map[string]HConsoValue
+
+type HConsoValue struct {
+	TotalPuissance float64 `json:"totalPuissance"`
+	Count          int32   `json:"count"`
 }

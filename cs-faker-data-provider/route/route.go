@@ -277,6 +277,18 @@ func useOrganizationsCharts(organizations fiber.Router) {
 	charts2WithId.Get("/data", func(c *fiber.Ctx) error {
 		return chartController.GetChart2Data(c)
 	})
+
+	charts1 := organizations.Group("/:organizationId/charts1")
+	charts1.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts1(c)
+	})
+	charts1WithId := charts1.Group("/:chartId")
+	charts1WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart1(c)
+	})
+	charts1WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart1Data(c)
+	})
 }
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {

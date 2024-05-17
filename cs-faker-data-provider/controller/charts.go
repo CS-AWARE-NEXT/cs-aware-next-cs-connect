@@ -196,11 +196,11 @@ func (cc *ChartController) GetChart6Data(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChart6Data{
 		BarData: []model.SimpleBarChart6Value{},
 		BarColor: model.BarColor{
-			DureeMoyenneDeRechargeMin: "#000000",
+			DureeMoyenneDeRechargeMin: "#323232",
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("donnees_conso_timechange_short_tidy", "*.csv")
+	filePath, err := util.GetEmbeddedFilePath("donnees_recharge_short_tidy", "*.csv")
 	if err != nil {
 		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
 		return c.JSON(chartData)
@@ -228,23 +228,23 @@ func (cc *ChartController) GetChart6Data(c *fiber.Ctx) error {
 		if i == 0 {
 			continue
 		}
-		periode := row[7]
-		hConso, err := strconv.Atoi(row[5])
+		periode := row[1]
+		chargingDuration, err := strconv.Atoi(row[8])
 		if err != nil {
 			log.Printf("Skipped row %d because failed Atoi of hConso with error: %v", i, err)
 			continue
 		}
 
-		hConso = hConso * 60
+		// chargingDuration = chargingDuration * 60
 
 		if periode == "2023" {
-			periode2023 += hConso
+			periode2023 += chargingDuration
 			total2023++
 			// log.Println("%d -> %s", i, periode)
 			// log.Printf("%d -> Periode 2023 %d, %d by adding %d", i, periode2023, total2023, hConso)
 		}
 		if periode == "Challenge" {
-			periodeChallenge += hConso
+			periodeChallenge += chargingDuration
 			totalChallenge++
 			// log.Println("%d -> %s", i, periode)
 			// log.Printf("%d -> Periode Challenge %d, %d by adding %d", i, periodeChallenge, totalChallenge, hConso)
@@ -526,6 +526,131 @@ func (cc *ChartController) getChart2ByID(c *fiber.Ctx) model.Chart {
 	return model.Chart{}
 }
 
+func (cc *ChartController) GetCharts1(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	tableData := model.PaginatedTableData{
+		Columns: chartsPaginatedTableData.Columns,
+		Rows:    []model.PaginatedTableRow{},
+	}
+	for _, chart := range charts1Map[organizationId] {
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(chart))
+	}
+	return c.JSON(tableData)
+}
+
+func (cc *ChartController) GetChart1(c *fiber.Ctx) error {
+	return c.JSON(cc.getChart1ByID(c))
+}
+
+func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
+	lineData := model.SimpleLineChart1Data{
+		LineData: []model.SimpleLineChart1Value{},
+		LineColor: model.LineColor{
+			Periode2023: "orange",
+			Challenge:   "green",
+			Ecowatt:     "blue",
+		},
+	}
+
+	filePath, err := util.GetEmbeddedFilePath("donnees_conso_timechange_short_tidy", "*.csv")
+	if err != nil {
+		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
+		return c.JSON(lineData)
+	}
+	content, err := data.Data.ReadFile(filePath)
+	if err != nil {
+		log.Printf("Failed ReadFile with error: %v", err)
+		return c.JSON(lineData)
+	}
+	bytesReader := bytes.NewReader(content)
+	reader := csv.NewReader(bytesReader)
+	reader.Comma = ';'
+
+	rows, err := reader.ReadAll()
+	if err != nil {
+		log.Printf("Failed ReadAll with error: %v", err)
+		return c.JSON(lineData)
+	}
+
+	periodeMap := make(model.PeriodeMap)
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		periode := row[7]
+		hConso := row[5]
+		hConsoFloat, err := strconv.ParseFloat(row[5], 64)
+		if err != nil {
+			log.Printf("Skipped row %d because failed ParseFloat of hConso with error: %v", i, err)
+			continue
+		}
+
+		hConsoMap, ok := periodeMap[periode]
+		if !ok {
+			log.Printf("2023: %v", periodeMap["2023"], "is not ok")
+			hConsoMap = make(model.HConsoMap)
+			periodeMap[periode] = hConsoMap
+		}
+		hConsoValue, ok := hConsoMap[hConso]
+		if !ok {
+			// log.Printf("2023: %v", periodeMap["2023"], hConsoValue)
+			hConsoValue = model.HConsoValue{
+				TotalPuissance: hConsoFloat,
+				Count:          1,
+			}
+			hConsoMap[hConso] = hConsoValue
+			periodeMap[periode] = hConsoMap
+			continue
+		}
+		hConsoValue.TotalPuissance += hConsoFloat
+		hConsoValue.Count++
+		hConsoMap[hConso] = hConsoValue
+		periodeMap[periode] = hConsoMap
+	}
+
+	log.Printf("2023: %v", periodeMap["2023"])
+	lines := []model.SimpleLineChart1Value{}
+	for periode, hConsoMap := range periodeMap {
+		for hConso, hConsoValue := range hConsoMap {
+			if periode == "2023" {
+				lines = append(lines, model.SimpleLineChart1Value{
+					Label:       hConso,
+					Periode2023: int64(hConsoValue.TotalPuissance / float64(hConsoValue.Count)),
+				})
+			}
+			if periode == "Challenge" {
+				lines = append(lines, model.SimpleLineChart1Value{
+					Label:     hConso,
+					Challenge: int64(hConsoValue.TotalPuissance / float64(hConsoValue.Count)),
+				})
+			}
+			if periode == "Ecowatt" {
+				lines = append(lines, model.SimpleLineChart1Value{
+					Label:   hConso,
+					Ecowatt: int64(hConsoValue.TotalPuissance / float64(hConsoValue.Count)),
+				})
+			}
+		}
+	}
+
+	// TODO: sort lines here
+	log.Printf("Lines: %v", lines)
+
+	lineData.LineData = lines
+	return c.JSON(lineData)
+}
+
+func (cc *ChartController) getChart1ByID(c *fiber.Ctx) model.Chart {
+	organizationId := c.Params("organizationId")
+	chartId := c.Params("chartId")
+	for _, chart := range charts1Map[organizationId] {
+		if chart.ID == chartId {
+			return chart
+		}
+	}
+	return model.Chart{}
+}
+
 var chartsMap = map[string][]model.Chart{
 	"9": {
 		{
@@ -562,6 +687,16 @@ var charts2Map = map[string][]model.Chart{
 			ID:          "d4078e0d-f089-4e8a-aaff-807f76a856f6",
 			Name:        "Consumption of terminals depending on different periods",
 			Description: "Consumption of terminals depending on different periods.",
+		},
+	},
+}
+
+var charts1Map = map[string][]model.Chart{
+	"9": {
+		{
+			ID:          "13efcab0-d161-4f2f-9416-458175b79697",
+			Name:        "Power called during a day according to different periods",
+			Description: "Power called during a day according to different periods.",
 		},
 	},
 }
