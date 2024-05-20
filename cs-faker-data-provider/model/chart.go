@@ -81,6 +81,16 @@ type SimpleBarChart2Value struct {
 	HPConsummationkWH string `json:"HPConsummationkWH"`
 }
 
+type SimpleBarChartCountryCountsData struct {
+	BarData  []SimpleBarChartCountryCountsValue `json:"barData"`
+	BarColor BarColor                           `json:"barColor"`
+}
+
+type SimpleBarChartCountryCountsValue struct {
+	Label       string `json:"label"`
+	Occurrences int    `json:"occurrences"`
+}
+
 type BarColor struct {
 	NumberOfPosts               string `json:"numberOfPosts"`
 	DureeMoyenneDeRechargeMin   string `json:"dureeMoyenneDeRechargeMin"`
@@ -88,6 +98,7 @@ type BarColor struct {
 	HPPercentageConsummationkWH string `json:"HPPercentageConsummationkWH"`
 	HCConsummationkWH           string `json:"HCConsummationkWH"`
 	HPConsummationkWH           string `json:"HPConsummationkWH"`
+	Occurrences                 string `json:"occurrences"`
 }
 
 type PeriodeMap = map[string]HConsoMap

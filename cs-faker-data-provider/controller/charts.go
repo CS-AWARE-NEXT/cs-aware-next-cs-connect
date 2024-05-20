@@ -664,6 +664,81 @@ func (cc *ChartController) getChart1ByID(c *fiber.Ctx) model.Chart {
 	return model.Chart{}
 }
 
+func (cc *ChartController) GetChartsCountryCounts(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	tableData := model.PaginatedTableData{
+		Columns: chartsPaginatedTableData.Columns,
+		Rows:    []model.PaginatedTableRow{},
+	}
+	for _, chart := range chartsCountryCountsMap[organizationId] {
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(chart))
+	}
+	return c.JSON(tableData)
+}
+
+func (cc *ChartController) GetChartCountryCounts(c *fiber.Ctx) error {
+	return c.JSON(cc.getChartCountryCountsByID(c))
+}
+
+func (cc *ChartController) GetChartCountryCountData(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChartCountryCountsData{
+		BarData: []model.SimpleBarChartCountryCountsValue{},
+		BarColor: model.BarColor{
+			Occurrences: "#6495ED",
+		},
+	}
+
+	filePath, err := util.GetEmbeddedFilePath("UniversitiesOFAlliancesCountryCounts", "*.csv")
+	if err != nil {
+		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
+		return c.JSON(chartData)
+	}
+	content, err := data.Data.ReadFile(filePath)
+	if err != nil {
+		log.Printf("Failed ReadFile with error: %v", err)
+		return c.JSON(chartData)
+	}
+	bytesReader := bytes.NewReader(content)
+	reader := csv.NewReader(bytesReader)
+
+	rows, err := reader.ReadAll()
+	if err != nil {
+		log.Printf("Failed ReadAll with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChartCountryCountsValue{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		country := row[0]
+		occurrences, err := strconv.Atoi(row[1])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of occurrences with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChartCountryCountsValue{
+			Label:       country,
+			Occurrences: occurrences,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) getChartCountryCountsByID(c *fiber.Ctx) model.Chart {
+	organizationId := c.Params("organizationId")
+	chartId := c.Params("chartId")
+	for _, chart := range chartsCountryCountsMap[organizationId] {
+		if chart.ID == chartId {
+			return chart
+		}
+	}
+	return model.Chart{}
+}
+
 var chartsMap = map[string][]model.Chart{
 	"9": {
 		{
@@ -710,6 +785,26 @@ var charts1Map = map[string][]model.Chart{
 			ID:          "13efcab0-d161-4f2f-9416-458175b79697",
 			Name:        "Power called during a day according to different periods",
 			Description: "Power called during a day according to different periods.",
+		},
+	},
+}
+
+var chartsCountryCountsMap = map[string][]model.Chart{
+	"9": {
+		{
+			ID:          "7c2155c5-deb7-463f-b1ec-a7f718a29a3e",
+			Name:        "Universities Of Alliances Per Country",
+			Description: "Universities Of Alliances Per Country.",
+		},
+	},
+}
+
+var chartsAlliancesPerGenerationMap = map[string][]model.Chart{
+	"9": {
+		{
+			ID:          "05f53657-5fec-446f-b0b8-2a3fade8bcaf",
+			Name:        "Universities Of Alliances Per Generation",
+			Description: "Universities Of Alliances Per Generation.",
 		},
 	},
 }

@@ -289,6 +289,18 @@ func useOrganizationsCharts(organizations fiber.Router) {
 	charts1WithId.Get("/data", func(c *fiber.Ctx) error {
 		return chartController.GetChart1Data(c)
 	})
+
+	chartsCountryCounts := organizations.Group("/:organizationId/chartsCountryCounts")
+	chartsCountryCounts.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartsCountryCounts(c)
+	})
+	chartsCountryCountsWithId := chartsCountryCounts.Group("/:chartId")
+	chartsCountryCountsWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartCountryCounts(c)
+	})
+	chartsCountryCountsWithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChartCountryCountData(c)
+	})
 }
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {
