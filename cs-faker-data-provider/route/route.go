@@ -325,6 +325,18 @@ func useOrganizationsCharts(organizations fiber.Router) {
 	chartsUniversitiesInvolvedWithId.Get("/data", func(c *fiber.Ctx) error {
 		return chartController.GetChartInvolvedUniversitiesData(c)
 	})
+
+	chartsEuropeanAlliances := organizations.Group("/:organizationId/chartsEuropeanAlliances")
+	chartsEuropeanAlliances.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartsEuropeanAlliances(c)
+	})
+	chartsEuropeanAlliancesWithId := chartsEuropeanAlliances.Group("/:chartId")
+	chartsEuropeanAlliancesWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartEuropeanAlliances(c)
+	})
+	chartsEuropeanAlliancesWithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChartEuropeanAlliancesData(c)
+	})
 }
 
 func useEcosystem(basePath fiber.Router, context *config.Context) {

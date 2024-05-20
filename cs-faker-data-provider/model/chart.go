@@ -26,11 +26,30 @@ type SimpleLineChart1Value struct {
 	Ecowatt     int64  `json:"ecowatt"`
 }
 
+type SimpleLineChartEuropeanAlliancesData struct {
+	LineData  []SimpleLineChartEuropeanAlliancesValue `json:"lineData"`
+	LineColor LineColor                               `json:"lineColor"`
+}
+
+type SimpleLineChartEuropeanAlliancesValue struct {
+	Label   string `json:"label"`
+	Italy   int    `json:"italy"`
+	France  int    `json:"france"`
+	Cyprus  int    `json:"cyprus"`
+	Poland  int    `json:"poland"`
+	Ukraine int    `json:"ukraine"`
+}
+
 type LineColor struct {
 	NumberOfPosts string `json:"numberOfPosts"`
 	Periode2023   string `json:"2023"`
 	Challenge     string `json:"challenge"`
 	Ecowatt       string `json:"ecowatt"`
+	Italy         string `json:"italy"`
+	France        string `json:"france"`
+	Cyprus        string `json:"cyprus"`
+	Poland        string `json:"poland"`
+	Ukraine       string `json:"ukraine"`
 }
 
 type ReferenceLine struct {
