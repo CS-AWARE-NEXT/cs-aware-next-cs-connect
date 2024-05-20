@@ -823,6 +823,7 @@ func (cc *ChartController) GetChartAlliancesPerGenerationData(c *fiber.Ctx) erro
 		bars = append(bars, bar)
 	}
 
+	sort.Sort(model.BarByLabel(bars))
 	chartData.BarData = bars
 	return c.JSON(chartData)
 }
@@ -1096,12 +1097,68 @@ var chartsCountryCountsMap = map[string][]model.Chart{
 			Description: "Alleanze stipulate per Paese.",
 		},
 	},
+	"10": {
+		{
+			ID:          "434d814f-9f30-4799-bb57-bc51c906b1b6",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
+		},
+	},
+	"11": {
+		{
+			ID:          "6efba994-9f16-4897-aa32-102e7b58c45d",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
+		},
+	},
+	"12": {
+		{
+			ID:          "73c0addc-36ab-4293-aad9-7c55de08e29a",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
+		},
+	},
+	"13": {
+		{
+			ID:          "d4c815bb-e11f-4ca4-b809-b92e3edeb8e0",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
+		},
+	},
 }
 
 var chartsAlliancesPerGenerationMap = map[string][]model.Chart{
 	"9": {
 		{
 			ID:          "05f53657-5fec-446f-b0b8-2a3fade8bcaf",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+	"10": {
+		{
+			ID:          "6707f15d-7af2-45af-9f84-d381c0ad2971",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+	"11": {
+		{
+			ID:          "b1702a07-c125-469c-95fe-a0b6911921d3",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+	"12": {
+		{
+			ID:          "29d3b3d3-32ae-44ab-a5cf-0a8d37b8b879",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+	"13": {
+		{
+			ID:          "e4dda46d-7bf4-451e-a227-891d1b0986b1",
 			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
 			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
 		},
@@ -1116,12 +1173,68 @@ var chartsInvolvedUniversitiesMap = map[string][]model.Chart{
 			Description: "Numero di Università coinvolte per numero di Alleanze.",
 		},
 	},
+	"10": {
+		{
+			ID:          "cac45858-0d52-496c-b101-d02f40b2d0d7",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
+		},
+	},
+	"11": {
+		{
+			ID:          "61051955-a74d-4034-a12d-96697627f2c7",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
+		},
+	},
+	"12": {
+		{
+			ID:          "f0c5cd5c-2134-40ce-b3e6-60f4f8a80a02",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
+		},
+	},
+	"13": {
+		{
+			ID:          "204b4caf-03f0-4157-a1dc-e61c4a841c5e",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
+		},
+	},
 }
 
 var chartsEuropeanAlliancesMap = map[string][]model.Chart{
 	"9": {
 		{
 			ID:          "0dbc23ae-b6a0-4769-a35b-a438cddf90b2",
+			Name:        "Numero di Alleanze Europee",
+			Description: "Numero di Alleanze Europee.",
+		},
+	},
+	"10": {
+		{
+			ID:          "a32e0537-f656-4eff-9f52-357834fefbc8",
+			Name:        "Numero di Alleanze Europee",
+			Description: "Numero di Alleanze Europee.",
+		},
+	},
+	"11": {
+		{
+			ID:          "12a6fa10-6e51-43a3-baac-81a49958e103",
+			Name:        "Numero di Alleanze Europee",
+			Description: "Numero di Alleanze Europee.",
+		},
+	},
+	"12": {
+		{
+			ID:          "6bf933f8-867a-4f93-a99f-d0beaadd3bc3",
+			Name:        "Numero di Alleanze Europee",
+			Description: "Numero di Alleanze Europee.",
+		},
+	},
+	"13": {
+		{
+			ID:          "902f2923-51db-441a-a67d-e927a884336a",
 			Name:        "Numero di Alleanze Europee",
 			Description: "Numero di Alleanze Europee.",
 		},

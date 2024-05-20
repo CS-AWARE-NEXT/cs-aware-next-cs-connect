@@ -176,3 +176,22 @@ func (a ByLabel) Less(i, j int) bool {
 	}
 	return labelI < labelJ
 }
+
+type BarByLabel []SimpleBarChartAlliancesPerGenerationValue
+
+func (a BarByLabel) Len() int {
+	return len(a)
+}
+
+func (a BarByLabel) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+func (a BarByLabel) Less(i, j int) bool {
+	labelI, errI := strconv.Atoi(a[i].Label)
+	labelJ, errJ := strconv.Atoi(a[j].Label)
+	if errI != nil || errJ != nil {
+		return a[i].Label < a[j].Label
+	}
+	return labelI < labelJ
+}
