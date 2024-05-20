@@ -213,19 +213,13 @@ func (cc *ChartController) GetChart6Data(c *fiber.Ctx) error {
 			continue
 		}
 
-		// chargingDuration = chargingDuration * 60
-
 		if periode == "2023" {
 			periode2023 += chargingDuration
 			total2023++
-			// log.Println("%d -> %s", i, periode)
-			// log.Printf("%d -> Periode 2023 %d, %d by adding %d", i, periode2023, total2023, hConso)
 		}
 		if periode == "Challenge" {
 			periodeChallenge += chargingDuration
 			totalChallenge++
-			// log.Println("%d -> %s", i, periode)
-			// log.Printf("%d -> Periode Challenge %d, %d by adding %d", i, periodeChallenge, totalChallenge, hConso)
 		}
 	}
 
@@ -347,9 +341,9 @@ func (cc *ChartController) GetChart3Data(c *fiber.Ctx) error {
 		}
 	}
 
-	log.Printf("2023 -> HC: %2.f, HP: %2.f, Total: %2.f, pHC: %d, pHP: %d", hc2023, hp2023, total2023, int((float32(hc2023)/float32(total2023))*100), int((float32(hp2023)/float32(total2023))*100))
-	log.Printf("Challenge -> HC: %2.f, HP: %2.f, Total: %2.f, pHC: %d, pHP: %d", hcChallenge, hpChallenge, totalChallenge, int((float32(hcChallenge)/float32(totalChallenge))*100), int((float32(hpChallenge)/float32(totalChallenge))*100))
-	log.Printf("Ecowatt -> HC: %2.f, HP: %2.f, Total: %2.f, pHC: %d, pHP: %d", hcEcowatt, hpEcowatt, totalEcowatt, int((float32(hcEcowatt)/float32(totalEcowatt))*100), int((float32(hpEcowatt)/float32(totalEcowatt))*100))
+	// log.Printf("2023 -> HC: %2.f, HP: %2.f, Total: %2.f, pHC: %d, pHP: %d", hc2023, hp2023, total2023, int((float32(hc2023)/float32(total2023))*100), int((float32(hp2023)/float32(total2023))*100))
+	// log.Printf("Challenge -> HC: %2.f, HP: %2.f, Total: %2.f, pHC: %d, pHP: %d", hcChallenge, hpChallenge, totalChallenge, int((float32(hcChallenge)/float32(totalChallenge))*100), int((float32(hpChallenge)/float32(totalChallenge))*100))
+	// log.Printf("Ecowatt -> HC: %2.f, HP: %2.f, Total: %2.f, pHC: %d, pHP: %d", hcEcowatt, hpEcowatt, totalEcowatt, int((float32(hcEcowatt)/float32(totalEcowatt))*100), int((float32(hpEcowatt)/float32(totalEcowatt))*100))
 
 	chartData.BarData = append(chartData.BarData, model.SimpleBarChart3Value{
 		Label:                       "2023",
@@ -470,9 +464,9 @@ func (cc *ChartController) GetChart2Data(c *fiber.Ctx) error {
 		}
 	}
 
-	log.Printf("2023 -> HC: %2.f, HP: %2.f", hc2023, hp2023)
-	log.Printf("Challenge -> HC: %2.f, HP: %2.f", hcChallenge, hpChallenge)
-	log.Printf("Ecowatt -> HC: %2.f, HP: %2.f", hcEcowatt, hpEcowatt)
+	// log.Printf("2023 -> HC: %2.f, HP: %2.f", hc2023, hp2023)
+	// log.Printf("Challenge -> HC: %2.f, HP: %2.f", hcChallenge, hpChallenge)
+	// log.Printf("Ecowatt -> HC: %2.f, HP: %2.f", hcEcowatt, hpEcowatt)
 
 	chartData.BarData = append(chartData.BarData, model.SimpleBarChart2Value{
 		Label:             "2023",
@@ -565,13 +559,11 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 
 		hConsoMap, ok := periodeMap[periode]
 		if !ok {
-			log.Printf("2023: %v", periodeMap["2023"])
 			hConsoMap = make(model.HConsoMap)
 			periodeMap[periode] = hConsoMap
 		}
 		hConsoValue, ok := hConsoMap[hConso]
 		if !ok {
-			// log.Printf("2023: %v", periodeMap["2023"], hConsoValue)
 			hConsoValue = model.HConsoValue{
 				TotalPuissance: hConsoFloat,
 				Count:          1,
@@ -586,7 +578,6 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 		periodeMap[periode] = hConsoMap
 	}
 
-	log.Printf("2023: %v", periodeMap["2023"])
 	lines := []model.SimpleLineChart1Value{}
 	for periode, hConsoMap := range periodeMap {
 		for hConso, hConsoValue := range hConsoMap {
@@ -636,8 +627,6 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 	}
 
 	sort.Sort(model.ByLabel(aggregatedLines))
-	log.Printf("Lines: %v", aggregatedLines)
-
 	lineData.LineData = aggregatedLines
 	lineData.ReferenceLines = []model.ReferenceLine{
 		{
