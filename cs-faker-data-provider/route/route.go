@@ -299,7 +299,19 @@ func useOrganizationsCharts(organizations fiber.Router) {
 		return chartController.GetChartCountryCounts(c)
 	})
 	chartsCountryCountsWithId.Get("/data", func(c *fiber.Ctx) error {
-		return chartController.GetChartCountryCountData(c)
+		return chartController.GetChartCountryCountsData(c)
+	})
+
+	chartsAlliancesPerGeneration := organizations.Group("/:organizationId/chartsAlliancesPerGeneration")
+	chartsAlliancesPerGeneration.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartsAlliancesPerGeneration(c)
+	})
+	chartsAlliancesPerGenerationWithId := chartsAlliancesPerGeneration.Group("/:chartId")
+	chartsAlliancesPerGenerationWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartAlliancesPerGeneration(c)
+	})
+	chartsAlliancesPerGenerationWithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChartAlliancesPerGenerationData(c)
 	})
 }
 

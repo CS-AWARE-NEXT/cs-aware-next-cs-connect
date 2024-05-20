@@ -680,7 +680,7 @@ func (cc *ChartController) GetChartCountryCounts(c *fiber.Ctx) error {
 	return c.JSON(cc.getChartCountryCountsByID(c))
 }
 
-func (cc *ChartController) GetChartCountryCountData(c *fiber.Ctx) error {
+func (cc *ChartController) GetChartCountryCountsData(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChartCountryCountsData{
 		BarData: []model.SimpleBarChartCountryCountsValue{},
 		BarColor: model.BarColor{
@@ -732,6 +732,105 @@ func (cc *ChartController) getChartCountryCountsByID(c *fiber.Ctx) model.Chart {
 	organizationId := c.Params("organizationId")
 	chartId := c.Params("chartId")
 	for _, chart := range chartsCountryCountsMap[organizationId] {
+		if chart.ID == chartId {
+			return chart
+		}
+	}
+	return model.Chart{}
+}
+
+func (cc *ChartController) GetChartsAlliancesPerGeneration(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	tableData := model.PaginatedTableData{
+		Columns: chartsPaginatedTableData.Columns,
+		Rows:    []model.PaginatedTableRow{},
+	}
+	for _, chart := range chartsAlliancesPerGenerationMap[organizationId] {
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(chart))
+	}
+	return c.JSON(tableData)
+}
+
+func (cc *ChartController) GetChartAlliancesPerGeneration(c *fiber.Ctx) error {
+	return c.JSON(cc.getChartAlliancesPerGenerationByID(c))
+}
+
+func (cc *ChartController) GetChartAlliancesPerGenerationData(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChartAlliancesPerGenerationData{
+		BarData: []model.SimpleBarChartAlliancesPerGenerationValue{},
+		BarColor: model.BarColor{
+			Generation1: "pink",
+			Generation2: "green",
+			Generation3: "black",
+			Generation4: "#6495ED",
+		},
+	}
+
+	filePath, err := util.GetEmbeddedFilePath("UniversitiesOFAlliancesAlliancesPerGeneration", "*.csv")
+	if err != nil {
+		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
+		return c.JSON(chartData)
+	}
+	content, err := data.Data.ReadFile(filePath)
+	if err != nil {
+		log.Printf("Failed ReadFile with error: %v", err)
+		return c.JSON(chartData)
+	}
+	bytesReader := bytes.NewReader(content)
+	reader := csv.NewReader(bytesReader)
+
+	rows, err := reader.ReadAll()
+	if err != nil {
+		log.Printf("Failed ReadAll with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	barsMap := make(map[string]model.SimpleBarChartAlliancesPerGenerationValue)
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		country := row[0]
+		generation := row[1]
+		count, err := strconv.Atoi(row[2])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of count with error: %v", i, err)
+			continue
+		}
+		bar, ok := barsMap[country]
+		if !ok {
+			bar = model.SimpleBarChartAlliancesPerGenerationValue{
+				Label: country,
+			}
+		}
+		if generation == "1" {
+			bar.Generation1 = count
+		}
+		if generation == "2" {
+			bar.Generation2 = count
+		}
+		if generation == "3" {
+			bar.Generation3 = count
+		}
+		if generation == "4" {
+			bar.Generation4 = count
+		}
+		barsMap[country] = bar
+	}
+
+	bars := []model.SimpleBarChartAlliancesPerGenerationValue{}
+	for _, bar := range barsMap {
+		bars = append(bars, bar)
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) getChartAlliancesPerGenerationByID(c *fiber.Ctx) model.Chart {
+	organizationId := c.Params("organizationId")
+	chartId := c.Params("chartId")
+	for _, chart := range chartsAlliancesPerGenerationMap[organizationId] {
 		if chart.ID == chartId {
 			return chart
 		}
