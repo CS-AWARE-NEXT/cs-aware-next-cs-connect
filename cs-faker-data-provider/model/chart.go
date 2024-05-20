@@ -88,7 +88,7 @@ type SimpleBarChartCountryCountsData struct {
 
 type SimpleBarChartCountryCountsValue struct {
 	Label       string `json:"label"`
-	Occurrences int    `json:"occurrences"`
+	Occurrences int    `json:"occorrenze"`
 }
 
 type SimpleBarChartAlliancesPerGenerationData struct {
@@ -104,6 +104,16 @@ type SimpleBarChartAlliancesPerGenerationValue struct {
 	Generation4 int    `json:"4"`
 }
 
+type SimpleBarChartInvolvedUniversitiesData struct {
+	BarData  []SimpleBarChartInvolvedUniversitiesValue `json:"barData"`
+	BarColor BarColor                                  `json:"barColor"`
+}
+
+type SimpleBarChartInvolvedUniversitiesValue struct {
+	Label                string `json:"label"`
+	NumberOfUniversities int    `json:"numeroUniversitaCoinvolte"`
+}
+
 type BarColor struct {
 	NumberOfPosts               string `json:"numberOfPosts"`
 	DureeMoyenneDeRechargeMin   string `json:"dureeMoyenneDeRechargeMin"`
@@ -111,11 +121,12 @@ type BarColor struct {
 	HPPercentageConsummationkWH string `json:"HPPercentageConsummationkWH"`
 	HCConsummationkWH           string `json:"HCConsummationkWH"`
 	HPConsummationkWH           string `json:"HPConsummationkWH"`
-	Occurrences                 string `json:"occurrences"`
+	Occurrences                 string `json:"occorrenze"`
 	Generation1                 string `json:"1"`
 	Generation2                 string `json:"2"`
 	Generation3                 string `json:"3"`
 	Generation4                 string `json:"4"`
+	NumberOfUniversities        string `json:"numeroUniversitaCoinvolte"`
 }
 
 type PeriodeMap = map[string]HConsoMap

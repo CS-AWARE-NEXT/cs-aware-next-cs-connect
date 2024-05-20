@@ -838,6 +838,91 @@ func (cc *ChartController) getChartAlliancesPerGenerationByID(c *fiber.Ctx) mode
 	return model.Chart{}
 }
 
+func (cc *ChartController) GetChartsInvolvedUniversities(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	tableData := model.PaginatedTableData{
+		Columns: chartsPaginatedTableData.Columns,
+		Rows:    []model.PaginatedTableRow{},
+	}
+	for _, chart := range chartsInvolvedUniversitiesMap[organizationId] {
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(chart))
+	}
+	return c.JSON(tableData)
+}
+
+func (cc *ChartController) GetChartInvolvedUniversities(c *fiber.Ctx) error {
+	return c.JSON(cc.getChartInvolvedUniversitiesByID(c))
+}
+
+func (cc *ChartController) GetChartInvolvedUniversitiesData(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChartInvolvedUniversitiesData{
+		BarData: []model.SimpleBarChartInvolvedUniversitiesValue{},
+		BarColor: model.BarColor{
+			NumberOfUniversities: "red",
+		},
+	}
+
+	filePath, err := util.GetEmbeddedFilePath("AlliancesWithInvolvedUniversities", "*.csv")
+	if err != nil {
+		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
+		return c.JSON(chartData)
+	}
+	content, err := data.Data.ReadFile(filePath)
+	if err != nil {
+		log.Printf("Failed ReadFile with error: %v", err)
+		return c.JSON(chartData)
+	}
+	bytesReader := bytes.NewReader(content)
+	reader := csv.NewReader(bytesReader)
+
+	rows, err := reader.ReadAll()
+	if err != nil {
+		log.Printf("Failed ReadAll with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChartInvolvedUniversitiesValue{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		c := row[0]
+		d, err := strconv.Atoi(row[1])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of d with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChartInvolvedUniversitiesValue{
+			Label:                c,
+			NumberOfUniversities: d,
+		})
+	}
+	sort.SliceStable(bars, func(i, j int) bool {
+		iLabel, err := strconv.Atoi(bars[i].Label)
+		if err != nil {
+			return false
+		}
+		jLabel, err := strconv.Atoi(bars[j].Label)
+		if err != nil {
+			return false
+		}
+		return iLabel < jLabel
+	})
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) getChartInvolvedUniversitiesByID(c *fiber.Ctx) model.Chart {
+	organizationId := c.Params("organizationId")
+	chartId := c.Params("chartId")
+	for _, chart := range chartsInvolvedUniversitiesMap[organizationId] {
+		if chart.ID == chartId {
+			return chart
+		}
+	}
+	return model.Chart{}
+}
+
 var chartsMap = map[string][]model.Chart{
 	"9": {
 		{
@@ -892,8 +977,8 @@ var chartsCountryCountsMap = map[string][]model.Chart{
 	"9": {
 		{
 			ID:          "7c2155c5-deb7-463f-b1ec-a7f718a29a3e",
-			Name:        "Universities Of Alliances Per Country",
-			Description: "Universities Of Alliances Per Country.",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
 		},
 	},
 }
@@ -902,8 +987,18 @@ var chartsAlliancesPerGenerationMap = map[string][]model.Chart{
 	"9": {
 		{
 			ID:          "05f53657-5fec-446f-b0b8-2a3fade8bcaf",
-			Name:        "Universities Of Alliances Per Generation",
-			Description: "Universities Of Alliances Per Generation.",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+}
+
+var chartsInvolvedUniversitiesMap = map[string][]model.Chart{
+	"9": {
+		{
+			ID:          "535d6cbe-2176-4000-b7d9-81b982e18963",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
 		},
 	},
 }
