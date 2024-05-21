@@ -1,0 +1,218 @@
+---
+environmentConfig:
+  showOptionsConfig:
+    showAddChannelButton: true
+    showDefaultChannels: true
+organizations:
+  - name: Ecosystem
+    id: "0"
+    description: This organization is for the whole ecosystem
+    isEcosystem: true
+    sections:
+      - name: Ecosystem Issues
+        id: "0"
+        isIssues: true
+        url: https://meet.isislab.it:3001/cs-data-provider/issues
+        widgets:
+          - type: channel
+  - name: Spazio 1
+    id: "9"
+    description: Il primo spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "104"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "105"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "106"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "107"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/9/chartsEuropeanAlliances/:id/data
+          - type: channels
+  - name: Spazio 2
+    id: "10"
+    description: Il secondo spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "108"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "109"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "110"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "111"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/10/chartsEuropeanAlliances/:id/data
+          - type: channels
+  - name: Spazio 3
+    id: "11"
+    description: Il terzo spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "112"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "113"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "114"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "115"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/11/chartsEuropeanAlliances/:id/data
+          - type: channels
+  - name: Spazio 4
+    id: "12"
+    description: Il quarto spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "116"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "117"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "118"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "119"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/12/chartsEuropeanAlliances/:id/data
+          - type: channels
+  - name: Spazio 5
+    id: "13"
+    description: Il quarto spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "120"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "121"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "122"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "123"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsEuropeanAlliances/:id/data
+          - type: channels
+    widgets: []
