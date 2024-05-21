@@ -51,6 +51,7 @@ export type SimpleBarChartType = {
     chartType: ChartType.SimpleBar;
     barData: SimpleBarChartData[];
     barColor: BarColor;
+    dataSuffix?: string;
 };
 
 export type SimpleBarChartData = {
