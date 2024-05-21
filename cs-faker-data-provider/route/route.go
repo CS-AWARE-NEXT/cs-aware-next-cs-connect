@@ -290,6 +290,45 @@ func useOrganizationsCharts(organizations fiber.Router) {
 		return chartController.GetChart1Data(c)
 	})
 
+	charts5 := organizations.Group("/:organizationId/charts5")
+	charts5.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts5(c)
+	})
+	charts5WithId := charts5.Group("/:chartId")
+	charts5WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart5(c)
+	})
+	charts5WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart5Data(c)
+	})
+
+	charts4 := organizations.Group("/:organizationId/charts4")
+	charts4.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts4(c)
+	})
+	charts4WithId := charts4.Group("/:chartId")
+	charts4WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart4(c)
+	})
+	charts4WithId.Get("/arrives_2023", func(c *fiber.Ctx) error {
+		return chartController.GetChart4Arrives2023(c)
+	})
+	charts4WithId.Get("/departures_2023", func(c *fiber.Ctx) error {
+		return chartController.GetChart4Departures2023(c)
+	})
+	charts4WithId.Get("/arrives_challenge", func(c *fiber.Ctx) error {
+		return chartController.GetChart4ArrivesChallenge(c)
+	})
+	charts4WithId.Get("/departures_challenge", func(c *fiber.Ctx) error {
+		return chartController.GetChart4DeparturesChallenge(c)
+	})
+	charts4WithId.Get("/arrives_ecowatt", func(c *fiber.Ctx) error {
+		return chartController.GetChart4ArrivesEcowatt(c)
+	})
+	charts4WithId.Get("/departures_ecowatt", func(c *fiber.Ctx) error {
+		return chartController.GetChart4DeparturesEcowatt(c)
+	})
+
 	chartsCountryCounts := organizations.Group("/:organizationId/chartsCountryCounts")
 	chartsCountryCounts.Get("/", func(c *fiber.Ctx) error {
 		return chartController.GetChartsCountryCounts(c)

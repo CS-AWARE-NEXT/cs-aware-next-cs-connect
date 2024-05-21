@@ -1,15 +1,12 @@
 package controller
 
 import (
-	"bytes"
-	"encoding/csv"
 	"fmt"
 	"log"
 	"sort"
 	"strconv"
 	"strings"
 
-	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
@@ -173,28 +170,16 @@ func (cc *ChartController) GetChart6(c *fiber.Ctx) error {
 func (cc *ChartController) GetChart6Data(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChart6Data{
 		BarData: []model.SimpleBarChart6Value{},
-		BarColor: model.BarColor{
-			DureeMoyenneDeRechargeMin: "#323232",
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				DureeMoyenneDeRechargeMin: "#323232",
+			},
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("donnees_recharge_short_tidy", "*.csv")
+	rows, err := util.GetCSVRows("donnees_recharge_short_tidy", "*.csv", ';')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(chartData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(chartData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-	reader.Comma = ';'
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(chartData)
 	}
 
@@ -265,29 +250,17 @@ func (cc *ChartController) GetChart3(c *fiber.Ctx) error {
 func (cc *ChartController) GetChart3Data(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChart3Data{
 		BarData: []model.SimpleBarChart3Value{},
-		BarColor: model.BarColor{
-			HCPercentageConsummationkWH: "#87ceeb",
-			HPPercentageConsummationkWH: "#1da2d8",
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				HCPercentageConsummationkWH: "#87ceeb",
+				HPPercentageConsummationkWH: "#1da2d8",
+			},
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("donnees_conso_timechange_short_tidy", "*.csv")
+	rows, err := util.GetCSVRows("donnees_conso_timechange_short_tidy", "*.csv", ';')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(chartData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(chartData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-	reader.Comma = ';'
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(chartData)
 	}
 
@@ -394,29 +367,17 @@ func (cc *ChartController) GetChart2(c *fiber.Ctx) error {
 func (cc *ChartController) GetChart2Data(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChart2Data{
 		BarData: []model.SimpleBarChart2Value{},
-		BarColor: model.BarColor{
-			HCConsummationkWH: "#87ceeb",
-			HPConsummationkWH: "#1da2d8",
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				HCConsummationkWH: "#87ceeb",
+				HPConsummationkWH: "#1da2d8",
+			},
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("donnees_conso_timechange_short_tidy", "*.csv")
+	rows, err := util.GetCSVRows("donnees_conso_timechange_short_tidy", "*.csv", ';')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(chartData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(chartData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-	reader.Comma = ';'
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(chartData)
 	}
 
@@ -518,29 +479,16 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 	lineData := model.SimpleLineChart1Data{
 		LineData: []model.SimpleLineChart1Value{},
 		LineColor: model.LineColor{
-			Periode2023: "orange",
+			Periode2023: "pink",
 			Challenge:   "green",
 			Ecowatt:     "blue",
 		},
+		ReferenceLines: referenceLines,
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("donnees_conso_timechange_short_tidy", "*.csv")
+	rows, err := util.GetCSVRows("donnees_conso_timechange_short_tidy", "*.csv", ';')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(lineData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(lineData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-	reader.Comma = ';'
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(lineData)
 	}
 
@@ -628,28 +576,6 @@ func (cc *ChartController) GetChart1Data(c *fiber.Ctx) error {
 
 	sort.Sort(model.ByLabel(aggregatedLines))
 	lineData.LineData = aggregatedLines
-	lineData.ReferenceLines = []model.ReferenceLine{
-		{
-			X:      "7",
-			Stroke: "red",
-			Label:  "",
-		},
-		{
-			X:      "11",
-			Stroke: "red",
-			Label:  "",
-		},
-		{
-			X:      "18",
-			Stroke: "red",
-			Label:  "",
-		},
-		{
-			X:      "20",
-			Stroke: "red",
-			Label:  "",
-		},
-	}
 	return c.JSON(lineData)
 }
 
@@ -657,6 +583,331 @@ func (cc *ChartController) getChart1ByID(c *fiber.Ctx) model.Chart {
 	organizationId := c.Params("organizationId")
 	chartId := c.Params("chartId")
 	for _, chart := range charts1Map[organizationId] {
+		if chart.ID == chartId {
+			return chart
+		}
+	}
+	return model.Chart{}
+}
+
+func (cc *ChartController) GetCharts5(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	tableData := model.PaginatedTableData{
+		Columns: chartsPaginatedTableData.Columns,
+		Rows:    []model.PaginatedTableRow{},
+	}
+	for _, chart := range charts5Map[organizationId] {
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(chart))
+	}
+	return c.JSON(tableData)
+}
+
+func (cc *ChartController) GetChart5(c *fiber.Ctx) error {
+	return c.JSON(cc.getChart5ByID(c))
+}
+
+func (cc *ChartController) GetChart5Data(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChart5Data{
+		BarData: []model.SimpleBarChart5Value{},
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NombreMoyenDeRecharge: "#323232",
+			},
+		},
+	}
+
+	rows, err := util.GetCSVRows("chart5", "*.csv", ',')
+	if err != nil {
+		log.Printf("Failed GetCSVRows with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChart5Value{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		day := row[0]
+		terminals, err := strconv.ParseFloat(row[1], 64)
+		if err != nil {
+			log.Printf("Skipped row %d because failed ParseFloat of hConso with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChart5Value{
+			Label:                 day,
+			NombreMoyenDeRecharge: terminals,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) getChart5ByID(c *fiber.Ctx) model.Chart {
+	organizationId := c.Params("organizationId")
+	chartId := c.Params("chartId")
+	for _, chart := range charts5Map[organizationId] {
+		if chart.ID == chartId {
+			return chart
+		}
+	}
+	return model.Chart{}
+}
+
+func (cc *ChartController) GetCharts4(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	tableData := model.PaginatedTableData{
+		Columns: chartsPaginatedTableData.Columns,
+		Rows:    []model.PaginatedTableRow{},
+	}
+	for _, chart := range charts4Map[organizationId] {
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(chart))
+	}
+	return c.JSON(tableData)
+}
+
+func (cc *ChartController) GetChart4(c *fiber.Ctx) error {
+	return c.JSON(cc.getChart4ByID(c))
+}
+
+func (cc *ChartController) GetChart4Arrives2023(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChart4Data{
+		BarData: []model.SimpleBarChart4Value{},
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NombreDeRecharge: "#0047AB",
+			},
+			DataSuffix:     "-arrives2023",
+			ReferenceLines: referenceLines,
+		},
+	}
+
+	rows, err := util.GetCSVRows("chart4", "*.csv", ',')
+	if err != nil {
+		log.Printf("Failed GetCSVRows with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChart4Value{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		hour := row[0]
+		arrive2023, err := strconv.Atoi(row[1])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of arrive2023 with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChart4Value{
+			Label:            hour,
+			NombreDeRecharge: arrive2023,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) GetChart4Departures2023(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChart4Data{
+		BarData: []model.SimpleBarChart4Value{},
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NombreDeRecharge: "#A52A2A",
+			},
+			DataSuffix:     "-departures2023",
+			ReferenceLines: referenceLines,
+		},
+	}
+
+	rows, err := util.GetCSVRows("chart4", "*.csv", ',')
+	if err != nil {
+		log.Printf("Failed GetCSVRows with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChart4Value{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		hour := row[0]
+		departure2023, err := strconv.Atoi(row[2])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of departure2023 with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChart4Value{
+			Label:            hour,
+			NombreDeRecharge: departure2023,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) GetChart4ArrivesChallenge(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChart4Data{
+		BarData: []model.SimpleBarChart4Value{},
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NombreDeRecharge: "#6495ED",
+			},
+			DataSuffix:     "-arrivesChallenge",
+			ReferenceLines: referenceLines,
+		},
+	}
+
+	rows, err := util.GetCSVRows("chart4", "*.csv", ',')
+	if err != nil {
+		log.Printf("Failed GetCSVRows with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChart4Value{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		hour := row[0]
+		arriveChallenge, err := strconv.Atoi(row[3])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of arriveChallenge with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChart4Value{
+			Label:            hour,
+			NombreDeRecharge: arriveChallenge,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) GetChart4DeparturesChallenge(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChart4Data{
+		BarData: []model.SimpleBarChart4Value{},
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NombreDeRecharge: "#D22B2B",
+			},
+			DataSuffix:     "-departuresChallenge",
+			ReferenceLines: referenceLines,
+		},
+	}
+
+	rows, err := util.GetCSVRows("chart4", "*.csv", ',')
+	if err != nil {
+		log.Printf("Failed GetCSVRows with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChart4Value{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		hour := row[0]
+		departureChallenge, err := strconv.Atoi(row[4])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of departureChallenge with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChart4Value{
+			Label:            hour,
+			NombreDeRecharge: departureChallenge,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) GetChart4ArrivesEcowatt(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChart4Data{
+		BarData: []model.SimpleBarChart4Value{},
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NombreDeRecharge: "#1434A4",
+			},
+			DataSuffix:     "-arrivesEcowatt",
+			ReferenceLines: referenceLines,
+		},
+	}
+
+	rows, err := util.GetCSVRows("chart4", "*.csv", ',')
+	if err != nil {
+		log.Printf("Failed GetCSVRows with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChart4Value{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		hour := row[0]
+		arriveEcowatt, err := strconv.Atoi(row[5])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of arriveEcowatt with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChart4Value{
+			Label:            hour,
+			NombreDeRecharge: arriveEcowatt,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) GetChart4DeparturesEcowatt(c *fiber.Ctx) error {
+	chartData := model.SimpleBarChart4Data{
+		BarData: []model.SimpleBarChart4Value{},
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NombreDeRecharge: "#D2042D",
+			},
+			DataSuffix:     "-departuresEcowatt",
+			ReferenceLines: referenceLines,
+		},
+	}
+
+	rows, err := util.GetCSVRows("chart4", "*.csv", ',')
+	if err != nil {
+		log.Printf("Failed GetCSVRows with error: %v", err)
+		return c.JSON(chartData)
+	}
+
+	bars := []model.SimpleBarChart4Value{}
+	for i, row := range rows {
+		if i == 0 {
+			continue
+		}
+		hour := row[0]
+		departureEcowatt, err := strconv.Atoi(row[6])
+		if err != nil {
+			log.Printf("Skipped row %d because failed Atoi of departureEcowatt with error: %v", i, err)
+			continue
+		}
+		bars = append(bars, model.SimpleBarChart4Value{
+			Label:            hour,
+			NombreDeRecharge: departureEcowatt,
+		})
+	}
+
+	chartData.BarData = bars
+	return c.JSON(chartData)
+}
+
+func (cc *ChartController) getChart4ByID(c *fiber.Ctx) model.Chart {
+	organizationId := c.Params("organizationId")
+	chartId := c.Params("chartId")
+	for _, chart := range charts4Map[organizationId] {
 		if chart.ID == chartId {
 			return chart
 		}
@@ -683,27 +934,16 @@ func (cc *ChartController) GetChartCountryCounts(c *fiber.Ctx) error {
 func (cc *ChartController) GetChartCountryCountsData(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChartCountryCountsData{
 		BarData: []model.SimpleBarChartCountryCountsValue{},
-		BarColor: model.BarColor{
-			Occurrences: "#6495ED",
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				Occurrences: "#6495ED",
+			},
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("UniversitiesOFAlliancesCountryCounts", "*.csv")
+	rows, err := util.GetCSVRows("UniversitiesOFAlliancesCountryCounts", "*.csv", ',')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(chartData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(chartData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(chartData)
 	}
 
@@ -758,30 +998,19 @@ func (cc *ChartController) GetChartAlliancesPerGeneration(c *fiber.Ctx) error {
 func (cc *ChartController) GetChartAlliancesPerGenerationData(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChartAlliancesPerGenerationData{
 		BarData: []model.SimpleBarChartAlliancesPerGenerationValue{},
-		BarColor: model.BarColor{
-			Generation1: "pink",
-			Generation2: "green",
-			Generation3: "black",
-			Generation4: "#6495ED",
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				Generation1: "pink",
+				Generation2: "green",
+				Generation3: "black",
+				Generation4: "#6495ED",
+			},
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("UniversitiesOFAlliancesAlliancesPerGeneration", "*.csv")
+	rows, err := util.GetCSVRows("UniversitiesOFAlliancesAlliancesPerGeneration", "*.csv", ',')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(chartData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(chartData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(chartData)
 	}
 
@@ -858,27 +1087,16 @@ func (cc *ChartController) GetChartInvolvedUniversities(c *fiber.Ctx) error {
 func (cc *ChartController) GetChartInvolvedUniversitiesData(c *fiber.Ctx) error {
 	chartData := model.SimpleBarChartInvolvedUniversitiesData{
 		BarData: []model.SimpleBarChartInvolvedUniversitiesValue{},
-		BarColor: model.BarColor{
-			NumberOfUniversities: "red",
+		BaseSimpleBarChartData: model.BaseSimpleBarChartData{
+			BarColor: model.BarColor{
+				NumberOfUniversities: "red",
+			},
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("AlliancesWithInvolvedUniversities", "*.csv")
+	rows, err := util.GetCSVRows("AlliancesWithInvolvedUniversities", "*.csv", ',')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(chartData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(chartData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(chartData)
 	}
 
@@ -952,22 +1170,9 @@ func (cc *ChartController) GetChartEuropeanAlliancesData(c *fiber.Ctx) error {
 		},
 	}
 
-	filePath, err := util.GetEmbeddedFilePath("EuropeanAlliances", "*.csv")
+	rows, err := util.GetCSVRows("EuropeanAlliances", "*.csv", ',')
 	if err != nil {
-		log.Printf("Failed GetEmbeddedFilePath with error: %v", err)
-		return c.JSON(chartData)
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		log.Printf("Failed ReadFile with error: %v", err)
-		return c.JSON(chartData)
-	}
-	bytesReader := bytes.NewReader(content)
-	reader := csv.NewReader(bytesReader)
-
-	rows, err := reader.ReadAll()
-	if err != nil {
-		log.Printf("Failed ReadAll with error: %v", err)
+		log.Printf("Failed GetCSVRows with error: %v", err)
 		return c.JSON(chartData)
 	}
 
@@ -1085,6 +1290,26 @@ var charts1Map = map[string][]model.Chart{
 			ID:          "13efcab0-d161-4f2f-9416-458175b79697",
 			Name:        "Power called during a day according to different periods",
 			Description: "Power called during a day according to different periods.",
+		},
+	},
+}
+
+var charts5Map = map[string][]model.Chart{
+	"9": {
+		{
+			ID:          "52f14a67-e084-4888-889b-1728ec5f0e54",
+			Name:        "Average number of charges depending on the day of the week",
+			Description: "Average number of charges depending on the day of the week.",
+		},
+	},
+}
+
+var charts4Map = map[string][]model.Chart{
+	"9": {
+		{
+			ID:          "4a7c706e-a375-4834-a30e-7b55d45e0093",
+			Name:        "Number of arrivals, departures, according to the time",
+			Description: "Number of arrivals, departures, according to the time.",
 		},
 	},
 }
@@ -1251,4 +1476,27 @@ var chartsPaginatedTableData = model.PaginatedTableData{
 		},
 	},
 	Rows: []model.PaginatedTableRow{},
+}
+
+var referenceLines = []model.ReferenceLine{
+	{
+		X:      "7",
+		Stroke: "red",
+		Label:  "",
+	},
+	{
+		X:      "11",
+		Stroke: "red",
+		Label:  "",
+	},
+	{
+		X:      "18",
+		Stroke: "red",
+		Label:  "",
+	},
+	{
+		X:      "20",
+		Stroke: "red",
+		Label:  "",
+	},
 }

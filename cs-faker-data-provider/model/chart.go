@@ -63,14 +63,20 @@ type SimpleBarChartData struct {
 	BarColor BarColor              `json:"barColor"`
 }
 
+type BaseSimpleBarChartData struct {
+	BarColor       BarColor        `json:"barColor"`
+	DataSuffix     string          `json:"dataSuffix"`
+	ReferenceLines []ReferenceLine `json:"referenceLines"`
+}
+
 type SimpleBarChartValue struct {
 	Label         string  `json:"label"`
 	NumberOfPosts float64 `json:"numberOfPosts"`
 }
 
 type SimpleBarChart6Data struct {
-	BarData  []SimpleBarChart6Value `json:"barData"`
-	BarColor BarColor               `json:"barColor"`
+	BaseSimpleBarChartData
+	BarData []SimpleBarChart6Value `json:"barData"`
 }
 
 type SimpleBarChart6Value struct {
@@ -79,8 +85,8 @@ type SimpleBarChart6Value struct {
 }
 
 type SimpleBarChart3Data struct {
-	BarData  []SimpleBarChart3Value `json:"barData"`
-	BarColor BarColor               `json:"barColor"`
+	BaseSimpleBarChartData
+	BarData []SimpleBarChart3Value `json:"barData"`
 }
 
 type SimpleBarChart3Value struct {
@@ -90,8 +96,8 @@ type SimpleBarChart3Value struct {
 }
 
 type SimpleBarChart2Data struct {
-	BarData  []SimpleBarChart2Value `json:"barData"`
-	BarColor BarColor               `json:"barColor"`
+	BaseSimpleBarChartData
+	BarData []SimpleBarChart2Value `json:"barData"`
 }
 
 type SimpleBarChart2Value struct {
@@ -100,9 +106,29 @@ type SimpleBarChart2Value struct {
 	HPConsummationkWH string `json:"HPConsummationkWH"`
 }
 
+type SimpleBarChart5Data struct {
+	BaseSimpleBarChartData
+	BarData []SimpleBarChart5Value `json:"barData"`
+}
+
+type SimpleBarChart5Value struct {
+	Label                 string  `json:"label"`
+	NombreMoyenDeRecharge float64 `json:"nombreMoyenDeRecharge"`
+}
+
+type SimpleBarChart4Data struct {
+	BaseSimpleBarChartData
+	BarData []SimpleBarChart4Value `json:"barData"`
+}
+
+type SimpleBarChart4Value struct {
+	Label            string `json:"label"`
+	NombreDeRecharge int    `json:"nombreDeRecharge"`
+}
+
 type SimpleBarChartCountryCountsData struct {
-	BarData  []SimpleBarChartCountryCountsValue `json:"barData"`
-	BarColor BarColor                           `json:"barColor"`
+	BaseSimpleBarChartData
+	BarData []SimpleBarChartCountryCountsValue `json:"barData"`
 }
 
 type SimpleBarChartCountryCountsValue struct {
@@ -111,8 +137,8 @@ type SimpleBarChartCountryCountsValue struct {
 }
 
 type SimpleBarChartAlliancesPerGenerationData struct {
-	BarData  []SimpleBarChartAlliancesPerGenerationValue `json:"barData"`
-	BarColor BarColor                                    `json:"barColor"`
+	BaseSimpleBarChartData
+	BarData []SimpleBarChartAlliancesPerGenerationValue `json:"barData"`
 }
 
 type SimpleBarChartAlliancesPerGenerationValue struct {
@@ -124,8 +150,8 @@ type SimpleBarChartAlliancesPerGenerationValue struct {
 }
 
 type SimpleBarChartInvolvedUniversitiesData struct {
-	BarData  []SimpleBarChartInvolvedUniversitiesValue `json:"barData"`
-	BarColor BarColor                                  `json:"barColor"`
+	BaseSimpleBarChartData
+	BarData []SimpleBarChartInvolvedUniversitiesValue `json:"barData"`
 }
 
 type SimpleBarChartInvolvedUniversitiesValue struct {
@@ -140,6 +166,8 @@ type BarColor struct {
 	HPPercentageConsummationkWH string `json:"HPPercentageConsummationkWH"`
 	HCConsummationkWH           string `json:"HCConsummationkWH"`
 	HPConsummationkWH           string `json:"HPConsummationkWH"`
+	NombreMoyenDeRecharge       string `json:"nombreMoyenDeRecharge"`
+	NombreDeRecharge            string `json:"nombreDeRecharge"`
 	Occurrences                 string `json:"occorrenze"`
 	Generation1                 string `json:"1"`
 	Generation2                 string `json:"2"`
