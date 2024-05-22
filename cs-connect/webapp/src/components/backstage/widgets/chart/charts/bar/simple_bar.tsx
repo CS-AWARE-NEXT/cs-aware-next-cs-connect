@@ -12,6 +12,7 @@ import {
     CartesianGrid,
     Cell,
     Legend,
+    ReferenceLine,
     ResponsiveContainer,
     Tooltip,
     XAxis,
@@ -20,7 +21,7 @@ import {
 import {useIntl} from 'react-intl';
 import {useRouteMatch} from 'react-router-dom';
 
-import {BarColor, SimpleBarChartData} from 'src/types/charts';
+import {BarColor, SimpleBarChartData, SimpleReferenceLine} from 'src/types/charts';
 import {formatStringToLowerCase, formatUrlAsMarkdown} from 'src/helpers';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {idStringify} from 'src/components/backstage/widgets/chart/charts/line/dots';
@@ -40,6 +41,7 @@ type Props = {
     barData: SimpleBarChartData[];
     barColor: BarColor;
     dataSuffix?: string;
+    referenceLines?: SimpleReferenceLine[];
     parentId: string;
     sectionId: string;
     delay?: number;
@@ -52,6 +54,7 @@ const SimpleBarChart: FC<Props> = ({
     barData,
     barColor,
     dataSuffix = '',
+    referenceLines = [],
     parentId,
     sectionId,
     delay = 1,
@@ -140,23 +143,18 @@ const SimpleBarChart: FC<Props> = ({
                             height={25}
                             stroke='#8884d8'
                         />
-                        {/* How to add reference lines in simple bar */}
-                        {/* <ReferenceLine
-                            key={'pa'}
-                            x={'Page B'}
-                            stroke={'red'}
-                            isFront={true}
-                            alwaysShow={true}
-                            strokeWidth={3}
-                        />
-                        <ReferenceLine
-                            key={'pe'}
-                            x={'Page E'}
-                            stroke={'red'}
-                            isFront={true}
-                            alwaysShow={true}
-                            strokeWidth={3}
-                        /> */}
+                        {(referenceLines && referenceLines.length > 0) && referenceLines.map((line) => (
+                            <ReferenceLine
+                                key={line.x}
+                                x={line.x}
+                                stroke={line.stroke}
+                                strokeWidth={line.strokeWidth || 2}
+                                label={{
+                                    value: line.label,
+                                    position: 'insideTop',
+                                }}
+                            />
+                        ))}
                         {keys.map((key) => (
                             <Bar
                                 key={isRhs ? key : `${Math.random()}_${key}`}

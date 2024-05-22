@@ -48,12 +48,13 @@ const buildChartByType = (
             />);
     }
     case ChartType.SimpleBar: {
-        const {barData, barColor, dataSuffix} = data as SimpleBarChartType;
+        const {barData, barColor, dataSuffix, referenceLines} = data as SimpleBarChartType;
         return (
             <SimpleBarChart
                 barData={barData}
                 barColor={barColor}
                 dataSuffix={dataSuffix}
+                referenceLines={referenceLines}
                 parentId={parentId}
                 sectionId={sectionId}
                 delay={delay}
