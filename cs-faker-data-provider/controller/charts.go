@@ -1262,12 +1262,40 @@ var charts6Map = map[string][]model.Chart{
 			Description: "Average charge duration depending on the periods.",
 		},
 	},
+	"10": {
+		{
+			ID:          "cb8dfbc1-ddb4-4a24-b17c-11b5dba45d31",
+			Name:        "Average charge duration depending on the periods",
+			Description: "Average charge duration depending on the periods.",
+		},
+	},
+	"11": {
+		{
+			ID:          "4a3d08d0-5dba-47f2-ba3e-21b9bb41b1e1",
+			Name:        "Average charge duration depending on the periods",
+			Description: "Average charge duration depending on the periods.",
+		},
+	},
 }
 
 var charts3Map = map[string][]model.Chart{
 	"9": {
 		{
 			ID:          "bd24c04f-e334-433c-bd2a-4dfb025b3b3a",
+			Name:        "Consumption of terminals according on different periods %",
+			Description: "Consumption of terminals according on different periods %.",
+		},
+	},
+	"10": {
+		{
+			ID:          "2460a50f-73ba-4f4f-9157-87da25a7e72b",
+			Name:        "Consumption of terminals according on different periods %",
+			Description: "Consumption of terminals according on different periods %.",
+		},
+	},
+	"11": {
+		{
+			ID:          "952eb2a3-daa1-4da4-86f7-1d05a9c79634",
 			Name:        "Consumption of terminals according on different periods %",
 			Description: "Consumption of terminals according on different periods %.",
 		},
@@ -1282,12 +1310,40 @@ var charts2Map = map[string][]model.Chart{
 			Description: "Consumption of terminals depending on different periods.",
 		},
 	},
+	"10": {
+		{
+			ID:          "b3b9a1ca-b210-4634-aac3-93f7caf21b60",
+			Name:        "Consumption of terminals depending on different periods",
+			Description: "Consumption of terminals depending on different periods.",
+		},
+	},
+	"11": {
+		{
+			ID:          "5ae9354e-febb-4662-8955-c2bde64a49ee",
+			Name:        "Consumption of terminals depending on different periods",
+			Description: "Consumption of terminals depending on different periods.",
+		},
+	},
 }
 
 var charts1Map = map[string][]model.Chart{
 	"9": {
 		{
 			ID:          "13efcab0-d161-4f2f-9416-458175b79697",
+			Name:        "Power called during a day according to different periods",
+			Description: "Power called during a day according to different periods.",
+		},
+	},
+	"10": {
+		{
+			ID:          "2554c39a-7348-4799-aa08-b03bc8c67a7b",
+			Name:        "Power called during a day according to different periods",
+			Description: "Power called during a day according to different periods.",
+		},
+	},
+	"11": {
+		{
+			ID:          "a7360057-0171-4ea6-b821-a46c725cb51e",
 			Name:        "Power called during a day according to different periods",
 			Description: "Power called during a day according to different periods.",
 		},
@@ -1302,12 +1358,40 @@ var charts5Map = map[string][]model.Chart{
 			Description: "Average number of charges depending on the day of the week.",
 		},
 	},
+	"10": {
+		{
+			ID:          "b9512b2c-0770-4fb1-b372-0d9adc2b5abb",
+			Name:        "Average number of charges depending on the day of the week",
+			Description: "Average number of charges depending on the day of the week.",
+		},
+	},
+	"11": {
+		{
+			ID:          "16071247-101f-4623-961c-0d679d20e06c",
+			Name:        "Average number of charges depending on the day of the week",
+			Description: "Average number of charges depending on the day of the week.",
+		},
+	},
 }
 
 var charts4Map = map[string][]model.Chart{
 	"9": {
 		{
 			ID:          "4a7c706e-a375-4834-a30e-7b55d45e0093",
+			Name:        "Number of arrivals, departures, according to the time",
+			Description: "Number of arrivals, departures, according to the time.",
+		},
+	},
+	"10": {
+		{
+			ID:          "09ec6ae7-8118-4f1b-b122-9853721f2d13",
+			Name:        "Number of arrivals, departures, according to the time",
+			Description: "Number of arrivals, departures, according to the time.",
+		},
+	},
+	"11": {
+		{
+			ID:          "6d7f45eb-6dda-42f4-8b6d-a5b419b9432f",
 			Name:        "Number of arrivals, departures, according to the time",
 			Description: "Number of arrivals, departures, according to the time.",
 		},
