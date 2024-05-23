@@ -30,6 +30,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 		return organizationController.GetOrganization(c)
 	})
 	useOrganizationsIncidents(organizations)
+	useOrganizationsIncidentsSynthethic(organizations)
 	useOrganizationsStories(organizations)
 	useOrganizationsPolicies(organizations, context)
 	useOrganizationsPlaybooks(organizations)
@@ -61,6 +62,28 @@ func useOrganizationsIncidents(organizations fiber.Router) {
 	})
 	incidentsWithId.Get("/text_box", func(c *fiber.Ctx) error {
 		return incidentController.GetIncidentTextBox(c)
+	})
+}
+
+func useOrganizationsIncidentsSynthethic(organizations fiber.Router) {
+	incidentSynthethicController := controller.NewIncidentSynthethicController()
+
+	incidentsSynthethic := organizations.Group("/:organizationId/incidents_synthethic")
+	incidentsSynthethic.Get("/", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentsSynthethic(c)
+	})
+	incidentsSynthethicWithId := incidentsSynthethic.Group("/:incidentId")
+	incidentsSynthethicWithId.Get("/", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynththic(c)
+	})
+	incidentsSynthethicWithId.Get("/graph", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynthethicGraph(c)
+	})
+	incidentsSynthethicWithId.Get("/table", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynthethicTable(c)
+	})
+	incidentsSynthethicWithId.Get("/text_box", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynthethicTextBox(c)
 	})
 }
 
