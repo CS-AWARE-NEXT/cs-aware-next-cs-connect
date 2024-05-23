@@ -1,0 +1,252 @@
+---
+environmentConfig:
+  showOptionsConfig:
+    showAddChannelButton: true
+    showDefaultChannels: true
+organizations:
+  - name: Ecosystem
+    id: "0"
+    description: This organization is for the whole ecosystem
+    isEcosystem: true
+    sections:
+      - name: Ecosystem Issues
+        id: "0"
+        isIssues: true
+        url: http://www.isislab.it:3000/cs-data-provider/issues
+        widgets:
+          - type: channel
+  - name: First Experiment
+    id: "9"
+    description: The organization for the first experiment
+    sections:
+      - name: Charts 1
+        id: "103"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts1
+        widgets:
+          - name: Puissance appelée au cours d'une journée en fonction de differentes periodes
+            type: chart
+            chartType: simple-line
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts1/:id/data
+          - type: channels
+      - name: Charts 2
+        id: "102"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts2
+        widgets:
+          - name: Consommation des bornes en fonction de différentes périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts2/:id/data
+          - type: channels
+      - name: Charts 3
+        id: "101"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts3
+        widgets:
+          - name: Consommation des bornes en fonction de différentes périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts3/:id/data
+          - type: channels
+      - name: Charts 4
+        id: "105"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts4
+        widgets:
+          - name: Nombre d'arrivées en fonction de l'heure 2023
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts4/:id/arrives_2023
+          - name: Nombre de departs en fonction de l'heure 2023
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts4/:id/departures_2023
+          - name: Nombre d'arrivées en fonction de l'heure Challenge
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts4/:id/arrives_challenge
+          - name: Nombre de departs en fonction de l'heure Challenge
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts4/:id/departures_challenge
+          - name: Nombre d'arrivées en fonction de l'heure Ecowatt
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts4/:id/arrives_ecowatt
+          - name: Nombre de departs en fonction de l'heure Ecowatt
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts4/:id/departures_ecowatt
+          - type: channels
+      - name: Charts 5
+        id: "104"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts5
+        widgets:
+          - name: Nombre moyen de recharge en fonction du jour de la semaine
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts5/:id/data
+          - type: channels
+      - name: Charts 6
+        id: "100"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts6
+        widgets:
+          - name: Durée moyenne de recharge en fonction des périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/charts6/:id/data
+          - type: channels
+  - name: Second Experiment
+    id: "10"
+    description: The organization for the second experiment
+    sections:
+      - name: Charts 1
+        id: "106"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts1
+        widgets:
+          - name: Puissance appelée au cours d'une journée en fonction de differentes periodes
+            type: chart
+            chartType: simple-line
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts1/:id/data
+          - type: channels
+      - name: Charts 2
+        id: "107"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts2
+        widgets:
+          - name: Consommation des bornes en fonction de différentes périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts2/:id/data
+          - type: channels
+      - name: Charts 3
+        id: "108"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts3
+        widgets:
+          - name: Consommation des bornes en fonction de différentes périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts3/:id/data
+          - type: channels
+      - name: Charts 4
+        id: "109"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts4
+        widgets:
+          - name: Nombre d'arrivées en fonction de l'heure 2023
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts4/:id/arrives_2023
+          - name: Nombre de departs en fonction de l'heure 2023
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts4/:id/departures_2023
+          - name: Nombre d'arrivées en fonction de l'heure Challenge
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts4/:id/arrives_challenge
+          - name: Nombre de departs en fonction de l'heure Challenge
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts4/:id/departures_challenge
+          - name: Nombre d'arrivées en fonction de l'heure Ecowatt
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts4/:id/arrives_ecowatt
+          - name: Nombre de departs en fonction de l'heure Ecowatt
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts4/:id/departures_ecowatt
+          - type: channels
+      - name: Charts 5
+        id: "110"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts5
+        widgets:
+          - name: Nombre moyen de recharge en fonction du jour de la semaine
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts5/:id/data
+          - type: channels
+      - name: Charts 6
+        id: "111"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts6
+        widgets:
+          - name: Durée moyenne de recharge en fonction des périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/charts6/:id/data
+          - type: channels
+  - name: Third Experiment
+    id: "11"
+    description: The organization for the second experiment
+    sections:
+      - name: Charts 1
+        id: "112"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts1
+        widgets:
+          - name: Puissance appelée au cours d'une journée en fonction de differentes periodes
+            type: chart
+            chartType: simple-line
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts1/:id/data
+          - type: channels
+      - name: Charts 2
+        id: "113"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts2
+        widgets:
+          - name: Consommation des bornes en fonction de différentes périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts2/:id/data
+          - type: channels
+      - name: Charts 3
+        id: "114"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts3
+        widgets:
+          - name: Consommation des bornes en fonction de différentes périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts3/:id/data
+          - type: channels
+      - name: Charts 4
+        id: "115"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts4
+        widgets:
+          - name: Nombre d'arrivées en fonction de l'heure 2023
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts4/:id/arrives_2023
+          - name: Nombre de departs en fonction de l'heure 2023
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts4/:id/departures_2023
+          - name: Nombre d'arrivées en fonction de l'heure Challenge
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts4/:id/arrives_challenge
+          - name: Nombre de departs en fonction de l'heure Challenge
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts4/:id/departures_challenge
+          - name: Nombre d'arrivées en fonction de l'heure Ecowatt
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts4/:id/arrives_ecowatt
+          - name: Nombre de departs en fonction de l'heure Ecowatt
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts4/:id/departures_ecowatt
+          - type: channels
+      - name: Charts 5
+        id: "116"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts5
+        widgets:
+          - name: Nombre moyen de recharge en fonction du jour de la semaine
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts5/:id/data
+          - type: channels
+      - name: Charts 6
+        id: "117"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts6
+        widgets:
+          - name: Durée moyenne de recharge en fonction des périodes
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/11/charts6/:id/data
+          - type: channels
+    widgets: []
