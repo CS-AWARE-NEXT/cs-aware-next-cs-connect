@@ -34,6 +34,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsPolicies(organizations, context)
 	useOrganizationsPlaybooks(organizations)
 	useOrganizationsBundles(organizations)
+	useOrganizationsMalwares(organizations)
 	useOrganizationsExpertConsultancies(organizations)
 	useOrganizationsSocialMedia(organizations)
 	useOrganizationsNews(organizations)
@@ -154,6 +155,19 @@ func useOrganizationsBundles(organizations fiber.Router) {
 	})
 	bundleWithId.Get("/content", func(c *fiber.Ctx) error {
 		return bundleController.GetBundleContent(c)
+	})
+}
+
+func useOrganizationsMalwares(organizations fiber.Router) {
+	malwareController := controller.NewMalwareController()
+
+	malwares := organizations.Group("/:organizationId/malwares")
+	malwares.Get("/", func(c *fiber.Ctx) error {
+		return malwareController.GetMalwares(c)
+	})
+	malwareWithId := malwares.Group("/:malwareId")
+	malwareWithId.Get("/", func(c *fiber.Ctx) error {
+		return malwareController.GetMalware(c)
 	})
 }
 
