@@ -69,6 +69,20 @@ organizations:
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
+      - name: Incidents Synthethic
+        id: "40"
+        url: http://localhost:3000/cs-data-provider/organizations/8/incidents_synthethic
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://localhost:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/text_box
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/graph
+          - name: History
+            type: table
+            url: http://localhost:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/table
+          - type: channels
   - name: Deyal
     id: "7"
     description: This is the Deyal organization for Larissa workshop
@@ -119,6 +133,20 @@ organizations:
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
+      - name: Incidents Synthethic
+        id: "41"
+        url: http://localhost:3000/cs-data-provider/organizations/7/incidents_synthethic
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://localhost:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/text_box
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/graph
+          - name: History
+            type: table
+            url: http://localhost:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/table
+          - type: channels
   - name: Larissa
     id: "6"
     description: This is the Larissa organization for Larissa workshop
@@ -169,6 +197,20 @@ organizations:
             type: list
             url: http://localhost:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
+      - name: Incidents Synthethic
+        id: "39"
+        url: http://localhost:3000/cs-data-provider/organizations/6/incidents_synthethic
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://localhost:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/text_box
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/graph
+          - name: History
+            type: table
+            url: http://localhost:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/table
+          - type: channels
   - name: Foggia
     id: "5"
     description: This is the organization for Foggia workshop
@@ -200,6 +242,20 @@ organizations:
           - name: Task
             type: exercise
             url: http://localhost:3000/cs-data-provider/organizations/5/exercises/:id/assignment
+          - type: channels
+      - name: Incidents Synthethic
+        id: "38"
+        url: http://localhost:3000/cs-data-provider/organizations/5/incidents_synthethic
+        widgets:
+          - name: Description
+            type: text-box
+            url: http://localhost:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/text_box
+          - name: System
+            type: graph
+            url: http://localhost:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/graph
+          - name: History
+            type: table
+            url: http://localhost:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/table
           - type: channels
   - name: Demo CS-AWARE EU
     id: "4"
@@ -249,18 +305,5 @@ organizations:
           - name: Relationship
             type: bundle
             url: http://localhost:3000/cs-data-provider/organizations/4/bundles/:id/content
-          - type: channel
-      - name: Charts
-        id: "99"
-        url: http://localhost:3000/cs-data-provider/organizations/4/charts
-        widgets:
-          - name: Bar Chart
-            type: chart
-            chartType: simple-bar
-            url: http://localhost:3000/cs-data-provider/organizations/4/charts/:id/bar_chart
-          - name: Line Chart
-            type: chart
-            chartType: simple-line
-            url: http://localhost:3000/cs-data-provider/organizations/4/charts/:id/line_chart
           - type: channel
     widgets: []
