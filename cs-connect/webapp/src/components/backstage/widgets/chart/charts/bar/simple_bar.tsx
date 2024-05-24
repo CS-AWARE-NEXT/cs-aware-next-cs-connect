@@ -12,6 +12,7 @@ import {
     CartesianGrid,
     Cell,
     Legend,
+    ReferenceLine,
     ResponsiveContainer,
     Tooltip,
     XAxis,
@@ -20,7 +21,7 @@ import {
 import {useIntl} from 'react-intl';
 import {useRouteMatch} from 'react-router-dom';
 
-import {LineColor, SimpleLineChartData} from 'src/types/charts';
+import {BarColor, SimpleBarChartData, SimpleReferenceLine} from 'src/types/charts';
 import {formatStringToLowerCase, formatUrlAsMarkdown} from 'src/helpers';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {idStringify} from 'src/components/backstage/widgets/chart/charts/line/dots';
@@ -37,8 +38,10 @@ import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 
 type Props = {
-    barData: SimpleLineChartData[];
-    barColor: LineColor;
+    barData: SimpleBarChartData[];
+    barColor: BarColor;
+    dataSuffix?: string;
+    referenceLines?: SimpleReferenceLine[];
     parentId: string;
     sectionId: string;
     delay?: number;
@@ -50,6 +53,8 @@ export const CELL_PREFIX = 'cell-';
 const SimpleBarChart: FC<Props> = ({
     barData,
     barColor,
+    dataSuffix = '',
+    referenceLines = [],
     parentId,
     sectionId,
     delay = 1,
@@ -105,7 +110,7 @@ const SimpleBarChart: FC<Props> = ({
     return (
         <div
             ref={ref}
-            id={`bar-chart-container-${idStringify(sectionId)}`}
+            id={`bar-chart-container-${idStringify(sectionId)}${dataSuffix}`}
             style={{
                 width: '95%',
                 maxWidth: '100%',
@@ -138,6 +143,18 @@ const SimpleBarChart: FC<Props> = ({
                             height={25}
                             stroke='#8884d8'
                         />
+                        {(referenceLines && referenceLines.length > 0) && referenceLines.map((line) => (
+                            <ReferenceLine
+                                key={line.x}
+                                x={line.x}
+                                stroke={line.stroke}
+                                strokeWidth={line.strokeWidth || 2}
+                                label={{
+                                    value: line.label,
+                                    position: 'insideTop',
+                                }}
+                            />
+                        ))}
                         {keys.map((key) => (
                             <Bar
                                 key={isRhs ? key : `${Math.random()}_${key}`}
@@ -162,7 +179,7 @@ const SimpleBarChart: FC<Props> = ({
                                 //     />}
                             >
                                 {data.map((entry, index) => {
-                                    const cellId = `${CELL_PREFIX}${index}-${idStringify(sectionId)}`;
+                                    const cellId = `${CELL_PREFIX}${index}-${idStringify(sectionId)}${dataSuffix}`;
                                     return (
                                         <Cell
                                             id={cellId}

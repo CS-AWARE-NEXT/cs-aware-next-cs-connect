@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -29,11 +28,7 @@ func (ec *ExerciseController) GetExercises(c *fiber.Ctx) error {
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, exercise := range exerciseMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          exercise.ID,
-			Name:        exercise.Name,
-			Description: exercise.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(exercise))
 	}
 	return c.JSON(tableData)
 }
@@ -199,22 +194,22 @@ func (ec *ExerciseController) ParseCourseIntoAssignment(assignment *model.Assign
 	}
 }
 
-func (ec *ExerciseController) getExerciseFromFile(fileName string) (model.SocialMediaPostEntityData, error) {
-	filePath, err := util.GetEmbeddedFilePath(fileName, "*.json")
-	if err != nil {
-		return model.SocialMediaPostEntityData{}, err
-	}
-	content, err := data.Data.ReadFile(filePath)
-	if err != nil {
-		return model.SocialMediaPostEntityData{}, err
-	}
-	var socialMediaPostEntityData model.SocialMediaPostEntityData
-	err = json.Unmarshal(content, &socialMediaPostEntityData)
-	if err != nil {
-		return model.SocialMediaPostEntityData{}, err
-	}
-	return socialMediaPostEntityData, nil
-}
+// func (ec *ExerciseController) getExerciseFromFile(fileName string) (model.SocialMediaPostEntityData, error) {
+// 	filePath, err := util.GetEmbeddedFilePath(fileName, "*.json")
+// 	if err != nil {
+// 		return model.SocialMediaPostEntityData{}, err
+// 	}
+// 	content, err := data.Data.ReadFile(filePath)
+// 	if err != nil {
+// 		return model.SocialMediaPostEntityData{}, err
+// 	}
+// 	var socialMediaPostEntityData model.SocialMediaPostEntityData
+// 	err = json.Unmarshal(content, &socialMediaPostEntityData)
+// 	if err != nil {
+// 		return model.SocialMediaPostEntityData{}, err
+// 	}
+// 	return socialMediaPostEntityData, nil
+// }
 
 func (ec *ExerciseController) getExerciseByID(c *fiber.Ctx) model.Exercise {
 	organizationId := c.Params("organizationId")

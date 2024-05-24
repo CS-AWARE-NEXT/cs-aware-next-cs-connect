@@ -21,18 +21,7 @@ func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
 			Rows:    []model.ExtendedPaginatedTableRow{},
 		}
 		for _, incident := range extendedIncidentsMap[organizationId] {
-			extendedTableData.Rows = append(extendedTableData.Rows, model.ExtendedPaginatedTableRow{
-				State:         incident.State,
-				ClosedAt:      incident.ClosedAt,
-				FirstObserved: incident.FirstObserved,
-				ID:            incident.ID,
-				Type:          incident.Type,
-				Group:         incident.Group,
-				AssignedTo:    incident.AssignedTo,
-				Where:         incident.Where,
-				Name:          incident.Name,
-				Description:   incident.Description,
-			})
+			extendedTableData.Rows = append(extendedTableData.Rows, model.ExtendedPaginatedTableRow(incident))
 		}
 		return c.JSON(extendedTableData)
 	}
@@ -41,11 +30,7 @@ func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, incident := range incidentsMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          incident.ID,
-			Name:        incident.Name,
-			Description: incident.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(incident))
 	}
 	return c.JSON(tableData)
 }

@@ -30,10 +30,12 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 		return organizationController.GetOrganization(c)
 	})
 	useOrganizationsIncidents(organizations)
+	useOrganizationsIncidentsSynthethic(organizations)
 	useOrganizationsStories(organizations)
 	useOrganizationsPolicies(organizations, context)
 	useOrganizationsPlaybooks(organizations)
 	useOrganizationsBundles(organizations)
+	useOrganizationsMalwares(organizations)
 	useOrganizationsExpertConsultancies(organizations)
 	useOrganizationsSocialMedia(organizations)
 	useOrganizationsNews(organizations)
@@ -60,6 +62,28 @@ func useOrganizationsIncidents(organizations fiber.Router) {
 	})
 	incidentsWithId.Get("/text_box", func(c *fiber.Ctx) error {
 		return incidentController.GetIncidentTextBox(c)
+	})
+}
+
+func useOrganizationsIncidentsSynthethic(organizations fiber.Router) {
+	incidentSynthethicController := controller.NewIncidentSynthethicController()
+
+	incidentsSynthethic := organizations.Group("/:organizationId/incidents_synthethic")
+	incidentsSynthethic.Get("/", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentsSynthethic(c)
+	})
+	incidentsSynthethicWithId := incidentsSynthethic.Group("/:incidentId")
+	incidentsSynthethicWithId.Get("/", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynththic(c)
+	})
+	incidentsSynthethicWithId.Get("/graph", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynthethicGraph(c)
+	})
+	incidentsSynthethicWithId.Get("/table", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynthethicTable(c)
+	})
+	incidentsSynthethicWithId.Get("/text_box", func(c *fiber.Ctx) error {
+		return incidentSynthethicController.GetIncidentSynthethicTextBox(c)
 	})
 }
 
@@ -157,6 +181,19 @@ func useOrganizationsBundles(organizations fiber.Router) {
 	})
 }
 
+func useOrganizationsMalwares(organizations fiber.Router) {
+	malwareController := controller.NewMalwareController()
+
+	malwares := organizations.Group("/:organizationId/malwares")
+	malwares.Get("/", func(c *fiber.Ctx) error {
+		return malwareController.GetMalwares(c)
+	})
+	malwareWithId := malwares.Group("/:malwareId")
+	malwareWithId.Get("/", func(c *fiber.Ctx) error {
+		return malwareController.GetMalware(c)
+	})
+}
+
 func useOrganizationsExpertConsultancies(organizations fiber.Router) {
 	expertConsultancyController := controller.NewExpertConsultancyController()
 
@@ -240,6 +277,141 @@ func useOrganizationsCharts(organizations fiber.Router) {
 	})
 	chartsWithId.Get("/bar_chart", func(c *fiber.Ctx) error {
 		return chartController.GetSocialMediaPostsPerComponentBarChart(c)
+	})
+
+	charts6 := organizations.Group("/:organizationId/charts6")
+	charts6.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts6(c)
+	})
+	charts6WithId := charts6.Group("/:chartId")
+	charts6WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart6(c)
+	})
+	charts6WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart6Data(c)
+	})
+
+	charts3 := organizations.Group("/:organizationId/charts3")
+	charts3.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts3(c)
+	})
+	charts3WithId := charts3.Group("/:chartId")
+	charts3WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart3(c)
+	})
+	charts3WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart3Data(c)
+	})
+
+	charts2 := organizations.Group("/:organizationId/charts2")
+	charts2.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts2(c)
+	})
+	charts2WithId := charts2.Group("/:chartId")
+	charts2WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart2(c)
+	})
+	charts2WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart2Data(c)
+	})
+
+	charts1 := organizations.Group("/:organizationId/charts1")
+	charts1.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts1(c)
+	})
+	charts1WithId := charts1.Group("/:chartId")
+	charts1WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart1(c)
+	})
+	charts1WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart1Data(c)
+	})
+
+	charts5 := organizations.Group("/:organizationId/charts5")
+	charts5.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts5(c)
+	})
+	charts5WithId := charts5.Group("/:chartId")
+	charts5WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart5(c)
+	})
+	charts5WithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChart5Data(c)
+	})
+
+	charts4 := organizations.Group("/:organizationId/charts4")
+	charts4.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetCharts4(c)
+	})
+	charts4WithId := charts4.Group("/:chartId")
+	charts4WithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChart4(c)
+	})
+	charts4WithId.Get("/arrives_2023", func(c *fiber.Ctx) error {
+		return chartController.GetChart4Arrives2023(c)
+	})
+	charts4WithId.Get("/departures_2023", func(c *fiber.Ctx) error {
+		return chartController.GetChart4Departures2023(c)
+	})
+	charts4WithId.Get("/arrives_challenge", func(c *fiber.Ctx) error {
+		return chartController.GetChart4ArrivesChallenge(c)
+	})
+	charts4WithId.Get("/departures_challenge", func(c *fiber.Ctx) error {
+		return chartController.GetChart4DeparturesChallenge(c)
+	})
+	charts4WithId.Get("/arrives_ecowatt", func(c *fiber.Ctx) error {
+		return chartController.GetChart4ArrivesEcowatt(c)
+	})
+	charts4WithId.Get("/departures_ecowatt", func(c *fiber.Ctx) error {
+		return chartController.GetChart4DeparturesEcowatt(c)
+	})
+
+	chartsCountryCounts := organizations.Group("/:organizationId/chartsCountryCounts")
+	chartsCountryCounts.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartsCountryCounts(c)
+	})
+	chartsCountryCountsWithId := chartsCountryCounts.Group("/:chartId")
+	chartsCountryCountsWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartCountryCounts(c)
+	})
+	chartsCountryCountsWithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChartCountryCountsData(c)
+	})
+
+	chartsAlliancesPerGeneration := organizations.Group("/:organizationId/chartsAlliancesPerGeneration")
+	chartsAlliancesPerGeneration.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartsAlliancesPerGeneration(c)
+	})
+	chartsAlliancesPerGenerationWithId := chartsAlliancesPerGeneration.Group("/:chartId")
+	chartsAlliancesPerGenerationWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartAlliancesPerGeneration(c)
+	})
+	chartsAlliancesPerGenerationWithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChartAlliancesPerGenerationData(c)
+	})
+
+	chartsUniversitiesInvolved := organizations.Group("/:organizationId/chartsUniversitiesInvolved")
+	chartsUniversitiesInvolved.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartsInvolvedUniversities(c)
+	})
+	chartsUniversitiesInvolvedWithId := chartsUniversitiesInvolved.Group("/:chartId")
+	chartsUniversitiesInvolvedWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartInvolvedUniversities(c)
+	})
+	chartsUniversitiesInvolvedWithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChartInvolvedUniversitiesData(c)
+	})
+
+	chartsEuropeanAlliances := organizations.Group("/:organizationId/chartsEuropeanAlliances")
+	chartsEuropeanAlliances.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartsEuropeanAlliances(c)
+	})
+	chartsEuropeanAlliancesWithId := chartsEuropeanAlliances.Group("/:chartId")
+	chartsEuropeanAlliancesWithId.Get("/", func(c *fiber.Ctx) error {
+		return chartController.GetChartEuropeanAlliances(c)
+	})
+	chartsEuropeanAlliancesWithId.Get("/data", func(c *fiber.Ctx) error {
+		return chartController.GetChartEuropeanAlliancesData(c)
 	})
 }
 

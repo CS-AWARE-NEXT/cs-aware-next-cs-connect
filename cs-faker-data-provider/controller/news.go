@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
@@ -27,11 +28,7 @@ func (nc *NewsController) GetAllNews(c *fiber.Ctx) error {
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, news := range newsMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          news.ID,
-			Name:        news.Name,
-			Description: news.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(news))
 	}
 	return c.JSON(tableData)
 }
@@ -53,8 +50,10 @@ func (nc *NewsController) getNewsByID(c *fiber.Ctx) model.News {
 
 func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	newsEndpoint := os.Getenv("NEWS_ENDPOINT")
+	log.Info("preparing for request at ", newsEndpoint)
 	search := c.Query("search")
 	if search == "" {
+		log.Info("search parameter is empty, so empty result")
 		return c.JSON(model.SocialMediaPostData{Items: []model.SocialMediaPost{}})
 	}
 
@@ -64,6 +63,7 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	}
 	limitInt, err := strconv.Atoi(limit)
 	if err != nil {
+		log.Error("limit parameter is not a number ", err.Error())
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{"error": "limit parameter is not a number"})
 	}
@@ -74,10 +74,13 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	}
 	offsetInt, err := strconv.Atoi(offset)
 	if err != nil {
+		log.Error("offset parameter is not a number ", err.Error())
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{"error": "offset parameter is not a number"})
 	}
+	log.Info("finished preparation for request")
 
+	log.Info("creating body ", search, " ", offset, " ", offsetInt, " ", limit, " ", limitInt)
 	keywords := strings.Split(search, " ")
 	body, err := json.Marshal(model.NewsPostBody{
 		InstanceID:     "javi",
@@ -88,6 +91,7 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 		NewerThan:      "2021-12-13T13:57:11.819492600Z",
 	})
 	if err != nil {
+		log.Error("error creating body ", err.Error())
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{"error": err.Error()})
 	}
@@ -99,6 +103,7 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 		bytes.NewBuffer(body),
 	)
 	if err != nil {
+		log.Error("error creating request ", err.Error())
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{"error": err.Error()})
 	}
@@ -108,15 +113,27 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		log.Error("error requesting news posts ", err.Error())
 		return c.JSON(fiber.Map{"error": err.Error()})
 	}
 	defer resp.Body.Close()
 
+	log.Info("Response Status: ", resp.Status)
+	log.Info("Response Headers: ", resp.Header)
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Error("error reading response body ", string(respBody), err.Error())
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{"error": err.Error()})
+	}
+	log.Info("Response body with no json convertion: ", string(respBody))
+
 	log.Info("unmarshaling news posts")
 	var newsPosts model.NewsPosts
 	// we cannot use Unmarshal because we have to read from the Body reader first
-	err = json.NewDecoder(resp.Body).Decode(&newsPosts)
+	err = json.NewDecoder(bytes.NewReader(respBody)).Decode(&newsPosts)
 	if err != nil {
+		log.Error("error unmarshaling news posts ", err.Error())
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{"error": err.Error()})
 	}
@@ -130,7 +147,7 @@ func (nc *NewsController) fromNewsPosts(
 	posts := []model.SocialMediaPost{}
 	log.Info("parsing news posts ", len(newsPosts.Entries), " ", newsPosts.PageInfo.TotalCount)
 	for _, post := range newsPosts.Entries {
-		log.Info(post.OriginalText.Title, post.OriginalText.Body)
+		log.Info("parsing news post with title ", post.OriginalText.Title)
 		postId := post.ID
 		posts = append(posts, model.SocialMediaPost{
 			ID:      postId,
@@ -138,7 +155,9 @@ func (nc *NewsController) fromNewsPosts(
 			Content: nc.buildContent(post.OriginalText.Title, post.OriginalText.Body),
 			URL:     postId,
 		})
+		log.Info("finished parsing news post with title ", post.OriginalText.Title)
 	}
+	log.Info("finished parsing news posts ", len(newsPosts.Entries), " ", newsPosts.PageInfo.TotalCount)
 	return model.SocialMediaPostData{
 		TotalCount: newsPosts.PageInfo.TotalCount,
 		Items:      posts,

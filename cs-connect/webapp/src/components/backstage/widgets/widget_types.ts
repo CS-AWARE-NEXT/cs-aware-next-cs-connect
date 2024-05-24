@@ -7,6 +7,7 @@ export enum WidgetType {
     Chart = 'chart',
     Exercise = 'exercise',
     Graph = 'graph',
+    Malware = 'malware',
     PaginatedTable = 'paginated-table',
     Policy = 'policy',
     List = 'list',

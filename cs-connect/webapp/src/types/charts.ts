@@ -26,6 +26,7 @@ export type SimpleReferenceLine = {
     x: string;
     label: string;
     stroke: string;
+    strokeWidth?: string | number | undefined;
 };
 
 export type LineDot = {
@@ -51,6 +52,8 @@ export type SimpleBarChartType = {
     chartType: ChartType.SimpleBar;
     barData: SimpleBarChartData[];
     barColor: BarColor;
+    referenceLines: SimpleReferenceLine[];
+    dataSuffix?: string;
 };
 
 export type SimpleBarChartData = {

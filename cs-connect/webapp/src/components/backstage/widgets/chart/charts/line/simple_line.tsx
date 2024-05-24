@@ -125,6 +125,7 @@ const SimpleLineChart: FC<Props> = ({
                                 key={line.x}
                                 x={line.x}
                                 stroke={line.stroke}
+                                strokeWidth={line.strokeWidth || 2}
                                 label={{
                                     value: line.label,
                                     position: 'insideTop',

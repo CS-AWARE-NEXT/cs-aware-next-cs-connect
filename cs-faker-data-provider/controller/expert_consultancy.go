@@ -19,11 +19,7 @@ func (ec *ExpertConsultancyController) GetExpertConsultancies(c *fiber.Ctx) erro
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, expertConsultancy := range expertConsultancyMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          expertConsultancy.ID,
-			Name:        expertConsultancy.Name,
-			Description: expertConsultancy.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(expertConsultancy))
 	}
 	return c.JSON(tableData)
 }

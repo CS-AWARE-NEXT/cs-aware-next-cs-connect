@@ -24,11 +24,7 @@ func (bc *BundleController) GetBundles(c *fiber.Ctx) error {
 		Rows:    []model.PaginatedTableRow{},
 	}
 	for _, bundle := range bundleMap[organizationId] {
-		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow{
-			ID:          bundle.ID,
-			Name:        bundle.Name,
-			Description: bundle.Description,
-		})
+		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(bundle))
 	}
 	return c.JSON(tableData)
 }
