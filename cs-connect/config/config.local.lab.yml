@@ -306,4 +306,17 @@ organizations:
             type: bundle
             url: http://www.isislab.it:3000/cs-data-provider/organizations/4/bundles/:id/content
           - type: channel
+      - name: Charts
+        id: "99"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/4/charts
+        widgets:
+          - name: Bar Chart
+            type: chart
+            chartType: simple-bar
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/4/charts/:id/bar_chart
+          - name: Line Chart
+            type: chart
+            chartType: simple-line
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/4/charts/:id/line_chart
+          - type: channel
     widgets: []
