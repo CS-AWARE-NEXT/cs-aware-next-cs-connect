@@ -1245,7 +1245,7 @@ func (cc *ChartController) getChartEuropeanAlliancesByID(c *fiber.Ctx) model.Cha
 }
 
 var chartsMap = map[string][]model.Chart{
-	"9": {
+	"4": {
 		{
 			ID:          "922e8e53-ffe8-4887-ae21-543674ad30d9",
 			Name:        "Number of Posts",
