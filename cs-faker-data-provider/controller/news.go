@@ -110,6 +110,14 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	req.Header.Set("Content-Type", "application/json")
 
 	log.Info("requesting news posts")
+	// TODO: try this to fix the error under HTTPS on AWS
+	// client := &http.Client{
+	// 	Transport: &http.Transport{
+	// 		TLSClientConfig: &tls.Config{
+	// 			InsecureSkipVerify: true, // Use only for testing, not in production
+	// 		},
+	// 	},
+	// }
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
