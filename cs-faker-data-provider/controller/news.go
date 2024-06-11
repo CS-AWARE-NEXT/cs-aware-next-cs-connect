@@ -2,6 +2,7 @@ package controller
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -111,14 +112,14 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 
 	log.Info("requesting news posts")
 	// TODO: try this to fix the error under HTTPS on AWS
-	// client := &http.Client{
-	// 	Transport: &http.Transport{
-	// 		TLSClientConfig: &tls.Config{
-	// 			InsecureSkipVerify: true, // Use only for testing, not in production
-	// 		},
-	// 	},
-	// }
-	client := &http.Client{}
+	client := &http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: true, // Use only for testing, not in production
+			},
+		},
+	}
+	// client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Error("error requesting news posts ", err.Error())
