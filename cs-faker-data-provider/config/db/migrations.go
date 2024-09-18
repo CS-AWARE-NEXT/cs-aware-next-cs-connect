@@ -97,11 +97,12 @@ var migrations = []Migration{
 		fromVersion: semver.MustParse("0.2.0"),
 		toVersion:   semver.MustParse("0.3.0"),
 		migrationFunc: func(e sqlx.Ext, db *DB) error {
-			if _, err := e.Exec(`
-				ALTER TABLE CSFDP_Issue ADD DeleteAt bigint DEFAULT 0;
-			`); err != nil {
-				return errors.Wrapf(err, "failed updating table CSFDP_Issue")
-			}
+			// TODO: add it the first time and then comment it out
+			// if _, err := e.Exec(`
+			// 	ALTER TABLE CSFDP_Issue ADD DeleteAt bigint DEFAULT 0;
+			// `); err != nil {
+			// 	return errors.Wrapf(err, "failed updating table CSFDP_Issue")
+			// }
 			return nil
 		},
 	},
