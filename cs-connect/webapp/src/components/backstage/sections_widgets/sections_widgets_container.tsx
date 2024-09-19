@@ -67,7 +67,7 @@ const SectionsWidgetsContainer = ({
     const ecosystem = useOrganization(organizationId);
 
     // This currently suppose that the children are shown for issues,
-    // that are placed always as the first section in the ecosystem organization.
+    // that are placed always as the section at index 0 in the ecosystem organization.
     // Maybe it's needed to add a flag to indicate which is the issues section in the configuration file,
     // the reason is that the section may not be called issues or it may not be the first one
     // TODO: Retrieve the Issue section by using the isIssues flag on sections
