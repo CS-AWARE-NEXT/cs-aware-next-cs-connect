@@ -187,6 +187,6 @@ var columns = []model.PaginatedTableColumn{
 		Title: "Name",
 	},
 	{
-		Title: "Objectives And Research Area",
+		Title: "Summary Of Event and Questions For Ecosystem",
 	},
 }
