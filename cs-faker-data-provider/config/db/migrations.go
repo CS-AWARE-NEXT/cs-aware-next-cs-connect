@@ -98,6 +98,7 @@ var migrations = []Migration{
 		toVersion:   semver.MustParse("0.3.0"),
 		migrationFunc: func(e sqlx.Ext, db *DB) error {
 			// TODO: add it the first time and then comment it out
+			// FIX: but it needs to pass if the column already exists
 			// if _, err := e.Exec(`
 			// 	ALTER TABLE CSFDP_Issue ADD DeleteAt bigint DEFAULT 0;
 			// `); err != nil {
