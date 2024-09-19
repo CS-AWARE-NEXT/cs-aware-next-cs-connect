@@ -54,11 +54,11 @@ const ObjectivesStep = ({
             >
                 {errorData.nameError}
             </PaddedErrorMessage>
-            <Text>{'Objectives And Research Area'}</Text>
+            <Text>{'Summary Of Event and Questions For Ecosystem'}</Text>
             <TextArea
                 style={{minHeight: '20vh'}}
                 key={'objectives'}
-                placeholder={'Insert objectives and research area'}
+                placeholder={'Insert summary of event and questions for ecosystem'}
                 value={objectives}
                 onChange={(e) => {
                     setObjectives(e.target.value);
