@@ -26,24 +26,19 @@ import {
     ecosystemAttachmentsWidget,
     ecosystemElementsWidget,
     ecosystemObjectivesWidget,
-    ecosystemOutcomesWidget,
-    ecosystemRolesWidget,
 } from 'src/constants';
 import {useOrganization} from 'src/hooks';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {HorizontalSpacer} from 'src/components/backstage/grid';
 import {ErrorMessage} from 'src/components/commons/messages';
 import {SectionInfo} from 'src/types/organization';
-import {
-    Attachment,
-    ElementData,
-    Outcome,
-    StepRole,
-} from 'src/types/scenario_wizard';
+import {Attachment, ElementData} from 'src/types/scenario_wizard';
 
 import ObjectivesStep from './steps/objectives_step';
-import OutcomesStep, {fillOutcomes} from './steps/outcomes_step';
-import RolesStep from './steps/roles_step';
+import {fillOutcomes} from './steps/outcomes_step';
+
+// import OutcomesStep, {fillOutcomes} from './steps/outcomes_step';
+// import RolesStep from './steps/roles_step';
 import TechnologyStep from './steps/technology_step';
 import AttachmentsStep, {fillAttachments} from './steps/attachments_step';
 
@@ -62,8 +57,9 @@ type Props = {
 type WizardData = {
     name: string;
     objectives: string;
-    outcomes: string[];
-    roles: StepRole[];
+
+    // outcomes: string[];
+    // roles: StepRole[];
     elements: any;
     attachments: string[];
 }
@@ -89,22 +85,23 @@ const getSteps = (organizationsData: any, wizardData: any, setWizardData: any, w
                     setWizardDataError={setWizardDataError}
                 />),
         },
-        {
-            title: formatStringToCapitalize(ecosystemOutcomesWidget),
-            content: (
-                <OutcomesStep
-                    data={wizardData.outcomes}
-                    setWizardData={setWizardData}
-                />),
-        },
-        {
-            title: formatStringToCapitalize(ecosystemRolesWidget),
-            content: (
-                <RolesStep
-                    data={wizardData.roles}
-                    setWizardData={setWizardData}
-                />),
-        },
+
+        // {
+        //     title: formatStringToCapitalize(ecosystemOutcomesWidget),
+        //     content: (
+        //         <OutcomesStep
+        //             data={wizardData.outcomes}
+        //             setWizardData={setWizardData}
+        //         />),
+        // },
+        // {
+        //     title: formatStringToCapitalize(ecosystemRolesWidget),
+        //     content: (
+        //         <RolesStep
+        //             data={wizardData.roles}
+        //             setWizardData={setWizardData}
+        //         />),
+        // },
         {
             title: formatStringToCapitalize(ecosystemElementsWidget),
             content: (
@@ -170,8 +167,8 @@ const ScenarioWizardModal = ({
             });
         }
 
-        const outcomes = prefillWizardData.outcomes ? (prefillWizardData.outcomes as Outcome[]).
-            map((outcome) => outcome.outcome) : null;
+        // const outcomes = prefillWizardData.outcomes ? (prefillWizardData.outcomes as Outcome[]).
+        //     map((outcome) => outcome.outcome) : null;
 
         const attachments = prefillWizardData.attachments ? (prefillWizardData.attachments as Attachment[]).
             map((attachment) => attachment.attachment) : null;
@@ -179,8 +176,9 @@ const ScenarioWizardModal = ({
         const data = {
             name: prefillWizardData.name,
             objectives: prefillWizardData.objectivesAndResearchArea,
-            outcomes,
-            roles: prefillWizardData.roles,
+
+            // outcomes,
+            // roles: prefillWizardData.roles,
             elements,
             attachments,
         } as WizardData;
@@ -255,9 +253,12 @@ const ScenarioWizardModal = ({
             id: '',
             name: wizardData.name,
             objectivesAndResearchArea: wizardData.objectives,
-            outcomes: fillOutcomes(wizardData.outcomes || []),
+
+            // outcomes: fillOutcomes(wizardData.outcomes || []),
+            // roles: wizardData.roles,
+            outcomes: fillOutcomes([]),
+            roles: [],
             elements: Object.values(wizardData.elements).flat(),
-            roles: wizardData.roles,
             attachments: fillAttachments(wizardData.attachments || []),
         };
 
