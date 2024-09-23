@@ -1,15 +1,12 @@
 import React from 'react';
-
 import styled from 'styled-components';
-
 import {Empty} from 'antd';
 
 import {Section} from 'src/types/organization';
-
 import EcosystemGraphWrapper from 'src/components/backstage/widgets/graph/wrappers/ecosystem_graph_wrapper';
-
 import {buildEcosystemGraphUrl} from 'src/hooks';
 import {getSystemConfig} from 'src/config/config';
+import CustomViewLinkListWrapper from 'src/components/backstage/widgets/link_list/wrappers/custom_view_link_list_wrapper';
 
 type Props = {
     section: Section;
@@ -34,6 +31,15 @@ const CustomSectionContent = ({section, customView}: Props) => {
                 />) : <Empty style={{marginTop: '20px'}}/>
         );
     }
+    if (customView === 'participants-link-list') {
+        return (
+            <CustomViewLinkListWrapper
+                name={'Channels'}
+                url={`${section.url}/participants_link_list`}
+            />
+        );
+    }
+
     return <></>;
 };
 
