@@ -41,6 +41,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsNews(organizations)
 	useOrganizationsExercises(organizations)
 	useOrganizationsCharts(organizations)
+	useOrganizationsLinks(organizations, context)
 }
 
 func useOrganizationsIncidents(organizations fiber.Router) {
@@ -127,6 +128,19 @@ func useOrganizationsPolicies(organizations fiber.Router, context *config.Contex
 	})
 	noOrganizationIdPolicy.Get("/ten_most_common", func(c *fiber.Ctx) error {
 		return policyController.GetTenMostCommonPolicies(c)
+	})
+}
+
+func useOrganizationsLinks(organizations fiber.Router, context *config.Context) {
+	linkRepository := context.RepositoriesMap["links"].(*repository.LinkRepository)
+	linksController := controller.NewLinkController(linkRepository)
+
+	links := organizations.Group("/:organizationId/:parentId/links")
+	links.Get("/", func(c *fiber.Ctx) error {
+		return linksController.GetLinks(c)
+	})
+	links.Post("/", func(c *fiber.Ctx) error {
+		return linksController.SaveLink(c)
 	})
 }
 
