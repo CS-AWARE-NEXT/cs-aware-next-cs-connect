@@ -142,6 +142,9 @@ func useOrganizationsLinks(organizations fiber.Router, context *config.Context) 
 	links.Post("/", func(c *fiber.Ctx) error {
 		return linksController.SaveLink(c)
 	})
+	links.Delete("/:linkId", func(c *fiber.Ctx) error {
+		return linksController.DeleteLink(c)
+	})
 }
 
 func useOrganizationsStories(organizations fiber.Router) {
@@ -436,9 +439,21 @@ func useEcosystem(basePath fiber.Router, context *config.Context) {
 	issueController := controller.NewIssueController(issueRepository)
 	ecosystemGraphController := controller.NewEcosystemGraphController(ecosystemGraphRepository, cacheRepository)
 
+	linksRepository := context.RepositoriesMap["links"].(*repository.LinkRepository)
+	linksController := controller.NewLinkController(linksRepository)
+
 	ecosystem := basePath.Group("/issues")
 	ecosystem.Get("/", func(c *fiber.Ctx) error {
 		return issueController.GetIssues(c)
+	})
+	ecosystem.Get("/:organizationId/:parentId/links", func(c *fiber.Ctx) error {
+		return linksController.GetLinks(c)
+	})
+	ecosystem.Post("/:organizationId/:parentId/links", func(c *fiber.Ctx) error {
+		return linksController.SaveLink(c)
+	})
+	ecosystem.Delete("/:organizationId/:parentId/links/:linkId", func(c *fiber.Ctx) error {
+		return linksController.DeleteLink(c)
 	})
 	ecosystem.Get("/ecosystem_graph", func(c *fiber.Ctx) error {
 		return ecosystemGraphController.GetEcosystemGraph(c)

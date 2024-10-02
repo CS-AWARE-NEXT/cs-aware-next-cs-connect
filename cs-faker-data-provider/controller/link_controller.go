@@ -40,7 +40,7 @@ func (lc *LinkController) GetLinks(c *fiber.Ctx) error {
 }
 
 func (lc *LinkController) SaveLink(c *fiber.Ctx) error {
-	log.Printf("Saving links")
+	log.Printf("Saving link")
 	var link model.Link
 	err := json.Unmarshal(c.Body(), &link)
 	if err != nil {
@@ -66,4 +66,24 @@ func (lc *LinkController) SaveLink(c *fiber.Ctx) error {
 	}
 	log.Printf("Saved link")
 	return c.JSON(savedLink)
+}
+
+func (lc *LinkController) DeleteLink(c *fiber.Ctx) error {
+	organizationId := c.Params("organizationId")
+	parentId := c.Params("parentId")
+	linkId := c.Params("linkId")
+
+	log.Printf("Deleting link %s for org %s and parent %s", linkId, organizationId, parentId)
+
+	err := lc.linkRepository.DeleteLinkByID(linkId)
+	if err != nil {
+		log.Printf("Could not delete link: %s", err.Error())
+		return c.JSON(fiber.Map{
+			"error": fmt.Sprintf("Could not delete link %s due to %s", linkId, err.Error()),
+		})
+	}
+	log.Printf("Deleted link")
+	return c.JSON(fiber.Map{
+		"deleted": linkId,
+	})
 }

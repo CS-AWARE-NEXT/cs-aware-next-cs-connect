@@ -2,6 +2,7 @@ package repository
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config/db"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
@@ -55,4 +56,22 @@ func (r *LinkRepository) SaveLink(link model.Link) (model.Link, error) {
 		return model.Link{}, errors.Wrap(err, "could not commit transaction")
 	}
 	return link, nil
+}
+
+func (r *LinkRepository) DeleteLinkByID(id string) error {
+	tx, err := r.db.DB.Beginx()
+	if err != nil {
+		return errors.Wrap(err, "could not begin transaction")
+	}
+	defer r.db.FinalizeTransaction(tx)
+
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Delete("CSFDP_links").
+		Where(sq.Eq{"ID": id})); err != nil {
+		return errors.Wrap(err, fmt.Sprintf("could not delete link with id %s", id))
+	}
+	if err := tx.Commit(); err != nil {
+		return errors.Wrap(err, "could not commit transaction")
+	}
+	return nil
 }
