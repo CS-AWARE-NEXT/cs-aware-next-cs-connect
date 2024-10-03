@@ -4,6 +4,7 @@ import {
     Button,
     Card,
     Col,
+    Collapse,
     Divider,
     Form,
     Input,
@@ -24,9 +25,10 @@ import {buildQuery} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {LinkListData, LinkListItem} from 'src/types/list';
 import {VerticalSpacer} from 'src/components/backstage/grid';
-import {saveLinkListItem} from 'src/clients';
+import {deleteLinkListItem, saveLinkListItem} from 'src/clients';
 
 const {Item} = Form;
+const {Panel} = Collapse;
 
 type Props = {
     data: LinkListData;
@@ -37,6 +39,7 @@ type Props = {
     flexGrow?: number;
     marginRight?: string;
     forceRefresh?: Dispatch<SetStateAction<boolean>>;
+    singleLink?: boolean;
 };
 
 const chunkItems = (array: any[], size: number): any[] => {
@@ -58,6 +61,7 @@ const LinkList = ({
     sectionId,
     flexGrow = 1,
     marginRight = '0',
+    singleLink = false,
     forceRefresh,
 }: Props) => {
     console.log('parentId', parentId, 'sectionId', sectionId);
@@ -89,6 +93,17 @@ const LinkList = ({
         }
     };
 
+    const onDeleteLinkListItem = (linkListItemId: string | undefined) => {
+        if (!linkListItemId) {
+            console.error('No linkListItemId provided');
+            return;
+        }
+        deleteLinkListItem(linkListItemId, url);
+        if (forceRefresh) {
+            forceRefresh((prev) => !prev);
+        }
+    };
+
     return (
         <Container
             id={id}
@@ -114,7 +129,7 @@ const LinkList = ({
                     >
                         {itemPair.map((item: LinkListItem) => (
                             <Col
-                                span={12}
+                                span={singleLink ? 24 : 12}
                                 key={item.id}
                             >
                                 <Card
@@ -136,6 +151,16 @@ const LinkList = ({
                                                         {`Go to '${item.name}' channel`}
                                                     </a>
                                                 </Button>
+                                                {isUserAdmin &&
+                                                    <Button
+                                                        style={{marginLeft: '8px'}}
+                                                        onClick={() => onDeleteLinkListItem(item.id)}
+                                                        key='delete'
+                                                        type='primary'
+                                                        danger={true}
+                                                    >
+                                                        {'Delete'}
+                                                    </Button>}
                                                 <Divider>{'Channel Description'}</Divider>
                                             </>
                                         )}
@@ -158,46 +183,56 @@ const LinkList = ({
                             style={{maxWidth: 1000}}
                         />
                         <VerticalSpacer size={24}/>
+                        <Collapse
+                            size='small'
+                            style={{maxWidth: 1000}}
+                        >
+                            <Panel
+                                id={'add-channel-panel'}
+                                key={'add-channel-panel'}
+                                header={'Add Channel Link'}
+                                forceRender={true}
+                            >
+                                <Form
+                                    name='channelCreation'
+                                    layout='vertical'
+                                    style={{maxWidth: 1000}}
+                                    onFinish={onFinish}
+                                >
+                                    <Item
+                                        name='channelName'
+                                        label='Channel Name'
+                                        rules={[{required: true}]}
+                                    >
+                                        <Input placeholder='Insert channel name'/>
+                                    </Item>
+
+                                    <Item
+                                        name='channelDescription'
+                                        label='Channel Description'
+                                        rules={[{required: true}]}
+                                    >
+                                        <Input placeholder='Insert channel description'/>
+                                    </Item>
+
+                                    <Item
+                                        name='channelUrl'
+                                        label='Channel URL'
+                                        rules={[{required: true}]}
+                                    >
+                                        <Input placeholder='Insert channel URL'/>
+                                    </Item>
+
+                                    <Button
+                                        type='primary'
+                                        htmlType='submit'
+                                    >
+                                        {'Add Channel'}
+                                    </Button>
+                                </Form>
+                            </Panel>
+                        </Collapse>
                     </>}
-
-                {isUserAdmin &&
-                    <Form
-                        name='channelCreation'
-                        layout='vertical'
-                        style={{maxWidth: 1000}}
-                        onFinish={onFinish}
-                    >
-                        <Item
-                            name='channelName'
-                            label='Channel Name'
-                            rules={[{required: true}]}
-                        >
-                            <Input placeholder='Insert channel name'/>
-                        </Item>
-
-                        <Item
-                            name='channelDescription'
-                            label='Channel Description'
-                            rules={[{required: true}]}
-                        >
-                            <Input placeholder='Insert channel description'/>
-                        </Item>
-
-                        <Item
-                            name='channelUrl'
-                            label='Channel URL'
-                            rules={[{required: true}]}
-                        >
-                            <Input placeholder='Insert channel URL'/>
-                        </Item>
-
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                        >
-                            {'Add Channel'}
-                        </Button>
-                    </Form>}
             </>
         </Container>
     );
