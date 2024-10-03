@@ -14,3 +14,16 @@ export const fromStrings = (strings: string[] | undefined): ListData => {
     const items = [...new Set(strings)].map((s) => ({id: s, text: s}));
     return {items};
 };
+
+export interface LinkListData {
+    items: LinkListItem[];
+}
+
+export interface LinkListItem {
+    id?: string;
+    name: string;
+    description: string;
+    to: string;
+    organizationId: string;
+    parentId: string;
+}
