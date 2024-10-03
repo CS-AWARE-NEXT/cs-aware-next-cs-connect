@@ -1,11 +1,13 @@
-import React, {createContext} from 'react';
+import React, {createContext, useContext} from 'react';
 import styled from 'styled-components';
 
+import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {useNavHighlighting, useSectionData} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import PaginatedTable from 'src/components/backstage/widgets/paginated_table/paginated_table';
 import {Section} from 'src/types/organization';
 import Loading from 'src/components/commons/loading';
+import CustomViewLinkListWrapper from 'src/components/backstage//widgets/link_list/wrappers/custom_view_link_list_wrapper';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 import CustomSectionContent from './custom_section_content';
@@ -17,6 +19,8 @@ type Props = {
 };
 
 const SectionList = ({section}: Props) => {
+    const organizationId = useContext(OrganizationIdContext);
+
     const {id, internal, customView, name, url} = section;
 
     const data = useSectionData(section);
@@ -48,9 +52,19 @@ const SectionList = ({section}: Props) => {
         );
     }
 
+    const isIssues = section && section.isIssues;
+    const issuesAlertsUrl = `${section.url}/${organizationId}/${section.id}/links`;
+
     return (
         <Body>
             <SectionUrlContext.Provider value={url}>
+                {isIssues && (
+                    <CustomViewLinkListWrapper
+                        name='Alerts'
+                        url={issuesAlertsUrl}
+                        sectionParentId={section.id}
+                        singleLink={true}
+                    />)}
                 {content}
             </SectionUrlContext.Provider>
         </Body>
