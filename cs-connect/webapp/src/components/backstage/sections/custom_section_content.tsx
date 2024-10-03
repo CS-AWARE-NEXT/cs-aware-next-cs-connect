@@ -31,11 +31,13 @@ const CustomSectionContent = ({section, customView}: Props) => {
                 />) : <Empty style={{marginTop: '20px'}}/>
         );
     }
+
     if (customView === 'participants-link-list') {
         return (
             <CustomViewLinkListWrapper
                 name={'Channels'}
-                url={`${section.url}/participants_link_list`}
+                url={section.url}
+                sectionParentId={section.id}
             />
         );
     }
