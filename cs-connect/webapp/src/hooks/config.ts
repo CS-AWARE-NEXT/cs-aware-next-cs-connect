@@ -54,6 +54,10 @@ const hideOptions = (showOptionsConfig: ShowOptionsConfig): NodeJS.Timeout[][] =
                     break;
                 }
             }
+            const openDirectMessageMenuItem = document.getElementById('openDirectMessageMenuItem');
+            if (openDirectMessageMenuItem) {
+                openDirectMessageMenuItem.style.display = 'none';
+            }
         }
         if (!showOptionsConfig.showDefaultChannels) {
             const townSquare = document.getElementById('sidebarItem_town-square')?.parentElement;
@@ -66,10 +70,6 @@ const hideOptions = (showOptionsConfig: ShowOptionsConfig): NodeJS.Timeout[][] =
         const offTopic = document.getElementById('sidebarItem_off-topic')?.parentElement;
         if (offTopic) {
             offTopic.style.display = 'none';
-        }
-        const openDirectMessageMenuItem = document.getElementById('openDirectMessageMenuItem');
-        if (openDirectMessageMenuItem) {
-            openDirectMessageMenuItem.style.display = 'none';
         }
     }, estimatedOptionsLoadTime);
 

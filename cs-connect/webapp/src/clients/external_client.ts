@@ -6,7 +6,7 @@ import {PaginatedTableData} from 'src/types/paginated_table';
 import {SectionInfo, SectionInfoParams} from 'src/types/organization';
 import {TableData} from 'src/types/table';
 import {TextBoxData} from 'src/types/text_box';
-import {ListData} from 'src/types/list';
+import {LinkListData, LinkListItem, ListData} from 'src/types/list';
 import {TimelineData} from 'src/types/timeline';
 import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
@@ -117,6 +117,26 @@ export const fetchListData = async (url: string): Promise<ListData> => {
     let data = await doGet<ListData>(url);
     if (!data) {
         data = {items: []} as ListData;
+    }
+    return data;
+};
+
+export const saveLinkListItem = async (params: LinkListItem, url: string): Promise<void> => {
+    await doPost<void>(
+        url,
+        JSON.stringify(params),
+    );
+};
+
+export const deleteLinkListItem = async (id: string, url: string): Promise<void> => {
+    const data = await doDelete(`${url}/${id}`);
+    return data;
+};
+
+export const fetchLinkListData = async (url: string): Promise<LinkListData> => {
+    let data = await doGet<LinkListData>(url);
+    if (!data) {
+        data = {items: []} as LinkListData;
     }
     return data;
 };

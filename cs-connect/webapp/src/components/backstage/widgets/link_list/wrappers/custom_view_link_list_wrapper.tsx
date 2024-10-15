@@ -1,20 +1,23 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
-// import {useListData} from 'src/hooks';
-// import {formatUrlWithId} from 'src/helpers';
+import {useLinkListData} from 'src/hooks';
 import {SectionContext} from 'src/components/rhs/rhs';
 import LinkList from 'src/components/backstage/widgets/link_list/link_list';
 
 type Props = {
     name?: string;
     url?: string;
+    sectionParentId?: string;
+    singleLink?: boolean;
 };
 
 const CustomViewLinkListWrapper = ({
     name = '',
     url = '',
+    sectionParentId = '',
+    singleLink = false,
 }: Props) => {
     const sectionContextOptions = useContext(SectionContext);
     const {params: {sectionId}} = useRouteMatch<{sectionId: string}>();
@@ -26,15 +29,19 @@ const CustomViewLinkListWrapper = ({
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
 
-    // const data = useListData(formatUrlWithId(url, sectionIdForUrl));
-    const data = {items: []};
+    // const data = {items: []};
+    const [refresh, forceRefresh] = useState<boolean>(false);
+    const data = useLinkListData(url, refresh);
 
     return (
         <LinkList
             data={data}
             name={name}
+            url={url}
             sectionId={sectionIdForUrl}
-            parentId={parentId}
+            parentId={sectionParentId ?? parentId}
+            forceRefresh={forceRefresh}
+            singleLink={singleLink}
         />
     );
 };

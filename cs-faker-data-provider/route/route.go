@@ -41,6 +41,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsNews(organizations)
 	useOrganizationsExercises(organizations)
 	useOrganizationsCharts(organizations)
+	useOrganizationsLinks(organizations, context)
 }
 
 func useOrganizationsIncidents(organizations fiber.Router) {
@@ -127,6 +128,22 @@ func useOrganizationsPolicies(organizations fiber.Router, context *config.Contex
 	})
 	noOrganizationIdPolicy.Get("/ten_most_common", func(c *fiber.Ctx) error {
 		return policyController.GetTenMostCommonPolicies(c)
+	})
+}
+
+func useOrganizationsLinks(organizations fiber.Router, context *config.Context) {
+	linkRepository := context.RepositoriesMap["links"].(*repository.LinkRepository)
+	linksController := controller.NewLinkController(linkRepository)
+
+	links := organizations.Group("/:organizationId/:parentId/links")
+	links.Get("/", func(c *fiber.Ctx) error {
+		return linksController.GetLinks(c)
+	})
+	links.Post("/", func(c *fiber.Ctx) error {
+		return linksController.SaveLink(c)
+	})
+	links.Delete("/:linkId", func(c *fiber.Ctx) error {
+		return linksController.DeleteLink(c)
 	})
 }
 
@@ -422,9 +439,21 @@ func useEcosystem(basePath fiber.Router, context *config.Context) {
 	issueController := controller.NewIssueController(issueRepository)
 	ecosystemGraphController := controller.NewEcosystemGraphController(ecosystemGraphRepository, cacheRepository)
 
+	linksRepository := context.RepositoriesMap["links"].(*repository.LinkRepository)
+	linksController := controller.NewLinkController(linksRepository)
+
 	ecosystem := basePath.Group("/issues")
 	ecosystem.Get("/", func(c *fiber.Ctx) error {
 		return issueController.GetIssues(c)
+	})
+	ecosystem.Get("/:organizationId/:parentId/links", func(c *fiber.Ctx) error {
+		return linksController.GetLinks(c)
+	})
+	ecosystem.Post("/:organizationId/:parentId/links", func(c *fiber.Ctx) error {
+		return linksController.SaveLink(c)
+	})
+	ecosystem.Delete("/:organizationId/:parentId/links/:linkId", func(c *fiber.Ctx) error {
+		return linksController.DeleteLink(c)
 	})
 	ecosystem.Get("/ecosystem_graph", func(c *fiber.Ctx) error {
 		return ecosystemGraphController.GetEcosystemGraph(c)

@@ -73,6 +73,13 @@ const SectionDetails = () => {
         enableActions = true;
     }
 
+    // if the internal section is part of the ecosystem organization,
+    // everyone in the ecosystem should be able to see the actions
+    const isEcosystemOrganization = organization && organization.isEcosystem;
+    if (isSectionInternal && isEcosystemOrganization) {
+        enableActions = true;
+    }
+
     const onDelete = async () => {
         if (sectionInfo && section) {
             await deleteSectionInfo(sectionInfo.id, section.url);
