@@ -33,6 +33,7 @@ import {
     fetchEcosystemGraphData,
     fetchExerciseData,
     fetchGraphData,
+    fetchLinkListData,
     fetchListData,
     fetchNewsPostData,
     fetchPaginatedTableData,
@@ -65,7 +66,7 @@ import {navigateToUrl} from 'src/browser_routing';
 import {resolve} from 'src/utils';
 import {PARENT_ID_PARAM} from 'src/constants';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
-import {ListData} from 'src/types/list';
+import {LinkListData, ListData} from 'src/types/list';
 import {TimelineData} from 'src/types/timeline';
 import {formatName, formatSectionPath} from 'src/helpers';
 import {UserOption} from 'src/types/users';
@@ -416,6 +417,27 @@ export const useListData = (url: string): ListData => {
         };
     }, [url]);
     return listData as ListData;
+};
+
+export const useLinkListData = (url: string, refresh: boolean): LinkListData => {
+    const [linkListData, setLinkListData] = useState<LinkListData | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchLinkListDataAsync() {
+            const linkListDataResult = await fetchLinkListData(url);
+            if (!isCanceled) {
+                setLinkListData(linkListDataResult);
+            }
+        }
+
+        fetchLinkListDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url, refresh]);
+    return linkListData as LinkListData;
 };
 
 export const useTimelineData = (url: string): TimelineData => {

@@ -1,5 +1,5 @@
 import {Avatar, Button, List} from 'antd';
-import {FileOutlined, LinkOutlined, TagsOutlined} from '@ant-design/icons';
+import {LinkOutlined, TagsOutlined} from '@ant-design/icons';
 import React, {Dispatch, SetStateAction, useState} from 'react';
 import styled from 'styled-components';
 import {cloneDeep} from 'lodash';
@@ -32,18 +32,21 @@ const AttachmentsStep = ({data, setWizardData}: Props) => {
                 <Button
                     type='primary'
                     icon={<LinkOutlined/>}
-                    style={{width: '48%', marginLeft: '1%', marginRight: '1%'}}
+
+                    // style={{width: '48%', marginLeft: '1%', marginRight: '1%'}}
+                    style={{width: '98%', marginLeft: '1%', marginRight: '1%'}}
                     onClick={() => setAttachments((prev) => ([...prev, '']))}
                 >
                     <FormattedMessage defaultMessage='Add a link'/>
                 </Button>
-                <Button
+
+                {/* <Button
                     icon={<FileOutlined/>}
                     style={{width: '48%'}}
                     disabled={true}
                 >
                     <FormattedMessage defaultMessage='Upload a file'/>
-                </Button>
+                </Button> */}
             </div>
             <List
                 style={{padding: '16px'}}

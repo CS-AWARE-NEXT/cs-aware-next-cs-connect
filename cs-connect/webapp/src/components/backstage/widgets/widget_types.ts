@@ -10,6 +10,7 @@ export enum WidgetType {
     Malware = 'malware',
     PaginatedTable = 'paginated-table',
     Policy = 'policy',
+    LinkList = 'link-list',
     List = 'list',
     News = 'news',
     SingleChannel = 'channel',

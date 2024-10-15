@@ -42,5 +42,5 @@ type IssuePaginatedTableData struct {
 type IssuePaginatedTableRow struct {
 	ID                        string `json:"id"`
 	Name                      string `json:"name"`
-	ObjectivesAndResearchArea string `json:"objectivesAndResearchArea"`
+	ObjectivesAndResearchArea string `json:"summaryOfEventAndQuestionsForEcosystem"`
 }

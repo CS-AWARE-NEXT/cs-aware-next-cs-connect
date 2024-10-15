@@ -41,9 +41,10 @@ export const PARENT_ID_PARAM = 'parentId';
 export const SECTION_ID_PARAM = 'sectionId';
 export const OBJECT_ID_TOKEN = ':id';
 
-export const ecosystemObjectivesWidget = 'objectives and research area';
+// export const ecosystemObjectivesWidget = 'objectives and research area';
+export const ecosystemObjectivesWidget = 'summary of event and questions for ecosystem';
 export const ecosystemOutcomesWidget = 'outcomes';
-export const ecosystemElementsWidget = 'support technology data';
+export const ecosystemElementsWidget = 'support data';
 export const ecosystemElementsFields = ['organization', 'name', 'description'];
 export const ecosystemRolesWidget = 'participants and roles';
 export const ecosystemRolesFields = ['user', 'roles'];

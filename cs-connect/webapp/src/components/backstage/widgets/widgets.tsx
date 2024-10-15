@@ -6,6 +6,8 @@ import {Widget} from 'src/types/organization';
 import ChannelsWrapper from './channels/wrappers/channels_wrapper';
 import GraphWrapper from './graph/wrappers/graph_wrapper';
 import ListWrapper from './list/wrappers/list_wrapper';
+
+// import LinkListWrapper from './link_list/wrappers/link_list_wrapper';
 import PaginatedTableWrapper from './paginated_table/wrappers/paginated_table_wrapper';
 import SingleChannelWrapper from './single_channel/wrappers/single_channel_wrapper';
 import TableWrapper from './table/wrappers/table_wrapper';
@@ -49,6 +51,10 @@ const buildWidgetByType = (
         return <PaginatedTableWrapper {...props}/>;
     case WidgetType.Policy:
         return <PolicyWrapper {...props}/>;
+
+    // TODO: it is not needed now, but it may be needed in the future
+    // case WidgetType.LinkList:
+    //     return <LinkListWrapper {...props}/>;
     case WidgetType.List:
         return <ListWrapper {...props}/>;
     case WidgetType.News:

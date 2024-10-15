@@ -210,4 +210,23 @@ var migrations = []Migration{
 			return nil
 		},
 	},
+	{
+		fromVersion: semver.MustParse("0.5.0"),
+		toVersion:   semver.MustParse("0.6.0"),
+		migrationFunc: func(e sqlx.Ext, db *DB) error {
+			if _, err := e.Exec(`
+				CREATE TABLE IF NOT EXISTS CSFDP_Links (
+					ID TEXT PRIMARY KEY,
+					Name TEXT,
+					Description TEXT,
+					Link TEXT,
+					OrganizationID TEXT NOT NULL,
+					ParentID TEXT NOT NULL
+				);
+			`); err != nil {
+				return errors.Wrapf(err, "failed creating table CSFDP_Links")
+			}
+			return nil
+		},
+	},
 }

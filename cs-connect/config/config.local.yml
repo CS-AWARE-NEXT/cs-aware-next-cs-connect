@@ -15,6 +15,15 @@ organizations:
         url: http://localhost:3000/cs-data-provider/issues
         widgets:
           - type: channel
+      - name: Policies
+        id: "37"
+        internal: true
+        url: http://localhost:3000/cs-data-provider/organizations/0/policies
+        widgets:
+          - name: Components
+            type: policy
+            url: http://localhost:3000/cs-data-provider/organizations/0/policies/:id/template
+          - type: channel
       - name: Ecosystem Graph
         id: "1"
         url: http://localhost:3000/cs-data-provider/issues/ecosystem_graph

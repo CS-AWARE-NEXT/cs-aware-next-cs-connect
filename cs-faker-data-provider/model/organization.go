@@ -132,3 +132,12 @@ type Chart struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
+
+type Link struct {
+	ID             string `json:"id"`
+	Name           string `json:"name"`
+	Description    string `json:"description"`
+	Link           string `json:"to"`
+	OrganizationId string `json:"organizationId"`
+	ParentId       string `json:"parentId"`
+}

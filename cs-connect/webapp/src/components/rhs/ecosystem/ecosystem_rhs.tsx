@@ -11,17 +11,12 @@ import {NameHeader} from 'src/components/backstage/header/header';
 import Accordion from 'src/components/backstage/widgets/accordion/accordion';
 import {Section, SectionInfo} from 'src/types/organization';
 import {formatStringToCapitalize} from 'src/helpers';
-import EcosystemOutcomesWrapper from 'src/components/backstage/widgets/list/wrappers/ecosystem_outcomes_wrapper';
 import EcosystemAttachmentsWrapper from 'src/components/backstage/widgets/list/wrappers/ecosystem_attachments_wrapper';
 import EcosystemObjectivesWrapper from 'src/components/backstage/widgets/text_box/wrappers/ecosystem_objectives_wrapper';
-import EcosystemRolesWrapper from 'src/components/backstage/widgets/paginated_table/wrappers/ecosystem_roles_wrapper';
-import {
-    ecosystemAttachmentsWidget,
-    ecosystemElementsWidget,
-    ecosystemObjectivesWidget,
-    ecosystemOutcomesWidget,
-    ecosystemRolesWidget,
-} from 'src/constants';
+
+// import EcosystemOutcomesWrapper from 'src/components/backstage/widgets/list/wrappers/ecosystem_outcomes_wrapper';
+// import EcosystemRolesWrapper from 'src/components/backstage/widgets/paginated_table/wrappers/ecosystem_roles_wrapper';
+import {ecosystemAttachmentsWidget, ecosystemElementsWidget, ecosystemObjectivesWidget} from 'src/constants';
 import {getOrganizationById, getSystemConfig} from 'src/config/config';
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {
@@ -105,14 +100,14 @@ const EcosystemRhs = ({
                                 name={formatStringToCapitalize(ecosystemObjectivesWidget)}
                                 objectives={currentSectionInfo?.objectivesAndResearchArea}
                             />
-                            <EcosystemOutcomesWrapper
+                            {/* <EcosystemOutcomesWrapper
                                 name={formatStringToCapitalize(ecosystemOutcomesWidget)}
                                 outcomes={currentSectionInfo?.outcomes}
-                            />
-                            <EcosystemRolesWrapper
+                            /> */}
+                            {/* <EcosystemRolesWrapper
                                 name={formatStringToCapitalize(ecosystemRolesWidget)}
                                 roles={currentSectionInfo?.roles}
-                            />
+                            /> */}
                             {isEcosystemGraphEnabled && (
                                 <EcosystemGraphWrapper
                                     name='Ecosystem Graph'

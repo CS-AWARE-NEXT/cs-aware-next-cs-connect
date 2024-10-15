@@ -3,6 +3,7 @@ environmentConfig:
   showOptionsConfig:
     showAddChannelButton: true
     showDefaultChannels: true
+    showDirectMessages: true
 organizations:
   - name: Ecosystem
     id: "0"
@@ -12,12 +13,29 @@ organizations:
       - name: Ecosystem Issues
         id: "0"
         isIssues: true
-        url: http://172.16.15.1:3000/cs-data-provider/issues
+        url: http://172.16.15.57:3000/cs-data-provider/issues
         widgets:
+          - type: channel
+      - name: Participants
+        id: "42"
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/0/42/links
+        customView: participants-link-list
+      - name: Agora
+        id: "43"
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/0/43/news
+        customView: agora
+      - name: Policies
+        id: "37"
+        internal: true
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/0/policies
+        widgets:
+          - name: Components
+            type: policy
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/0/policies/:id/template
           - type: channel
       - name: Ecosystem Graph
         id: "1"
-        url: http://172.16.15.1:3000/cs-data-provider/issues/ecosystem_graph
+        url: http://172.16.15.57:3000/cs-data-provider/issues/ecosystem_graph
         customView: ecosystem-graph
   - name: 5thYPE
     id: "8"
@@ -25,63 +43,63 @@ organizations:
     sections:
       - name: Incidents
         id: "22"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents
         widgets:
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents/:id/graph
           - type: channels
       - name: Social Media
         id: "23"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/8/social_media
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/8/social_media
         widgets:
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/social_media/:id/posts
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/social_media/:id/posts
           - name: Posts per Hashtag
             type: chart
             chartType: simple-line
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/social_media/:id/chart
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/social_media/:id/chart
           - type: channels
       - name: News
         id: "26"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/8/news
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/8/news
         widgets:
           - name: Explore
             type: news
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/news/:id/news
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/news/:id/news
           - type: channels
       - name: Policies
         id: "30"
         internal: true
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/8/policies
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/8/policies
         widgets:
           - name: Components
             type: policy
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/policies/:id/template
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/policies/:id/template
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents/:id/graph
           - name: Top 10 Most Common Threats
             type: list
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/policies/ten_most_common
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
       - name: Incidents Synthethic
         id: "40"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents_synthethic
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents_synthethic
         widgets:
           - name: Description
             type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/text_box
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/text_box
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/graph
           - name: History
             type: table
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/table
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/8/incidents_synthethic/:id/table
           - type: channels
   - name: Deyal
     id: "7"
@@ -89,63 +107,63 @@ organizations:
     sections:
       - name: Incidents
         id: "18"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents
         widgets:
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents/:id/graph
           - type: channels
       - name: Social Media
         id: "21"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/7/social_media
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/7/social_media
         widgets:
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/social_media/:id/posts
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/social_media/:id/posts
           - name: Posts per Hashtag
             type: chart
             chartType: simple-line
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/social_media/:id/chart
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/social_media/:id/chart
           - type: channels
       - name: News
         id: "27"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/7/news
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/7/news
         widgets:
           - name: Explore
             type: news
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/news/:id/news
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/news/:id/news
           - type: channels
       - name: Policies
         id: "31"
         internal: true
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/7/policies
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/7/policies
         widgets:
           - name: Components
             type: policy
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/policies/:id/template
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/policies/:id/template
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents/:id/graph
           - name: Top 10 Most Common Threats
             type: list
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/policies/ten_most_common
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
       - name: Incidents Synthethic
         id: "41"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents_synthethic
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents_synthethic
         widgets:
           - name: Description
             type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/text_box
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/text_box
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/graph
           - name: History
             type: table
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/table
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/7/incidents_synthethic/:id/table
           - type: channels
   - name: Larissa
     id: "6"
@@ -153,63 +171,63 @@ organizations:
     sections:
       - name: Incidents
         id: "17"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents
         widgets:
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents/:id/graph
           - type: channels
       - name: Social Media
         id: "20"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/6/social_media
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/6/social_media
         widgets:
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents/:id/graph
           - name: Posts
             type: social-media-posts
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/social_media/:id/posts
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/social_media/:id/posts
           - name: Posts per Hashtag
             type: chart
             chartType: simple-line
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/social_media/:id/chart
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/social_media/:id/chart
           - type: channels
       - name: News
         id: "28"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/6/news
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/6/news
         widgets:
           - name: Explore
             type: news
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/news/:id/news
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/news/:id/news
           - type: channels
       - name: Policies
         id: "32"
         internal: true
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/6/policies
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/6/policies
         widgets:
           - name: Components
             type: policy
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/policies/:id/template
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/policies/:id/template
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents/:id/graph
           - name: Top 10 Most Common Threats
             type: list
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/policies/ten_most_common
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
       - name: Incidents Synthethic
         id: "39"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents_synthethic
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents_synthethic
         widgets:
           - name: Description
             type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/text_box
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/text_box
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/graph
           - name: History
             type: table
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/table
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/6/incidents_synthethic/:id/table
           - type: channels
   - name: Foggia
     id: "5"
@@ -218,44 +236,44 @@ organizations:
       - name: Policies
         id: "33"
         internal: true
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/5/policies
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/5/policies
         widgets:
           - name: Components
             type: policy
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/5/policies/:id/template
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/5/policies/:id/template
           - name: Top 10 Most Common Threats
             type: list
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/policies/ten_most_common
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
       - name: Expert Consultancy
         id: "36"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/5/expert_consultancies
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/5/expert_consultancies
         widgets:
           - name: What I Can Do Here
             type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/5/expert_consultancies/:id/info
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/5/expert_consultancies/:id/info
           - type: channel
       - name: Education and Training
         id: "24"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/5/exercises
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/5/exercises
         widgets:
           - name: Task
             type: exercise
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/5/exercises/:id/assignment
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/5/exercises/:id/assignment
           - type: channels
       - name: Incidents Synthethic
         id: "38"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/5/incidents_synthethic
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/5/incidents_synthethic
         widgets:
           - name: Description
             type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/text_box
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/text_box
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/graph
           - name: History
             type: table
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/table
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/5/incidents_synthethic/:id/table
           - type: channels
   - name: Demo CS-AWARE EU
     id: "4"
@@ -263,60 +281,60 @@ organizations:
     sections:
       - name: Incidents
         id: "13"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/4/incidents
         widgets:
           - name: Description
             type: text-box
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents/:id/text_box
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/incidents/:id/text_box
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/incidents/:id/graph
           - name: History
             type: table
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents/:id/table
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/incidents/:id/table
           - type: channel
       - name: Playbooks
         id: "19"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/playbooks
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/4/playbooks
         widgets:
           - name: Detail
             type: cacao-playbook
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/playbooks/:id/detail
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/playbooks/:id/detail
           - type: channel
       - name: Policies
         id: "34"
         internal: true
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/policies
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/4/policies
         widgets:
           - name: Components
             type: policy
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/policies/:id/template
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/policies/:id/template
           - name: System
             type: graph
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/incidents/:id/graph
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/incidents/:id/graph
           - name: Top 10 Most Common Threats
             type: list
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/policies/ten_most_common
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/policies/ten_most_common
           - type: channel
       - name: Bundles
         id: "35"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/bundles
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/4/bundles
         widgets:
           - name: Relationship
             type: bundle
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/bundles/:id/content
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/bundles/:id/content
           - type: channel
       - name: Charts
         id: "99"
-        url: http://172.16.15.1:3000/cs-data-provider/organizations/4/charts
+        url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts
         widgets:
           - name: Bar Chart
             type: chart
             chartType: simple-bar
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/charts/:id/bar_chart
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts/:id/bar_chart
           - name: Line Chart
             type: chart
             chartType: simple-line
-            url: http://172.16.15.1:3000/cs-data-provider/organizations/4/charts/:id/line_chart
+            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts/:id/line_chart
           - type: channel
     widgets: []

@@ -52,6 +52,7 @@ func main() {
 		"cache":          repository.NewCacheRepository(db),
 		"ecosystemGraph": repository.NewEcosystemGraphRepository(db),
 		"policies":       repository.NewPolicyRepository(db),
+		"links":          repository.NewLinkRepository(db),
 	}
 	app := fiber.New()
 	app.Use(cors.New())
