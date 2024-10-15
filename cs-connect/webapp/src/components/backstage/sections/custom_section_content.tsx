@@ -42,6 +42,12 @@ const CustomSectionContent = ({section, customView}: Props) => {
         );
     }
 
+    if (customView === 'agora') {
+        return (
+            <div>{'Agora here'}</div>
+        );
+    }
+
     return <></>;
 };
 
