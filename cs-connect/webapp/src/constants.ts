@@ -18,6 +18,7 @@ export const DateTimeFormats = {
 };
 
 export const estimatedOptionsLoadTime = 150;
+export const estimatedAnnouncementBarsLoadTime = 50;
 
 export const MATTERMOST_CHANNEL_NAME_LENGTH = 64;
 

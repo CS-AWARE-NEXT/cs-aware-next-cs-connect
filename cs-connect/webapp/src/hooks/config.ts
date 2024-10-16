@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 
 import {Section, ShowOptionsConfig} from 'src/types/organization';
 import {getOrganizations} from 'src/config/config';
-import {estimatedOptionsLoadTime} from 'src/constants';
+import {estimatedAnnouncementBarsLoadTime, estimatedOptionsLoadTime} from 'src/constants';
 
 import {formatStringToLowerCase} from 'src/helpers';
 
@@ -73,7 +73,21 @@ const hideOptions = (showOptionsConfig: ShowOptionsConfig): NodeJS.Timeout[][] =
         }
     }, estimatedOptionsLoadTime);
 
-    return [[], [interval]];
+    // this fixes Mattermost's bug where the announcement bar is shown
+    // even when there is no error and is shown also to non-admin users
+    const announcementBarInterval = setInterval(() => {
+        const announcementBars = document.getElementsByClassName('announcement-bar') as HTMLCollectionOf<HTMLElement>;
+        if (announcementBars) {
+            for (let i = 0; i < announcementBars.length; i++) {
+                const announcementBar = announcementBars[i];
+                if (announcementBar.style.display !== 'none') {
+                    announcementBar.style.display = 'none';
+                }
+            }
+        }
+    }, estimatedAnnouncementBarsLoadTime);
+
+    return [[], [interval, announcementBarInterval]];
 };
 
 export const getSection = (id: string): Section => {
