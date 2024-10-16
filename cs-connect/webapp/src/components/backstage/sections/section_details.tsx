@@ -90,6 +90,8 @@ const SectionDetails = () => {
 
     const onExport = async () => {
         if (sectionInfo && section) {
+            // TODO: make a first call to check whether the policy is valid for export
+            // if it is not do not allow the export and show a message to the user
             updatePolicyTemplateFieldAction({
                 policyId: sectionInfo.id,
                 field: 'exported',
