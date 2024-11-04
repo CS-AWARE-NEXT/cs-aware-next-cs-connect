@@ -177,7 +177,7 @@ organizations:
           - type: channels
   - name: Spazio 5
     id: "13"
-    description: Il quarto spazio di lavoro
+    description: Il quinto spazio di lavoro
     sections:
       - name: Charts Country Counts
         id: "120"
