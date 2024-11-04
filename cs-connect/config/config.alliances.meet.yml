@@ -177,7 +177,7 @@ organizations:
           - type: channels
   - name: Spazio 5
     id: "13"
-    description: Il quarto spazio di lavoro
+    description: Il quinto spazio di lavoro
     sections:
       - name: Charts Country Counts
         id: "120"
@@ -214,5 +214,125 @@ organizations:
             type: chart
             chartType: simple-line
             url: https://meet.isislab.it:3001/cs-data-provider/organizations/13/chartsEuropeanAlliances/:id/data
+          - type: channels
+  - name: Spazio 6
+    id: "14"
+    description: Il sesto spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "124"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "125"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "126"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "127"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/14/chartsEuropeanAlliances/:id/data
+          - type: channels
+  - name: Spazio 7
+    id: "15"
+    description: Il settimo spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "128"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "129"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "130"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "131"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/15/chartsEuropeanAlliances/:id/data
+          - type: channels
+  - name: Spazio 8
+    id: "16"
+    description: L'ottavo spazio di lavoro
+    sections:
+      - name: Charts Country Counts
+        id: "132"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsCountryCounts
+        widgets:
+          - name: Alleanze stipulate per Paese
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsCountryCounts/:id/data
+          - type: channels
+      - name: Charts Alliances Per Generation
+        id: "133"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsAlliancesPerGeneration
+        widgets:
+          - name: Paesi con numero di Alleanze stipulate per ogni Generazione
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsAlliancesPerGeneration/:id/data
+          - type: channels
+      - name: Number of Universities Per Number of Alliances
+        id: "134"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsUniversitiesInvolved
+        widgets:
+          - name: Numero di Università coinvolte per numero di Alleanze
+            type: chart
+            chartType: simple-bar
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsUniversitiesInvolved/:id/data
+          - type: channels
+      - name: European Alliances
+        id: "135"
+        url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsEuropeanAlliances
+        widgets:
+          - name: Numero di Alleanze Europee
+            type: chart
+            chartType: simple-line
+            url: https://meet.isislab.it:3001/cs-data-provider/organizations/16/chartsEuropeanAlliances/:id/data
           - type: channels
     widgets: []
