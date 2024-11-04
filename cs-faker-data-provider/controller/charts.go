@@ -915,6 +915,9 @@ func (cc *ChartController) getChart4ByID(c *fiber.Ctx) model.Chart {
 	return model.Chart{}
 }
 
+//
+// ALLIANCES
+//
 func (cc *ChartController) GetChartsCountryCounts(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 	tableData := model.PaginatedTableData{
@@ -1434,6 +1437,27 @@ var chartsCountryCountsMap = map[string][]model.Chart{
 			Description: "Alleanze stipulate per Paese.",
 		},
 	},
+	"14": {
+		{
+			ID:          "4e957927-5d18-424b-90a4-1bfa3656d844",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
+		},
+	},
+	"15": {
+		{
+			ID:          "8b5b5637-a727-4639-89e9-ba68c1aedcae",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
+		},
+	},
+	"16": {
+		{
+			ID:          "47c11557-31ff-489d-b9a8-e0342e119c30",
+			Name:        "Alleanze stipulate per Paese",
+			Description: "Alleanze stipulate per Paese.",
+		},
+	},
 }
 
 var chartsAlliancesPerGenerationMap = map[string][]model.Chart{
@@ -1468,6 +1492,27 @@ var chartsAlliancesPerGenerationMap = map[string][]model.Chart{
 	"13": {
 		{
 			ID:          "e4dda46d-7bf4-451e-a227-891d1b0986b1",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+	"14": {
+		{
+			ID:          "01655b0e-0098-4783-854d-047555e19d5c",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+	"15": {
+		{
+			ID:          "dd4c3ed0-e4d9-45b6-8c64-f99362b418f4",
+			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
+			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
+		},
+	},
+	"16": {
+		{
+			ID:          "a9a8bdac-bec1-4156-a5dd-5631ea12a889",
 			Name:        "Paesi con numero di Alleanze stipulate per ogni Generazione",
 			Description: "Paesi con numero di Alleanze stipulate per ogni Generazione.",
 		},
@@ -1510,6 +1555,27 @@ var chartsInvolvedUniversitiesMap = map[string][]model.Chart{
 			Description: "Numero di Università coinvolte per numero di Alleanze.",
 		},
 	},
+	"14": {
+		{
+			ID:          "7e593512-c22d-4d1d-b22e-e89e81fb1e05",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
+		},
+	},
+	"15": {
+		{
+			ID:          "c413ec99-007a-44d5-9ceb-afbf19313cd5",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
+		},
+	},
+	"16": {
+		{
+			ID:          "451d6dce-217c-4bcf-9c14-54d076b13776",
+			Name:        "Numero di Università coinvolte per numero di Alleanze",
+			Description: "Numero di Università coinvolte per numero di Alleanze.",
+		},
+	},
 }
 
 var chartsEuropeanAlliancesMap = map[string][]model.Chart{
@@ -1544,6 +1610,27 @@ var chartsEuropeanAlliancesMap = map[string][]model.Chart{
 	"13": {
 		{
 			ID:          "902f2923-51db-441a-a67d-e927a884336a",
+			Name:        "Numero di Alleanze Europee",
+			Description: "Numero di Alleanze Europee.",
+		},
+	},
+	"14": {
+		{
+			ID:          "aa5691de-6490-4c46-8761-1d20f62ebab8",
+			Name:        "Numero di Alleanze Europee",
+			Description: "Numero di Alleanze Europee.",
+		},
+	},
+	"15": {
+		{
+			ID:          "0f4e0bb8-fe77-4594-b0fe-3ad5199afadd",
+			Name:        "Numero di Alleanze Europee",
+			Description: "Numero di Alleanze Europee.",
+		},
+	},
+	"16": {
+		{
+			ID:          "6d775e19-4b09-4adc-ae43-b10e9996ddb0",
 			Name:        "Numero di Alleanze Europee",
 			Description: "Numero di Alleanze Europee.",
 		},
