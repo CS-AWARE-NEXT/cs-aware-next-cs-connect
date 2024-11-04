@@ -7,6 +7,7 @@ import EcosystemGraphWrapper from 'src/components/backstage/widgets/graph/wrappe
 import {buildEcosystemGraphUrl} from 'src/hooks';
 import {getSystemConfig} from 'src/config/config';
 import CustomViewLinkListWrapper from 'src/components/backstage/widgets/link_list/wrappers/custom_view_link_list_wrapper';
+import CustomViewAgoraWrapper from 'src/components/backstage/widgets/agora/wrappers/custom_view_agora_wrapper';
 
 type Props = {
     section: Section;
@@ -44,7 +45,11 @@ const CustomSectionContent = ({section, customView}: Props) => {
 
     if (customView === 'agora') {
         return (
-            <div>{'Agora here'}</div>
+            <CustomViewAgoraWrapper
+                name={'Agora'}
+                url={section.url}
+                sectionParentId={section.id}
+            />
         );
     }
 
