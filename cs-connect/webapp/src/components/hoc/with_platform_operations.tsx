@@ -24,7 +24,7 @@ const withPlatformOperations = (Component: ComponentType): (props: any) => JSX.E
         useHideOptions(showOptionsConfig);
         const [suggestions, isVisible, setIsVisible] = useSuggestions();
 
-        // TODO: Maybe yiou can also add the current user id to the local storage
+        // TODO: Maybe you can also add the current user id to the local storage
         // it can be useful for example for the update policy action to prevent a user to add posts from other users to policies
         const channelId = useSelector(getCurrentChannelId);
         const teamId = useSelector(getCurrentTeamId);

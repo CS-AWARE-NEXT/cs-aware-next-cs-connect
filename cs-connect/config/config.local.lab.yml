@@ -3,6 +3,7 @@ environmentConfig:
   showOptionsConfig:
     showAddChannelButton: true
     showDefaultChannels: true
+    showDirectMessages: true
 organizations:
   - name: Ecosystem
     id: "0"
@@ -15,6 +16,14 @@ organizations:
         url: http://www.isislab.it:3000/cs-data-provider/issues
         widgets:
           - type: channel
+      - name: Participants
+        id: "42"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/0/42/links
+        customView: participants-link-list
+      - name: Agora
+        id: "43"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/0/43/news
+        customView: agora
       - name: Policies
         id: "37"
         internal: true
