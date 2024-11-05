@@ -38,6 +38,9 @@ func main() {
 	// Used to generalize session management to any type
 	gob.Register(map[string]interface{}{})
 
+	// Init provider
+	log.Infof("Starting provider for ecosystem with id: %s", os.Getenv("ECOSYSTEM_ID"))
+
 	// Init DB and run migrations
 	db, err := db.New(os.Getenv("DATA_SOURCE"), os.Getenv("DRIVER_NAME"))
 	if err != nil {
