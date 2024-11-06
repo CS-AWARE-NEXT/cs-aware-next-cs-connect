@@ -12,7 +12,12 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import {exportChannel, getSectionInfoUrl} from 'src/clients';
 import {channelNameSelector, exportChannelSelector} from 'src/selectors';
-import {useIsSectionFromEcosystem, useSection, useSectionInfo} from 'src/hooks';
+import {
+    getUrlWithoutQueryParams,
+    useIsSectionFromEcosystem,
+    useSection,
+    useSectionInfo,
+} from 'src/hooks';
 import {getSectionById} from 'src/config/config';
 import {exportAction} from 'src/actions';
 
@@ -68,7 +73,15 @@ export const Exporter = ({parentId, sectionId}: Props) => {
                 }),
             });
         }
-        const data = await exportChannel(channel.id, format, pinnedOnly, references);
+
+        const channelUrl = getUrlWithoutQueryParams();
+        const data = await exportChannel(
+            channel.id,
+            format,
+            pinnedOnly,
+            channelUrl,
+            references,
+        );
         const fileURL = window.URL.createObjectURL(data);
 
         // Emulate a click on an anchor to trigger a browser download
