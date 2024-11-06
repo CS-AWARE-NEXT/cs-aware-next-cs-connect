@@ -20,3 +20,8 @@ export type PolicyTemplateField = {
     field: string;
     value: string;
 };
+
+export type ExportPolicyResult = {
+    success: boolean;
+    message: string;
+};
