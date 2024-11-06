@@ -194,7 +194,6 @@ export default class Plugin {
     doRegistrations(registry: any, store: Store<GlobalState>): void {
         registry.registerTranslations((locale: string) => {
             try {
-                // TODO: make async, this increases bundle size exponentially
                 // eslint-disable-next-line global-require
                 return require(`../i18n/${locale}.json`);
             } catch {
