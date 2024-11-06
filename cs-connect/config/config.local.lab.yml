@@ -4,6 +4,7 @@ environmentConfig:
     showAddChannelButton: true
     showDefaultChannels: true
     showDirectMessages: true
+  ecosystemId: "9"
 organizations:
   - name: Ecosystem
     id: "0"
