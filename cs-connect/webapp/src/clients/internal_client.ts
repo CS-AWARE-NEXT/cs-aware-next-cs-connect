@@ -189,11 +189,13 @@ export const exportChannel = async (
     channelId: string,
     format: string,
     pinnedOnly: boolean,
+    channelUrl: string,
     references: ExportReference[],
 ): Promise<Blob> => {
     const body = JSON.stringify({
         format,
         pinnedOnly,
+        channelUrl,
         references,
     });
     const {data} = await doFetchWithBlobResponse(`${apiUrl}/channel/${channelId}/export`, {method: 'POST', body});

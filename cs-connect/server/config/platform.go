@@ -16,6 +16,7 @@ type PlatformConfig struct {
 
 type EnvironmentConfig struct {
 	ShowOptionsConfig ShowOptionsConfig `json:"showOptionsConfig" yaml:"showOptionsConfig"`
+	EcosystemID       string            `json:"ecosystemId" yaml:"ecosystemId"`
 }
 
 type ShowOptionsConfig struct {

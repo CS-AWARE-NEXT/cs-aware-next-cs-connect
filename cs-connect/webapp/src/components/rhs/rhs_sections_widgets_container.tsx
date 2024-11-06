@@ -12,6 +12,7 @@ import {updatePolicyTemplateFieldAction} from 'src/actions';
 import {RefreshContext} from 'src/components/backstage/sections/section_details';
 import {useUserProps} from 'src/hooks';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
+import {ToastStyle} from 'src/components/backstage/toast';
 
 type Props = {
     headerPath: string;
@@ -38,11 +39,15 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
 
     const onExport = async () => {
         if (sectionInfo && section) {
-            updatePolicyTemplateFieldAction({
+            const result = await updatePolicyTemplateFieldAction({
                 policyId: sectionInfo.id,
                 field: 'exported',
                 value: 'true',
             }, true);
+            if (!result.success) {
+                addToast({content: result.message, toastStyle: ToastStyle.Failure});
+                return;
+            }
             if (forceRefresh) {
                 forceRefresh();
             }

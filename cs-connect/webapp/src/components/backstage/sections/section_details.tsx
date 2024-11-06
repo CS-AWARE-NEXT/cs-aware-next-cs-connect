@@ -23,6 +23,7 @@ import {formatName} from 'src/helpers';
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {updatePolicyTemplateFieldAction} from 'src/actions';
 import {ORGANIZATION_ID_ALL} from 'src/types/organization';
+import {ToastStyle} from 'src/components/backstage/toast';
 
 import {SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE} from './sections';
 
@@ -92,12 +93,17 @@ const SectionDetails = () => {
         if (sectionInfo && section) {
             // TODO: make a first call to check whether the policy is valid for export
             // if it is not do not allow the export and show a message to the user
-            updatePolicyTemplateFieldAction({
+            const result = await updatePolicyTemplateFieldAction({
                 policyId: sectionInfo.id,
                 field: 'exported',
                 value: 'true',
             }, true);
+            if (!result.success) {
+                addToast({content: result.message, toastStyle: ToastStyle.Failure});
+                return;
+            }
             forceRefresh();
+
             addToast({content: 'Work in Progress!'});
         }
     };

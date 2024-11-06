@@ -157,15 +157,17 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 	var policyTemplateField model.PolicyTemplateFied
 	err := json.Unmarshal(c.Body(), &policyTemplateField)
 	if err != nil {
-		return c.JSON(fiber.Map{
-			"error": "Not a valid policy template field provided",
+		return c.JSON(model.UpdatePolicyTemplateResponse{
+			Success: false,
+			Message: "Not a valid policy template field provided",
 		})
 	}
 
 	policyTemplate, err := pc.policyRepository.GetPolicyByID(policyTemplateField.PolicyID)
 	if err != nil {
-		return c.JSON(fiber.Map{
-			"error": "Policy template not found",
+		return c.JSON(model.UpdatePolicyTemplateResponse{
+			Success: false,
+			Message: "Policy template not found",
 		})
 	}
 
@@ -176,8 +178,9 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		}
 		for _, purpose := range policyTemplate.Purpose {
 			if purpose == policyTemplateField.Value {
-				return c.JSON(fiber.Map{
-					"error": "Purpose already exists",
+				return c.JSON(model.UpdatePolicyTemplateResponse{
+					Success: false,
+					Message: "Purpose already exists",
 				})
 			}
 		}
@@ -188,8 +191,9 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		}
 		for _, element := range policyTemplate.Elements {
 			if element == policyTemplateField.Value {
-				return c.JSON(fiber.Map{
-					"error": "Element already exists",
+				return c.JSON(model.UpdatePolicyTemplateResponse{
+					Success: false,
+					Message: "Element already exists",
 				})
 			}
 		}
@@ -200,8 +204,9 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		}
 		for _, need := range policyTemplate.Need {
 			if need == policyTemplateField.Value {
-				return c.JSON(fiber.Map{
-					"error": "Need already exists",
+				return c.JSON(model.UpdatePolicyTemplateResponse{
+					Success: false,
+					Message: "Need already exists",
 				})
 			}
 		}
@@ -212,8 +217,9 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		}
 		for _, role := range policyTemplate.RolesAndResponsibilities {
 			if role == policyTemplateField.Value {
-				return c.JSON(fiber.Map{
-					"error": "Role already exists",
+				return c.JSON(model.UpdatePolicyTemplateResponse{
+					Success: false,
+					Message: "Role already exists",
 				})
 			}
 		}
@@ -224,8 +230,9 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		}
 		for _, reference := range policyTemplate.References {
 			if reference == policyTemplateField.Value {
-				return c.JSON(fiber.Map{
-					"error": "Reference already exists",
+				return c.JSON(model.UpdatePolicyTemplateResponse{
+					Success: false,
+					Message: "Reference already exists",
 				})
 			}
 		}
@@ -236,33 +243,42 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 		}
 		for _, tag := range policyTemplate.Tags {
 			if tag == policyTemplateField.Value {
-				return c.JSON(fiber.Map{
-					"error": "Tag already exists",
+				return c.JSON(model.UpdatePolicyTemplateResponse{
+					Success: false,
+					Message: "Tag already exists",
 				})
 			}
 		}
 		policyTemplate.Tags = append(policyTemplate.Tags, policyTemplateField.Value)
 	case "exported":
+		if policyTemplate.Tags == nil || len(policyTemplate.Tags) == 0 {
+			return c.JSON(model.UpdatePolicyTemplateResponse{
+				Success: false,
+				Message: "Policy template must have at least one tag",
+			})
+		}
 		policyTemplate.Exported = "true"
+
+		// TODO: Here also call the API to erxport the policy to the datalake
 	default:
-		return c.JSON(fiber.Map{
-			"error": "Not a valid policy template field provided",
+		return c.JSON(model.UpdatePolicyTemplateResponse{
+			Success: false,
+			Message: "Not a valid policy template field provided",
 		})
 	}
 	pc.policyRepository.DeletePolicyByID(policyTemplate.ID)
 	_, err = pc.policyRepository.SavePolicy(policyTemplate)
 	if err != nil {
 		log.Printf("Could not update policy template: %s", err.Error())
-		return c.JSON(fiber.Map{
-			"error": "Could not update policy template",
+		return c.JSON(model.UpdatePolicyTemplateResponse{
+			Success: false,
+			Message: "Could not update policy template",
 		})
 	}
 
-	return c.JSON(fiber.Map{
-		"id":             policyTemplate.ID,
-		"name":           policyTemplate.Name,
-		"description":    policyTemplate.Description,
-		"organizationId": policyTemplate.OrganizationId,
+	return c.JSON(model.UpdatePolicyTemplateResponse{
+		Success: true,
+		Message: "Policy template updated",
 	})
 }
 

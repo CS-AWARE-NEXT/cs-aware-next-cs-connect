@@ -48,6 +48,7 @@ const EcosystemSectionsWidgetsContainer = ({section, sectionInfo}: Props) => {
     };
 
     const onExport = async () => {
+        // TODO: this is for issues export currently
         if (sectionInfo && section) {
             addToast({content: 'Work in Progress!'});
         }

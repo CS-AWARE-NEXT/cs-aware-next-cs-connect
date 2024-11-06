@@ -9,7 +9,7 @@ import {
 import {updatePolicyTemplateField} from './clients';
 import {getEcosystem} from './config/config';
 import {ChannelCreation} from './types/channels';
-import {PolicyTemplateField} from './types/policy';
+import {ExportPolicyResult, PolicyTemplateField} from './types/policy';
 
 export const channelCreationAction = (channelCreation: ChannelCreation) => {
     return {
@@ -53,19 +53,22 @@ export const editEcosystemgraphAction = (visible: boolean) => {
     };
 };
 
-export const updatePolicyTemplateFieldAction = (
+export const updatePolicyTemplateFieldAction = async (
     field: PolicyTemplateField,
     disableTimeout = false,
-) => {
+): Promise<ExportPolicyResult> => {
     let url = getEcosystem().sections[0].url;
     url = url.replace('issues', 'organizations/policies/template');
 
     // TODO: Add a check for posts in a way that posts it displays an error
     // in case users try to add a message not containing only text.
-    updatePolicyTemplateField(field, url);
+    const result = await updatePolicyTemplateField(field, url);
+    if (!result.success) {
+        return result;
+    }
 
     if (disableTimeout) {
-        return;
+        return result;
     }
 
     // We take advantage of Mattermost opening Threads after a post submenu is clicked
@@ -74,4 +77,6 @@ export const updatePolicyTemplateFieldAction = (
         const openRhsButton = document.getElementById('open-product-rhs')?.parentElement;
         openRhsButton?.click();
     });
+
+    return result;
 };

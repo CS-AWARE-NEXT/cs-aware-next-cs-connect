@@ -15,3 +15,8 @@ type PolicyTemplateFied struct {
 	Field    string `json:"field"`
 	Value    string `json:"value"`
 }
+
+type UpdatePolicyTemplateResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
