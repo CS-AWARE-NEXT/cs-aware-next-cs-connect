@@ -162,3 +162,16 @@ export const generatePolicySectionMessages = (options: PolicySectionOptions): Mu
     return messages;
 };
 
+export const getTimeOfFirstPost = (allPosts: IDMappedPosts): number => {
+    let time = 0;
+    if (!allPosts) {
+        return time;
+    }
+
+    for (const post of Object.values(allPosts)) {
+        if (post.create_at < time || time === 0) {
+            time = post.create_at;
+        }
+    }
+    return time;
+};
