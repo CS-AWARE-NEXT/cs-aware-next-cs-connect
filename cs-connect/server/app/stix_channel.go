@@ -15,12 +15,18 @@ type STIXChannel struct {
 	Modified           int64             `json:"modified"`
 	Name               string            `json:"name"`
 	Description        string            `json:"description"`
+	ChannelURL         string            `json:"channel_url"`
 	Published          int64             `json:"published"`
 	ObjectRefs         []*STIXPost       `json:"object_refs"`
 	ExternalReferences []ExportReference `json:"external_references"`
 }
 
-func ToStixChannel(channel *mattermost.Channel, opinions []*STIXPost, extraReferences []ExportReference) *STIXChannel {
+func ToStixChannel(
+	channel *mattermost.Channel,
+	opinions []*STIXPost,
+	extraReferences []ExportReference,
+	channelURL string,
+) *STIXChannel {
 	return &STIXChannel{
 		ID:                 channel.Id,
 		SpecVersion:        stixVersion,
@@ -29,6 +35,7 @@ func ToStixChannel(channel *mattermost.Channel, opinions []*STIXPost, extraRefer
 		Modified:           channel.UpdateAt,
 		Name:               channel.DisplayName,
 		Description:        channel.Header,
+		ChannelURL:         channelURL,
 		Published:          time.Now().UnixMilli(),
 		ObjectRefs:         opinions,
 		ExternalReferences: extraReferences,
