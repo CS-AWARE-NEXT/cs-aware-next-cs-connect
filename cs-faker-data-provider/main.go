@@ -55,6 +55,7 @@ func main() {
 		"cache":          repository.NewCacheRepository(db),
 		"ecosystemGraph": repository.NewEcosystemGraphRepository(db),
 		"policies":       repository.NewPolicyRepository(db),
+		"posts":          repository.NewPostRepository(db),
 		"links":          repository.NewLinkRepository(db),
 	}
 	app := fiber.New()
