@@ -21,6 +21,10 @@ export type PolicyTemplateField = {
     value: string;
 };
 
+export type ExportPolicyRequest = PolicyTemplateField & {
+    organizationName?: string;
+};
+
 export type ExportPolicyResult = {
     success: boolean;
     message: string;
