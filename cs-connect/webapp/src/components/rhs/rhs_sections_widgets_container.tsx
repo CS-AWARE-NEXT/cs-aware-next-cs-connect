@@ -10,7 +10,7 @@ import {
 import {useToaster} from 'src/components/backstage/toast_banner';
 import {updatePolicyTemplateFieldAction} from 'src/actions';
 import {RefreshContext} from 'src/components/backstage/sections/section_details';
-import {useUserProps} from 'src/hooks';
+import {useOrganization, useUserProps} from 'src/hooks';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import {ToastStyle} from 'src/components/backstage/toast';
 
@@ -26,6 +26,7 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
     const {sectionInfo, section, ...restProps} = props;
     const {add: addToast} = useToaster();
     const organizationId = useContext(OrganizationIdContext);
+    const organization = useOrganization(organizationId);
     const [userProps, _setUserProps] = useUserProps();
 
     let enableActions = false;
@@ -39,11 +40,15 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
 
     const onExport = async () => {
         if (sectionInfo && section) {
-            const result = await updatePolicyTemplateFieldAction({
-                policyId: sectionInfo.id,
-                field: 'exported',
-                value: 'true',
-            }, true);
+            const result = await updatePolicyTemplateFieldAction(
+                {
+                    policyId: sectionInfo.id,
+                    field: 'exported',
+                    value: 'true',
+                },
+                organization.name,
+                true
+            );
             if (!result.success) {
                 addToast({content: result.message, toastStyle: ToastStyle.Failure});
                 return;
