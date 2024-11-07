@@ -93,11 +93,15 @@ const SectionDetails = () => {
         if (sectionInfo && section) {
             // TODO: make a first call to check whether the policy is valid for export
             // if it is not do not allow the export and show a message to the user
-            const result = await updatePolicyTemplateFieldAction({
-                policyId: sectionInfo.id,
-                field: 'exported',
-                value: 'true',
-            }, true);
+            const result = await updatePolicyTemplateFieldAction(
+                {
+                    policyId: sectionInfo.id,
+                    field: 'exported',
+                    value: 'true',
+                },
+                organization.name,
+                true
+            );
             if (!result.success) {
                 addToast({content: result.message, toastStyle: ToastStyle.Failure});
                 return;

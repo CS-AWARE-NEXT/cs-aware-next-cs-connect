@@ -13,14 +13,14 @@ import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
 import {EcosystemGraph} from 'src/types/ecosystem_graph';
-import {ExportPolicyResult, PolicyTemplate, PolicyTemplateField} from 'src/types/policy';
+import {ExportPolicyRequest, ExportPolicyResult, PolicyTemplate} from 'src/types/policy';
 import {NewsPostData} from 'src/types/news';
 import {BundleData} from 'src/types/bundles';
 
 // Is there really no existing list of consts for status codes?
 const HTTP_STATUS_CODE_CONFLICT = 409;
 
-export const updatePolicyTemplateField = async (params: PolicyTemplateField, url: string): Promise<ExportPolicyResult> => {
+export const updatePolicyTemplateField = async (params: ExportPolicyRequest, url: string): Promise<ExportPolicyResult> => {
     let data = await doPut<ExportPolicyResult>(
         url,
         JSON.stringify(params),

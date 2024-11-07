@@ -9,7 +9,7 @@ import {
 import {updatePolicyTemplateField} from './clients';
 import {getEcosystem} from './config/config';
 import {ChannelCreation} from './types/channels';
-import {ExportPolicyResult, PolicyTemplateField} from './types/policy';
+import {ExportPolicyRequest, ExportPolicyResult, PolicyTemplateField} from './types/policy';
 
 export const channelCreationAction = (channelCreation: ChannelCreation) => {
     return {
@@ -55,6 +55,7 @@ export const editEcosystemgraphAction = (visible: boolean) => {
 
 export const updatePolicyTemplateFieldAction = async (
     field: PolicyTemplateField,
+    organizationName?: string,
     disableTimeout = false,
 ): Promise<ExportPolicyResult> => {
     let url = getEcosystem().sections[0].url;
@@ -62,7 +63,11 @@ export const updatePolicyTemplateFieldAction = async (
 
     // TODO: Add a check for posts in a way that posts it displays an error
     // in case users try to add a message not containing only text.
-    const result = await updatePolicyTemplateField(field, url);
+    const request: ExportPolicyRequest = {
+        ...field,
+        organizationName,
+    };
+    const result = await updatePolicyTemplateField(request, url);
     if (!result.success) {
         return result;
     }

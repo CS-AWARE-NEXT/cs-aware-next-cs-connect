@@ -7,17 +7,23 @@ import (
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 )
 
 type PolicyController struct {
 	policyRepository *repository.PolicyRepository
+	postRepository   *repository.PostRepository
 }
 
-func NewPolicyController(policyRepository *repository.PolicyRepository) *PolicyController {
+func NewPolicyController(
+	policyRepository *repository.PolicyRepository,
+	postRepository *repository.PostRepository,
+) *PolicyController {
 	return &PolicyController{
 		policyRepository: policyRepository,
+		postRepository:   postRepository,
 	}
 }
 
@@ -154,7 +160,7 @@ func (pc *PolicyController) SavePolicyTemplate(c *fiber.Ctx) error {
 }
 
 func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
-	var policyTemplateField model.PolicyTemplateFied
+	var policyTemplateField model.UpdatePolicyTemplateRequest
 	err := json.Unmarshal(c.Body(), &policyTemplateField)
 	if err != nil {
 		return c.JSON(model.UpdatePolicyTemplateResponse{
@@ -258,8 +264,20 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 			})
 		}
 		policyTemplate.Exported = "true"
-
+		jsonPolicyExporter := service.NewJSONPolicyExporter(repository.PostRepository(*pc.postRepository))
+		jsonPolicy, err := jsonPolicyExporter.ExportPolicy(
+			policyTemplate,
+			policyTemplateField.OrganizationName,
+		)
+		if err != nil {
+			log.Printf("Could not export policy template: %s", err.Error())
+			return c.JSON(model.UpdatePolicyTemplateResponse{
+				Success: false,
+				Message: "Could not export policy template",
+			})
+		}
 		// TODO: Here also call the API to erxport the policy to the datalake
+		log.Printf("Exported policy as %s", jsonPolicy.String())
 	default:
 		return c.JSON(model.UpdatePolicyTemplateResponse{
 			Success: false,

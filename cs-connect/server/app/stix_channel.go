@@ -3,6 +3,8 @@ package app
 import (
 	"time"
 
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/util"
+
 	mattermost "github.com/mattermost/mattermost-server/v6/model"
 )
 
@@ -11,12 +13,12 @@ type STIXChannel struct {
 	ID                 string            `json:"id"`
 	SpecVersion        string            `json:"spec_version"`
 	Type               string            `json:"type"`
-	Created            int64             `json:"created"`
-	Modified           int64             `json:"modified"`
+	Created            string            `json:"created"`
+	Modified           string            `json:"modified"`
 	Name               string            `json:"name"`
 	Description        string            `json:"description"`
 	ChannelURL         string            `json:"channel_url"`
-	Published          int64             `json:"published"`
+	Published          string            `json:"published"`
 	ObjectRefs         []*STIXPost       `json:"object_refs"`
 	ExternalReferences []ExportReference `json:"external_references"`
 }
@@ -31,12 +33,12 @@ func ToStixChannel(
 		ID:                 channel.Id,
 		SpecVersion:        stixVersion,
 		Type:               stixReport,
-		Created:            channel.CreateAt,
-		Modified:           channel.UpdateAt,
+		Created:            util.ConvertUnixMilliToUTC(channel.CreateAt),
+		Modified:           util.ConvertUnixMilliToUTC(channel.UpdateAt),
 		Name:               channel.DisplayName,
 		Description:        channel.Header,
 		ChannelURL:         channelURL,
-		Published:          time.Now().UnixMilli(),
+		Published:          util.ConvertUnixMilliToUTC(time.Now().UnixMilli()),
 		ObjectRefs:         opinions,
 		ExternalReferences: extraReferences,
 	}

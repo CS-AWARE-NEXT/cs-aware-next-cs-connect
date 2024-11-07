@@ -1,6 +1,8 @@
 package app
 
 import (
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-connect/server/util"
+
 	mattermost "github.com/mattermost/mattermost-server/v6/model"
 	"github.com/mattermost/mattermost-server/v6/plugin"
 )
@@ -10,8 +12,8 @@ type STIXPost struct {
 	ID                 string      `json:"id"`
 	SpecVersion        string      `json:"spec_version"`
 	Type               string      `json:"type"`
-	Created            int64       `json:"created"`
-	Modified           int64       `json:"modified"`
+	Created            string      `json:"created"`
+	Modified           string      `json:"modified"`
 	Authors            []string    `json:"authors"`
 	Opinion            string      `json:"opinion"`
 	Labels             []string    `json:"labels"`
@@ -79,8 +81,8 @@ func ToStixPost(
 		ID:                 post.Id,
 		SpecVersion:        stixVersion,
 		Type:               stixOpinion,
-		Created:            post.CreateAt,
-		Modified:           post.EditAt,
+		Created:            util.ConvertUnixMilliToUTC(post.CreateAt),
+		Modified:           util.ConvertUnixMilliToUTC(post.EditAt),
 		Authors:            []string{userName},
 		Opinion:            post.Message,
 		Labels:             labels,
