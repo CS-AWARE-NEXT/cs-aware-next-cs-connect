@@ -6,7 +6,8 @@ import News from 'src/components/backstage/widgets/news/news';
 import {NewsQuery} from 'src/types/news';
 import {SectionContext} from 'src/components/rhs/rhs';
 import {formatUrlWithId} from 'src/helpers';
-import {useNewsPostData} from 'src/hooks';
+import {useNewsPostData, useSectionInfo} from 'src/hooks';
+import {getSectionById} from 'src/config/config';
 
 type Props = {
     name?: string;
@@ -33,18 +34,42 @@ const NewsWrapper = ({
         limit: '10',
     });
 
+    const parent = getSectionById(parentId);
+    const sectionInfo = useSectionInfo(sectionIdForUrl, parent.url);
+
+    // console.log('NewsWrapper',
+    //     'sectionIdForUrl', sectionIdForUrl,
+    //     'sectionInfo', sectionInfo,
+    //     'parentId', parentId,
+    //     'parent', {parent});
+
     const data = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), query);
+    const todayData = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), {
+        search: 'today',
+        offset: '0',
+        limit: '10',
+        orderBy: 'observation_created',
+        direction: 'desc',
+    });
+
+    const isToday = Boolean(sectionInfo) && Boolean(parent) && Boolean(parent.name) &&
+        parent.name.toLowerCase().includes('agora') && sectionInfo.name === 'Todays Latest News';
+    const newsData = isToday ? todayData : data;
+    const introText = isToday ? 'Enjoy Today\'s Latest News.' : '';
 
     return (
         <>
             {data &&
                 <News
-                    data={data}
+                    data={newsData}
                     name={name}
                     query={query}
                     setQuery={setQuery}
                     sectionId={sectionIdForUrl}
                     parentId={parentId}
+                    noSearchBar={isToday}
+                    noTotalCount={isToday}
+                    introText={introText}
                 />}
         </>
     );
