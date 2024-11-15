@@ -508,11 +508,13 @@ export const useNewsPostData = (url: string, query: NewsQuery): NewsPostData | N
     const [newsPostData, setNewsPostData] = useState<NewsPostData | {}>({});
     const [newsError, setNewsError] = useState<NewsError | null>(null);
 
+    const direction = query.direction || 'asc';
+    const orderBy = query.orderBy || 'observation_created';
     useEffect(() => {
         let isCanceled = false;
         async function fetchNewsPostDataAsync() {
             try {
-                const newsPostDataResult = await fetchNewsPostData(`${url}?search=${search}&offset=${offset}&limit=${limit}`);
+                const newsPostDataResult = await fetchNewsPostData(`${url}?search=${search}&offset=${offset}&limit=${limit}&orderBy=${orderBy}&direction=${direction}`);
                 if (!isCanceled) {
                     setNewsPostData(newsPostDataResult);
                     setNewsError(null);
