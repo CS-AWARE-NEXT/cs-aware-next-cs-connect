@@ -6,6 +6,7 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/controller"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 )
 
 func UseRoutes(app *fiber.App, context *config.Context) {
@@ -248,8 +249,10 @@ func useOrganizationsSocialMedia(organizations fiber.Router) {
 }
 
 func useOrganizationsNews(organizations fiber.Router, context *config.Context) {
+	newsEndpoint := context.EndpointsMap["news"]
 	newsRepository := context.RepositoriesMap["news"].(*repository.NewsRepository)
-	newsController := controller.NewNewsController(newsRepository)
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	newsController := controller.NewNewsController(newsRepository, newsEndpoint, authService)
 
 	linksRepository := context.RepositoriesMap["links"].(*repository.LinkRepository)
 	linksController := controller.NewLinkController(linksRepository)

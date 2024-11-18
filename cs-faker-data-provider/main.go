@@ -59,13 +59,19 @@ func main() {
 		"links":          repository.NewLinkRepository(db),
 		"news":           repository.NewNewsRepository(db),
 	}
+
+	endpointsMap := map[string]string{
+		"auth": os.Getenv("AUTH_ENDPOINT"),
+		"news": os.Getenv("NEWS_ENDPOINT"),
+	}
+
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Use(logger.New(logger.Config{
 		Output: mw,
 	}))
 
-	route.UseRoutes(app, config.NewContext(repositoriesMap))
+	route.UseRoutes(app, config.NewContext(repositoriesMap, endpointsMap))
 	config.Shutdown(app)
 
 	port := os.Getenv("PORT")
