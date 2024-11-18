@@ -12,17 +12,26 @@ import (
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 )
 
 type NewsController struct {
 	newsRepository *repository.NewsRepository
+	endpoint       string
+	authService    *service.AuthService
 }
 
-func NewNewsController(newsRepository *repository.NewsRepository) *NewsController {
+func NewNewsController(
+	newsRepository *repository.NewsRepository,
+	endpoint string,
+	authService *service.AuthService,
+) *NewsController {
 	return &NewsController{
 		newsRepository: newsRepository,
+		endpoint:       endpoint,
+		authService:    authService,
 	}
 }
 
@@ -114,8 +123,7 @@ func (nc *NewsController) DeleteNews(c *fiber.Ctx) error {
 }
 
 func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
-	newsEndpoint := os.Getenv("NEWS_ENDPOINT")
-	log.Info("preparing for request at ", newsEndpoint)
+	log.Info("preparing for request at ", nc.endpoint)
 	search := c.Query("search")
 	if search == "" {
 		log.Info("search parameter is empty, so empty result")
@@ -182,7 +190,7 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	log.Info("creating request ", keywords, " ", queryString)
 	req, err := http.NewRequest(
 		"POST",
-		newsEndpoint+"?"+queryString,
+		nc.endpoint+"?"+queryString,
 		bytes.NewBuffer(body),
 	)
 	if err != nil {
@@ -191,7 +199,16 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{"error": err.Error()})
 	}
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("access-token", "TOKEN-HERE")
+
+	log.Info("authenticating to get token")
+	authResp, err := nc.authService.Auth(os.Getenv("AUTH_USERNAME"), os.Getenv("AUTH_PASSWORD"))
+	if err != nil {
+		log.Error("error authenticating ", err.Error())
+		c.Status(fiber.StatusInternalServerError)
+		return c.JSON(fiber.Map{"error": err.Error()})
+	}
+	log.Infof("Got token: %s", authResp.String())
+	req.Header.Set("access-token", authResp.AccessToken)
 
 	log.Info("requesting news posts")
 
@@ -226,7 +243,7 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 		c.Status(fiber.StatusInternalServerError)
 		return c.JSON(fiber.Map{"error": err.Error()})
 	}
-	// log.Info("Response body with no json convertion: ", string(respBody))
+	log.Info("News response body with no json convertion: ", string(respBody))
 
 	log.Info("unmarshaling news posts")
 	var newsPosts model.NewsPostsV2
