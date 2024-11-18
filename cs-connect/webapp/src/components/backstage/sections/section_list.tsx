@@ -52,8 +52,10 @@ const SectionList = ({section}: Props) => {
         );
     }
 
+    const linksUrl = `${section.url}/${organizationId}/${section.id}/links`;
+
     const isIssues = section && section.isIssues;
-    const issuesAlertsUrl = `${section.url}/${organizationId}/${section.id}/links`;
+    const isAgora = section && section.name.toLowerCase().includes('agora');
 
     return (
         <Body>
@@ -61,7 +63,14 @@ const SectionList = ({section}: Props) => {
                 {isIssues && (
                     <CustomViewLinkListWrapper
                         name='Alerts'
-                        url={issuesAlertsUrl}
+                        url={linksUrl}
+                        sectionParentId={section.id}
+                        singleLink={true}
+                    />)}
+                {isAgora && (
+                    <CustomViewLinkListWrapper
+                        name='Important Channels'
+                        url={linksUrl}
                         sectionParentId={section.id}
                         singleLink={true}
                     />)}

@@ -8,4 +8,6 @@ export type NewsQuery = {
     search: string;
     offset: string;
     limit: string;
+    orderBy?: string;
+    direction?: string;
 };

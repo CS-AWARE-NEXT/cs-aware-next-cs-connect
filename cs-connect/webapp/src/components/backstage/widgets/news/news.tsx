@@ -30,10 +30,13 @@ type Props = {
     setQuery: Dispatch<SetStateAction<NewsQuery>>;
     parentId: string;
     sectionId: string;
+    noSearchBar?: boolean;
+    noTotalCount?: boolean;
+    introText?: string;
 };
 
-const calcTotalItems = (data: NewsPostData): number => {
-    if (!data.totalCount) {
+const calcTotalItems = (data: NewsPostData, noTotalCount: boolean): number => {
+    if (!data.totalCount || noTotalCount) {
         return 1;
     }
     return data.totalCount === 0 ? 1 : data.totalCount;
@@ -46,6 +49,9 @@ const News: FC<Props> = ({
     setQuery,
     parentId,
     sectionId,
+    noSearchBar = false,
+    noTotalCount = false,
+    introText = '',
 }) => {
     const {formatMessage} = useIntl();
 
@@ -75,11 +81,11 @@ const News: FC<Props> = ({
         (
             <NewsPosts
                 data={data.items}
-                name={name}
+                name={`${name} Posts`}
                 sectionId={sectionId}
                 parentId={parentId}
                 perPage={query.limit ? parseInt(query.limit, 10) : 10}
-                total={calcTotalItems(data)}
+                total={calcTotalItems(data, noTotalCount)}
                 postOptions={{
                     noHyperlinking: true,
                     noActions: true,
@@ -103,8 +109,10 @@ const News: FC<Props> = ({
                 />
             </Header>
 
+            {(introText && introText.length > 1) && <Alert message={introText}/>}
+
             {/* width: isRhs ? 'calc(100% - 32px)' : 'calc(50% - 48px)', */}
-            <HorizontalContainer>
+            {!noSearchBar && <HorizontalContainer>
                 <Search
                     placeholder={formatMessage({defaultMessage: 'Search'})}
                     allowClear={true}
@@ -114,6 +122,8 @@ const News: FC<Props> = ({
                     style={{
                         width: isRhs ? '90%' : 'calc(50% - 48px)',
                     }}
+
+                    // value={queryValue}
                 />
 
                 {/* <Tooltip title={formatMessage({defaultMessage: 'Advanced Search'})}>
@@ -128,7 +138,8 @@ const News: FC<Props> = ({
                         }}
                     />
                 </Tooltip> */}
-            </HorizontalContainer>
+            </HorizontalContainer>}
+
             {Body}
         </Container>
     );

@@ -91,6 +91,11 @@ const SectionDetails = () => {
 
     const onExport = async () => {
         if (sectionInfo && section) {
+            if (section.name.toLowerCase().includes('agora')) {
+                addToast({content: 'Work in Progress!'});
+                return;
+            }
+
             // TODO: make a first call to check whether the policy is valid for export
             // if it is not do not allow the export and show a message to the user
             const result = await updatePolicyTemplateFieldAction(

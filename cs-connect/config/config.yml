@@ -23,8 +23,13 @@ organizations:
         customView: participants-link-list
       - name: Agora
         id: "43"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/0/43/news
-        customView: agora
+        internal: true
+        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/0/news
+        widgets:
+          - name: News
+            type: news
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/0/news/:id/news
+          - type: channel
       - name: Policies
         id: "37"
         internal: true
@@ -65,14 +70,14 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media/:id/chart
           - type: channels
-      - name: News
-        id: "26"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news
-        widgets:
-          - name: Explore
-            type: news
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news/:id/news
-          - type: channels
+      # - name: News
+      #   id: "26"
+      #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news
+      #   widgets:
+      #     - name: Explore
+      #       type: news
+      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/news/:id/news
+      #     - type: channels
       - name: Policies
         id: "30"
         internal: true
@@ -129,14 +134,14 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media/:id/chart
           - type: channels
-      - name: News
-        id: "27"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news
-        widgets:
-          - name: Explore
-            type: news
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news/:id/news
-          - type: channels
+      # - name: News
+      #   id: "27"
+      #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news
+      #   widgets:
+      #     - name: Explore
+      #       type: news
+      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/news/:id/news
+      #     - type: channels
       - name: Policies
         id: "31"
         internal: true
@@ -193,14 +198,14 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media/:id/chart
           - type: channels
-      - name: News
-        id: "28"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news
-        widgets:
-          - name: Explore
-            type: news
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news/:id/news
-          - type: channels
+      # - name: News
+      #   id: "28"
+      #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news
+      #   widgets:
+      #     - name: Explore
+      #       type: news
+      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/news/:id/news
+      #     - type: channels
       - name: Policies
         id: "32"
         internal: true

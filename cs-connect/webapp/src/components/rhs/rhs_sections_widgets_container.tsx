@@ -40,6 +40,10 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
 
     const onExport = async () => {
         if (sectionInfo && section) {
+            if (section.name.toLowerCase().includes('agora')) {
+                addToast({content: 'Work in Progress!'});
+                return;
+            }
             const result = await updatePolicyTemplateFieldAction(
                 {
                     policyId: sectionInfo.id,
@@ -60,6 +64,8 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
         }
     };
 
+    // TODO: is this useful?
+    // console.log('RhsSectionsWidgetsContainer', {sectionInfo}, {section});
     return (
         <SectionsWidgetsContainer
             {...restProps}

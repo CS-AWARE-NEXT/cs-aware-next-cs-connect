@@ -6,6 +6,7 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/controller"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 )
 
 func UseRoutes(app *fiber.App, context *config.Context) {
@@ -38,7 +39,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsMalwares(organizations)
 	useOrganizationsExpertConsultancies(organizations)
 	useOrganizationsSocialMedia(organizations)
-	useOrganizationsNews(organizations)
+	useOrganizationsNews(organizations, context)
 	useOrganizationsExercises(organizations)
 	useOrganizationsCharts(organizations)
 	useOrganizationsLinks(organizations, context)
@@ -247,16 +248,39 @@ func useOrganizationsSocialMedia(organizations fiber.Router) {
 	})
 }
 
-func useOrganizationsNews(organizations fiber.Router) {
-	newsController := controller.NewNewsController()
+func useOrganizationsNews(organizations fiber.Router, context *config.Context) {
+	newsEndpoint := context.EndpointsMap["news"]
+	newsRepository := context.RepositoriesMap["news"].(*repository.NewsRepository)
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	newsController := controller.NewNewsController(newsRepository, newsEndpoint, authService)
+
+	linksRepository := context.RepositoriesMap["links"].(*repository.LinkRepository)
+	linksController := controller.NewLinkController(linksRepository)
 
 	news := organizations.Group("/:organizationId/news")
+
+	news.Get("/:organizationId/:parentId/links", func(c *fiber.Ctx) error {
+		return linksController.GetLinks(c)
+	})
+	news.Post("/:organizationId/:parentId/links", func(c *fiber.Ctx) error {
+		return linksController.SaveLink(c)
+	})
+	news.Delete("/:organizationId/:parentId/links/:linkId", func(c *fiber.Ctx) error {
+		return linksController.DeleteLink(c)
+	})
+
 	news.Get("/", func(c *fiber.Ctx) error {
 		return newsController.GetAllNews(c)
 	})
+	news.Post("/", func(c *fiber.Ctx) error {
+		return newsController.SaveNews(c)
+	})
 	newsWithId := news.Group("/:newsId")
 	newsWithId.Get("/", func(c *fiber.Ctx) error {
-		return newsController.GetNews(c)
+		return newsController.GetNewsByID(c)
+	})
+	newsWithId.Delete("/", func(c *fiber.Ctx) error {
+		return newsController.DeleteNews(c)
 	})
 	newsWithId.Get("/news", func(c *fiber.Ctx) error {
 		return newsController.GetNewsPosts(c)
