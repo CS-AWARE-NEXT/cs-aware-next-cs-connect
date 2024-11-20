@@ -1,5 +1,7 @@
 import {debounce, isEqual} from 'lodash';
 import {
+    Dispatch,
+    SetStateAction,
     useCallback,
     useContext,
     useEffect,
@@ -503,7 +505,11 @@ export const usePostData = (url: string): PostData => {
     return postData as PostData;
 };
 
-export const useNewsPostData = (url: string, query: NewsQuery): NewsPostData | NewsError => {
+export const useNewsPostData = (
+    url: string,
+    query: NewsQuery,
+    setLoading: Dispatch<SetStateAction<boolean>>,
+): NewsPostData | NewsError => {
     const {search, offset, limit} = query;
     const [newsPostData, setNewsPostData] = useState<NewsPostData | {}>({});
     const [newsError, setNewsError] = useState<NewsError | null>(null);
@@ -514,15 +520,18 @@ export const useNewsPostData = (url: string, query: NewsQuery): NewsPostData | N
         let isCanceled = false;
         async function fetchNewsPostDataAsync() {
             try {
+                setLoading(true);
                 const newsPostDataResult = await fetchNewsPostData(`${url}?search=${search}&offset=${offset}&limit=${limit}&orderBy=${orderBy}&direction=${direction}`);
                 if (!isCanceled) {
                     setNewsPostData(newsPostDataResult);
                     setNewsError(null);
+                    setLoading(false);
                 }
             } catch (err: any) {
                 if (!isCanceled) {
                     setNewsPostData({});
                     setNewsError({message: JSON.parse(err.message)});
+                    setLoading(false);
                 }
             }
         }
@@ -531,6 +540,7 @@ export const useNewsPostData = (url: string, query: NewsQuery): NewsPostData | N
 
         return () => {
             isCanceled = true;
+            setLoading(false);
         };
     }, [url, search, offset]);
 
