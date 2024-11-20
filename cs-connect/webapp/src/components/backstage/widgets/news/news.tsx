@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import {Alert, Input} from 'antd';
 import {SearchProps} from 'antd/es/input';
 import {useIntl} from 'react-intl';
+
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
