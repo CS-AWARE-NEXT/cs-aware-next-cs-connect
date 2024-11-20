@@ -37,20 +37,23 @@ const NewsWrapper = ({
     const parent = getSectionById(parentId);
     const sectionInfo = useSectionInfo(sectionIdForUrl, parent.url);
 
+    const [loading, setLoading] = useState(false);
+    const [todayLoading, setTodayLoading] = useState(false);
+
     // console.log('NewsWrapper',
     //     'sectionIdForUrl', sectionIdForUrl,
     //     'sectionInfo', sectionInfo,
     //     'parentId', parentId,
     //     'parent', {parent});
 
-    const data = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), query);
+    const data = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), query, setLoading);
     const todayData = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), {
         search: 'today',
         offset: '0',
         limit: '10',
         orderBy: 'observation_created',
         direction: 'desc',
-    });
+    }, setTodayLoading);
 
     const isToday = Boolean(sectionInfo) && Boolean(parent) && Boolean(parent.name) &&
         parent.name.toLowerCase().includes('agora') && sectionInfo.name === 'Todays Latest News';
@@ -70,6 +73,7 @@ const NewsWrapper = ({
                     noSearchBar={isToday}
                     noTotalCount={isToday}
                     introText={introText}
+                    loading={loading || todayLoading}
                 />}
         </>
     );
