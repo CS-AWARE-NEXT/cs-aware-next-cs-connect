@@ -3,14 +3,13 @@ import React, {
     FC,
     SetStateAction,
     useContext,
+    useEffect,
+    useState,
 } from 'react';
 import styled from 'styled-components';
 import {Alert, Input} from 'antd';
 import {SearchProps} from 'antd/es/input';
 import {useIntl} from 'react-intl';
-
-// import {FileSearchOutlined} from '@ant-design/icons';
-
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
@@ -33,6 +32,7 @@ type Props = {
     noSearchBar?: boolean;
     noTotalCount?: boolean;
     introText?: string;
+    loading?: boolean;
 };
 
 const calcTotalItems = (data: NewsPostData, noTotalCount: boolean): number => {
@@ -52,6 +52,7 @@ const News: FC<Props> = ({
     noSearchBar = false,
     noTotalCount = false,
     introText = '',
+    loading = false,
 }) => {
     const {formatMessage} = useIntl();
 
@@ -62,12 +63,24 @@ const News: FC<Props> = ({
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
 
+    const [searchValue, setSearchValue] = useState('');
+
     const onSearch: SearchProps['onSearch'] = (
         value: string,
         event?: React.ChangeEvent<HTMLInputElement> | React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLInputElement>,
     ) => {
         setQuery({...query, search: value});
     };
+
+    // clean value and query when switching channels
+    useEffect(() => {
+        setSearchValue('');
+        setQuery({
+            search: '',
+            offset: '0',
+            limit: '10',
+        });
+    }, [sectionId]);
 
     const hasErrorOccurred = 'message' in data;
     const Body = hasErrorOccurred ?
@@ -119,25 +132,13 @@ const News: FC<Props> = ({
                     enterButton={true}
                     size='middle'
                     onSearch={onSearch}
+                    value={searchValue}
+                    onChange={(e) => setSearchValue(e.target.value)}
                     style={{
                         width: isRhs ? '90%' : 'calc(50% - 48px)',
                     }}
-
-                    // value={queryValue}
+                    loading={loading}
                 />
-
-                {/* <Tooltip title={formatMessage({defaultMessage: 'Advanced Search'})}>
-                    <Button
-                        type='primary'
-                        icon={<FileSearchOutlined/>}
-                        style={{
-                            width: '32px',
-                            height: '32px',
-                            fontSize: '16px',
-                            marginLeft: '8px',
-                        }}
-                    />
-                </Tooltip> */}
             </HorizontalContainer>}
 
             {Body}
