@@ -156,6 +156,13 @@ var incidentsMap = map[string][]model.Incident{
 			Description: "This provides an overview of the system graph for the 5thYPE organization",
 		},
 	},
+	"9": {
+		{
+			ID:          "incident--bab6087c-904f-42ac-80c2-93594b8ac86a",
+			Name:        "Potential DoS Attack",
+			Description: "Anomalous connection detected from source IP None to destination IP None over 6 protocol.",
+		},
+	},
 }
 
 var extendedIncidentsMap = map[string][]model.ExtendedIncident{
