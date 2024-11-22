@@ -64,7 +64,6 @@ const LinkList = ({
     singleLink = false,
     forceRefresh,
 }: Props) => {
-    console.log('parentId', parentId, 'sectionId', sectionId);
     const {formatMessage} = useIntl();
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
