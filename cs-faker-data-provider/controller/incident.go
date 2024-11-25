@@ -159,7 +159,7 @@ var incidentsMap = map[string][]model.Incident{
 	"9": {
 		{
 			ID:          "incident--bab6087c-904f-42ac-80c2-93594b8ac86a",
-			Name:        "Potential DoS Attack",
+			Name:        "Potential DoS Attack 2024-11-11T16:25:46Z",
 			Description: "Anomalous connection detected from source IP None to destination IP None over 6 protocol.",
 		},
 	},
