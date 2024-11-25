@@ -20,6 +20,12 @@ func NewGraphController() *GraphController {
 
 func (gc *GraphController) GetGraph(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
+
+	// TODO: Temporary to return the same graph of organization
+	// Demo CS-AWARE for the organization NexDev CS-AWARE
+	if organizationId == "9" {
+		organizationId = "4"
+	}
 	if organizationId > "4" {
 		graphData, err := gc.getGraphFromJson(organizationId)
 		if err != nil {
@@ -559,8 +565,9 @@ var graphMap = map[string]model.GraphData{
 					Y: 50,
 				},
 				Data: model.GraphNodeData{
-					Kind:  model.Switch,
-					Label: "Internet",
+					Kind:        model.Switch,
+					Label:       "Internet",
+					Description: "Internet node",
 				},
 			},
 			{
