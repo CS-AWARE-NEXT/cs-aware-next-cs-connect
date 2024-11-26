@@ -18,7 +18,7 @@ type Attributes = {
     anomaly_details: AnomalyDetails;
 };
 
-type Anomaly = {
+export type Anomaly = {
     type: string;
     id: string;
     is_anomaly: boolean;
@@ -40,7 +40,7 @@ export type Incident = {
     notes: string;
     status: string;
     attack_type: string;
-    severity: string | null;
+    severity: string | number | null;
     system_graph_relations: string[];
     access_level: string;
     bcdr_status: string | null;
