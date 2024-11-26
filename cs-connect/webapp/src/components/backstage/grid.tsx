@@ -20,3 +20,10 @@ export const VerticalSpacer = styled.div<{ size: number }>`
 export const Spacer = styled.div`
     flex: 1;
 `;
+
+export const HorizontalSeparator = styled.div`
+    border: none;
+    border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+    margin: 16px 0;
+    width: 100%;
+`;

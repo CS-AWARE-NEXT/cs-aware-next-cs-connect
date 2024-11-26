@@ -15,6 +15,7 @@ import {
 import Avatar from 'react-avatar';
 import {useIntl} from 'react-intl';
 import styled from 'styled-components';
+import moment from 'moment';
 
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {FullUrlContext} from 'src/components/rhs/rhs';
@@ -183,7 +184,7 @@ const SocialMediaPost: FC<Props> = ({
         >
             <Meta
                 avatar={getAvatarComponent(post.avatar, post.title, href, viewOnExternalSite)}
-                description={post.date}
+                description={`${moment(post.date).format('MMMM Do YYYY, h:mm:ss a')}`}
                 title={
                     <SocialMediaPostTitle
                         id={postId}

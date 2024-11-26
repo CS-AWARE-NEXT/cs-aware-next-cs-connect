@@ -82,6 +82,7 @@ const MultiTextBox = ({
                         onClick={txt.onClick}
                         dropdownItems={txt.dropdownItems}
                         dropdownTrigger={txt.dropdownTrigger}
+                        opaqueText={true}
                     />
                     <VerticalSpacer size={8}/>
                 </>

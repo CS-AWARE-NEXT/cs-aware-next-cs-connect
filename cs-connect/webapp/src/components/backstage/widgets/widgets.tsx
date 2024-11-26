@@ -21,6 +21,7 @@ import NewsWrapper from './news/wrappers/news_wrapper';
 import PolicyWrapper from './policy/wrappers/policy_wrappers';
 import BundleWrapper from './bundle/wrappers/bundle_wrapper';
 import MalwareWrapper from './bundle/wrappers/malware_wrapper';
+import IncidentWrapper from './incident/wrappers/incident_wrapper';
 import {WidgetType} from './widget_types';
 
 type Props = {
@@ -43,6 +44,8 @@ const buildWidgetByType = (
         return <ChartWrapper {...props}/>;
     case WidgetType.Graph:
         return <GraphWrapper {...props}/>;
+    case WidgetType.Incident:
+        return <IncidentWrapper {...props}/>;
     case WidgetType.Malware:
         return <MalwareWrapper {...props}/>;
     case WidgetType.Exercise:

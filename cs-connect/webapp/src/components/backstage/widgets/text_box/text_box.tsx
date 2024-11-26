@@ -25,6 +25,7 @@ type Props = {
     text: string;
     customId?: string;
     titleText?: string;
+    opaqueText?: boolean;
 };
 
 const TextBox = ({
@@ -40,6 +41,7 @@ const TextBox = ({
     },
     customId,
     titleText,
+    opaqueText = false,
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
@@ -68,6 +70,7 @@ const TextBox = ({
                 placeholder={placeholder}
                 value={text}
                 borderColor={isReferencedByUrlHash(urlHash, id) ? 'rgb(244, 180, 0)' : undefined}
+                opaqueText={opaqueText}
             />
         </Container>
     );
