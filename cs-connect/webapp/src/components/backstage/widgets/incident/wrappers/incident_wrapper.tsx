@@ -5,6 +5,7 @@ import qs from 'qs';
 import {SectionContext} from 'src/components/rhs/rhs';
 import Incident from 'src/components/backstage/widgets/incident/incident';
 import {Incident as IncidentType} from 'src/types/incident';
+import {formatUrlWithId} from 'src/helpers';
 
 type Props = {
     name?: string;
@@ -24,6 +25,8 @@ const IncidentWrapper = ({
     const areSectionContextOptionsProvided = sectionContextOptions.parentId !== '' && sectionContextOptions.sectionId !== '';
     const parentId = areSectionContextOptionsProvided ? sectionContextOptions.parentId : parentIdParam;
     const sectionIdForUrl = areSectionContextOptionsProvided ? sectionContextOptions.sectionId : sectionId;
+
+    const sectionUrl = formatUrlWithId(url, sectionIdForUrl);
 
     // TODO: replace this with actual data
     const data: IncidentType = {
@@ -100,6 +103,7 @@ const IncidentWrapper = ({
             name={name}
             sectionId={sectionIdForUrl}
             parentId={parentId}
+            url={sectionUrl}
         />
     );
 };
