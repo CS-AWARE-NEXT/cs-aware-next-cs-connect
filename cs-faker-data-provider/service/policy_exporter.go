@@ -16,11 +16,13 @@ type PolicyExporter interface {
 
 type JSONPolicyExporter struct {
 	postRepository repository.PostRepository
+	ecosystemId    string
 }
 
-func NewJSONPolicyExporter(postRepository repository.PostRepository) *JSONPolicyExporter {
+func NewJSONPolicyExporter(postRepository repository.PostRepository, ecosystemId string) *JSONPolicyExporter {
 	return &JSONPolicyExporter{
 		postRepository: postRepository,
+		ecosystemId:    ecosystemId,
 	}
 }
 
@@ -50,6 +52,8 @@ func (pe *JSONPolicyExporter) toJSONPolicyTemplate(
 		ID:           policyTemplate.ID,
 		Name:         policyTemplate.Name,
 		Organization: organizationName,
+
+		// EcosystemID:  pe.ecosystemId,
 
 		DateCreated: util.ConvertUnixMilliToUTC(pe.getFirstMessageTime(policyTemplate)),
 		LastUpdated: util.ConvertUnixMilliToUTC(time.Now().UnixMilli()),

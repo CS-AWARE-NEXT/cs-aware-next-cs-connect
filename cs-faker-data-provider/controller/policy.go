@@ -159,7 +159,7 @@ func (pc *PolicyController) SavePolicyTemplate(c *fiber.Ctx) error {
 	})
 }
 
-func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
+func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]string) error {
 	var policyTemplateField model.UpdatePolicyTemplateRequest
 	err := json.Unmarshal(c.Body(), &policyTemplateField)
 	if err != nil {
@@ -264,7 +264,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx) error {
 			})
 		}
 		policyTemplate.Exported = "true"
-		jsonPolicyExporter := service.NewJSONPolicyExporter(repository.PostRepository(*pc.postRepository))
+		jsonPolicyExporter := service.NewJSONPolicyExporter(*pc.postRepository, vars["ecosystemId"])
 		jsonPolicy, err := jsonPolicyExporter.ExportPolicy(
 			policyTemplate,
 			policyTemplateField.OrganizationName,
