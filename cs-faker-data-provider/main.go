@@ -65,13 +65,19 @@ func main() {
 		"news": os.Getenv("NEWS_ENDPOINT"),
 	}
 
+	varsMap := map[string]string{
+		"ecosystemId":  os.Getenv("ECOSYSTEM_ID"),
+		"authUsername": os.Getenv("AUTH_USERNAME"),
+		"authPassword": os.Getenv("AUTH_PASSWORD"),
+	}
+
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Use(logger.New(logger.Config{
 		Output: mw,
 	}))
 
-	route.UseRoutes(app, config.NewContext(repositoriesMap, endpointsMap))
+	route.UseRoutes(app, config.NewContext(repositoriesMap, endpointsMap, varsMap))
 	config.Shutdown(app)
 
 	port := os.Getenv("PORT")
