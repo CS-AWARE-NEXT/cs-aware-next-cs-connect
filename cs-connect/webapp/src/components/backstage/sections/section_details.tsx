@@ -113,7 +113,7 @@ const SectionDetails = () => {
             }
             forceRefresh();
 
-            addToast({content: 'Work in Progress!'});
+            addToast({content: 'Policy exported successfully!', toastStyle: ToastStyle.Success});
         }
     };
 
