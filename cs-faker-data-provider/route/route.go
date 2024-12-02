@@ -92,7 +92,13 @@ func useOrganizationsIncidentsSynthethic(organizations fiber.Router) {
 func useOrganizationsPolicies(organizations fiber.Router, context *config.Context) {
 	policyRepository := context.RepositoriesMap["policies"].(*repository.PolicyRepository)
 	postRepository := context.RepositoriesMap["posts"].(*repository.PostRepository)
-	policyController := controller.NewPolicyController(policyRepository, postRepository)
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	policyController := controller.NewPolicyController(
+		policyRepository,
+		postRepository,
+		authService,
+		context.EndpointsMap["policyExport"],
+	)
 
 	policies := organizations.Group("/:organizationId/policies")
 	policies.Get("/", func(c *fiber.Ctx) error {
