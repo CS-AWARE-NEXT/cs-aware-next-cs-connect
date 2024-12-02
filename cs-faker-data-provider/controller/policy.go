@@ -15,15 +15,21 @@ import (
 type PolicyController struct {
 	policyRepository *repository.PolicyRepository
 	postRepository   *repository.PostRepository
+	authService      *service.AuthService
+	endpoint         string
 }
 
 func NewPolicyController(
 	policyRepository *repository.PolicyRepository,
 	postRepository *repository.PostRepository,
+	authService *service.AuthService,
+	endpoint string,
 ) *PolicyController {
 	return &PolicyController{
 		policyRepository: policyRepository,
 		postRepository:   postRepository,
+		authService:      authService,
+		endpoint:         endpoint,
 	}
 }
 
@@ -264,10 +270,16 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 			})
 		}
 		policyTemplate.Exported = "true"
-		jsonPolicyExporter := service.NewJSONPolicyExporter(*pc.postRepository, vars["ecosystemId"])
+		jsonPolicyExporter := service.NewJSONPolicyExporter(
+			*pc.postRepository,
+			vars["ecosystemId"],
+			pc.endpoint,
+			pc.authService,
+		)
 		jsonPolicy, err := jsonPolicyExporter.ExportPolicy(
 			policyTemplate,
 			policyTemplateField.OrganizationName,
+			vars,
 		)
 		if err != nil {
 			log.Printf("Could not export policy template: %s", err.Error())
@@ -276,7 +288,6 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 				Message: "Could not export policy template",
 			})
 		}
-		// TODO: Here also call the API to erxport the policy to the datalake
 		log.Printf("Exported policy as %s", jsonPolicy.String())
 	default:
 		return c.JSON(model.UpdatePolicyTemplateResponse{
