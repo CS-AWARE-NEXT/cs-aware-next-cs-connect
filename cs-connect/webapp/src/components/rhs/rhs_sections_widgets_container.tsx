@@ -45,6 +45,8 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
                 return;
             }
 
+            addToast({content: 'Exporting policy...'});
+
             const result = await updatePolicyTemplateFieldAction(
                 {
                     policyId: sectionInfo.id,
