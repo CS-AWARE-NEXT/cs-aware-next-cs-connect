@@ -24,7 +24,6 @@ import ReactFlow, {
     useStoreApi,
     useUpdateNodeInternals,
 } from 'reactflow';
-
 import {
     Alert,
     Button,
@@ -38,20 +37,17 @@ import {
 } from 'antd';
 import {Content} from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
-
 import styled from 'styled-components';
 
 import withAdditionalProps from 'src/components/hoc/with_additional_props';
-
 import {uuidv4} from 'src/helpers/uuid';
-
 import {LockStatus} from 'src/types/ecosystem_graph';
-
 import {getSystemConfig} from 'src/config/config';
 
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
 
+const ON_CREATION_NODE_TYPE = 'default';
 export const EDGE_TYPE_MANAGED_BY = 'managed-by';
 export const EDGE_TYPE_SUPPLIED_BY = 'supplied-by';
 
@@ -242,11 +238,11 @@ const EditableGraph = ({
         if (
             !domNode ||
 
-          // we need to check if these properites exist, because when a node is not initialized yet,
-          // it doesn't have a positionAbsolute nor a width or height
-          !parentNode?.positionAbsolute ||
-          !parentNode?.width ||
-          !parentNode?.height
+            // we need to check if these properites exist, because when a node is not initialized yet,
+            // it doesn't have a positionAbsolute nor a width or height
+            !parentNode?.positionAbsolute ||
+            !parentNode?.width ||
+            !parentNode?.height
         ) {
             return {x: 0, y: 0};
         }
@@ -273,7 +269,7 @@ const EditableGraph = ({
             data: {
                 label: 'New Node',
                 description: '',
-                kind: 'default',
+                kind: ON_CREATION_NODE_TYPE, // this is the default kind (Organization)
             },
             position,
             parentNode: parentNode.id,
@@ -373,12 +369,12 @@ const EditableGraph = ({
             } else {
                 // Always keep a non deletable root node to allow creating more nodes from it
                 const startingNode = {
-                    id: 'root',
+                    id: 'default-node',
                     type: nodeType,
                     data: {
-                        label: 'New node',
-                        kind: 'cloud',
-                        description: '',
+                        label: 'Start node',
+                        kind: 'rectangle',
+                        description: 'Start working on the graph by customizing this node.',
                     },
                     position: {x: 0, y: 0},
                 };
@@ -616,9 +612,10 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                             disabled={!editEnabled}
                             options={[
                                 {value: 'default', label: 'Default'},
-                                {value: 'database', label: 'Database'},
-                                {value: 'cloud', label: 'Cloud'},
-                                {value: 'network', label: 'Network'},
+
+                                // {value: 'database', label: 'Database'},
+                                // {value: 'cloud', label: 'Cloud'},
+                                // {value: 'network', label: 'Network'},
                                 {value: 'rectangle', label: 'Organization'},
                                 {value: 'oval', label: 'Service'},
                             ]}

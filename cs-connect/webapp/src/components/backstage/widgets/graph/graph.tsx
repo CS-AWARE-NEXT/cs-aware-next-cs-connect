@@ -283,6 +283,7 @@ const Graph = ({
         }
     }, [targetNode]);
 
+    // opens the drawer if the section hash refers to a node's info in the drawer
     useEffect(() => {
         if (sectionUrlHash) {
             const urlHashedNode = data.nodes.find((node) => sectionUrlHash.includes(node.id));
