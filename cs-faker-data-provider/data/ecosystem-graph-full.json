@@ -1,0 +1,198 @@
+{
+    "nodes": [
+        {
+            "id": "ad4a6922-74fb-4220-b8a3-dd6aabb0fa35",
+            "name": "Sysefxis",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "root",
+            "name": "Municipality of Larissa",
+            "description": "",
+            "type": "rectangle"
+        },
+        {
+            "id": "7d333e94-f59f-4f22-927b-c72db04b5b21",
+            "name": "Waste Management",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "3a5bfaec-8818-44e8-9202-d00a3c4f1324",
+            "name": "Transportation/Traffic",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "2e432a7c-df22-4aff-b6d0-0758d480c329",
+            "name": "Novoville",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "e163be27-3e8b-4a71-b121-48801fbf47d5",
+            "name": "MAN",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "b96b1dc0-ef0b-44e6-a2d3-f5c96652e50e",
+            "name": "Deyal",
+            "description": "",
+            "type": "rectangle"
+        },
+        {
+            "id": "dcbd4c77-a9e9-4af6-b84b-2b63b9cc8cfc",
+            "name": "Smartville",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "29a04c16-8b92-419e-a0b8-4e4514c603e0",
+            "name": "Novoville",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "ddb61c4c-10e1-4b21-811d-dbab47885e6f",
+            "name": "Sewerage",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "8f5b4799-496e-436d-aa39-ef5eca9d3388",
+            "name": "Water supply",
+            "description": "",
+            "type": "oval"
+        },
+        {
+            "id": "34a03ca6-a09d-4c4b-bd11-f14dbfd67980",
+            "name": "5thYPE",
+            "description": "",
+            "type": "rectangle"
+        },
+        {
+            "id": "0a33bce2-e603-4b4d-9eef-fe91cd044110",
+            "name": "University Hospital Larissa",
+            "description": "",
+            "type": "rectangle"
+        },
+        {
+            "id": "6e925cfa-e7a9-4239-bf20-73430322cc27",
+            "name": "General Hospital Larissa",
+            "description": "",
+            "type": "rectangle"
+        },
+        {
+            "id": "eab5bcab-adf6-433f-8723-e3e2a8d137c4",
+            "name": "Volos Hospital",
+            "description": "",
+            "type": "rectangle"
+        },
+        {
+            "id": "83ea94ce-a968-4a33-b001-ebdee0a8805c",
+            "name": "Health Centres",
+            "description": "",
+            "type": "oval"
+        }
+    ],
+    "edges": [
+        {
+            "id": "73f0822b-6418-4a63-86b4-1ac6c8e47306",
+            "sourceNodeID": "root",
+            "destinationNodeID": "7d333e94-f59f-4f22-927b-c72db04b5b21",
+            "kind": "managed-by"
+        },
+        {
+            "id": "102423d4-a2e1-496d-9d3c-aecb5cad1ff7",
+            "sourceNodeID": "root",
+            "destinationNodeID": "3a5bfaec-8818-44e8-9202-d00a3c4f1324",
+            "kind": "managed-by"
+        },
+        {
+            "id": "4a621fad-38d4-4d97-911d-884c08af2407",
+            "sourceNodeID": "root",
+            "destinationNodeID": "2e432a7c-df22-4aff-b6d0-0758d480c329",
+            "kind": "managed-by"
+        },
+        {
+            "id": "96c8f27e-c412-49f7-b358-c4e9e22bb8f7",
+            "sourceNodeID": "root",
+            "destinationNodeID": "e163be27-3e8b-4a71-b121-48801fbf47d5",
+            "kind": "managed-by"
+        },
+        {
+            "id": "0502f4c5-aa49-4c15-8103-97d074e2edb4",
+            "sourceNodeID": "e163be27-3e8b-4a71-b121-48801fbf47d5",
+            "destinationNodeID": "34a03ca6-a09d-4c4b-bd11-f14dbfd67980",
+            "kind": "supplied-by"
+        },
+        {
+            "id": "23456070-35f0-4591-9b6d-e27e206d6855",
+            "sourceNodeID": "ad4a6922-74fb-4220-b8a3-dd6aabb0fa35",
+            "destinationNodeID": "root",
+            "kind": "supplied-by"
+        },
+        {
+            "id": "b0836c4e-c5ec-4734-b249-149871eaf520",
+            "sourceNodeID": "ad4a6922-74fb-4220-b8a3-dd6aabb0fa35",
+            "destinationNodeID": "b96b1dc0-ef0b-44e6-a2d3-f5c96652e50e",
+            "kind": "supplied-by"
+        },
+        {
+            "id": "56f22031-889c-4a81-ba18-bdddb1d344c1",
+            "sourceNodeID": "ad4a6922-74fb-4220-b8a3-dd6aabb0fa35",
+            "destinationNodeID": "34a03ca6-a09d-4c4b-bd11-f14dbfd67980",
+            "kind": "supplied-by"
+        },
+        {
+            "id": "7d91dd7b-98ae-418a-8f39-07b7e22db0a8",
+            "sourceNodeID": "b96b1dc0-ef0b-44e6-a2d3-f5c96652e50e",
+            "destinationNodeID": "dcbd4c77-a9e9-4af6-b84b-2b63b9cc8cfc",
+            "kind": "managed-by"
+        },
+        {
+            "id": "dd91fbd6-9a8c-4f24-a046-97a40bd36acd",
+            "sourceNodeID": "b96b1dc0-ef0b-44e6-a2d3-f5c96652e50e",
+            "destinationNodeID": "29a04c16-8b92-419e-a0b8-4e4514c603e0",
+            "kind": "managed-by"
+        },
+        {
+            "id": "06f2b6fd-76b8-4b2a-839f-14fc2409b15a",
+            "sourceNodeID": "b96b1dc0-ef0b-44e6-a2d3-f5c96652e50e",
+            "destinationNodeID": "ddb61c4c-10e1-4b21-811d-dbab47885e6f",
+            "kind": "managed-by"
+        },
+        {
+            "id": "ebed0b33-d58b-4e8d-9b36-75b38d140a24",
+            "sourceNodeID": "b96b1dc0-ef0b-44e6-a2d3-f5c96652e50e",
+            "destinationNodeID": "8f5b4799-496e-436d-aa39-ef5eca9d3388",
+            "kind": "managed-by"
+        },
+        {
+            "id": "277bdd6b-7bc3-4e82-853f-7f42664cb996",
+            "sourceNodeID": "34a03ca6-a09d-4c4b-bd11-f14dbfd67980",
+            "destinationNodeID": "0a33bce2-e603-4b4d-9eef-fe91cd044110",
+            "kind": "managed-by"
+        },
+        {
+            "id": "871a4287-8015-4683-871d-187e010f5037",
+            "sourceNodeID": "34a03ca6-a09d-4c4b-bd11-f14dbfd67980",
+            "destinationNodeID": "6e925cfa-e7a9-4239-bf20-73430322cc27",
+            "kind": "managed-by"
+        },
+        {
+            "id": "e90bef70-f6a6-4afb-8040-9a1710ba1804",
+            "sourceNodeID": "34a03ca6-a09d-4c4b-bd11-f14dbfd67980",
+            "destinationNodeID": "eab5bcab-adf6-433f-8723-e3e2a8d137c4",
+            "kind": "managed-by"
+        },
+        {
+            "id": "dbc2f393-9294-48a0-847c-26213ca4e349",
+            "sourceNodeID": "34a03ca6-a09d-4c4b-bd11-f14dbfd67980",
+            "destinationNodeID": "83ea94ce-a968-4a33-b001-ebdee0a8805c",
+            "kind": "managed-by"
+        }
+    ]
+}

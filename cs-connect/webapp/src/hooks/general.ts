@@ -76,7 +76,7 @@ import {PostData} from 'src/types/social_media';
 import {ChartData} from 'src/types/charts';
 import {ChartType} from 'src/components/backstage/widgets/widget_types';
 import {ExerciseAssignment} from 'src/types/exercise';
-import {EcosystemGraph} from 'src/types/ecosystem_graph';
+import {EcosystemGraph, EcosystemGraphNode} from 'src/types/ecosystem_graph';
 import {PolicyTemplate} from 'src/types/policy';
 import {
     GetPostsByIdsResult,
@@ -312,7 +312,16 @@ export const useEcosystemGraphData = (
     useEffect(() => {
         let isCanceled = false;
         async function fetchGraphDataAsync() {
-            const graphDataResult = await fetchEcosystemGraphData(url);
+            let graphDataResult = await fetchEcosystemGraphData(url);
+            if (graphDataResult && graphDataResult.nodes.length < 1) {
+                const nodes: EcosystemGraphNode[] = [{
+                    id: 'default-node',
+                    name: 'Start node',
+                    description: 'Start working on the graph by customizing this node.',
+                    type: 'rectangle',
+                }];
+                graphDataResult = {nodes, edges: []};
+            }
             if (!isCanceled) {
                 setGraphData(graphDataResult);
             }

@@ -45,6 +45,8 @@ type JSONPolicyTemplate struct {
 	Name         string `json:"name"`
 	Organization string `json:"organization"`
 
+	// EcosystemID  string `json:"ecosystemId"`
+
 	DateCreated string `json:"date_created"`
 	LastUpdated string `json:"last_updated"`
 

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 
@@ -122,7 +121,7 @@ func (nc *NewsController) DeleteNews(c *fiber.Ctx) error {
 	})
 }
 
-func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
+func (nc *NewsController) GetNewsPosts(c *fiber.Ctx, vars map[string]string) error {
 	log.Info("preparing for request at ", nc.endpoint)
 	search := c.Query("search")
 	if search == "" {
@@ -201,7 +200,7 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx) error {
 	req.Header.Set("Content-Type", "application/json")
 
 	log.Info("authenticating to get token")
-	authResp, err := nc.authService.Auth(os.Getenv("AUTH_USERNAME"), os.Getenv("AUTH_PASSWORD"))
+	authResp, err := nc.authService.Auth(vars["authUsername"], vars["authPassword"])
 	if err != nil {
 		log.Error("error authenticating ", err.Error())
 		c.Status(fiber.StatusInternalServerError)

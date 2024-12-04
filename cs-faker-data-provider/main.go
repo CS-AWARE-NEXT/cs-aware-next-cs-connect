@@ -61,8 +61,15 @@ func main() {
 	}
 
 	endpointsMap := map[string]string{
-		"auth": os.Getenv("AUTH_ENDPOINT"),
-		"news": os.Getenv("NEWS_ENDPOINT"),
+		"auth":         os.Getenv("AUTH_ENDPOINT"),
+		"news":         os.Getenv("NEWS_ENDPOINT"),
+		"policyExport": os.Getenv("POLICY_EXPORT_ENDPOINT"),
+	}
+
+	varsMap := map[string]string{
+		"ecosystemId":  os.Getenv("ECOSYSTEM_ID"),
+		"authUsername": os.Getenv("AUTH_USERNAME"),
+		"authPassword": os.Getenv("AUTH_PASSWORD"),
 	}
 
 	app := fiber.New()
@@ -71,7 +78,7 @@ func main() {
 		Output: mw,
 	}))
 
-	route.UseRoutes(app, config.NewContext(repositoriesMap, endpointsMap))
+	route.UseRoutes(app, config.NewContext(repositoriesMap, endpointsMap, varsMap))
 	config.Shutdown(app)
 
 	port := os.Getenv("PORT")

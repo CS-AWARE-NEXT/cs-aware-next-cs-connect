@@ -44,6 +44,9 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
                 addToast({content: 'Work in Progress!'});
                 return;
             }
+
+            addToast({content: 'Exporting policy...'});
+
             const result = await updatePolicyTemplateFieldAction(
                 {
                     policyId: sectionInfo.id,
@@ -60,7 +63,8 @@ const RhsSectionsWidgetsContainer = (props: Props) => {
             if (forceRefresh) {
                 forceRefresh();
             }
-            addToast({content: 'Work in Progress!'});
+
+            addToast({content: 'Policy exported successfully!', toastStyle: ToastStyle.Success});
         }
     };
 

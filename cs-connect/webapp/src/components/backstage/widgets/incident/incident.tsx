@@ -1,5 +1,5 @@
 import React, {FC, useContext} from 'react';
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 import moment from 'moment';
 import {Tag} from 'antd';
@@ -10,7 +10,7 @@ import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {formatName} from 'src/helpers';
-import {buildQuery, useOrganization} from 'src/hooks';
+import {buildQuery, getUrlWithoutQueryParamsAndFragment, useOrganization} from 'src/hooks';
 import {HorizontalSeparator, VerticalSpacer} from 'src/components/backstage/grid';
 import TextBox from 'src/components/backstage/widgets/text_box/text_box';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
@@ -43,10 +43,13 @@ const Incident: FC<Props> = ({
     const fullUrl = useContext(FullUrlContext);
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
+    const channelUrl = getUrlWithoutQueryParamsAndFragment();
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
-    const anomaliesId = `${formatName(name)}-${sectionId}-${parentId}-widget-anomalies`;
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
+
+    // const anomaliesId = `${formatName(name)}-${sectionId}-${parentId}-widget-anomalies`;
+    const anomaliesAccordionId = `anomalies-${sectionId}-${parentId}-widget`;
 
     const severity = data.severity ? `${data.severity}` : 'Severity is not available yet';
     const status = data.status || 'Status is not available yet';
@@ -56,9 +59,10 @@ const Incident: FC<Props> = ({
     const bcdrStatus = data.bcdr_status || 'BCDR Status is not available yet';
 
     // to use anomalies as elements in the accordion
+    // name is currently different than the header because the hyperlinks would be too long otherwise
     const anomalyElements = data.anomalies.map((anomaly: AnomalyType) => ({
         anomaly,
-        header: `Anomaly at line ${anomaly.attributes.anomaly_details.line_number}`,
+        header: `Anomaly at line ${anomaly.attributes.anomaly_details.line_number} of ${anomaly.attributes.anomaly_details.file_path}`,
         name: `Anomaly at line ${anomaly.attributes.anomaly_details.line_number}`,
         id: `${anomaly.id}`,
     })) ?? [];
@@ -110,6 +114,16 @@ const Incident: FC<Props> = ({
                         {'BCDR Relevant'}
                     </Tag>
                 }
+            </HorizontalContainer>
+
+            <HorizontalContainer>
+                <a
+                    style={{marginTop: '24px'}}
+                    href={`${channelUrl}#${anomaliesAccordionId}`}
+                    rel='noreferrer'
+                >
+                    {`${formatMessage({defaultMessage: 'Go to Anomalies'})}`}
+                </a>
             </HorizontalContainer>
 
             <TextBox
@@ -252,6 +266,16 @@ const Incident: FC<Props> = ({
                     />
                 </>
             )}
+
+            <HorizontalContainer>
+                <a
+                    style={{marginTop: '24px'}}
+                    href={`${channelUrl}#${id}`}
+                    rel='noreferrer'
+                >
+                    {`${formatMessage({defaultMessage: 'Go to Top'})}`}
+                </a>
+            </HorizontalContainer>
         </Container>
     );
 };
@@ -267,15 +291,6 @@ export const HorizontalContainer = styled.div<{disable?: boolean}>`
     display: flex;
     flex-direction: ${({disable}) => (disable ? 'column' : 'row')};
     justify-content: 'space-between';
-`;
-
-const BorderBox = styled.div<{border?: boolean}>`
-    padding: 8px;
-    border-radius: 8px;
-
-    ${({border}) => border && css`
-        border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    `}
 `;
 
 export default Incident;

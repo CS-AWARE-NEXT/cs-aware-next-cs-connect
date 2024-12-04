@@ -96,6 +96,8 @@ const SectionDetails = () => {
                 return;
             }
 
+            addToast({content: 'Exporting policy...'});
+
             // TODO: make a first call to check whether the policy is valid for export
             // if it is not do not allow the export and show a message to the user
             const result = await updatePolicyTemplateFieldAction(
@@ -113,7 +115,7 @@ const SectionDetails = () => {
             }
             forceRefresh();
 
-            addToast({content: 'Work in Progress!'});
+            addToast({content: 'Policy exported successfully!', toastStyle: ToastStyle.Success});
         }
     };
 

@@ -92,7 +92,13 @@ func useOrganizationsIncidentsSynthethic(organizations fiber.Router) {
 func useOrganizationsPolicies(organizations fiber.Router, context *config.Context) {
 	policyRepository := context.RepositoriesMap["policies"].(*repository.PolicyRepository)
 	postRepository := context.RepositoriesMap["posts"].(*repository.PostRepository)
-	policyController := controller.NewPolicyController(policyRepository, postRepository)
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	policyController := controller.NewPolicyController(
+		policyRepository,
+		postRepository,
+		authService,
+		context.EndpointsMap["policyExport"],
+	)
 
 	policies := organizations.Group("/:organizationId/policies")
 	policies.Get("/", func(c *fiber.Ctx) error {
@@ -126,7 +132,7 @@ func useOrganizationsPolicies(organizations fiber.Router, context *config.Contex
 
 	noOrganizationIdPolicy := organizations.Group("/policies")
 	noOrganizationIdPolicy.Put("/template", func(c *fiber.Ctx) error {
-		return policyController.UpdatePolicyTemplate(c)
+		return policyController.UpdatePolicyTemplate(c, context.Vars)
 	})
 	noOrganizationIdPolicy.Get("/ten_most_common", func(c *fiber.Ctx) error {
 		return policyController.GetTenMostCommonPolicies(c)
@@ -283,7 +289,7 @@ func useOrganizationsNews(organizations fiber.Router, context *config.Context) {
 		return newsController.DeleteNews(c)
 	})
 	newsWithId.Get("/news", func(c *fiber.Ctx) error {
-		return newsController.GetNewsPosts(c)
+		return newsController.GetNewsPosts(c, context.Vars)
 	})
 }
 
