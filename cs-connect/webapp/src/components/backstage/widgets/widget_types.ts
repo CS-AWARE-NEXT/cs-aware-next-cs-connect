@@ -6,6 +6,7 @@ export enum WidgetType {
     Channels = 'channels',
     Chart = 'chart',
     Exercise = 'exercise',
+    EcosystemGraph = 'ecosystem-graph',
     Graph = 'graph',
     Incident = 'incident',
     Malware = 'malware',
