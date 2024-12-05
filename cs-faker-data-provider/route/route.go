@@ -65,6 +65,9 @@ func useOrganizationsIncidents(organizations fiber.Router) {
 	incidentsWithId.Get("/text_box", func(c *fiber.Ctx) error {
 		return incidentController.GetIncidentTextBox(c)
 	})
+	incidentsWithId.Get("/details", func(c *fiber.Ctx) error {
+		return incidentController.GetIncidentDetails(c)
+	})
 }
 
 func useOrganizationsIncidentsSynthethic(organizations fiber.Router) {
