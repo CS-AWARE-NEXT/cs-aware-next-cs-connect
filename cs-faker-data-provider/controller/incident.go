@@ -14,7 +14,6 @@ func NewIncidentController() *IncidentController {
 func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
 	organizationId := c.Params("organizationId")
 
-	// TODO: maybe this will become the new default
 	if organizationId == "4" {
 		extendedTableData := model.ExtendedPaginatedTableData{
 			Columns: extendedIncidentsPaginatedTableData.Columns,
@@ -25,14 +24,32 @@ func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
 		}
 		return c.JSON(extendedTableData)
 	}
+
 	tableData := model.PaginatedTableData{
 		Columns: incidentsPaginatedTableData.Columns,
 		Rows:    []model.PaginatedTableRow{},
 	}
+
+	if organizationId == "9" {
+		tableData.Rows = ic.getIncidentsAsRows(organizationId)
+		return c.JSON(tableData)
+	}
+
 	for _, incident := range incidentsMap[organizationId] {
 		tableData.Rows = append(tableData.Rows, model.PaginatedTableRow(incident))
 	}
 	return c.JSON(tableData)
+}
+
+func (ic *IncidentController) getIncidentsAsRows(organizationId string) []model.PaginatedTableRow {
+	// TODO: call the API to get the incidents before converting them to rows
+	// dataLakeOrganizationId := model.OrgToDataLakeOrgMap[organizationId]
+
+	rows := []model.PaginatedTableRow{}
+	for _, incident := range incidentsMap[organizationId] {
+		rows = append(rows, model.PaginatedTableRow(incident))
+	}
+	return rows
 }
 
 func (ic *IncidentController) GetIncidentsByOrganizationId(organizationId string) []model.Incident {
@@ -45,6 +62,15 @@ func (ic *IncidentController) GetIncident(c *fiber.Ctx) error {
 		return c.JSON(ic.getExtendedIncidentByID(c))
 	}
 	return c.JSON(ic.getIncidentByID(c))
+}
+
+func (ic *IncidentController) GetIncidentDetails(c *fiber.Ctx) error {
+	// organizationId := c.Params("organizationId")
+
+	// TODO: call the API to get the incident's details
+
+	incident := model.CreateFakeIncident()
+	return c.JSON(incident)
 }
 
 func (ic *IncidentController) GetIncidentGraph(c *fiber.Ctx) error {
