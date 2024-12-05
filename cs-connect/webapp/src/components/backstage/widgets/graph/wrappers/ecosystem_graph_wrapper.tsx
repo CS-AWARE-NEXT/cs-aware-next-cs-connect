@@ -35,7 +35,7 @@ type Props = {
     name?: string;
     editable?: boolean;
     className?: string;
-    url: string;
+    url?: string;
     refreshNodeInternalsParent?: Record<string, never>,
     setEditMode?: React.Dispatch<React.SetStateAction<boolean>>,
 };
@@ -44,7 +44,7 @@ const EcosystemGraphWrapper = ({
     name = 'Graph',
     editable,
     className,
-    url,
+    url = '',
     refreshNodeInternalsParent,
     setEditMode,
 }: Props) => {

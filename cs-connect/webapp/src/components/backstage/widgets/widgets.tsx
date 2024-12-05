@@ -23,6 +23,7 @@ import BundleWrapper from './bundle/wrappers/bundle_wrapper';
 import MalwareWrapper from './bundle/wrappers/malware_wrapper';
 import IncidentWrapper from './incident/wrappers/incident_wrapper';
 import {WidgetType} from './widget_types';
+import EcosystemGraphWrapper from './graph/wrappers/ecosystem_graph_wrapper';
 
 type Props = {
     widgets: Widget[];
@@ -44,6 +45,8 @@ const buildWidgetByType = (
         return <ChartWrapper {...props}/>;
     case WidgetType.Graph:
         return <GraphWrapper {...props}/>;
+    case WidgetType.EcosystemGraph:
+        return <EcosystemGraphWrapper {...props}/>;
     case WidgetType.Incident:
         return <IncidentWrapper {...props}/>;
     case WidgetType.Malware:

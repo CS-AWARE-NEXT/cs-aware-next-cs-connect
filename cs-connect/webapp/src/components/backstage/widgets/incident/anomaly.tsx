@@ -30,8 +30,8 @@ const Anomaly: FC<Props> = ({data, name: widgetName, sectionId, parentId}) => {
     const fullUrl = useContext(FullUrlContext);
     const hyperlinkPathContext = useContext(HyperlinkPathContext);
 
-    let name = `Anomaly at line ${data.attributes.anomaly_details.line_number} of ${data.attributes.anomaly_details.file_path}`;
-    name = widgetName || name;
+    // widgetName will always be the name of the anomaly
+    const name = widgetName ?? 'Anomaly';
     const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     const id = `${data.id}-${sectionId}-${parentId}-widget`;
