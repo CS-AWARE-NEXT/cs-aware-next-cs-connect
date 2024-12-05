@@ -35,6 +35,9 @@ organizations:
         internal: true
         url: http://www.isislab.it:3000/cs-data-provider/organizations/0/policies
         widgets:
+          - name: Ecosystem Graph
+            type: ecosystem-graph
+            url: http://www.isislab.it:3000/cs-data-provider/issues/ecosystem_graph
           - name: Components
             type: policy
             url: http://www.isislab.it:3000/cs-data-provider/organizations/0/policies/:id/template
@@ -70,14 +73,6 @@ organizations:
             chartType: simple-line
             url: http://www.isislab.it:3000/cs-data-provider/organizations/8/social_media/:id/chart
           - type: channels
-      # - name: News
-      #   id: "26"
-      #   url: http://www.isislab.it:3000/cs-data-provider/organizations/8/news
-      #   widgets:
-      #     - name: Explore
-      #       type: news
-      #       url: http://www.isislab.it:3000/cs-data-provider/organizations/8/news/:id/news
-      #     - type: channels
       - name: Policies
         id: "30"
         internal: true
@@ -134,14 +129,6 @@ organizations:
             chartType: simple-line
             url: http://www.isislab.it:3000/cs-data-provider/organizations/7/social_media/:id/chart
           - type: channels
-      # - name: News
-      #   id: "27"
-      #   url: http://www.isislab.it:3000/cs-data-provider/organizations/7/news
-      #   widgets:
-      #     - name: Explore
-      #       type: news
-      #       url: http://www.isislab.it:3000/cs-data-provider/organizations/7/news/:id/news
-      #     - type: channels
       - name: Policies
         id: "31"
         internal: true
@@ -198,14 +185,6 @@ organizations:
             chartType: simple-line
             url: http://www.isislab.it:3000/cs-data-provider/organizations/6/social_media/:id/chart
           - type: channels
-      # - name: News
-      #   id: "28"
-      #   url: http://www.isislab.it:3000/cs-data-provider/organizations/6/news
-      #   widgets:
-      #     - name: Explore
-      #       type: news
-      #       url: http://www.isislab.it:3000/cs-data-provider/organizations/6/news/:id/news
-      #     - type: channels
       - name: Policies
         id: "32"
         internal: true
@@ -342,5 +321,17 @@ organizations:
             type: chart
             chartType: simple-line
             url: http://www.isislab.it:3000/cs-data-provider/organizations/4/charts/:id/line_chart
+          - type: channel
+  - name: NextDev CS-AWARE
+    id: "9"
+    description: The NextDev organization
+    sections:
+      - name: Incidents
+        id: "44"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/9/incidents
+        widgets:
+          - name: Details
+            type: incident
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/9/incidents/:id/details
           - type: channel
     widgets: []
