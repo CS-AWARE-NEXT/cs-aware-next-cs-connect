@@ -15,6 +15,7 @@ const AnomalyAccordionChild = ({element, parentId, sectionId}: Props) => {
         <Anomaly
             key={element.id}
             data={element.anomaly}
+            name={element.name}
             parentId={parentId || ''}
             sectionId={sectionId || ''}
         />

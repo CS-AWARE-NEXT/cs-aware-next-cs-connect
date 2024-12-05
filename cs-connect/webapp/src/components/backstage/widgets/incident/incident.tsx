@@ -60,12 +60,20 @@ const Incident: FC<Props> = ({
 
     // to use anomalies as elements in the accordion
     // name is currently different than the header because the hyperlinks would be too long otherwise
-    const anomalyElements = data.anomalies.map((anomaly: AnomalyType) => ({
-        anomaly,
-        header: `Anomaly at line ${anomaly.attributes.anomaly_details.line_number} of ${anomaly.attributes.anomaly_details.file_path}`,
-        name: `Anomaly at line ${anomaly.attributes.anomaly_details.line_number}`,
-        id: `${anomaly.id}`,
-    })) ?? [];
+    const anomalyElements = data.anomalies.map((anomaly: AnomalyType) => {
+        let anomalyName = 'Anomaly';
+        let anomalyHeader = 'Anomaly';
+        if (anomaly.type === 'lineguard') {
+            anomalyName = `Anomaly at line ${anomaly.attributes.anomaly_details.line_number}`;
+            anomalyHeader = `Anomaly at line ${anomaly.attributes.anomaly_details.line_number} of ${anomaly.attributes.anomaly_details.file_path}`;
+        }
+        return {
+            anomaly,
+            id: anomaly.id,
+            header: anomalyHeader,
+            name: anomalyName,
+        };
+    }) ?? [];
 
     // the incident container expects the url to be /details
     // and then converts it to be the graph url /graph
