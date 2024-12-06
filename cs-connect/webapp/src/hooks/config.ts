@@ -73,6 +73,12 @@ const hideOptions = (showOptionsConfig: ShowOptionsConfig): NodeJS.Timeout[][] =
         }
     }, estimatedOptionsLoadTime);
 
+    const announcementBarInterval = hideAnnouncementBar();
+
+    return [[], [interval, announcementBarInterval]];
+};
+
+export const hideAnnouncementBar = (): NodeJS.Timeout => {
     // this fixes Mattermost's bug where the announcement bar is shown
     // even when there is no error and is shown also to non-admin users
     const announcementBarInterval = setInterval(() => {
@@ -87,7 +93,7 @@ const hideOptions = (showOptionsConfig: ShowOptionsConfig): NodeJS.Timeout[][] =
         }
     }, estimatedAnnouncementBarsLoadTime);
 
-    return [[], [interval, announcementBarInterval]];
+    return announcementBarInterval;
 };
 
 export const getSection = (id: string): Section => {

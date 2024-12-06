@@ -8,9 +8,7 @@ import {getCurrentChannelId} from 'mattermost-webapp/packages/mattermost-redux/s
 
 import {
     DEFAULT_PATH,
-    DOCUMENTATION_PATH,
     ECOSYSTEM_GRAPH_EDIT_LABEL,
-    PRODUCT_DOCUMENTATION,
     PRODUCT_ICON,
     PRODUCT_NAME,
 } from 'src/constants';
@@ -23,18 +21,12 @@ import {
 } from 'src/config/config';
 import {loadPlatformConfig, loadSystemConfig, setSiteUrl} from 'src/clients';
 import Backstage from 'src/components/backstage/backstage';
-import {
-    EcosystemGraphEditIcon,
-    HiddenIcon,
-    InfoIcon,
-    RHSIcon,
-} from 'src/components/icons';
+import {EcosystemGraphEditIcon, HiddenIcon, RHSIcon} from 'src/components/icons';
 import {GlobalSelectStyle} from 'src/components/backstage/styles';
 import RHSView from 'src/components/rhs/rhs';
 import manifest, {pluginId} from 'src/manifest';
 
 import {messageWillBePosted, messageWillBeUpdated, slashCommandWillBePosted} from './hooks';
-import {navigateToPluginUrl} from './browser_routing';
 import withPlatformOperations from './components/hoc/with_platform_operations';
 import LHSView from './components/lhs/lhs';
 import {editEcosystemgraphAction, exportAction, updatePolicyTemplateFieldAction} from './actions';
@@ -232,12 +224,13 @@ export default class Plugin {
             PRODUCT_NAME,
         );
 
-        registry.registerChannelHeaderButtonAction(
-            <InfoIcon/>,
-            () => navigateToPluginUrl(`/${DOCUMENTATION_PATH}`),
-            PRODUCT_DOCUMENTATION,
-            PRODUCT_DOCUMENTATION,
-        );
+        // Uncomment this to add an icon to the documentation
+        // registry.registerChannelHeaderButtonAction(
+        //     <InfoIcon/>,
+        //     () => navigateToPluginUrl(`/${DOCUMENTATION_PATH}`),
+        //     PRODUCT_DOCUMENTATION,
+        //     PRODUCT_DOCUMENTATION,
+        // );
 
         if (enableEcosystemGraph && enableRSEcosystemGraphEdit) {
             registry.registerChannelHeaderButtonAction(

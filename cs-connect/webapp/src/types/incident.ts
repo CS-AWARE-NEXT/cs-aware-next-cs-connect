@@ -44,6 +44,7 @@ export type Incident = {
     system_graph_relations: string[];
     access_level: string;
     bcdr_status: string | null;
+    context_status: string | null;
     bcdr_relevant: boolean;
     last_modified_entity: string[];
     anomalies: Anomaly[];

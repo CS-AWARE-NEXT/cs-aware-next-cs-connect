@@ -35,6 +35,7 @@ import {
     fetchEcosystemGraphData,
     fetchExerciseData,
     fetchGraphData,
+    fetchIncidentData,
     fetchLinkListData,
     fetchListData,
     fetchNewsPostData,
@@ -86,6 +87,7 @@ import {
 } from 'src/types/post';
 import {NewsError, NewsPostData, NewsQuery} from 'src/types/news';
 import {BundleData} from 'src/types/bundles';
+import {Incident} from 'src/types/incident';
 
 type FetchParams = FetchOrganizationsParams;
 
@@ -491,6 +493,27 @@ export const usePlaybookData = (url: string): any => {
         };
     }, [url]);
     return playbookData as any;
+};
+
+export const useIncidentData = (url: string): Incident => {
+    const [incidentData, setIncidentData] = useState<Incident | {}>({});
+
+    useEffect(() => {
+        let isCanceled = false;
+        async function fetchPostDataAsync() {
+            const incidentDataResult = await fetchIncidentData(url);
+            if (!isCanceled) {
+                setIncidentData(incidentDataResult);
+            }
+        }
+
+        fetchPostDataAsync();
+
+        return () => {
+            isCanceled = true;
+        };
+    }, [url]);
+    return incidentData as Incident;
 };
 
 export const usePostData = (url: string): PostData => {
