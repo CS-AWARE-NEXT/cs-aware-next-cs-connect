@@ -22,7 +22,7 @@ import {
     PRODUCT_NAME,
 } from 'src/constants';
 import {applyTheme} from 'src/components/backstage/css_utils';
-import {useForceDocumentTitle} from 'src/hooks';
+import {hideAnnouncementBar, useForceDocumentTitle} from 'src/hooks';
 import Documentation from 'src/components/documentation/documentation';
 
 import LHSNavigation from './lhs/lhs_navigation';
@@ -53,6 +53,13 @@ const Backstage = () => {
             document.body.classList.remove('app__body');
         };
     }, [currentTheme]);
+
+    useEffect(() => {
+        const interval = hideAnnouncementBar();
+        return () => {
+            clearInterval(interval);
+        };
+    });
 
     useForceDocumentTitle(PRODUCT_NAME);
 
