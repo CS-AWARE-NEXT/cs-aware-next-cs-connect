@@ -13,6 +13,12 @@ export const getUrlWithoutQueryParamsAndFragment = () => {
     return currentUrlWithoutQueryParams;
 };
 
+export const getUrlWithoutFragment = () => {
+    let currentUrlWithoutQueryParams = window.location.href;
+    currentUrlWithoutQueryParams = currentUrlWithoutQueryParams.split('#')[0];
+    return currentUrlWithoutQueryParams;
+};
+
 export const isUrlEqualWithoutQueryParams = (url: string) => {
     const currentUrlWithoutQueryParams = window.location.href.split('?')[0];
     return currentUrlWithoutQueryParams === url || `${currentUrlWithoutQueryParams}/` === url;
