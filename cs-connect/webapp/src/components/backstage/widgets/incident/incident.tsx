@@ -10,7 +10,7 @@ import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {IsRhsContext} from 'src/components/backstage/sections_widgets/sections_widgets_container';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {formatName} from 'src/helpers';
-import {buildQuery, getUrlWithoutQueryParamsAndFragment, useOrganization} from 'src/hooks';
+import {buildQuery, getUrlWithoutFragment, useOrganization} from 'src/hooks';
 import {HorizontalSeparator, VerticalSpacer} from 'src/components/backstage/grid';
 import TextBox from 'src/components/backstage/widgets/text_box/text_box';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
@@ -43,7 +43,7 @@ const Incident: FC<Props> = ({
     const fullUrl = useContext(FullUrlContext);
     const organizationId = useContext(OrganizationIdContext);
     const organization = useOrganization(organizationId);
-    const channelUrl = getUrlWithoutQueryParamsAndFragment();
+    const channelUrl = getUrlWithoutFragment();
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
@@ -57,10 +57,11 @@ const Incident: FC<Props> = ({
     const description = data.description || 'Description is not available yet';
     const notes = data.notes || 'Notes added by users will appear here';
     const bcdrStatus = data.bcdr_status || 'BCDR Status is not available yet';
+    const contextStatus = data.context_status || 'Context Status is not available yet';
 
     // to use anomalies as elements in the accordion
     // name is currently different than the header because the hyperlinks would be too long otherwise
-    const anomalyElements = data.anomalies.map((anomaly: AnomalyType) => {
+    const anomalyElements = data?.anomalies?.map((anomaly: AnomalyType) => {
         let anomalyName = 'Anomaly';
         let anomalyHeader = 'Anomaly';
         if (anomaly.type === 'lineguard') {
@@ -124,15 +125,17 @@ const Incident: FC<Props> = ({
                 }
             </HorizontalContainer>
 
-            <HorizontalContainer>
-                <a
-                    style={{marginTop: '24px'}}
-                    href={`${channelUrl}#${anomaliesAccordionId}`}
-                    rel='noreferrer'
-                >
-                    {`${formatMessage({defaultMessage: 'Go to Anomalies'})}`}
-                </a>
-            </HorizontalContainer>
+            {isRhs &&
+                <HorizontalContainer>
+                    <a
+                        style={{marginTop: '24px'}}
+                        href={`${channelUrl}#${anomaliesAccordionId}`}
+                        rel='noreferrer'
+                    >
+                        {`${formatMessage({defaultMessage: 'Go to Anomalies'})}`}
+                    </a>
+                </HorizontalContainer>
+            }
 
             <TextBox
                 idPrefix={DESCRIPTION_ID_PREFIX}
@@ -163,17 +166,6 @@ const Incident: FC<Props> = ({
                 />
             </HorizontalContainer>
 
-            {data.bcdr_relevant &&
-                <TextBox
-                    idPrefix={DESCRIPTION_ID_PREFIX}
-                    name={formatMessage({defaultMessage: 'BCDR Status'})}
-                    sectionId={sectionId}
-                    parentId={parentId}
-                    text={bcdrStatus}
-                    opaqueText={true}
-                />
-            }
-
             <TextBox
                 idPrefix={DESCRIPTION_ID_PREFIX}
                 name={formatMessage({defaultMessage: 'Description'})}
@@ -189,6 +181,26 @@ const Incident: FC<Props> = ({
                 sectionId={sectionId}
                 parentId={parentId}
                 text={notes}
+                opaqueText={true}
+            />
+
+            {data.bcdr_relevant &&
+                <TextBox
+                    idPrefix={DESCRIPTION_ID_PREFIX}
+                    name={formatMessage({defaultMessage: 'BCDR Status'})}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                    text={bcdrStatus}
+                    opaqueText={true}
+                />
+            }
+
+            <TextBox
+                idPrefix={DESCRIPTION_ID_PREFIX}
+                name={formatMessage({defaultMessage: 'Context Status'})}
+                sectionId={sectionId}
+                parentId={parentId}
+                text={contextStatus}
                 opaqueText={true}
             />
 
@@ -275,15 +287,17 @@ const Incident: FC<Props> = ({
                 </>
             )}
 
-            <HorizontalContainer>
-                <a
-                    style={{marginTop: '24px'}}
-                    href={`${channelUrl}#${id}`}
-                    rel='noreferrer'
-                >
-                    {`${formatMessage({defaultMessage: 'Go to Top'})}`}
-                </a>
-            </HorizontalContainer>
+            {isRhs &&
+                <HorizontalContainer>
+                    <a
+                        style={{marginTop: '24px'}}
+                        href={`${channelUrl}#${id}`}
+                        rel='noreferrer'
+                    >
+                        {`${formatMessage({defaultMessage: 'Go to Top'})}`}
+                    </a>
+                </HorizontalContainer>
+            }
         </Container>
     );
 };
