@@ -39,6 +39,10 @@ export const formatUrlAsMarkdown = (path: string, text: string) => {
 
 export const formatChannelName = (name: string): string => {
     let channelName = formatName(name);
+
+    // data lake apis return : within the name of things
+    channelName = channelName.replaceAll(':', '');
+
     if (channelName.length < MATTERMOST_CHANNEL_NAME_LENGTH) {
         return channelName;
     }
