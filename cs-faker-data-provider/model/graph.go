@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	Customer  string = "customer"
@@ -81,4 +83,82 @@ type CSAwareGraphNode struct {
 	XCategories      []string  `json:"x_categories"`
 	XCsawareNodeType string    `json:"x_csaware_node_type,omitempty"`
 	Timestamp        string    `json:"timestamp,omitempty"`
+}
+
+type DataLakeGraph struct {
+	Type                  string              `json:"type"`
+	ID                    string              `json:"id"`
+	Name                  string              `json:"name"`
+	Created               string              `json:"created"`
+	Modified              string              `json:"modified"`
+	Version               string              `json:"version"`
+	Objects               []DataLakeGraphNode `json:"objects"`
+	Description           string              `json:"description,omitempty"`
+	XCsawareCIA           []string            `json:"x_csaware_CIA"`
+	XCsawareCPE           []string            `json:"x_csaware_CPE"`
+	XCategories           []string            `json:"x_categories"`
+	XCsawareIP            []string            `json:"x_csaware_ip"`
+	XCsawareHostname      string              `json:"x_csaware_hostname,omitempty"`
+	XCsawareCriticalLevel int                 `json:"x_csaware_critical_level,omitempty"`
+	XCsawareRPO           string              `json:"x_csaware_rpo,omitempty"`
+	XCsawareRTO           string              `json:"x_csaware_rto,omitempty"`
+	XCsawareHostedOn      string              `json:"x_csaware_hostedOn,omitempty"`
+	XCsawareEmail         string              `json:"x_csaware_email,omitempty"`
+	XCsawareModel         string              `json:"x_csaware_model,omitempty"`
+	XCsawareSoftware      string              `json:"x_csaware_software,omitempty"`
+	XCsawareVendor        string              `json:"x_csaware_vendor,omitempty"`
+	XCsawareCPU           string              `json:"x_csaware_cpu,omitempty"`
+	XCsawarePhoneNumber   string              `json:"x_csaware_phoneNumber,omitempty"`
+	DependsFrom           string              `json:"dependsFrom,omitempty"`
+	Redundancy            string              `json:"redundancy,omitempty"`
+	InfrastructureType    string              `json:"infrastructure_type,omitempty"`
+	NeedsInfrastructure   string              `json:"needsInfrastructure,omitempty"`
+}
+
+type DataLakeGraphNode struct {
+	Type                  string   `json:"type"`
+	ID                    string   `json:"id"`
+	Name                  string   `json:"name"`
+	BCDRRelevant          bool     `json:"bcdr_relevant"`
+	HashedIDs             []string `json:"hashed_ids"`
+	Created               string   `json:"created"`
+	Modified              string   `json:"modified"`
+	Description           string   `json:"description"`
+	Source                []string `json:"source"`
+	XInfoFlow             []string `json:"x_infoflow"`
+	XCsawareNodeType      string   `json:"x_csaware_node_type"`
+	XCsawareCIA           []string `json:"x_csaware_CIA"`
+	XCsawareCPE           []string `json:"x_csaware_CPE"`
+	XCategories           []string `json:"x_categories"`
+	XCsawareIP            []string `json:"x_csaware_ip"`
+	XCsawareHostname      string   `json:"x_csaware_hostname,omitempty"`
+	XCsawareCriticalLevel int      `json:"x_csaware_critical_level,omitempty"`
+	XCsawareRPO           string   `json:"x_csaware_rpo,omitempty"`
+	XCsawareRTO           string   `json:"x_csaware_rto,omitempty"`
+	XCsawareHostedOn      string   `json:"x_csaware_hostedOn,omitempty"`
+	XCsawareEmail         string   `json:"x_csaware_email,omitempty"`
+	XCsawareModel         string   `json:"x_csaware_model,omitempty"`
+	XCsawareSoftware      string   `json:"x_csaware_software,omitempty"`
+	XCsawareVendor        string   `json:"x_csaware_vendor,omitempty"`
+	XCsawareCPU           string   `json:"x_csaware_cpu,omitempty"`
+	XCsawarePhoneNumber   string   `json:"x_csaware_phoneNumber,omitempty"`
+	DependsFrom           []string `json:"dependsFrom"`
+	Redundancy            []string `json:"redundancy"`
+	InfrastructureType    string   `json:"infrastructure_type,omitempty"`
+	NeedsInfrastructure   string   `json:"needsInfrastructure,omitempty"`
+}
+
+type DataLakeGraphRoot struct {
+	Graph       DataLakeGraph `json:"graph"`
+	AccessLevel int           `json:"access_level"`
+}
+
+func (n DataLakeGraphNode) ToCSAwareNode(dln DataLakeGraphNode) CSAwareGraphNode {
+	return CSAwareGraphNode{
+		Type:        dln.Type,
+		ID:          dln.ID,
+		Name:        dln.Name,
+		Description: dln.Description,
+		Source:      dln.Source,
+	}
 }
