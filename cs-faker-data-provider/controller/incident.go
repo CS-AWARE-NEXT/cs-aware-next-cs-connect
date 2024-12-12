@@ -1,17 +1,38 @@
 package controller
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
+
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 )
 
-type IncidentController struct{}
-
-func NewIncidentController() *IncidentController {
-	return &IncidentController{}
+type IncidentController struct {
+	authService             *service.AuthService
+	incidentsEndpoint       string
+	incidentDetailsEndpoint string
 }
 
-func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
+func NewIncidentController(
+	authService *service.AuthService,
+	incidentsEndpoint string,
+	incidentDetailsEndpoint string,
+) *IncidentController {
+	return &IncidentController{
+		authService:             authService,
+		incidentsEndpoint:       incidentsEndpoint,
+		incidentDetailsEndpoint: incidentDetailsEndpoint,
+	}
+}
+
+func (ic *IncidentController) GetIncidents(c *fiber.Ctx, vars map[string]string) error {
 	organizationId := c.Params("organizationId")
 
 	if organizationId == "4" {
@@ -31,7 +52,7 @@ func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
 	}
 
 	if organizationId == "9" {
-		tableData.Rows = ic.getIncidentsAsRows(organizationId)
+		tableData.Rows = ic.getIncidentsAsRows(c, organizationId, vars)
 		return c.JSON(tableData)
 	}
 
@@ -41,13 +62,84 @@ func (ic *IncidentController) GetIncidents(c *fiber.Ctx) error {
 	return c.JSON(tableData)
 }
 
-func (ic *IncidentController) getIncidentsAsRows(organizationId string) []model.PaginatedTableRow {
-	// TODO: call the API to get the incidents before converting them to rows
-	// dataLakeOrganizationId := model.OrgToDataLakeOrgMap[organizationId]
+func (ic *IncidentController) getIncidentsAsRows(
+	c *fiber.Ctx,
+	organizationId string,
+	vars map[string]string,
+) []model.PaginatedTableRow {
+	log.Info("Starting preparation for incidents request")
+
+	dataLakeOrganizationId := model.OrgToDataLakeOrgMap[organizationId]
+	limit := c.Query("limit")
+	if limit == "" {
+		limit = "1000"
+	}
+	compact := "true"
+	queryString := fmt.Sprintf("limit=%s&compact=%s", limit, compact)
+	endpoint := strings.Replace(ic.incidentsEndpoint, "{organization_id}", dataLakeOrganizationId, 1)
+	endpoint = endpoint + "?" + queryString
+	log.Infof("Endpoint for incidents: %s", endpoint)
+
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		log.Error("error creating request ", err.Error())
+		return []model.PaginatedTableRow{}
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	log.Info("Authenticating to get token")
+	authResp, err := ic.authService.Auth(vars["authUsername"], vars["authPassword"])
+	if err != nil {
+		log.Error("error authenticating ", err.Error())
+		return []model.PaginatedTableRow{}
+	}
+	log.Infof("Got token: %s", authResp.String())
+	req.Header.Set("access-token", authResp.AccessToken)
+	req.Header.Set("id-token", authResp.IdToken)
+
+	transport := &http.Transport{}
+	client := &http.Client{Transport: transport}
+
+	log.Info("Making request to get incidents...")
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Error("error getting incidents ", err.Error())
+		return []model.PaginatedTableRow{}
+	}
+	defer resp.Body.Close()
+	defer transport.CloseIdleConnections()
+
+	log.Info("Response Status: ", resp.Status)
+	log.Info("Response Headers: ", resp.Header)
+	if resp.StatusCode != http.StatusOK {
+		log.Error("error getting incidents ", resp.Status)
+		return []model.PaginatedTableRow{}
+	}
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Error("error reading response body ", string(respBody), err.Error())
+		return []model.PaginatedTableRow{}
+	}
+	// log.Info("Response Body: ", string(respBody))
+
+	log.Info("unmarshaling incidents")
+
+	var incidents []model.DataLakeIncidentCompact
+	// we cannot use Unmarshal because we have to read from the Body reader first
+	err = json.NewDecoder(bytes.NewReader(respBody)).Decode(&incidents)
+	if err != nil {
+		log.Error("error unmarshaling incidents ", err.Error())
+		return []model.PaginatedTableRow{}
+	}
 
 	rows := []model.PaginatedTableRow{}
-	for _, incident := range incidentsMap[organizationId] {
-		rows = append(rows, model.PaginatedTableRow(incident))
+	for _, incident := range incidents {
+		rows = append(rows, model.PaginatedTableRow{
+			ID:          incident.ID,
+			Name:        incident.Title,
+			Description: incident.Description,
+		})
 	}
 	return rows
 }
@@ -56,20 +148,97 @@ func (ic *IncidentController) GetIncidentsByOrganizationId(organizationId string
 	return incidentsMap[organizationId]
 }
 
-func (ic *IncidentController) GetIncident(c *fiber.Ctx) error {
+func (ic *IncidentController) GetIncident(c *fiber.Ctx, vars map[string]string) error {
 	organizationId := c.Params("organizationId")
+	if organizationId == "9" {
+		// this is needed in section_details.tsx to get the basic incident's information
+		// to keep building the visualization, in this case it is the same as the content of the incident's widget
+		log.Infof("GetIncident -> Requesting incident details for organization %s", organizationId)
+		return ic.GetIncidentDetails(c, vars)
+	}
 	if organizationId == "4" {
 		return c.JSON(ic.getExtendedIncidentByID(c))
 	}
 	return c.JSON(ic.getIncidentByID(c))
 }
 
-func (ic *IncidentController) GetIncidentDetails(c *fiber.Ctx) error {
-	// organizationId := c.Params("organizationId")
+func (ic *IncidentController) GetIncidentDetails(
+	c *fiber.Ctx,
+	vars map[string]string,
+) error {
+	log.Info("Starting preparation for incident details request")
 
-	// TODO: call the API to get the incident's details
+	organizationId := c.Params("organizationId")
+	incidentId := c.Params("incidentId")
+	log.Infof("Requesting incident details for organization %s and incident %s", organizationId, incidentId)
 
-	incident := model.CreateFakeIncident()
+	dataLakeOrganizationId := model.OrgToDataLakeOrgMap[organizationId]
+	endpoint := strings.Replace(ic.incidentDetailsEndpoint, "{organization_id}", dataLakeOrganizationId, 1)
+	endpoint = strings.Replace(endpoint, "{incident_id}", incidentId, 1)
+	log.Infof("Endpoint for incident details: %s", endpoint)
+
+	req, err := http.NewRequest("GET", endpoint, nil)
+	if err != nil {
+		log.Error("error creating request ", err.Error())
+		c.Status(http.StatusInternalServerError)
+		return c.JSON(model.DataLakeIncident{})
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	log.Info("Authenticating to get token")
+	authResp, err := ic.authService.Auth(vars["authUsername"], vars["authPassword"])
+	if err != nil {
+		log.Error("error authenticating ", err.Error())
+		c.Status(http.StatusInternalServerError)
+		return c.JSON(model.DataLakeIncident{})
+	}
+	log.Infof("Got token: %s", authResp.String())
+	req.Header.Set("access-token", authResp.AccessToken)
+	req.Header.Set("id-token", authResp.IdToken)
+
+	transport := &http.Transport{}
+	client := &http.Client{Transport: transport}
+
+	log.Info("Making request to get incident details...")
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Error("error getting incident details ", err.Error())
+		c.Status(resp.StatusCode)
+		return c.JSON(model.DataLakeIncident{})
+	}
+	defer resp.Body.Close()
+	defer transport.CloseIdleConnections()
+
+	log.Info("Response Status: ", resp.Status)
+	log.Info("Response Headers: ", resp.Header)
+	if resp.StatusCode != http.StatusOK {
+		log.Error("error getting incident details ", resp.Status)
+		c.Status(resp.StatusCode)
+		return c.JSON(model.DataLakeIncident{})
+	}
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Error("error reading response body ", string(respBody), err.Error())
+		c.Status(http.StatusInternalServerError)
+		return c.JSON(model.DataLakeIncident{})
+	}
+	log.Info("Response Body: ", string(respBody))
+
+	log.Info("unmarshaling incident details")
+
+	var incident model.DataLakeIncident
+	// we cannot use Unmarshal because we have to read from the Body reader first
+	err = json.NewDecoder(bytes.NewReader(respBody)).Decode(&incident)
+	if err != nil {
+		c.Status(http.StatusInternalServerError)
+		return c.JSON(model.DataLakeIncident{})
+	}
+
+	// custom marshal logic (it is read from the title field coming from the API)
+	incident.Name = incident.Title
+
+	// incident := model.CreateFakeIncident()
 	return c.JSON(incident)
 }
 
