@@ -48,7 +48,7 @@
         "needsInfrastructure": null
       },
       {
-        "type": "node",
+        "type": "root",
         "id": "identity--3de01dde-3f8e-433d-8bac-8db0b506583d",
         "name": "information sharing",
         "bcdr_relevant": true,
