@@ -11,6 +11,7 @@ import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 import {buildQuery} from 'src/hooks';
 import TextBox from 'src/components/backstage/widgets/text_box/text_box';
 import {Anomaly as AnomalyType} from 'src/types/incident';
+import {formatStringNoNewLine} from 'src/helpers';
 
 import {HorizontalContainer} from './incident';
 
@@ -37,15 +38,20 @@ const Anomaly: FC<Props> = ({data, name: widgetName, sectionId, parentId}) => {
     const id = `${data.id}-${sectionId}-${parentId}-widget`;
     const ecosystemQuery = isEcosystemRhs ? '' : buildQuery(parentId, sectionId);
 
-    const description = data.description || 'Description is not available yet';
+    // TODO: removed because it is an ID
     const criticalAsset = data.attributes.critical_asset.asset_identifier || 'Unknown';
+    const description = data.description || 'Description is not available yet';
     const srcIp = data.attributes.anomaly_details.src_ip || 'Unknown';
     const destIp = data.attributes.anomaly_details.dest_ip || 'Unknown';
     const protocol = data.attributes.anomaly_details.protocol || 'Unknown';
     const type = data.type || 'Unknown';
     const lineNumber = `${data.attributes.anomaly_details.line_number}` || 'Unknown';
     const filePath = data.attributes.anomaly_details.file_path || 'Unknown';
-    const rawLine = data.attributes.anomaly_details.raw_line || 'Unknown';
+
+    // TODO: there are a few issues with some raw lines that make the accordion's dropdown strech too much
+    const rawLine = data.attributes.anomaly_details.raw_line ?
+        formatStringNoNewLine(data.attributes.anomaly_details.raw_line) :
+        'Unknown';
 
     const prefix = `${DESCRIPTION_ID_PREFIX}${data.id}-`;
 
@@ -107,14 +113,14 @@ const Anomaly: FC<Props> = ({data, name: widgetName, sectionId, parentId}) => {
                     opaqueText={true}
                 />
 
-                <TextBox
+                {/* <TextBox
                     idPrefix={prefix}
                     name={formatMessage({defaultMessage: 'Critical Asset'})}
                     sectionId={sectionId}
                     parentId={parentId}
                     text={criticalAsset}
                     opaqueText={true}
-                />
+                /> */}
 
                 <HorizontalContainer>
                     <TextBox

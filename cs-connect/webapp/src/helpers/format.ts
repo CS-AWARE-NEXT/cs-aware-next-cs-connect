@@ -33,6 +33,10 @@ export const formatStringToCapitalize = (s: string): string => {
     return startCase(camelCase(s));
 };
 
+export const formatStringNoNewLine = (s: string): string => {
+    return s.replaceAll('\n', ' ').replaceAll('\t', ' ');
+};
+
 export const formatUrlAsMarkdown = (path: string, text: string) => {
     return `[${text}](${path})`;
 };
