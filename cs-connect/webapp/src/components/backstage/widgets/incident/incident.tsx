@@ -16,6 +16,7 @@ import TextBox from 'src/components/backstage/widgets/text_box/text_box';
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
 import GraphWrapper from 'src/components/backstage/widgets/graph/wrappers/graph_wrapper';
 import Accordion from 'src/components/backstage/widgets/accordion/accordion';
+import Loading from 'src/components/commons/loading';
 
 import AnomalyAccordionChild from './anomaly_accordion_child';
 
@@ -27,6 +28,7 @@ type Props = {
     url?: string;
     parentId: string;
     sectionId: string;
+    loading: boolean;
 };
 
 const Incident: FC<Props> = ({
@@ -35,6 +37,7 @@ const Incident: FC<Props> = ({
     url = '',
     parentId,
     sectionId,
+    loading,
 }) => {
     const {formatMessage} = useIntl();
 
@@ -79,6 +82,10 @@ const Incident: FC<Props> = ({
     // the incident container expects the url to be /details
     // and then converts it to be the graph url /graph
     const graphUrl = url.replace('details', 'graph');
+
+    if (loading) {
+        return <Loading marginTop='8px'/>;
+    }
 
     return (
         <Container data-testid={id}>

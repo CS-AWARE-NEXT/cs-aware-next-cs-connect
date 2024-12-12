@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 
@@ -97,7 +97,8 @@ const IncidentWrapper = ({
     //     ],
     // };
 
-    const data = useIncidentData(sectionUrl);
+    const [loading, setLoading] = useState(false);
+    const data = useIncidentData(sectionUrl, setLoading);
 
     return (
         <Incident
@@ -106,6 +107,7 @@ const IncidentWrapper = ({
             sectionId={sectionIdForUrl}
             parentId={parentId}
             url={sectionUrl}
+            loading={loading}
         />
     );
 };
