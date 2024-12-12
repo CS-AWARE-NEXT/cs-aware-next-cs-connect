@@ -33,12 +33,20 @@ export const formatStringToCapitalize = (s: string): string => {
     return startCase(camelCase(s));
 };
 
+export const formatStringNoNewLine = (s: string): string => {
+    return s.replaceAll('\n', ' ').replaceAll('\t', ' ');
+};
+
 export const formatUrlAsMarkdown = (path: string, text: string) => {
     return `[${text}](${path})`;
 };
 
 export const formatChannelName = (name: string): string => {
     let channelName = formatName(name);
+
+    // data lake apis return : within the name of things
+    channelName = channelName.replaceAll(':', '');
+
     if (channelName.length < MATTERMOST_CHANNEL_NAME_LENGTH) {
         return channelName;
     }

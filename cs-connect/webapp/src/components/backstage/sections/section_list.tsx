@@ -1,4 +1,4 @@
-import React, {createContext, useContext} from 'react';
+import React, {createContext, useContext, useState} from 'react';
 import styled from 'styled-components';
 
 import {OrganizationIdContext} from 'src/components/backstage/organizations/organization_details';
@@ -23,18 +23,19 @@ const SectionList = ({section}: Props) => {
 
     const {id, internal, customView, name, url} = section;
 
-    const data = useSectionData(section);
+    const [loading, setLoading] = useState(false);
+    const data = useSectionData(section, setLoading);
 
     useNavHighlighting(SECTION_NAV_ITEM, SECTION_NAV_ITEM_ACTIVE, name, []);
 
     let content;
-    if (customView) {
+    if (customView && !loading) {
         content = (
             <CustomSectionContent
                 section={section}
                 customView={customView}
             />);
-    } else if (data) {
+    } else if (data && !loading) {
         content = (
             <PaginatedTable
                 id={formatName(name)}
@@ -48,7 +49,7 @@ const SectionList = ({section}: Props) => {
         );
     } else {
         content = (
-            <Loading/>
+            <Loading marginTop='16px'/>
         );
     }
 

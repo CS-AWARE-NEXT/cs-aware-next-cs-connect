@@ -61,9 +61,11 @@ func main() {
 	}
 
 	endpointsMap := map[string]string{
-		"auth":         os.Getenv("AUTH_ENDPOINT"),
-		"news":         os.Getenv("NEWS_ENDPOINT"),
-		"policyExport": os.Getenv("POLICY_EXPORT_ENDPOINT"),
+		"auth":            os.Getenv("AUTH_ENDPOINT"),
+		"news":            os.Getenv("NEWS_ENDPOINT"),
+		"policyExport":    os.Getenv("POLICY_EXPORT_ENDPOINT"),
+		"incidents":       os.Getenv("INCIDENTS_ENDPOINT"),
+		"incidentDetails": os.Getenv("INCIDENTS_DETAILS_ENDPOINT"),
 	}
 
 	varsMap := map[string]string{

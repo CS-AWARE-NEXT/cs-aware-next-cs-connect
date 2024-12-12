@@ -8,6 +8,7 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"gopkg.in/karalabe/cookiejar.v2/graph"
 	"gopkg.in/karalabe/cookiejar.v2/graph/bfs"
 )
@@ -23,9 +24,6 @@ func (gc *GraphController) GetGraph(c *fiber.Ctx) error {
 
 	// TODO: Temporary to return the same graph of organization
 	// Demo CS-AWARE for the organization NexDev CS-AWARE
-	if organizationId == "9" {
-		organizationId = "4"
-	}
 	if organizationId > "4" {
 		graphData, err := gc.getGraphFromJson(organizationId)
 		if err != nil {
@@ -47,6 +45,9 @@ func (gc *GraphController) getGraphFromJson(organizationId string) (model.GraphD
 	if organizationId == "8" {
 		organizationName = "5thype"
 	}
+	if organizationId == "9" {
+		organizationName = "nextdev"
+	}
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
 	if err != nil {
 		return model.GraphData{}, err
@@ -58,12 +59,80 @@ func (gc *GraphController) getGraphFromJson(organizationId string) (model.GraphD
 	if err != nil {
 		return model.GraphData{}, err
 	}
-	var csAwareGraphData model.CSAwareGraphData
-	err = json.Unmarshal(content, &csAwareGraphData)
+
+	if organizationId == "9" {
+		return gc.fromDataLakeGraphData(content)
+	}
+
+	if organizationId >= "6" || organizationId <= "8" {
+		var csAwareGraphData model.CSAwareGraphData
+		err = json.Unmarshal(content, &csAwareGraphData)
+		if err != nil {
+			return model.GraphData{}, err
+		}
+		return gc.fromCSAwareGraphData(csAwareGraphData), nil
+	}
+
+	return model.GraphData{}, nil
+}
+
+func (gc *GraphController) fromDataLakeGraphData(content []byte) (model.GraphData, error) {
+	log.Info("Getting graph data from DataLake")
+
+	var dataLakeGraphData model.DataLakeGraphRoot
+	err := json.Unmarshal(content, &dataLakeGraphData)
 	if err != nil {
 		return model.GraphData{}, err
 	}
-	return gc.fromCSAwareGraphData(csAwareGraphData), nil
+
+	nodes := []model.GraphNode{}
+	edges := []model.GraphEdge{}
+
+	log.Info("Creating data lake nodes")
+	for _, dataLakeNode := range dataLakeGraphData.Graph.Objects {
+		nodes = append(nodes, model.GraphNode{
+			Position: model.GraphNodePosition{X: 0, Y: 0},
+			ID:       dataLakeNode.ID,
+			Data: model.GraphNodeData{
+				Label:       dataLakeNode.Name,
+				Description: dataLakeNode.Description,
+				Kind:        dataLakeNode.XCsawareNodeType,
+			},
+		})
+	}
+
+	log.Info("Converting data lake nodes to CSA nodes")
+	csaNodes := []model.CSAwareGraphNode{}
+	for _, dln := range dataLakeGraphData.Graph.Objects {
+		csaNodes = append(csaNodes, dln.ToCSAwareNode(dln))
+	}
+
+	log.Info("Creating data lake edges")
+	nodeIndexes, nodeIDs, bfs := gc.getBfs(csaNodes)
+	for _, node := range nodes {
+		path := bfs.Path(nodeIndexes[node.ID])
+		if len(path) < 2 {
+			continue
+		}
+		index := path[len(path)-2]
+		ID := nodeIDs[index]
+		edges = append(edges, model.GraphEdge{
+			ID:     fmt.Sprintf("%s-%s", ID, node.ID),
+			Source: ID,
+			Target: node.ID,
+		})
+	}
+
+	log.Info("Creating data lake nodes")
+	return model.GraphData{
+		Description: model.GraphDescription{
+			Name: "Description",
+			Text: fmt.Sprintf("%s %s, version %s", dataLakeGraphData.Graph.Name, dataLakeGraphData.Graph.Type, dataLakeGraphData.Graph.Version),
+		},
+		Nodes:    nodes,
+		Edges:    edges,
+		Layouted: false,
+	}, nil
 }
 
 func (gc *GraphController) fromCSAwareGraphData(csAwareGraphData model.CSAwareGraphData) model.GraphData {
@@ -142,6 +211,7 @@ func (gc *GraphController) getBfs(nodes []model.CSAwareGraphNode) (map[string]in
 	return nodeIndexes, nodeIDs, bfs.New(g, root)
 }
 
+// TODO: we need a way to identify the root node in all graphs (a dedicated field)
 func (gc *GraphController) getRootAndCount(nodes []model.CSAwareGraphNode) (int, int) {
 	for index, node := range nodes {
 		if node.Type == "root" {

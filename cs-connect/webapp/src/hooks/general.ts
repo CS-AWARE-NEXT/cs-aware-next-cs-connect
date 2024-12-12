@@ -234,7 +234,10 @@ export const useSectionInfo = (id: string, url: string, refresh = false): Sectio
     return info as SectionInfo;
 };
 
-export const useSectionData = ({id, name, customView, url}: Section): PaginatedTableData => {
+export const useSectionData = (
+    {id, name, customView, url}: Section,
+    setLoading: Dispatch<SetStateAction<boolean>>,
+): PaginatedTableData => {
     const [sectionData, setSectionData] = useState<PaginatedTableData>({columns: [], rows: []});
     const {path, url: routeUrl} = useRouteMatch();
     const organizationId = useContext(OrganizationIdContext);
@@ -243,6 +246,7 @@ export const useSectionData = ({id, name, customView, url}: Section): PaginatedT
     useEffect(() => {
         let isCanceled = false;
         async function fetchSectionDataAsync() {
+            setLoading(true);
             const paginatedTableDataResult = await fetchPaginatedTableData(url);
             if (!isCanceled) {
                 const {columns, rows} = sectionData;
@@ -256,6 +260,7 @@ export const useSectionData = ({id, name, customView, url}: Section): PaginatedT
                     });
                 });
                 setSectionData({columns, rows});
+                setLoading(false);
             }
         }
 
@@ -266,6 +271,7 @@ export const useSectionData = ({id, name, customView, url}: Section): PaginatedT
 
         return () => {
             isCanceled = true;
+            setLoading(false);
         };
     }, [url]);
 
@@ -495,15 +501,17 @@ export const usePlaybookData = (url: string): any => {
     return playbookData as any;
 };
 
-export const useIncidentData = (url: string): Incident => {
+export const useIncidentData = (url: string, setLoading: Dispatch<SetStateAction<boolean>>): Incident => {
     const [incidentData, setIncidentData] = useState<Incident | {}>({});
 
     useEffect(() => {
         let isCanceled = false;
         async function fetchPostDataAsync() {
+            setLoading(true);
             const incidentDataResult = await fetchIncidentData(url);
             if (!isCanceled) {
                 setIncidentData(incidentDataResult);
+                setLoading(false);
             }
         }
 
@@ -511,6 +519,7 @@ export const useIncidentData = (url: string): Incident => {
 
         return () => {
             isCanceled = true;
+            setLoading(false);
         };
     }, [url]);
     return incidentData as Incident;

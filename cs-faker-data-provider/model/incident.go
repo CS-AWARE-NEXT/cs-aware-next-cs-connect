@@ -1,8 +1,15 @@
 package model
 
+type DataLakeIncidentCompact struct {
+	OrganizationID string `json:"organisation_id"`
+	ID             string `json:"incident_reference_id"`
+	Title          string `json:"title"`
+	Description    string `json:"description"`
+}
+
 type CriticalAsset struct {
-	Type            *string `json:"type,omitempty"`
-	AssetIdentifier string  `json:"asset_identifier"`
+	Type            string `json:"type,omitempty"`
+	AssetIdentifier string `json:"asset_identifier"`
 }
 
 type AnomalyDetails struct {
@@ -30,32 +37,41 @@ type Anomaly struct {
 	Attributes      Attributes `json:"attributes"`
 }
 
+type LastModifiedEntity struct {
+	Timestamp          string `json:"timestamp"`
+	LastModifiedEntity string `json:"last_modified_entity"`
+}
+
 type DataLakeIncident struct {
 	ID             int64  `json:"id"`
 	ReferenceID    string `json:"reference_id"`
 	OrganisationID string `json:"organisation_id"`
-	Title          string `json:"title"`
-	Description    string `json:"description"`
-	CreatedTime    string `json:"created_time"`
-	DetectedTime   string `json:"detected_time"`
-	ModifiedTime   string `json:"modified_time"`
-	Notes          string `json:"notes"`
-	Status         string `json:"status"`
-	AttackType     string `json:"attack_type"`
+
+	// custom marshal logic (it is read from the title field coming from the API)
+	Name string `json:"name"`
+
+	Title        string `json:"title"`
+	Description  string `json:"description"`
+	CreatedTime  string `json:"created_time"`
+	DetectedTime string `json:"detected_time"`
+	ModifiedTime string `json:"modified_time"`
+	Notes        string `json:"notes"`
+	Status       string `json:"status"`
+	AttackType   string `json:"attack_type"`
 
 	// string | number | null
-	Severity interface{} `json:"severity"`
+	Severity int64 `json:"severity"`
 
 	SystemGraphRelations []string `json:"system_graph_relations"`
-	AccessLevel          string   `json:"access_level"`
+	AccessLevel          int64    `json:"access_level"`
 
 	// string | null
-	BCDRStatus    *string `json:"bcdr_status,omitempty"`
-	ContextStatus *string `json:"context_status,omitempty"`
+	BCDRStatus    string `json:"bcdr_status,omitempty"`
+	ContextStatus string `json:"context_status,omitempty"`
 
-	BCDRRelevant       bool      `json:"bcdr_relevant"`
-	LastModifiedEntity []string  `json:"last_modified_entity"`
-	Anomalies          []Anomaly `json:"anomalies"`
+	BCDRRelevant       bool                 `json:"bcdr_relevant"`
+	LastModifiedEntity []LastModifiedEntity `json:"last_modified_entity"`
+	Anomalies          []Anomaly            `json:"anomalies"`
 }
 
 func CreateFakeIncident() DataLakeIncident {
@@ -63,6 +79,7 @@ func CreateFakeIncident() DataLakeIncident {
 		ID:                   24,
 		ReferenceID:          "incident--bab6087c-904f-42ac-80c2-93594b8ac86a",
 		OrganisationID:       "30",
+		Name:                 "Potential DoS Attack 2024-11-11T16:25:46Z",
 		Title:                "Potential DoS Attack 2024-11-11T16:25:46Z",
 		Description:          "Anomalous connection detected from source IP None to destination IP None over 6 protocol.",
 		CreatedTime:          "2024-11-11T16:25:46.320616+00:00",
@@ -71,13 +88,13 @@ func CreateFakeIncident() DataLakeIncident {
 		Notes:                "Anomalous connection detected from source IP None to destination IP None over 6 protocol.",
 		Status:               "open",
 		AttackType:           "ddos",
-		Severity:             int64(3),
+		Severity:             3,
 		SystemGraphRelations: []string{"unknown", "unknown"},
-		AccessLevel:          "1",
-		BCDRStatus:           nil,
+		AccessLevel:          1,
+		BCDRStatus:           "",
 		BCDRRelevant:         true,
-		ContextStatus:        stringPtr("needs_contextualisation"),
-		LastModifiedEntity:   []string{},
+		ContextStatus:        "needs_contextualisation",
+		LastModifiedEntity:   []LastModifiedEntity{},
 		Anomalies: []Anomaly{
 			{
 				Type:            "lineguard",
@@ -88,7 +105,7 @@ func CreateFakeIncident() DataLakeIncident {
 				Timestamp:       "2024-10-29T16:51:53.484878+00:00",
 				Attributes: Attributes{
 					CriticalAsset: CriticalAsset{
-						Type:            nil,
+						Type:            "",
 						AssetIdentifier: "unknown",
 					},
 					AnomalyDetails: AnomalyDetails{
@@ -111,7 +128,7 @@ func CreateFakeIncident() DataLakeIncident {
 				Timestamp:       "2024-10-29T16:51:53.484832+00:00",
 				Attributes: Attributes{
 					CriticalAsset: CriticalAsset{
-						Type:            nil,
+						Type:            "",
 						AssetIdentifier: "unknown",
 					},
 					AnomalyDetails: AnomalyDetails{
@@ -127,8 +144,4 @@ func CreateFakeIncident() DataLakeIncident {
 			},
 		},
 	}
-}
-
-func stringPtr(s string) *string {
-	return &s
 }

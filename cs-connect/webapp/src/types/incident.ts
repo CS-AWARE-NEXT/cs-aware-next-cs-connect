@@ -28,11 +28,16 @@ export type Anomaly = {
     attributes: Attributes;
 };
 
+type LastModifiedEntity = {
+    timestamp: string;
+    lastModifiedEntity: string;
+};
+
 export type Incident = {
     id: number;
     reference_id: string;
     organisation_id: string;
-    title: string;
+    name: string;
     description: string;
     created_time: string;
     detected_time: string;
@@ -46,6 +51,6 @@ export type Incident = {
     bcdr_status: string | null;
     context_status: string | null;
     bcdr_relevant: boolean;
-    last_modified_entity: string[];
+    last_modified_entity: LastModifiedEntity[];
     anomalies: Anomaly[];
 };

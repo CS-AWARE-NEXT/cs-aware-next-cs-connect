@@ -30,7 +30,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	organizations.Get("/:organizationId", func(c *fiber.Ctx) error {
 		return organizationController.GetOrganization(c)
 	})
-	useOrganizationsIncidents(organizations)
+	useOrganizationsIncidents(organizations, context)
 	useOrganizationsIncidentsSynthethic(organizations)
 	useOrganizationsStories(organizations)
 	useOrganizationsPolicies(organizations, context)
@@ -45,16 +45,21 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 	useOrganizationsLinks(organizations, context)
 }
 
-func useOrganizationsIncidents(organizations fiber.Router) {
-	incidentController := controller.NewIncidentController()
+func useOrganizationsIncidents(organizations fiber.Router, context *config.Context) {
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	incidentController := controller.NewIncidentController(
+		authService,
+		context.EndpointsMap["incidents"],
+		context.EndpointsMap["incidentDetails"],
+	)
 
 	incidents := organizations.Group("/:organizationId/incidents")
 	incidents.Get("/", func(c *fiber.Ctx) error {
-		return incidentController.GetIncidents(c)
+		return incidentController.GetIncidents(c, context.Vars)
 	})
 	incidentsWithId := incidents.Group("/:incidentId")
 	incidentsWithId.Get("/", func(c *fiber.Ctx) error {
-		return incidentController.GetIncident(c)
+		return incidentController.GetIncident(c, context.Vars)
 	})
 	incidentsWithId.Get("/graph", func(c *fiber.Ctx) error {
 		return incidentController.GetIncidentGraph(c)
@@ -66,7 +71,7 @@ func useOrganizationsIncidents(organizations fiber.Router) {
 		return incidentController.GetIncidentTextBox(c)
 	})
 	incidentsWithId.Get("/details", func(c *fiber.Ctx) error {
-		return incidentController.GetIncidentDetails(c)
+		return incidentController.GetIncidentDetails(c, context.Vars)
 	})
 }
 
