@@ -42,6 +42,7 @@ import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
 import {FullUrlContext, IsRhsClosedContext} from 'src/components/rhs/rhs';
 import {
     Direction,
+    GraphEdgeInfo as EdgeInfo,
     GraphData,
     GraphDescription,
     GraphDirection,
@@ -62,6 +63,8 @@ import {HyperlinkPathContext} from 'src/components/rhs/rhs_shared';
 
 import GraphNodeType, {markNodesAndEdges} from './graph_node_type';
 import GraphNodeInfo, {NODE_INFO_ID_PREFIX} from './graph_node_info';
+import CustomEdge from './graph_edge_type';
+import GraphEdgeInfo, {EDGE_INFO_ID_PREFIX} from './graph_edge_info';
 
 type GraphStyle = {
     containerDirection: string,
@@ -201,10 +204,12 @@ const Graph = ({
     const [targetNode, setTargetNode] = useState<Node | undefined>();
     const [selectedObject, setSelectedObject] = useState<SelectObject|null>(null);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isEdgeDrawerOpen, setIsEdgeDrawerOpen] = useState(false);
     const hyperlinkPathContext = useContext(HyperlinkPathContext);
     const hyperlinkPath = `${hyperlinkPathContext}.${name}`;
 
     const [nodeInfo, setNodeInfo] = useState<NodeInfo | undefined>();
+    const [edgeInfo, setEdgeInfo] = useState<EdgeInfo | undefined>();
     const channelId = useSelector(getCurrentChannelId);
     const setTargetNodeId = useCallback((nodeId: string) => {
         const node = getNode(nodeId);
@@ -216,15 +221,43 @@ const Graph = ({
     useEffect(() => {
         setNodeInfo(undefined);
         setIsDrawerOpen(false);
+        setIsEdgeDrawerOpen(false);
         setTargetNode(undefined);
         setViewport({x: 0, y: 0, zoom: 0.6});
     }, [channelId]);
 
-    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo, setTargetNodeId, setIsDrawerOpen, hyperlinkPath})}), [hyperlinkPath]);
-
-    const [description, setDescription] = useState<GraphDescription>(emptyDescription);
+    const [graphDescription, setGraphDescription] = useState<GraphDescription>(emptyDescription);
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+    // Highlight clicked edges (and disable the highlight on all the other elements)
+    const onEdgeClick = useCallback((
+        id: string,
+        kind: string,
+        description: string | undefined,
+    ) => {
+        setNodes((nds) => {
+            nds.forEach((node) => {
+                node.data = {...node.data, isUrlHashed: false};
+            });
+            return [...nds];
+        });
+        setEdges((eds) => {
+            eds.forEach((edge) => {
+                edge.data = {...edge.data, isUrlHashed: false};
+                if (edge.id === id) {
+                    edge.data = {...edge.data, isUrlHashed: true};
+                }
+            });
+            return [...eds];
+        });
+
+        setEdgeInfo({edgeId: id, description});
+        setIsEdgeDrawerOpen(true);
+    }, [edges, setEdges]);
+
+    const nodeTypes = useMemo(() => ({graphNodeType: withAdditionalProps(GraphNodeType, {setNodeInfo, setTargetNodeId, setIsDrawerOpen, hyperlinkPath})}), [hyperlinkPath]);
+    const edgeTypes = useMemo(() => ({step: withAdditionalProps(CustomEdge, {onEdgeClick})}), []);
 
     const toggleDirection = (dir: GraphDirection): GraphDirection => {
         return dir === Direction.HORIZONTAL ? Direction.VERTICAL : Direction.HORIZONTAL;
@@ -246,7 +279,7 @@ const Graph = ({
     }, [nodes, edges]);
 
     useEffect(() => {
-        setDescription(data.description || emptyDescription);
+        setGraphDescription(data.description || emptyDescription);
 
         // Ignore node properties such as position which can change due to a scroll event happening - we only care about a structural update (new/deleted nodes)
         const oldNodes = nodes.map((node) => node.id);
@@ -300,8 +333,22 @@ const Graph = ({
                 slice(1, -1);
             const hashedNode = data.nodes.find((node) => nodeId.includes(node.id));
             if (hashedNode !== undefined) {
+                setIsEdgeDrawerOpen(false);
                 setIsDrawerOpen(true);
                 setNodeInfo({name: hashedNode.data.label, description: hashedNode.data.description, nodeId});
+            }
+        }
+        if (sectionUrlHash.includes(EDGE_INFO_ID_PREFIX)) {
+            // We assume ids are unique across nodes and sections
+            // #identity--588fa371-4527-4fef-8499-14383fa7a29d-cb55b098-4c1d-4bfe-86ec-923a5e8933af-16-node-info--widget to nodeId-sectionid-parentid
+            const edgeId = sectionUrlHash.
+                split(EDGE_INFO_ID_PREFIX)[0].
+                slice(1, -1);
+            const hashedEdge = data.edges.find((edge) => edgeId.includes(edge.id));
+            if (hashedEdge !== undefined) {
+                setIsDrawerOpen(false);
+                setIsEdgeDrawerOpen(true);
+                setEdgeInfo({description: hashedEdge.data.description, edgeId});
             }
         }
     }, [sectionUrlHash, data]);
@@ -320,7 +367,7 @@ const Graph = ({
     // }, []);
 
     // const graphStyle = getGraphStyle();
-    const graphStyle = (isRhsClosed && isRhs) ? rhsGraphStyle : defaultGraphStyle(isDescriptionProvided(description));
+    const graphStyle = (isRhsClosed && isRhs) ? rhsGraphStyle : defaultGraphStyle(isDescriptionProvided(graphDescription));
     const graphSidebarStyle = (isRhsClosed && isRhs) ? rhsGraphSidebarStyle : defaultGraphSidebarStyle;
 
     const id = `${formatName(name)}-${sectionId}-${parentId}-widget`;
@@ -338,7 +385,7 @@ const Graph = ({
     return (
         <Container
             containerDirection={graphStyle.containerDirection}
-            marginBottom={(isRhs && isRhsClosed && isDescriptionProvided(description)) ? '0px' : '42px'}
+            marginBottom={(isRhs && isRhsClosed && isDescriptionProvided(graphDescription)) ? '0px' : '42px'}
         >
             <GraphContainer
                 id={id}
@@ -372,6 +419,7 @@ const Graph = ({
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
                     fitView={true}
                     fitViewOptions={fitViewOptions}
                     proOptions={hideOptions}
@@ -413,18 +461,35 @@ const Graph = ({
                     graphName={name}
                 />}
             </Drawer>
-            {isDescriptionProvided(description) &&
+            <Drawer
+                title={'Edge Info'}
+                placement='right'
+                onClose={() => {
+                    setIsEdgeDrawerOpen(false);
+                }}
+                open={isEdgeDrawerOpen}
+                size='large'
+            >
+                {edgeInfo &&
+                <GraphEdgeInfo
+                    info={edgeInfo}
+                    sectionId={sectionId}
+                    parentId={parentId}
+                    graphName={name}
+                />}
+            </Drawer>
+            {isDescriptionProvided(graphDescription) &&
             <GraphSidebar
                 width={graphSidebarStyle.width}
                 noMargin={(isRhsClosed && isRhs) ?? false}
             >
                 <TextBox
                     idPrefix={DESCRIPTION_ID_PREFIX}
-                    name={description.name}
+                    name={graphDescription.name}
                     sectionId={sectionId}
                     style={graphStyle.textBoxStyle}
                     parentId={parentId}
-                    text={description.text}
+                    text={graphDescription.text}
                 />
             </GraphSidebar>
             }

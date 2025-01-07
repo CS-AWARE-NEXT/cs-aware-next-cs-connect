@@ -31,6 +31,11 @@ export type GraphNodeInfo = {
     nodeId: string;
 };
 
+export type GraphEdgeInfo = {
+    description?: string;
+    edgeId: string;
+};
+
 export type GraphDirection = 'LR' | 'TB';
 
 export enum Direction {
@@ -46,3 +51,4 @@ export const emptyDescription = {
 };
 
 export const EMPTY_NODE_DESCRIPTION = 'Node description is not available';
+export const EMPTY_EDGE_DESCRIPTION = 'Edge description is not available';
