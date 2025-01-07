@@ -54,7 +54,7 @@ const GraphNodeInfo: FC<Props> = ({
                 parentId={parentId}
                 text={description ?? EMPTY_NODE_DESCRIPTION}
                 style={textBoxStyle}
-                customId={`${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-widget`}
+                customId={`_${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-widget`}
                 titleText={`${graphName}.${name}.Description`}
             />
             {(isRhs && isRhsClosed) && <VerticalSpacer size={24}/>}
