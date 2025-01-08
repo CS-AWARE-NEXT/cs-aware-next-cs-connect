@@ -23,7 +23,6 @@ import {useToaster} from 'src/components/backstage/toast_banner';
 import {copyToClipboard} from 'src/utils';
 import {formatUrlAsMarkdown} from 'src/helpers';
 import 'src/styles/nodes.scss';
-
 import {StyledDropdownMenuItem} from 'src/components/backstage/shared';
 
 import {GraphNodeInfoDropdown} from './graph_node_info';
@@ -59,6 +58,9 @@ export const fillEdges = (edges: Edge[], withArrow?: boolean) => {
         }
         filledEdges.push({
             ...edge,
+            data: {
+                ...edge.data,
+            },
             type: edgeType,
         });
     });
