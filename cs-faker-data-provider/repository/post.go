@@ -7,6 +7,7 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/config/db"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	sq "github.com/Masterminds/squirrel"
+	"github.com/gofiber/fiber/v2/log"
 )
 
 // PostRepository is a repository for posts stored in the
@@ -32,8 +33,10 @@ func (r *PostRepository) GetPostByID(ID string) (model.Post, error) {
 	err := r.db.GetBuilder(r.db.DB, &post, postSelect)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			log.Infof("post with id %s not found", ID)
 			return model.Post{}, fmt.Errorf("post with id %s not found", ID)
 		}
+		log.Infof("post with id %s resulted into error %s", ID, err.Error())
 		return model.Post{}, fmt.Errorf("error getting post: %w", err)
 	}
 	return post, nil

@@ -146,6 +146,7 @@ func (pe *JSONPolicyExporter) getPurpose(policyTemplate model.PolicyTemplate) st
 	for _, purpose := range policyTemplate.Purpose {
 		post, err := pe.postRepository.GetPostByID(purpose)
 		if err != nil {
+			log.Infof("skipping purpose post with id %s because of %s", purpose, err.Error())
 			continue
 		}
 		purposes = append(purposes, post.Message)
@@ -159,6 +160,7 @@ func (pe *JSONPolicyExporter) getNeed(policyTemplate model.PolicyTemplate) strin
 	for _, n := range policyTemplate.Need {
 		post, err := pe.postRepository.GetPostByID(n)
 		if err != nil {
+			log.Infof("skipping need post with id %s because of %s", n, err.Error())
 			continue
 		}
 		needs = append(needs, post.Message)
@@ -172,6 +174,7 @@ func (pe *JSONPolicyExporter) getElements(policyTemplate model.PolicyTemplate) s
 	for _, e := range policyTemplate.Elements {
 		post, err := pe.postRepository.GetPostByID(e)
 		if err != nil {
+			log.Infof("skipping element post with id %s because of %s", e, err.Error())
 			continue
 		}
 		elements = append(elements, post.Message)
@@ -185,6 +188,7 @@ func (pe *JSONPolicyExporter) getRoles(policyTemplate model.PolicyTemplate) stri
 	for _, r := range policyTemplate.RolesAndResponsibilities {
 		post, err := pe.postRepository.GetPostByID(r)
 		if err != nil {
+			log.Infof("skipping roles post with id %s because of %s", r, err.Error())
 			continue
 		}
 		roles = append(roles, post.Message)
@@ -198,6 +202,7 @@ func (pe *JSONPolicyExporter) getReferences(policyTemplate model.PolicyTemplate)
 	for _, r := range policyTemplate.References {
 		post, err := pe.postRepository.GetPostByID(r)
 		if err != nil {
+			log.Infof("skipping reference post with id %s because of %s", r, err.Error())
 			continue
 		}
 		references = append(references, post.Message)
