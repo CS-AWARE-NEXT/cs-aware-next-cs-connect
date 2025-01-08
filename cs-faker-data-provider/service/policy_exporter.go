@@ -104,7 +104,7 @@ func (pe *JSONPolicyExporter) ExportPolicy(
 	log.Info("Response Status: ", resp.Status)
 	log.Info("Response Headers: ", resp.Header)
 	if resp.StatusCode != http.StatusOK {
-		log.Error("error exporting policy ", resp.Status)
+		log.Error("error exporting policy on status check ", resp.Status)
 		return model.JSONPolicy{}, err
 	}
 	respBody, err := ioutil.ReadAll(resp.Body)
