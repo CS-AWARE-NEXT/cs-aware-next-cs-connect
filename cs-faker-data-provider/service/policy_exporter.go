@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -105,7 +106,7 @@ func (pe *JSONPolicyExporter) ExportPolicy(
 	log.Info("Response Headers: ", resp.Header)
 	if resp.StatusCode != http.StatusOK {
 		log.Error("error exporting policy on status check ", resp.Status)
-		return model.JSONPolicy{}, err
+		return model.JSONPolicy{}, errors.New("external server returned error when trying to export the policy")
 	}
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
