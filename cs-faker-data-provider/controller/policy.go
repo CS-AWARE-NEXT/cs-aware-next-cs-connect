@@ -285,7 +285,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 			log.Printf("Could not export policy template: %s", err.Error())
 			return c.JSON(model.UpdatePolicyTemplateResponse{
 				Success: false,
-				Message: "Could not export policy template",
+				Message: "Could not export policy template because the external server returned an error",
 			})
 		}
 		log.Printf("Exported policy as %s", jsonPolicy.String())
