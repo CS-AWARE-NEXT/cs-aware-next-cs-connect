@@ -39,5 +39,6 @@ func (r *PostRepository) GetPostByID(ID string) (model.Post, error) {
 		log.Infof("post with id %s resulted into error %s", ID, err.Error())
 		return model.Post{}, fmt.Errorf("error getting post: %w", err)
 	}
+	log.Infof("found post with id %s -----> %s", ID, post.Message)
 	return post, nil
 }
