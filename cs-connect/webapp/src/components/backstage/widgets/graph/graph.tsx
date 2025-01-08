@@ -83,6 +83,7 @@ type Props = {
     name: string;
     sectionId: string;
     parentId: string;
+    isEcosystemGraphView?: boolean;
     setDirection: Dispatch<SetStateAction<GraphDirection>>;
 };
 
@@ -192,6 +193,7 @@ const Graph = ({
     name,
     sectionId,
     parentId,
+    isEcosystemGraphView = false,
     setDirection,
 }: Props) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
@@ -419,7 +421,7 @@ const Graph = ({
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
                     nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
+                    edgeTypes={isEcosystemGraphView ? edgeTypes : undefined}
                     fitView={true}
                     fitViewOptions={fitViewOptions}
                     proOptions={hideOptions}
