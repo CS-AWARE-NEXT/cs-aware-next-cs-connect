@@ -55,7 +55,7 @@ func (pe *JSONPolicyExporter) ExportPolicy(
 
 	log.Infof("Exporting policy %s", jsonPolicyTemplate.Name)
 
-	log.Info("creating request")
+	log.Info("Creating request")
 	jsonPolicy := model.JSONPolicy{
 		Policy: jsonPolicyTemplate,
 		Tags:   pe.getTags(policyTemplate),
@@ -65,6 +65,7 @@ func (pe *JSONPolicyExporter) ExportPolicy(
 		log.Error("error creating body ", err.Error())
 		return model.JSONPolicy{}, err
 	}
+	log.Infof("Exporting policy -----> %s", string(body))
 
 	endpoint := strings.Replace(pe.endpoint, "{ecosystem_id}", pe.ecosystemId, 1)
 	log.Infof("Endpoint for policy export: %s", endpoint)
@@ -122,6 +123,7 @@ func (pe *JSONPolicyExporter) toJSONPolicyTemplate(
 	policyTemplate model.PolicyTemplate,
 	organizationName string,
 ) (model.JSONPolicyTemplate, error) {
+	log.Info("mapping policy template to the JSON format for export")
 	return model.JSONPolicyTemplate{
 		ID:           policyTemplate.ID,
 		Name:         policyTemplate.Name,
