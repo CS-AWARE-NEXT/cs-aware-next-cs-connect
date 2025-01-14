@@ -169,7 +169,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 	var policyTemplateField model.UpdatePolicyTemplateRequest
 	err := json.Unmarshal(c.Body(), &policyTemplateField)
 	if err != nil {
-		return c.JSON(model.UpdatePolicyTemplateResponse{
+		return c.JSON(model.BaseResponse{
 			Success: false,
 			Message: "Not a valid policy template field provided",
 		})
@@ -177,7 +177,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 
 	policyTemplate, err := pc.policyRepository.GetPolicyByID(policyTemplateField.PolicyID)
 	if err != nil {
-		return c.JSON(model.UpdatePolicyTemplateResponse{
+		return c.JSON(model.BaseResponse{
 			Success: false,
 			Message: "Policy template not found",
 		})
@@ -190,7 +190,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		}
 		for _, purpose := range policyTemplate.Purpose {
 			if purpose == policyTemplateField.Value {
-				return c.JSON(model.UpdatePolicyTemplateResponse{
+				return c.JSON(model.BaseResponse{
 					Success: false,
 					Message: "Purpose already exists",
 				})
@@ -203,7 +203,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		}
 		for _, element := range policyTemplate.Elements {
 			if element == policyTemplateField.Value {
-				return c.JSON(model.UpdatePolicyTemplateResponse{
+				return c.JSON(model.BaseResponse{
 					Success: false,
 					Message: "Element already exists",
 				})
@@ -216,7 +216,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		}
 		for _, need := range policyTemplate.Need {
 			if need == policyTemplateField.Value {
-				return c.JSON(model.UpdatePolicyTemplateResponse{
+				return c.JSON(model.BaseResponse{
 					Success: false,
 					Message: "Need already exists",
 				})
@@ -229,7 +229,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		}
 		for _, role := range policyTemplate.RolesAndResponsibilities {
 			if role == policyTemplateField.Value {
-				return c.JSON(model.UpdatePolicyTemplateResponse{
+				return c.JSON(model.BaseResponse{
 					Success: false,
 					Message: "Role already exists",
 				})
@@ -242,7 +242,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		}
 		for _, reference := range policyTemplate.References {
 			if reference == policyTemplateField.Value {
-				return c.JSON(model.UpdatePolicyTemplateResponse{
+				return c.JSON(model.BaseResponse{
 					Success: false,
 					Message: "Reference already exists",
 				})
@@ -255,7 +255,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		}
 		for _, tag := range policyTemplate.Tags {
 			if tag == policyTemplateField.Value {
-				return c.JSON(model.UpdatePolicyTemplateResponse{
+				return c.JSON(model.BaseResponse{
 					Success: false,
 					Message: "Tag already exists",
 				})
@@ -264,7 +264,7 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		policyTemplate.Tags = append(policyTemplate.Tags, policyTemplateField.Value)
 	case "exported":
 		if policyTemplate.Tags == nil || len(policyTemplate.Tags) == 0 {
-			return c.JSON(model.UpdatePolicyTemplateResponse{
+			return c.JSON(model.BaseResponse{
 				Success: false,
 				Message: "Policy template must have at least one tag",
 			})
@@ -283,14 +283,14 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 		)
 		if err != nil {
 			log.Printf("Could not export policy template: %s", err.Error())
-			return c.JSON(model.UpdatePolicyTemplateResponse{
+			return c.JSON(model.BaseResponse{
 				Success: false,
 				Message: "Could not export policy template because the external server returned an error",
 			})
 		}
 		log.Printf("Exported policy as %s", jsonPolicy.String())
 	default:
-		return c.JSON(model.UpdatePolicyTemplateResponse{
+		return c.JSON(model.BaseResponse{
 			Success: false,
 			Message: "Not a valid policy template field provided",
 		})
@@ -299,13 +299,13 @@ func (pc *PolicyController) UpdatePolicyTemplate(c *fiber.Ctx, vars map[string]s
 	_, err = pc.policyRepository.SavePolicy(policyTemplate)
 	if err != nil {
 		log.Printf("Could not update policy template: %s", err.Error())
-		return c.JSON(model.UpdatePolicyTemplateResponse{
+		return c.JSON(model.BaseResponse{
 			Success: false,
 			Message: "Could not update policy template",
 		})
 	}
 
-	return c.JSON(model.UpdatePolicyTemplateResponse{
+	return c.JSON(model.BaseResponse{
 		Success: true,
 		Message: "Policy template updated",
 	})

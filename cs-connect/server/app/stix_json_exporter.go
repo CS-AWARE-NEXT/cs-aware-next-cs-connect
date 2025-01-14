@@ -18,7 +18,7 @@ func (e *JSON) ContentType() string {
 	return "application/json"
 }
 
-func (e *JSON) Export(w http.ResponseWriter, stixChannel *STIXChannel) {
+func (e *JSON) Export(w http.ResponseWriter, stixChannel *STIXChannel, download bool) {
 	fileName := e.FileName(stixChannel.Name)
 
 	jsonBytes, err := json.Marshal(stixChannel)
@@ -28,7 +28,10 @@ func (e *JSON) Export(w http.ResponseWriter, stixChannel *STIXChannel) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	if download {
+		logrus.Infof("JSON export is for downloading %s", fileName)
+		w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	}
 	w.WriteHeader(http.StatusOK)
 
 	if _, err = w.Write(jsonBytes); err != nil {

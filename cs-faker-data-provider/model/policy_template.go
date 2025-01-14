@@ -23,11 +23,6 @@ type UpdatePolicyTemplateRequest struct {
 	OrganizationName string `json:"organizationName"`
 }
 
-type UpdatePolicyTemplateResponse struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-}
-
 type JSONPolicy struct {
 	Policy JSONPolicyTemplate `json:"policy"`
 	Tags   []string           `json:"tags"`

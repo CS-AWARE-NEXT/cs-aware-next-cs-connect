@@ -191,15 +191,21 @@ export const exportChannel = async (
     pinnedOnly: boolean,
     channelUrl: string,
     references: ExportReference[],
-): Promise<Blob> => {
+): Promise<Blob | any> => {
     const body = JSON.stringify({
         format,
         pinnedOnly,
         channelUrl,
         references,
     });
+    if (format === 'JSON') {
+        const data = await doPost(`${apiUrl}/channel/${channelId}/export`, body);
+        return data;
+    }
+
+    // This is only for when you want to download the channel discussion
     const {data} = await doFetchWithBlobResponse(`${apiUrl}/channel/${channelId}/export`, {method: 'POST', body});
-    return data;
+    return data as Blob;
 };
 
 export interface UserProps {

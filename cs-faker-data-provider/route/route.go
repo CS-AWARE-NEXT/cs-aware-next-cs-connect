@@ -11,8 +11,21 @@ import (
 
 func UseRoutes(app *fiber.App, context *config.Context) {
 	basePath := app.Group("/cs-data-provider")
+	useChannels(basePath, context)
 	useOrganizations(basePath, context)
 	useEcosystem(basePath, context)
+}
+
+func useChannels(basePath fiber.Router, context *config.Context) {
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	channelController := controller.NewChannelController(
+		authService,
+		context.EndpointsMap["discussionsExport"],
+	)
+	channels := basePath.Group("/channels")
+	channels.Put("/export", func(c *fiber.Ctx) error {
+		return channelController.ExportChannel(c, context.Vars)
+	})
 }
 
 // TODO: /organizations base routes are not used since config file was introduced

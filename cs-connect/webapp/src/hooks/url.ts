@@ -76,3 +76,12 @@ export const buildEcosystemGraphUrl = (issues_url: string, append_last_path: boo
     }
     return url;
 };
+
+export const buildBaseProviderUrl = (sectionUrl: string): string => {
+    // match the word "provider"
+    const match = sectionUrl.match(/^(.*?\/[^/]*provider)/);
+    if (!match) {
+        throw new Error('No "provider" segment found in the URL.');
+    }
+    return match[1];
+};

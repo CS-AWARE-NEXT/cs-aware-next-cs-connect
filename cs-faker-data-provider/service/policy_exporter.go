@@ -17,7 +17,11 @@ import (
 )
 
 type PolicyExporter interface {
-	ExportPolicy(policy model.PolicyTemplate, firstMessageTime int64, organizationName string) (model.JSONPolicy, error)
+	ExportPolicy(
+		policy model.PolicyTemplate,
+		organizationName string,
+		vars map[string]string,
+	) (model.JSONPolicy, error)
 }
 
 type JSONPolicyExporter struct {
@@ -26,6 +30,9 @@ type JSONPolicyExporter struct {
 	endpoint       string
 	authService    *AuthService
 }
+
+// This is a way to implement interface explicitly
+var _ PolicyExporter = (*JSONPolicyExporter)(nil)
 
 func NewJSONPolicyExporter(
 	postRepository repository.PostRepository,

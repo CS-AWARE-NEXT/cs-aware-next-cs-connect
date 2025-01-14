@@ -322,16 +322,16 @@ organizations:
             chartType: simple-line
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/charts/:id/line_chart
           - type: channel
-  - name: NextDev CS-AWARE
-    id: "9"
-    description: The NextDev organization
-    sections:
-      - name: Incidents
-        id: "44"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/9/incidents
-        widgets:
-          - name: Details
-            type: incident
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/9/incidents/:id/details
-          - type: channel
+    # - name: NextDev CS-AWARE
+    #   id: "9"
+    #   description: The NextDev organization
+    #   sections:
+    #     - name: Incidents
+    #       id: "44"
+    #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/9/incidents
+    #       widgets:
+    #         - name: Details
+    #           type: incident
+    #           url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/9/incidents/:id/details
+    #         - type: channel
     widgets: []

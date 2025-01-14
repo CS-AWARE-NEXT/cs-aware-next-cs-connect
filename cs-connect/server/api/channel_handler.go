@@ -129,9 +129,10 @@ func (h *ChannelHandler) exportChannel(c *Context, w http.ResponseWriter, r *htt
 	}
 
 	var exporter app.Exporter
-	if params.Format == "json" {
+	if params.Format == "JSON" || params.Format == "Download" {
+		c.logger.Infof("Exporting channel as %s format", params.Format)
 		exporter = &app.JSON{}
-		exporter.Export(w, stixChannel)
+		exporter.Export(w, stixChannel, params.Format == "Download")
 		return
 	}
 
