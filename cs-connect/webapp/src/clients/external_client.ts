@@ -219,6 +219,15 @@ export const fetchEcosystemGraphData = async (url: string): Promise<EcosystemGra
     return data;
 };
 
+export const exportChannelToDatalake = async (
+    url: string,
+    channel: any,
+): Promise<any> => {
+    const body = JSON.stringify(channel);
+    const data = await doPut(`${url}/channels/export`, body);
+    return data;
+};
+
 /**
  * Refresh the lock required to edit the ecosystem graph.
  *
