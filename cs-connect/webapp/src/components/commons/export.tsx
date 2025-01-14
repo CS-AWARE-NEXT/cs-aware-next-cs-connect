@@ -3,6 +3,7 @@ import {
     CheckboxProps,
     Modal,
     Select,
+    message,
 } from 'antd';
 import React, {useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
@@ -10,9 +11,10 @@ import styled from 'styled-components';
 import {ModalBody} from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux';
 
-import {exportChannel, getSectionInfoUrl} from 'src/clients';
+import {exportChannel, exportChannelToDatalake, getSectionInfoUrl} from 'src/clients';
 import {channelNameSelector, exportChannelSelector} from 'src/selectors';
 import {
+    buildBaseProviderUrl,
     getUrlWithoutQueryParams,
     useIsSectionFromEcosystem,
     useSection,
@@ -20,6 +22,8 @@ import {
 } from 'src/hooks';
 import {getSectionById} from 'src/config/config';
 import {exportAction} from 'src/actions';
+
+const DEFAULT_FORMAT = 'JSON';
 
 export type ExportReference = {
     source_name: string,
@@ -40,7 +44,7 @@ type Props = {
 
 export const Exporter = ({parentId, sectionId}: Props) => {
     const exportData = useSelector(exportChannelSelector);
-    const [format, setFormat] = useState('json');
+    const [format, setFormat] = useState(DEFAULT_FORMAT);
     const [pinnedOnly, setPinnedOnly] = useState(false);
     const channel = useSelector(channelNameSelector(exportData?.channelId));
     const dispatch = useDispatch();
@@ -82,18 +86,40 @@ export const Exporter = ({parentId, sectionId}: Props) => {
             channelUrl,
             references,
         );
-        const fileURL = window.URL.createObjectURL(data);
 
-        // Emulate a click on an anchor to trigger a browser download
-        const link = document.createElement('a');
-        link.href = fileURL;
-        link.download = `${channel.name}.${format}`;
-        link.click();
-        setTimeout(() => {
-            URL.revokeObjectURL(fileURL);
-        }, 0);
-        dispatch(exportAction(''));
-        setOpen(false);
+        try {
+            switch (format) {
+            case 'JSON': {
+                console.log('exporting in JSON', {data}, section.url);
+                message.info('Exporting discussion...');
+                const result = await exportChannelToDatalake(buildBaseProviderUrl(section.url), data);
+                if (!result.success) {
+                    message.error(result.message);
+                    break;
+                }
+                message.success('Discussion exported successfully!');
+                break;
+            }
+            case 'Download': {
+                const fileURL = window.URL.createObjectURL(data as Blob);
+
+                // Emulate a click on an anchor to trigger a browser download
+                const link = document.createElement('a');
+                link.href = fileURL;
+                link.download = `${channel.name}.${DEFAULT_FORMAT.toLowerCase()}`;
+                link.click();
+                setTimeout(() => {
+                    URL.revokeObjectURL(fileURL);
+                }, 0);
+                break;
+            }
+            default:
+                break;
+            }
+        } finally {
+            dispatch(exportAction(''));
+            setOpen(false);
+        }
     };
 
     const onCancel = () => {
@@ -119,16 +145,22 @@ export const Exporter = ({parentId, sectionId}: Props) => {
             <ModalBody>
                 <Container>
                     <Text>{'Select the format for the export.'}</Text>
-                    <Checkbox onChange={onChange}>{'Pinned only'}</Checkbox>
+                    <Checkbox
+                        onChange={onChange}
+                        style={{marginTop: '8px'}}
+                    >
+                        {'Pinned only (export only important messages)'}
+                    </Checkbox>
                     <Select
                         id={'export-select-format'}
                         defaultValue={format}
-                        style={{width: 120}}
+                        style={{width: 120, marginTop: '8px'}}
                         onChange={(value) => {
                             setFormat(value);
                         }}
                         options={[
-                            {value: 'json', label: 'JSON/STIX'},
+                            {value: 'JSON', label: 'JSON/STIX'},
+                            {value: 'Download', label: 'Download'},
                         ]}
                     />
                 </Container>
