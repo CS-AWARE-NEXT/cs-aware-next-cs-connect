@@ -333,19 +333,19 @@ organizations:
             type: bundle
             url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/bundles/:id/content
           - type: channel
-      - name: Charts
-        id: "99"
-        url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/charts
-        widgets:
-          - name: Bar Chart
-            type: chart
-            chartType: simple-bar
-            url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/charts/:id/bar_chart
-          - name: Line Chart
-            type: chart
-            chartType: simple-line
-            url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/charts/:id/line_chart
-          - type: channel
+      # - name: Charts
+      #   id: "99"
+      #   url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/charts
+      #   widgets:
+      #     - name: Bar Chart
+      #       type: chart
+      #       chartType: simple-bar
+      #       url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/charts/:id/bar_chart
+      #     - name: Line Chart
+      #       type: chart
+      #       chartType: simple-line
+      #       url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/charts/:id/line_chart
+      #     - type: channel
   - name: NextDev CS-AWARE
     id: "9"
     description: The NextDev organization
