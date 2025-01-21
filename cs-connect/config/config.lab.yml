@@ -309,19 +309,19 @@ organizations:
             type: bundle
             url: http://172.16.15.57:3000/cs-data-provider/organizations/4/bundles/:id/content
           - type: channel
-      - name: Charts
-        id: "99"
-        url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts
-        widgets:
-          - name: Bar Chart
-            type: chart
-            chartType: simple-bar
-            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts/:id/bar_chart
-          - name: Line Chart
-            type: chart
-            chartType: simple-line
-            url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts/:id/line_chart
-          - type: channel
+      # - name: Charts
+      #   id: "99"
+      #   url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts
+      #   widgets:
+      #     - name: Bar Chart
+      #       type: chart
+      #       chartType: simple-bar
+      #       url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts/:id/bar_chart
+      #     - name: Line Chart
+      #       type: chart
+      #       chartType: simple-line
+      #       url: http://172.16.15.57:3000/cs-data-provider/organizations/4/charts/:id/line_chart
+      #     - type: channel
   - name: NextDev CS-AWARE
     id: "9"
     description: The NextDev organization
