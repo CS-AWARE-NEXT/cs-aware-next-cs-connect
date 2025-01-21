@@ -21,13 +21,13 @@ $ docker exec cs-connect-base sh -c "cd /home/cs-aware-next-cs-connect/cs-connec
 With the previously generated .tar.gz of the cs-connect plugin, you can copy the built plugin in the necessary directory.
 
 ```sh
-docker cp cs-connect-base:/home/cs-aware-next-cs-connect/cs-connect/dist/cs-aware-connect-+.tar.gz home/ubuntu/cs-aware-next-cs-connect/cs-connect/docker/package/cs-aware-connect-+.tar.gz
+$ docker cp cs-connect-base:/home/cs-aware-next-cs-connect/cs-connect/dist/cs-aware-connect-+.tar.gz home/ubuntu/cs-aware-next-cs-connect/cs-connect/docker/package/cs-aware-connect-+.tar.gz
 ```
 
 Then, to build the final image, run the following command.
 
 ```sh
-docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile .
+$ docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile .
 ```
 
 Or build everything with the following command (`cs-connect-base` still required). This approach is slower because it builds everything from scratch everytime, while building the plugin separately in the `cs-connect-base` environment leverages caching to make builds faster.
