@@ -47,9 +47,14 @@ import {getSystemConfig} from 'src/config/config';
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
 
+const {TextArea} = Input;
+
 const ON_CREATION_NODE_TYPE = 'default';
 export const EDGE_TYPE_MANAGED_BY = 'managed-by';
 export const EDGE_TYPE_SUPPLIED_BY = 'supplied-by';
+export const EDGE_TYPE_COOPERATING_WITH = 'cooperating-with';
+export const EDGE_TYPE_OPERATED_BY = 'operated-by';
+export const EDGE_TYPE_SUPPORTED_BY = 'supported-by';
 
 const minimapStyle = {
     height: 90,
@@ -66,14 +71,18 @@ type NodeSelectionData = {
     description: string,
     kind: string,
 };
+
 type EdgeSelectionData = {
     id: string,
     kind: string,
+    description?: string,
 };
+
 type GraphData = {
     nodes: Node[],
     edges: Edge[],
 }
+
 enum SaveType {
     Save,
     SaveAndClose,
@@ -81,7 +90,9 @@ enum SaveType {
 }
 
 const defaultNodeSelectionData = {id: '', label: '', description: '', kind: ''};
-const defaultEdgeSelectionData = {id: '', kind: ''};
+
+// IMPORTANT: add here extra edge data info
+const defaultEdgeSelectionData = {id: '', description: '', kind: ''};
 
 /**
  * className: used to style the graph through styled-components
@@ -194,6 +205,8 @@ const EditableGraph = ({
                 });
                 return [...eds];
             });
+
+            // IMPORTANT: add here extra node data info
             setNodeSelectionData({
                 id,
                 label: targetNode.data.label || '',
@@ -205,7 +218,11 @@ const EditableGraph = ({
     }, []);
 
     // Highlight clicked edges (and disable the highlight on all the other elements)
-    const onEdgeClick = useCallback((id: string, kind: string) => {
+    const onEdgeClick = useCallback((
+        id: string,
+        kind: string,
+        description: string | undefined,
+    ) => {
         setNodes((nds) => {
             nds.forEach((node) => {
                 node.data = {...node.data, isUrlHashed: false};
@@ -222,9 +239,12 @@ const EditableGraph = ({
             return [...eds];
         });
         setNodeSelectionData(defaultNodeSelectionData);
+
+        // IMPORTANT: add here extra edge data info
         setEdgeSelectionData({
             id,
             kind,
+            description,
         });
     }, [edges, setEdges]);
 
@@ -266,6 +286,8 @@ const EditableGraph = ({
         const newNode = {
             id: uuidv4(),
             type: nodeType,
+
+            // IMPORTANT: add here extra node data info
             data: {
                 label: 'New Node',
                 description: '',
@@ -280,8 +302,11 @@ const EditableGraph = ({
             source: parentNode.id,
             target: newNode.id,
             type: edgeType,
+
+            // IMPORTANT: add here extra edge data info
             data: {
                 kind: EDGE_TYPE_MANAGED_BY,
+                description: '',
             },
             markerEnd: {
                 type: MarkerType.Arrow,
@@ -312,8 +337,11 @@ const EditableGraph = ({
                 source: params.source || '',
                 target: params.target || '',
                 type: edgeType,
+
+                // IMPORTANT: add here extra edge data info
                 data: {
                     kind: EDGE_TYPE_MANAGED_BY,
+                    description: '',
                 },
                 markerEnd: {
                     type: MarkerType.Arrow,
@@ -442,6 +470,9 @@ const EditableGraph = ({
         if (!editEnabled) {
             return;
         }
+
+        // used to keep track of edge's data to update the edgeSelectionData
+        let edgeData: any = {};
         setEdges((eds) => {
             let result = eds;
             if (newData.delete) {
@@ -450,21 +481,25 @@ const EditableGraph = ({
             result.forEach((edge) => {
                 if (edge.id === edgeSelectionData.id) {
                     edge.data = {...edge.data, ...newData};
+                    edgeData = {...edge.data};
                 }
             });
             setUpdatedData((updatedData) => ({nodes: updatedData.nodes, edges: [...result]}));
             return [...result];
         });
+
+        // IMPORTANT: add here extra edge data info
         setEdgeSelectionData(newData.delete ? defaultEdgeSelectionData : {
             id: edgeSelectionData.id,
-            kind: newData.kind || '',
+            kind: edgeData.kind || '',
+            description: edgeData.description || '',
         });
     }, [edgeSelectionData, setEdges, editEnabled]);
 
     return (
         <Layout
             className={className}
-            style={{width: '95%'}}
+            style={{width: '100%'}}
         >
             <Content>
                 <Drawer
@@ -525,9 +560,16 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                     />
                 </ReactFlow>
             </Content>
-            <Sider
+
+            <CustomSider
                 theme={'light'}
-                style={{paddingLeft: '15px', overflow: 'scroll'}}
+                width='18%'
+
+                // style={{
+                //     paddingLeft: '8px',
+                //     overflow: 'scroll',
+                //     width: '100%',
+                // }}
             >
                 {!editEnabled && (
                     <Tooltip title={lockStatus === LockStatus.Busy ? 'The ecosystem graph is being edited by someone else. Try again in a few minutes.' : ''}>
@@ -548,7 +590,6 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
 
                         <StyledDropdownButton
                             type='primary'
-
                             onClick={() => save(SaveType.Save)}
                             menu={{items: saveActions,
                                 onClick: (e) => {
@@ -572,34 +613,38 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                                 </Tooltip>,
                                 rightButton,
                             ]}
-                        >{'Save'}</StyledDropdownButton>
-                        <Alert
+                        >
+                            {'Save'}
+                        </StyledDropdownButton>
+                        {/* <Alert
                             message='You are in edit mode'
                             description='Rememeber to save when you are finished.'
                             type='warning'
                             showIcon={true}
                             style={{marginTop: '10px'}}
-                        />
+                        /> */}
                     </>
                 )}
                 <Divider/>
                 {nodeSelectionData !== defaultNodeSelectionData && (
                     <>
-                        <InputLabel><i className='icon fa fa-info-circle'/> {'Node Info'}</InputLabel>
+                        <InputLabel><i className='icon fa fa-info-circle'/> {'Node information'}</InputLabel>
                         <InputLabel>{'Name'}</InputLabel>
-                        <Input
+                        <TextArea
                             placeholder='Name'
                             value={nodeSelectionData.label}
                             disabled={!editEnabled}
+                            rows={2}
                             onChange={(e) => {
                                 updateNodeData({label: e.target.value});
                             }}
                         />
                         <InputLabel>{'Description'}</InputLabel>
-                        <Input
+                        <TextArea
                             placeholder='Description'
                             value={nodeSelectionData.description}
                             disabled={!editEnabled}
+                            rows={3}
                             onChange={(e) => {
                                 updateNodeData({description: e.target.value});
                             }}
@@ -623,12 +668,19 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                                 updateNodeData({kind: value});
                             }}
                         />
+
+                        <Divider/>
+
                         <StyledButton
                             type='primary'
                             danger={true}
                             block={true}
                             disabled={!editEnabled || nodeSelectionData.id === 'root'}
-                            style={{position: 'sticky', bottom: 0}}
+
+                            // style={{
+                            //     position: 'sticky',
+                            //     bottom: 0,
+                            // }}
                             onClick={() => {
                                 updateNodeData({delete: true});
                             }}
@@ -639,27 +691,50 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                 )}
                 {edgeSelectionData !== defaultEdgeSelectionData && (
                     <>
-                        <InputLabel><i className='icon fa fa-info-circle'/> {'Edge Info'}</InputLabel>
-                        <InputLabel>{'Kind'}</InputLabel>
+                        <InputLabel><i className='icon fa fa-info-circle'/> {'Edge information'}</InputLabel>
+                        <InputLabel>{'Description'}</InputLabel>
+                        <TextArea
+                            placeholder='Description'
+                            value={edgeSelectionData?.description}
+                            disabled={!editEnabled}
+                            rows={3}
+                            onChange={(e) => {
+                                updateEdgeData({description: e.target.value});
+                            }}
+                        />
+                        <InputLabel>{'Type'}</InputLabel>
                         <Select
                             defaultValue={EDGE_TYPE_MANAGED_BY}
                             value={edgeSelectionData.kind}
                             style={{width: '100%'}}
                             disabled={!editEnabled}
+
+                            // IMPORTANT: here more options for type
                             options={[
                                 {value: EDGE_TYPE_MANAGED_BY, label: 'Managed by'},
                                 {value: EDGE_TYPE_SUPPLIED_BY, label: 'Supplied by'},
+                                {value: EDGE_TYPE_COOPERATING_WITH, label: 'Cooperating with'},
+
+                                // {value: EDGE_TYPE_OPERATED_BY, label: 'Operated by'},
+                                // {value: EDGE_TYPE_SUPPORTED_BY, label: 'Supported by'},
                             ]}
                             onChange={(value) => {
                                 updateEdgeData({kind: value});
                             }}
                         />
+
+                        <Divider/>
+
                         <StyledButton
                             type='primary'
                             danger={true}
                             block={true}
                             disabled={!editEnabled}
-                            style={{position: 'sticky', bottom: 0}}
+
+                            // style={{
+                            //     position: 'sticky',
+                            //     bottom: 0,
+                            // }}
                             onClick={() => {
                                 updateEdgeData({delete: true});
                             }}
@@ -675,22 +750,46 @@ You can use the "Save" button in the sidebar to trigger a manual save. Be sure t
                         showIcon={true}
                     />
                 )}
-            </Sider>
+            </CustomSider>
         </Layout>
     );
 };
 
 const StyledButton = styled(Button)`
 	margin-top: 10px;
-	border-radius: 0px;
+
+	/* border-radius: 0px; */
 `;
 
 const StyledDropdownButton = styled(Dropdown.Button)`
 	margin-top: 10px;
-	border-radius: 0px;
+
+    /* border-radius: 0px; */
 `;
 
 const InputLabel = styled.h4`
+`;
+
+const CustomSider = styled(Sider)`
+    padding-left: 10px;
+    padding-right: 8px;
+    overflow: scroll;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 8px;
+        border: 4px solid transparent;
+        background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
 `;
 
 export default React.memo(EditableGraph);

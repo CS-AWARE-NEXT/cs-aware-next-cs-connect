@@ -5,14 +5,38 @@ import {
     EdgeProps,
     getSmoothStepPath,
 } from 'reactflow';
-
 import styled from 'styled-components';
 
-import {EDGE_TYPE_SUPPLIED_BY} from './editable_graph';
+import {
+    EDGE_TYPE_COOPERATING_WITH,
+    EDGE_TYPE_OPERATED_BY,
+    EDGE_TYPE_SUPPLIED_BY,
+    EDGE_TYPE_SUPPORTED_BY,
+} from './editable_graph';
+
+const getStroke = (kind: string | undefined) => {
+    if (kind === EDGE_TYPE_SUPPLIED_BY) {
+        return 5;
+    }
+    if (kind === EDGE_TYPE_COOPERATING_WITH) {
+        return 8;
+    }
+    if (kind === EDGE_TYPE_OPERATED_BY) {
+        return 13;
+    }
+    if (kind === EDGE_TYPE_SUPPORTED_BY) {
+        return 18;
+    }
+    return 0;
+};
 
 // This is needed to add a label to handle an edge onclick event. React Flow doesn't allow a proper onClick handler on the svg itself.
 const CustomEdge: FC<EdgeProps & {
-    onEdgeClick: (id: string, kind: string) => void;
+    onEdgeClick: (
+        id: string,
+        kind: string,
+        description: string | undefined,
+    ) => void;
 }> = ({
     id,
     sourceX,
@@ -36,11 +60,12 @@ const CustomEdge: FC<EdgeProps & {
         borderRadius: 0,
     });
 
+    // TODO: custom style for the svg of the edge (https://css-tricks.com/svg-properties-and-css/)
     const customStyle = {
         ...style,
         stroke: (data?.isUrlHashed ? '#f4b400' : undefined),
         strokeWidth: (data?.isUrlHashed ? 1.5 : undefined),
-        strokeDasharray: (data?.kind === EDGE_TYPE_SUPPLIED_BY ? 5 : 0),
+        strokeDasharray: getStroke(data?.kind),
     };
 
     return (
@@ -53,7 +78,8 @@ const CustomEdge: FC<EdgeProps & {
             <EdgeLabelRenderer>
                 <div
                     onClick={() => {
-                        onEdgeClick(id, data.kind);
+                        // IMPORTANT: add here all extra edge info
+                        onEdgeClick(id, data.kind, data.description);
                     }}
                     style={{
                         position: 'absolute',
