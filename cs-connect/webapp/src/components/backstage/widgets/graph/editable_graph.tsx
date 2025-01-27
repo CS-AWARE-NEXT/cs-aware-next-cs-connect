@@ -35,6 +35,7 @@ import {
     Select,
     Tooltip,
 } from 'antd';
+import {LeftOutlined, RightOutlined} from '@ant-design/icons';
 import {Content} from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import styled from 'styled-components';
@@ -47,9 +48,14 @@ import {getSystemConfig} from 'src/config/config';
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
 
+const {TextArea} = Input;
+
 const ON_CREATION_NODE_TYPE = 'default';
 export const EDGE_TYPE_MANAGED_BY = 'managed-by';
 export const EDGE_TYPE_SUPPLIED_BY = 'supplied-by';
+export const EDGE_TYPE_COOPERATING_WITH = 'cooperating-with';
+export const EDGE_TYPE_OPERATED_BY = 'operated-by';
+export const EDGE_TYPE_SUPPORTED_BY = 'supported-by';
 
 const minimapStyle = {
     height: 90,
@@ -66,22 +72,38 @@ type NodeSelectionData = {
     description: string,
     kind: string,
 };
+
 type EdgeSelectionData = {
     id: string,
     kind: string,
+    description?: string,
 };
+
 type GraphData = {
     nodes: Node[],
     edges: Edge[],
 }
+
 enum SaveType {
     Save,
     SaveAndClose,
     CloseWithoutSaving,
 }
 
-const defaultNodeSelectionData = {id: '', label: '', description: '', kind: ''};
-const defaultEdgeSelectionData = {id: '', kind: ''};
+// IMPORTANT: add here extra node data info
+const defaultNodeSelectionData = {
+    id: '',
+    label: '',
+    description: '',
+    kind: '',
+};
+
+// IMPORTANT: add here extra edge data info
+const defaultEdgeSelectionData = {
+    id: '',
+    description: '',
+    kind: '',
+};
 
 /**
  * className: used to style the graph through styled-components
@@ -124,6 +146,7 @@ const EditableGraph = ({
     const [helpDrawerOpen, setHelpDrawerOpen] = useState(false);
     const [savedTooltipOpen, setSavedTooltipOpen] = useState(false);
     const [resetNodes, setResetNodes] = useState(false);
+    const [hideSidebar, setHideSidebar] = useState(false);
 
     const [nodeSelectionData, setNodeSelectionData] = useState<NodeSelectionData>(defaultNodeSelectionData);
     const [edgeSelectionData, setEdgeSelectionData] = useState<EdgeSelectionData>(defaultEdgeSelectionData);
@@ -194,6 +217,8 @@ const EditableGraph = ({
                 });
                 return [...eds];
             });
+
+            // IMPORTANT: add here extra node data info
             setNodeSelectionData({
                 id,
                 label: targetNode.data.label || '',
@@ -205,7 +230,11 @@ const EditableGraph = ({
     }, []);
 
     // Highlight clicked edges (and disable the highlight on all the other elements)
-    const onEdgeClick = useCallback((id: string, kind: string) => {
+    const onEdgeClick = useCallback((
+        id: string,
+        kind: string,
+        description: string | undefined,
+    ) => {
         setNodes((nds) => {
             nds.forEach((node) => {
                 node.data = {...node.data, isUrlHashed: false};
@@ -222,9 +251,12 @@ const EditableGraph = ({
             return [...eds];
         });
         setNodeSelectionData(defaultNodeSelectionData);
+
+        // IMPORTANT: add here extra edge data info
         setEdgeSelectionData({
             id,
             kind,
+            description,
         });
     }, [edges, setEdges]);
 
@@ -266,6 +298,8 @@ const EditableGraph = ({
         const newNode = {
             id: uuidv4(),
             type: nodeType,
+
+            // IMPORTANT: add here extra node data info
             data: {
                 label: 'New Node',
                 description: '',
@@ -280,8 +314,11 @@ const EditableGraph = ({
             source: parentNode.id,
             target: newNode.id,
             type: edgeType,
+
+            // IMPORTANT: add here extra edge data info
             data: {
                 kind: EDGE_TYPE_MANAGED_BY,
+                description: '',
             },
             markerEnd: {
                 type: MarkerType.Arrow,
@@ -312,8 +349,11 @@ const EditableGraph = ({
                 source: params.source || '',
                 target: params.target || '',
                 type: edgeType,
+
+                // IMPORTANT: add here extra edge data info
                 data: {
                     kind: EDGE_TYPE_MANAGED_BY,
+                    description: '',
                 },
                 markerEnd: {
                     type: MarkerType.Arrow,
@@ -442,6 +482,9 @@ const EditableGraph = ({
         if (!editEnabled) {
             return;
         }
+
+        // used to keep track of edge's data to update the edgeSelectionData
+        let edgeData: any = {};
         setEdges((eds) => {
             let result = eds;
             if (newData.delete) {
@@ -450,247 +493,374 @@ const EditableGraph = ({
             result.forEach((edge) => {
                 if (edge.id === edgeSelectionData.id) {
                     edge.data = {...edge.data, ...newData};
+                    edgeData = {...edge.data};
                 }
             });
             setUpdatedData((updatedData) => ({nodes: updatedData.nodes, edges: [...result]}));
             return [...result];
         });
+
+        // IMPORTANT: add here extra edge data info
         setEdgeSelectionData(newData.delete ? defaultEdgeSelectionData : {
             id: edgeSelectionData.id,
-            kind: newData.kind || '',
+            kind: edgeData.kind || '',
+            description: edgeData.description || '',
         });
     }, [edgeSelectionData, setEdges, editEnabled]);
 
     return (
-        <Layout
-            className={className}
-            style={{width: '95%'}}
-        >
-            <Content>
-                <Drawer
-                    title={'Ecosystem Graph Help'}
-                    open={helpDrawerOpen}
-                    onClose={() => setHelpDrawerOpen(false)}
-                >
-                    <p>{`
-This view allows you to edit the ecosystem graph.
-`}</p>
-                    <p>{`
-To enable the edit mode, press the "Turn on edit mode" button. This will give you unique edit access to the graph, so that others won't be able to make changes at the same time.
-`}</p>
-                    <p>{`
-You can create a new node by starting an edge from an existing node (by pressing the left click mouse button on a node anchor point) and releasing the left mouse button somewhere on the graph canvas.
-`}</p>
-                    <p>{`
-You can also create new edges between existing nodes in a similar way, by simply releasing the left mouse button on another node's anchor point.
-`}</p>
-                    <p>{`
-By clicking on a node or on an edge info button (the "i" at the center of the edge), you will be able to view and edit its associated information from the right sidebar. The selected node or edge will be highlighted in yellow.
-`}</p>
-                    <p>{`
-The graph will be automatically saved periodically to prevent losing data.
-`}</p>
-                    <p>{`
-Node and edge positions will not be persisted. Instead, a proper layout for the whole graph will automatically be calculated.
-`}</p>
-                    <p>{`
-You can use the "Save" button in the sidebar to trigger a manual save. Be sure to save before closing the browser or leaving the page!
-`}</p>
-
-                </Drawer>
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    onConnectStart={onConnectStart}
-                    onConnectEnd={onConnectEnd}
-                    onConnect={onConnect}
-                    nodeTypes={nodeTypes}
-                    edgeTypes={edgeTypes}
-                    fitView={true}
-                    onlyRenderVisibleElements={false}
-                    proOptions={hideOptions}
-                >
-                    <Background/>
-                    <Controls>
-                        <ControlButton onClick={() => setHelpDrawerOpen(true)}>
-                            <i className='icon fa fa-info'/>
-                        </ControlButton>
-                    </Controls>
-                    <MiniMap
-                        style={minimapStyle}
-                        zoomable={true}
-                        pannable={true}
-                    />
-                </ReactFlow>
-            </Content>
-            <Sider
-                theme={'light'}
-                style={{paddingLeft: '15px', overflow: 'scroll'}}
-            >
-                {!editEnabled && (
-                    <Tooltip title={lockStatus === LockStatus.Busy ? 'The ecosystem graph is being edited by someone else. Try again in a few minutes.' : ''}>
+        <Flex>
+            <RightElements>
+                {hideSidebar ?
+                    <Tooltip title='Open sidebar'>
                         <StyledButton
-                            type='primary'
+                            type='default'
+                            icon={<LeftOutlined/>}
                             block={true}
-                            disabled={lockStatus === LockStatus.Busy}
                             onClick={() => {
-                                setIsEditing(true);
+                                setHideSidebar(false);
                             }}
-                        >
-                            {'Edit'}
-                        </StyledButton>
+                            style={{
+                                width: '50px',
+                                border: 'none',
+                            }}
+                        />
+                    </Tooltip> :
+                    <Tooltip title='Close sidebar'>
+                        <StyledButton
+                            type='default'
+                            icon={<RightOutlined/>}
+                            block={true}
+                            onClick={() => {
+                                setHideSidebar(true);
+                            }}
+                            style={{
+                                width: '50px',
+                                border: 'none',
+                            }}
+                        />
                     </Tooltip>
-                )}
-                {editEnabled && (
-                    <>
+                }
+            </RightElements>
 
-                        <StyledDropdownButton
-                            type='primary'
+            <Layout
+                className={className}
+                style={{width: '100%'}}
+            >
+                <Content>
+                    <Drawer
+                        title={'Ecosystem Graph Help'}
+                        open={helpDrawerOpen}
+                        onClose={() => setHelpDrawerOpen(false)}
+                    >
+                        <p>{`
+                            This view allows you to edit the ecosystem graph.
+                        `}</p>
+                        <p>{`
+                            To enable the edit mode, press the "Turn on edit mode" button. This will give you unique edit access to the graph, so that others won't be able to make changes at the same time.
+                        `}</p>
+                        <p>{`
+                            You can create a new node by starting an edge from an existing node (by pressing the left click mouse button on a node anchor point) and releasing the left mouse button somewhere on the graph canvas.
+                        `}</p>
+                        <p>{`
+                            You can also create new edges between existing nodes in a similar way, by simply releasing the left mouse button on another node's anchor point.
+                        `}</p>
+                        <p>{`
+                            By clicking on a node or on an edge info button (the "i" at the center of the edge), you will be able to view and edit its associated information from the right sidebar. The selected node or edge will be highlighted in yellow.
+                        `}</p>
+                        <p>{`
+                            The graph will be automatically saved periodically to prevent losing data.
+                        `}</p>
+                        <p>{`
+                            Node and edge positions will not be persisted. Instead, a proper layout for the whole graph will automatically be calculated.
+                        `}</p>
+                        <p>{`
+                            You can use the "Save" button in the sidebar to trigger a manual save. Be sure to save before closing the browser or leaving the page!
+                        `}</p>
+                    </Drawer>
 
-                            onClick={() => save(SaveType.Save)}
-                            menu={{items: saveActions,
-                                onClick: (e) => {
-                                    switch (e.key) {
-                                    case '1':
-                                        save(SaveType.SaveAndClose);
-                                        break;
-                                    case '2':
-                                        save(SaveType.CloseWithoutSaving);
-                                        break;
-                                    }
-                                }}}
-                            buttonsRender={([leftButton, rightButton]) => [
-                                <Tooltip
-                                    key={'leftButton'}
-                                    title='Saved!'
-                                    trigger='click'
-                                    open={savedTooltipOpen}
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        onConnectStart={onConnectStart}
+                        onConnectEnd={onConnectEnd}
+                        onConnect={onConnect}
+                        nodeTypes={nodeTypes}
+                        edgeTypes={edgeTypes}
+                        fitView={true}
+                        onlyRenderVisibleElements={false}
+                        proOptions={hideOptions}
+                    >
+                        <Background/>
+                        <Controls>
+                            <ControlButton onClick={() => setHelpDrawerOpen(true)}>
+                                <i className='icon fa fa-info'/>
+                            </ControlButton>
+                        </Controls>
+                        <MiniMap
+                            style={minimapStyle}
+                            zoomable={true}
+                            pannable={true}
+                        />
+                    </ReactFlow>
+                </Content>
+
+                {!hideSidebar &&
+                    <CustomSider
+                        theme='light'
+                        width='20%'
+
+                        // collapsible={true}
+                        // defaultCollapsed={false}
+
+                        // style={{
+                        //     paddingLeft: '8px',
+                        //     overflow: 'scroll',
+                        //     width: '100%',
+                        // }}
+                    >
+                        {!editEnabled && (
+                            <Tooltip title={lockStatus === LockStatus.Busy ? 'The ecosystem graph is being edited by someone else. Try again in a few minutes.' : ''}>
+                                <StyledButton
+                                    type='primary'
+                                    block={true}
+                                    disabled={lockStatus === LockStatus.Busy}
+                                    onClick={() => {
+                                        setIsEditing(true);
+                                    }}
                                 >
-                                    {React.cloneElement(leftButton as React.ReactElement<any, string>, {block: true})}
-                                </Tooltip>,
-                                rightButton,
-                            ]}
-                        >{'Save'}</StyledDropdownButton>
-                        <Alert
-                            message='You are in edit mode'
-                            description='Rememeber to save when you are finished.'
-                            type='warning'
-                            showIcon={true}
-                            style={{marginTop: '10px'}}
-                        />
-                    </>
-                )}
-                <Divider/>
-                {nodeSelectionData !== defaultNodeSelectionData && (
-                    <>
-                        <InputLabel><i className='icon fa fa-info-circle'/> {'Node Info'}</InputLabel>
-                        <InputLabel>{'Name'}</InputLabel>
-                        <Input
-                            placeholder='Name'
-                            value={nodeSelectionData.label}
-                            disabled={!editEnabled}
-                            onChange={(e) => {
-                                updateNodeData({label: e.target.value});
-                            }}
-                        />
-                        <InputLabel>{'Description'}</InputLabel>
-                        <Input
-                            placeholder='Description'
-                            value={nodeSelectionData.description}
-                            disabled={!editEnabled}
-                            onChange={(e) => {
-                                updateNodeData({description: e.target.value});
-                            }}
-                        />
-                        <InputLabel>{'Type'}</InputLabel>
-                        <Select
-                            defaultValue='default'
-                            value={nodeSelectionData.kind}
-                            style={{width: '100%'}}
-                            disabled={!editEnabled}
-                            options={[
-                                {value: 'default', label: 'Default'},
+                                    {'Edit'}
+                                </StyledButton>
+                            </Tooltip>
+                        )}
+                        {editEnabled && (
+                            <>
 
-                                // {value: 'database', label: 'Database'},
-                                // {value: 'cloud', label: 'Cloud'},
-                                // {value: 'network', label: 'Network'},
-                                {value: 'rectangle', label: 'Organization'},
-                                {value: 'oval', label: 'Service'},
-                            ]}
-                            onChange={(value) => {
-                                updateNodeData({kind: value});
-                            }}
-                        />
-                        <StyledButton
-                            type='primary'
-                            danger={true}
-                            block={true}
-                            disabled={!editEnabled || nodeSelectionData.id === 'root'}
-                            style={{position: 'sticky', bottom: 0}}
-                            onClick={() => {
-                                updateNodeData({delete: true});
-                            }}
-                        >
-                            {'Delete'}
-                        </StyledButton>
-                    </>
-                )}
-                {edgeSelectionData !== defaultEdgeSelectionData && (
-                    <>
-                        <InputLabel><i className='icon fa fa-info-circle'/> {'Edge Info'}</InputLabel>
-                        <InputLabel>{'Kind'}</InputLabel>
-                        <Select
-                            defaultValue={EDGE_TYPE_MANAGED_BY}
-                            value={edgeSelectionData.kind}
-                            style={{width: '100%'}}
-                            disabled={!editEnabled}
-                            options={[
-                                {value: EDGE_TYPE_MANAGED_BY, label: 'Managed by'},
-                                {value: EDGE_TYPE_SUPPLIED_BY, label: 'Supplied by'},
-                            ]}
-                            onChange={(value) => {
-                                updateEdgeData({kind: value});
-                            }}
-                        />
-                        <StyledButton
-                            type='primary'
-                            danger={true}
-                            block={true}
-                            disabled={!editEnabled}
-                            style={{position: 'sticky', bottom: 0}}
-                            onClick={() => {
-                                updateEdgeData({delete: true});
-                            }}
-                        >
-                            {'Delete'}
-                        </StyledButton>
-                    </>
-                )}
-                {nodeSelectionData === defaultNodeSelectionData && edgeSelectionData === defaultEdgeSelectionData && (
-                    <Alert
-                        message='Select a node or an edge to view or edit its information.'
-                        type='info'
-                        showIcon={true}
-                    />
-                )}
-            </Sider>
-        </Layout>
+                                <StyledDropdownButton
+                                    type='primary'
+                                    onClick={() => save(SaveType.Save)}
+                                    menu={{items: saveActions,
+                                        onClick: (e) => {
+                                            switch (e.key) {
+                                            case '1':
+                                                save(SaveType.SaveAndClose);
+                                                break;
+                                            case '2':
+                                                save(SaveType.CloseWithoutSaving);
+                                                break;
+                                            }
+                                        }}}
+                                    buttonsRender={([leftButton, rightButton]) => [
+                                        <Tooltip
+                                            key={'leftButton'}
+                                            title='Saved!'
+                                            trigger='click'
+                                            open={savedTooltipOpen}
+                                        >
+                                            {React.cloneElement(leftButton as React.ReactElement<any, string>, {block: true})}
+                                        </Tooltip>,
+                                        rightButton,
+                                    ]}
+                                >
+                                    {'Save'}
+                                </StyledDropdownButton>
+                                {/* <Alert
+                                    message='You are in edit mode'
+                                    description='Rememeber to save when you are finished.'
+                                    type='warning'
+                                    showIcon={true}
+                                    style={{marginTop: '10px'}}
+                                /> */}
+                            </>
+                        )}
+
+                        <Divider/>
+
+                        {nodeSelectionData !== defaultNodeSelectionData && (
+                            <>
+                                <InputLabel><i className='icon fa fa-info-circle'/> {'Node information'}</InputLabel>
+
+                                <InputLabel>{'Name'}</InputLabel>
+                                <TextArea
+                                    placeholder='Name'
+                                    value={nodeSelectionData.label}
+                                    disabled={!editEnabled}
+                                    rows={2}
+                                    onChange={(e) => {
+                                        updateNodeData({label: e.target.value});
+                                    }}
+                                />
+                                <InputLabel>{'Description'}</InputLabel>
+                                <TextArea
+                                    placeholder='Description'
+                                    value={nodeSelectionData.description}
+                                    disabled={!editEnabled}
+                                    rows={3}
+                                    onChange={(e) => {
+                                        updateNodeData({description: e.target.value});
+                                    }}
+                                />
+                                <InputLabel>{'Type'}</InputLabel>
+                                <Select
+                                    defaultValue='default'
+                                    value={nodeSelectionData.kind}
+                                    style={{width: '100%'}}
+                                    disabled={!editEnabled}
+                                    options={[
+                                        {value: 'default', label: 'Default'},
+
+                                        // {value: 'database', label: 'Database'},
+                                        // {value: 'cloud', label: 'Cloud'},
+                                        // {value: 'network', label: 'Network'},
+                                        {value: 'rectangle', label: 'Organization'},
+                                        {value: 'oval', label: 'Service'},
+                                    ]}
+                                    onChange={(value) => {
+                                        updateNodeData({kind: value});
+                                    }}
+                                />
+
+                                <Divider/>
+
+                                <StyledButton
+                                    type='primary'
+                                    danger={true}
+                                    block={true}
+                                    disabled={!editEnabled || nodeSelectionData.id === 'root'}
+
+                                    // style={{
+                                    //     position: 'sticky',
+                                    //     bottom: 0,
+                                    // }}
+                                    onClick={() => {
+                                        updateNodeData({delete: true});
+                                    }}
+                                >
+                                    {'Delete node'}
+                                </StyledButton>
+                            </>
+                        )}
+
+                        {edgeSelectionData !== defaultEdgeSelectionData && (
+                            <>
+                                <InputLabel><i className='icon fa fa-info-circle'/> {'Edge information'}</InputLabel>
+
+                                <InputLabel>{'Description'}</InputLabel>
+                                <TextArea
+                                    placeholder='Description'
+                                    value={edgeSelectionData?.description}
+                                    disabled={!editEnabled}
+                                    rows={3}
+                                    onChange={(e) => {
+                                        updateEdgeData({description: e.target.value});
+                                    }}
+                                />
+                                <InputLabel>{'Type'}</InputLabel>
+                                <Select
+                                    defaultValue={EDGE_TYPE_MANAGED_BY}
+                                    value={edgeSelectionData.kind}
+                                    style={{width: '100%'}}
+                                    disabled={!editEnabled}
+
+                                    // IMPORTANT: here more options for type
+                                    options={[
+                                        {value: EDGE_TYPE_MANAGED_BY, label: 'Managed by'},
+                                        {value: EDGE_TYPE_SUPPLIED_BY, label: 'Supplied by'},
+                                        {value: EDGE_TYPE_COOPERATING_WITH, label: 'Cooperating with'},
+
+                                        // {value: EDGE_TYPE_OPERATED_BY, label: 'Operated by'},
+                                        // {value: EDGE_TYPE_SUPPORTED_BY, label: 'Supported by'},
+                                    ]}
+                                    onChange={(value) => {
+                                        updateEdgeData({kind: value});
+                                    }}
+                                />
+
+                                <Divider/>
+
+                                <StyledButton
+                                    type='primary'
+                                    danger={true}
+                                    block={true}
+                                    disabled={!editEnabled}
+
+                                    // style={{
+                                    //     position: 'sticky',
+                                    //     bottom: 0,
+                                    // }}
+                                    onClick={() => {
+                                        updateEdgeData({delete: true});
+                                    }}
+                                >
+                                    {'Delete edge'}
+                                </StyledButton>
+                            </>
+                        )}
+
+                        {nodeSelectionData === defaultNodeSelectionData && edgeSelectionData === defaultEdgeSelectionData && (
+                            <Alert
+                                message='Select a node/edge to view/edit.'
+                                type='info'
+                                showIcon={true}
+                            />
+                        )}
+                    </CustomSider>
+                }
+            </Layout>
+        </Flex>
     );
 };
 
 const StyledButton = styled(Button)`
 	margin-top: 10px;
-	border-radius: 0px;
+
+	/* border-radius: 0px; */
 `;
 
 const StyledDropdownButton = styled(Dropdown.Button)`
 	margin-top: 10px;
-	border-radius: 0px;
+
+    /* border-radius: 0px; */
 `;
 
 const InputLabel = styled.h4`
+`;
+
+const Flex = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+const RightElements = styled.div`
+    display: flex;
+    flex-direction: row-reverse;
+
+    margin-right: 12px;
+`;
+
+const CustomSider = styled(Sider)`
+    padding-left: 10px;
+    padding-right: 8px;
+
+    overflow: scroll;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 8px;
+        border: 4px solid transparent;
+        background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
 `;
 
 export default React.memo(EditableGraph);

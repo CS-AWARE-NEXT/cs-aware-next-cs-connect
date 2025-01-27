@@ -81,11 +81,29 @@ const EcosystemGraphWrapper = ({
     const sectionUrl = isFullUrlProvided ? fullUrl : routeUrl;
 
     const resetData = useCallback(() => {
+        // IMPORTANT: Add all extra information in the node's data
         const mappedNodes = serverGraphData && serverGraphData.nodes ? serverGraphData.nodes.map((ecosystemNode) => {
-            return {...ecosystemNode, data: {label: ecosystemNode.name, description: ecosystemNode.description, kind: ecosystemNode.type}} as unknown;
+            return {
+                ...ecosystemNode,
+                data: {
+                    label: ecosystemNode.name,
+                    description: ecosystemNode.description,
+                    kind: ecosystemNode.type,
+                },
+            } as unknown;
         }) as Node[] : [];
+
+        // IMPORTANT: Add all extra information in the edge's data
         const mappedEdges = serverGraphData && serverGraphData.edges ? serverGraphData.edges.map((ecosystemEdge) => {
-            return {...ecosystemEdge, source: ecosystemEdge.sourceNodeID, target: ecosystemEdge.destinationNodeID, data: {kind: ecosystemEdge.kind}} as unknown;
+            return {
+                ...ecosystemEdge,
+                source: ecosystemEdge.sourceNodeID,
+                target: ecosystemEdge.destinationNodeID,
+                data: {
+                    kind: ecosystemEdge.kind,
+                    description: '',
+                },
+            } as unknown;
         }) as Edge[] : [];
 
         const filledNodes = fillNodes(mappedNodes, {
@@ -111,17 +129,22 @@ const EcosystemGraphWrapper = ({
 
     const updateGraph = useCallback(async (close?: boolean) => {
         const mappedData = {
+
+            // IMPORTANT: add here extra node data info
             nodes: updatedDataRef.current.nodes.map((node) => ({
                 id: node.id,
                 name: node.data.label,
                 description: node.data.description,
                 type: node.data.kind,
             })),
+
+            // IMPORTANT: add here extra edge data info
             edges: updatedDataRef.current.edges.map((edge) => ({
                 id: edge.id,
                 sourceNodeID: edge.source,
                 destinationNodeID: edge.target,
                 kind: edge.data.kind,
+                description: edge.data.description,
             })),
         };
         const lockAcquired = await refreshEcosystemGraphLock(url, userID, autoSaveDelay, mappedData);
@@ -238,6 +261,7 @@ const EcosystemGraphWrapper = ({
                         name={name}
                         sectionId={sectionIdForUrl}
                         parentId={parentId}
+                        isEcosystemGraphView={true}
                         setDirection={setDirection}
                     />)
                 }
