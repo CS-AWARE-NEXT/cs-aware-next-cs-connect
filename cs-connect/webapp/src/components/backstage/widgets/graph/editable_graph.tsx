@@ -89,10 +89,20 @@ enum SaveType {
     CloseWithoutSaving,
 }
 
-const defaultNodeSelectionData = {id: '', label: '', description: '', kind: ''};
+// IMPORTANT: add here extra node data info
+const defaultNodeSelectionData = {
+    id: '',
+    label: '',
+    description: '',
+    kind: '',
+};
 
 // IMPORTANT: add here extra edge data info
-const defaultEdgeSelectionData = {id: '', description: '', kind: ''};
+const defaultEdgeSelectionData = {
+    id: '',
+    description: '',
+    kind: '',
+};
 
 /**
  * className: used to style the graph through styled-components

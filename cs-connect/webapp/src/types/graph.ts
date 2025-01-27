@@ -25,12 +25,14 @@ export type GraphSectionOptions = {
     sectionUrlHash?: string;
 };
 
+// IMPORTANT: add here extra node data info
 export type GraphNodeInfo = {
     name: string;
     description?: string;
     nodeId: string;
 };
 
+// IMPORTANT: add here extra edge data info
 export type GraphEdgeInfo = {
     description?: string;
     edgeId: string;
