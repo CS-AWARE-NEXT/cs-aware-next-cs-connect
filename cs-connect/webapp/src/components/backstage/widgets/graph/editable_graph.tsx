@@ -680,7 +680,9 @@ const EditableGraph = ({
 
                         {nodeSelectionData !== defaultNodeSelectionData && (
                             <>
-                                <InputLabel><i className='icon fa fa-info-circle'/> {'Node information'}</InputLabel>
+                                <InputLabel>
+                                    <i className='icon fa fa-info-circle'/> {'Node information'}
+                                </InputLabel>
 
                                 <InputLabel>{'Name'}</InputLabel>
                                 <TextArea
@@ -745,7 +747,9 @@ const EditableGraph = ({
 
                         {edgeSelectionData !== defaultEdgeSelectionData && (
                             <>
-                                <InputLabel><i className='icon fa fa-info-circle'/> {'Edge information'}</InputLabel>
+                                <InputLabel>
+                                    <i className='icon fa fa-info-circle'/> {'Edge information'}
+                                </InputLabel>
 
                                 <InputLabel>{'Description'}</InputLabel>
                                 <TextArea
