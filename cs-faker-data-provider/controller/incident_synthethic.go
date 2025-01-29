@@ -2,13 +2,23 @@ package controller
 
 import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 	"github.com/gofiber/fiber/v2"
 )
 
-type IncidentSynthethicController struct{}
+type IncidentSynthethicController struct {
+	authService   *service.AuthService
+	graphEndpoint string
+}
 
-func NewIncidentSynthethicController() *IncidentSynthethicController {
-	return &IncidentSynthethicController{}
+func NewIncidentSynthethicController(
+	authService *service.AuthService,
+	graphEndpoint string,
+) *IncidentSynthethicController {
+	return &IncidentSynthethicController{
+		authService:   authService,
+		graphEndpoint: graphEndpoint,
+	}
 }
 
 func (ic *IncidentSynthethicController) GetIncidentsSynthethic(c *fiber.Ctx) error {
@@ -32,9 +42,9 @@ func (ic *IncidentSynthethicController) GetIncidentSynththic(c *fiber.Ctx) error
 	return c.JSON(ic.getIncidentSynthethicByID(c))
 }
 
-func (ic *IncidentSynthethicController) GetIncidentSynthethicGraph(c *fiber.Ctx) error {
-	graphController := NewGraphController()
-	return graphController.GetGraph(c)
+func (ic *IncidentSynthethicController) GetIncidentSynthethicGraph(c *fiber.Ctx, vars map[string]string) error {
+	graphController := NewGraphController(ic.authService, ic.graphEndpoint)
+	return graphController.GetGraph(c, vars)
 }
 
 func (ic *IncidentSynthethicController) GetIncidentSynthethicTable(c *fiber.Ctx) error {

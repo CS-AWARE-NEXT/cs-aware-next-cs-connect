@@ -44,7 +44,7 @@ func useOrganizations(basePath fiber.Router, context *config.Context) {
 		return organizationController.GetOrganization(c)
 	})
 	useOrganizationsIncidents(organizations, context)
-	useOrganizationsIncidentsSynthethic(organizations)
+	useOrganizationsIncidentsSynthethic(organizations, context)
 	useOrganizationsStories(organizations)
 	useOrganizationsPolicies(organizations, context)
 	useOrganizationsPlaybooks(organizations)
@@ -64,6 +64,7 @@ func useOrganizationsIncidents(organizations fiber.Router, context *config.Conte
 		authService,
 		context.EndpointsMap["incidents"],
 		context.EndpointsMap["incidentDetails"],
+		context.EndpointsMap["graph"],
 	)
 
 	incidents := organizations.Group("/:organizationId/incidents")
@@ -75,7 +76,7 @@ func useOrganizationsIncidents(organizations fiber.Router, context *config.Conte
 		return incidentController.GetIncident(c, context.Vars)
 	})
 	incidentsWithId.Get("/graph", func(c *fiber.Ctx) error {
-		return incidentController.GetIncidentGraph(c)
+		return incidentController.GetIncidentGraph(c, context.Vars)
 	})
 	incidentsWithId.Get("/table", func(c *fiber.Ctx) error {
 		return incidentController.GetIncidentTable(c)
@@ -88,8 +89,12 @@ func useOrganizationsIncidents(organizations fiber.Router, context *config.Conte
 	})
 }
 
-func useOrganizationsIncidentsSynthethic(organizations fiber.Router) {
-	incidentSynthethicController := controller.NewIncidentSynthethicController()
+func useOrganizationsIncidentsSynthethic(organizations fiber.Router, context *config.Context) {
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	incidentSynthethicController := controller.NewIncidentSynthethicController(
+		authService,
+		context.EndpointsMap["graph"],
+	)
 
 	incidentsSynthethic := organizations.Group("/:organizationId/incidents_synthethic")
 	incidentsSynthethic.Get("/", func(c *fiber.Ctx) error {
@@ -100,7 +105,7 @@ func useOrganizationsIncidentsSynthethic(organizations fiber.Router) {
 		return incidentSynthethicController.GetIncidentSynththic(c)
 	})
 	incidentsSynthethicWithId.Get("/graph", func(c *fiber.Ctx) error {
-		return incidentSynthethicController.GetIncidentSynthethicGraph(c)
+		return incidentSynthethicController.GetIncidentSynthethicGraph(c, context.Vars)
 	})
 	incidentsSynthethicWithId.Get("/table", func(c *fiber.Ctx) error {
 		return incidentSynthethicController.GetIncidentSynthethicTable(c)

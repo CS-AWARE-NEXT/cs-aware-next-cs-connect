@@ -67,6 +67,7 @@ func main() {
 		"incidents":         os.Getenv("INCIDENTS_ENDPOINT"),
 		"incidentDetails":   os.Getenv("INCIDENTS_DETAILS_ENDPOINT"),
 		"discussionsExport": os.Getenv("DISCUSSIONS_EXPORT_ENDPOINT"),
+		"graph":             os.Getenv("GRAPH_ENDPOINT"),
 	}
 
 	varsMap := map[string]string{
