@@ -18,17 +18,20 @@ type IncidentController struct {
 	authService             *service.AuthService
 	incidentsEndpoint       string
 	incidentDetailsEndpoint string
+	graphEndpoint           string
 }
 
 func NewIncidentController(
 	authService *service.AuthService,
 	incidentsEndpoint string,
 	incidentDetailsEndpoint string,
+	graphEndpoint string,
 ) *IncidentController {
 	return &IncidentController{
 		authService:             authService,
 		incidentsEndpoint:       incidentsEndpoint,
 		incidentDetailsEndpoint: incidentDetailsEndpoint,
+		graphEndpoint:           graphEndpoint,
 	}
 }
 
@@ -242,9 +245,9 @@ func (ic *IncidentController) GetIncidentDetails(
 	return c.JSON(incident)
 }
 
-func (ic *IncidentController) GetIncidentGraph(c *fiber.Ctx) error {
-	graphController := NewGraphController()
-	return graphController.GetGraph(c)
+func (ic *IncidentController) GetIncidentGraph(c *fiber.Ctx, vars map[string]string) error {
+	graphController := NewGraphController(ic.authService, ic.graphEndpoint)
+	return graphController.GetGraph(c, vars)
 }
 
 func (ic *IncidentController) GetIncidentTable(c *fiber.Ctx) error {

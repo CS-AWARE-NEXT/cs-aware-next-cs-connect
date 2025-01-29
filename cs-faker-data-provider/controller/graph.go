@@ -1,11 +1,16 @@
 package controller
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
@@ -13,19 +18,25 @@ import (
 	"gopkg.in/karalabe/cookiejar.v2/graph/bfs"
 )
 
-type GraphController struct{}
-
-func NewGraphController() *GraphController {
-	return &GraphController{}
+type GraphController struct {
+	authService *service.AuthService
+	endpoint    string
 }
 
-func (gc *GraphController) GetGraph(c *fiber.Ctx) error {
+func NewGraphController(authService *service.AuthService, endpoint string) *GraphController {
+	return &GraphController{
+		authService: authService,
+		endpoint:    endpoint,
+	}
+}
+
+func (gc *GraphController) GetGraph(c *fiber.Ctx, vars map[string]string) error {
 	organizationId := c.Params("organizationId")
 
 	// TODO: Temporary to return the same graph of organization
 	// Demo CS-AWARE for the organization NexDev CS-AWARE
 	if organizationId > "4" {
-		graphData, err := gc.getGraphFromJson(organizationId)
+		graphData, err := gc.getGraphFromJson(organizationId, vars)
 		if err != nil {
 			return c.JSON(model.GraphData{})
 		}
@@ -34,7 +45,10 @@ func (gc *GraphController) GetGraph(c *fiber.Ctx) error {
 	return c.JSON(graphMap[organizationId])
 }
 
-func (gc *GraphController) getGraphFromJson(organizationId string) (model.GraphData, error) {
+func (gc *GraphController) getGraphFromJson(
+	organizationId string,
+	vars map[string]string,
+) (model.GraphData, error) {
 	organizationName := "foggia"
 	if organizationId == "6" {
 		organizationName = "larissa"
@@ -61,7 +75,11 @@ func (gc *GraphController) getGraphFromJson(organizationId string) (model.GraphD
 	}
 
 	if organizationId == "9" {
-		return gc.fromDataLakeGraphData(content)
+		graph, err := gc.getGraphFromDataLake(organizationId, vars)
+		if err != nil {
+			return model.GraphData{}, err
+		}
+		return gc.fromDataLakeGraphData(graph)
 	}
 
 	if organizationId >= "6" || organizationId <= "8" {
@@ -76,14 +94,76 @@ func (gc *GraphController) getGraphFromJson(organizationId string) (model.GraphD
 	return model.GraphData{}, nil
 }
 
-func (gc *GraphController) fromDataLakeGraphData(content []byte) (model.GraphData, error) {
-	log.Info("Getting graph data from DataLake")
+func (gc *GraphController) getGraphFromDataLake(
+	organizationId string,
+	vars map[string]string,
+) (model.DataLakeGraphRoot, error) {
+	log.Info("Starting preparation for graph request")
+	log.Infof("Requesting graph for organization %s", organizationId)
 
-	var dataLakeGraphData model.DataLakeGraphRoot
-	err := json.Unmarshal(content, &dataLakeGraphData)
+	dataLakeOrganizationId := model.OrgToDataLakeOrgMap[organizationId]
+	endpoint := strings.Replace(gc.endpoint, "{organization_id}", dataLakeOrganizationId, 1)
+	log.Infof("Endpoint for graph: %s", endpoint)
+
+	req, err := http.NewRequest("GET", endpoint, nil)
 	if err != nil {
-		return model.GraphData{}, err
+		log.Error("error creating request ", err.Error())
+		return model.DataLakeGraphRoot{}, err
 	}
+	req.Header.Set("Content-Type", "application/json")
+
+	log.Info("Authenticating to get token")
+	authResp, err := gc.authService.Auth(vars["authUsername"], vars["authPassword"])
+	if err != nil {
+		log.Error("error authenticating ", err.Error())
+		return model.DataLakeGraphRoot{}, err
+	}
+	log.Infof("Got token: %s", authResp.String())
+	req.Header.Set("access-token", authResp.AccessToken)
+	req.Header.Set("id-token", authResp.IdToken)
+
+	transport := &http.Transport{}
+	client := &http.Client{Transport: transport}
+
+	log.Info("Making request to get graph...")
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Error("error getting graph ", err.Error())
+		return model.DataLakeGraphRoot{}, err
+	}
+	defer resp.Body.Close()
+	defer transport.CloseIdleConnections()
+
+	log.Info("Response Status: ", resp.Status)
+	log.Info("Response Headers: ", resp.Header)
+	if resp.StatusCode != http.StatusOK {
+		log.Error("error getting graph ", resp.Status)
+		return model.DataLakeGraphRoot{}, err
+	}
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Error("error reading response body ", string(respBody), err.Error())
+		return model.DataLakeGraphRoot{}, err
+	}
+	log.Info("Response Body: ", string(respBody))
+
+	log.Info("unmarshaling incident details")
+
+	var graph model.DataLakeGraphRoot
+	// we cannot use Unmarshal because we have to read from the Body reader first
+	err = json.NewDecoder(bytes.NewReader(respBody)).Decode(&graph)
+	if err != nil {
+		return model.DataLakeGraphRoot{}, err
+	}
+
+	return graph, nil
+}
+
+func (gc *GraphController) fromDataLakeGraphData(
+	dataLakeGraphData model.DataLakeGraphRoot,
+) (model.GraphData, error) {
+	log.Info("Getting graph data from DataLake")
 
 	nodes := []model.GraphNode{}
 	edges := []model.GraphEdge{}
@@ -199,6 +279,7 @@ func (gc *GraphController) fromCSAwareGraphData(csAwareGraphData model.CSAwareGr
 func (gc *GraphController) getBfs(nodes []model.CSAwareGraphNode) (map[string]int, map[int]string, *bfs.Bfs) {
 	root, count := gc.getRootAndCount(nodes)
 	if count < 0 {
+		log.Infof("No nodes in the graph as count=%s", count)
 		return nil, nil, nil
 	}
 	nodeIndexes, nodeIDs := gc.nodesToMaps(nodes)
@@ -219,9 +300,18 @@ func (gc *GraphController) getRootAndCount(nodes []model.CSAwareGraphNode) (int,
 		}
 
 		// This is temporary until we are provided with a way to udentify the root node in all graphs
-		if node.Name == "Internet" {
+		if strings.EqualFold(node.Name, "Internet") {
 			return index, len(nodes)
 		}
+
+		// This is temporary until we are provided with a way to udentify the root node in all graphs
+		if strings.EqualFold(node.Name, "information sharing") {
+			return index, len(nodes)
+		}
+	}
+	// Use the first node if none of the above works
+	if len(nodes) > 0 {
+		return 0, len(nodes)
 	}
 	return -1, -1
 }
