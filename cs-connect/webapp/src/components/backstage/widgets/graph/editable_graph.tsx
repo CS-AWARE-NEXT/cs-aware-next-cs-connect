@@ -27,12 +27,9 @@ import ReactFlow, {
 import {
     Alert,
     Button,
-    Divider,
     Drawer,
     Dropdown,
-    Input,
     Layout,
-    Select,
     Tooltip,
 } from 'antd';
 import {LeftOutlined, RightOutlined} from '@ant-design/icons';
@@ -47,8 +44,8 @@ import {getSystemConfig} from 'src/config/config';
 
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
-
-const {TextArea} = Input;
+import EdgeSidebar from './edge_sidebar';
+import NodeSidebar from './node_sidebar';
 
 const ON_CREATION_NODE_TYPE = 'default';
 export const EDGE_TYPE_MANAGED_BY = 'managed-by';
@@ -66,14 +63,14 @@ const hideOptions = {
     hideAttribution: true,
 };
 
-type NodeSelectionData = {
+export type NodeSelectionData = {
     id: string,
     label: string,
     description: string,
     kind: string,
 };
 
-type EdgeSelectionData = {
+export type EdgeSelectionData = {
     id: string,
     kind: string,
     description?: string,
@@ -676,131 +673,22 @@ const EditableGraph = ({
                             </>
                         )}
 
-                        <Divider/>
+                        {/* <Divider/> */}
 
                         {nodeSelectionData !== defaultNodeSelectionData && (
-                            <>
-                                <InputLabel>
-                                    <i className='icon fa fa-info-circle'/> {'Node information'}
-                                </InputLabel>
-
-                                <InputLabel>{'Name'}</InputLabel>
-                                <TextArea
-                                    placeholder='Name'
-                                    value={nodeSelectionData.label}
-                                    disabled={!editEnabled}
-                                    rows={2}
-                                    onChange={(e) => {
-                                        updateNodeData({label: e.target.value});
-                                    }}
-                                />
-                                <InputLabel>{'Description'}</InputLabel>
-                                <TextArea
-                                    placeholder='Description'
-                                    value={nodeSelectionData.description}
-                                    disabled={!editEnabled}
-                                    rows={3}
-                                    onChange={(e) => {
-                                        updateNodeData({description: e.target.value});
-                                    }}
-                                />
-                                <InputLabel>{'Type'}</InputLabel>
-                                <Select
-                                    defaultValue='default'
-                                    value={nodeSelectionData.kind}
-                                    style={{width: '100%'}}
-                                    disabled={!editEnabled}
-                                    options={[
-                                        {value: 'default', label: 'Default'},
-
-                                        // {value: 'database', label: 'Database'},
-                                        // {value: 'cloud', label: 'Cloud'},
-                                        // {value: 'network', label: 'Network'},
-                                        {value: 'rectangle', label: 'Organization'},
-                                        {value: 'oval', label: 'Service'},
-                                    ]}
-                                    onChange={(value) => {
-                                        updateNodeData({kind: value});
-                                    }}
-                                />
-
-                                <Divider/>
-
-                                <StyledButton
-                                    type='primary'
-                                    danger={true}
-                                    block={true}
-                                    disabled={!editEnabled || nodeSelectionData.id === 'root'}
-
-                                    // style={{
-                                    //     position: 'sticky',
-                                    //     bottom: 0,
-                                    // }}
-                                    onClick={() => {
-                                        updateNodeData({delete: true});
-                                    }}
-                                >
-                                    {'Delete node'}
-                                </StyledButton>
-                            </>
+                            <NodeSidebar
+                                editEnabled={editEnabled}
+                                nodeSelectionData={nodeSelectionData}
+                                updateNodeData={updateNodeData}
+                            />
                         )}
 
                         {edgeSelectionData !== defaultEdgeSelectionData && (
-                            <>
-                                <InputLabel>
-                                    <i className='icon fa fa-info-circle'/> {'Edge information'}
-                                </InputLabel>
-
-                                <InputLabel>{'Description'}</InputLabel>
-                                <TextArea
-                                    placeholder='Description'
-                                    value={edgeSelectionData?.description}
-                                    disabled={!editEnabled}
-                                    rows={3}
-                                    onChange={(e) => {
-                                        updateEdgeData({description: e.target.value});
-                                    }}
-                                />
-                                <InputLabel>{'Type'}</InputLabel>
-                                <Select
-                                    defaultValue={EDGE_TYPE_MANAGED_BY}
-                                    value={edgeSelectionData.kind}
-                                    style={{width: '100%'}}
-                                    disabled={!editEnabled}
-
-                                    // IMPORTANT: here more options for type
-                                    options={[
-                                        {value: EDGE_TYPE_MANAGED_BY, label: 'Managed by'},
-                                        {value: EDGE_TYPE_SUPPLIED_BY, label: 'Supplied by'},
-                                        {value: EDGE_TYPE_COOPERATING_WITH, label: 'Cooperating with'},
-
-                                        // {value: EDGE_TYPE_OPERATED_BY, label: 'Operated by'},
-                                        // {value: EDGE_TYPE_SUPPORTED_BY, label: 'Supported by'},
-                                    ]}
-                                    onChange={(value) => {
-                                        updateEdgeData({kind: value});
-                                    }}
-                                />
-
-                                <Divider/>
-
-                                <StyledButton
-                                    type='primary'
-                                    danger={true}
-                                    block={true}
-                                    disabled={!editEnabled}
-
-                                    // style={{
-                                    //     position: 'sticky',
-                                    //     bottom: 0,
-                                    // }}
-                                    onClick={() => {
-                                        updateEdgeData({delete: true});
-                                    }}
-                                >
-                                    {'Delete edge'}
-                                </StyledButton>
-                            </>
+                            <EdgeSidebar
+                                editEnabled={editEnabled}
+                                edgeSelectionData={edgeSelectionData}
+                                updateEdgeData={updateEdgeData}
+                            />
                         )}
 
                         {nodeSelectionData === defaultNodeSelectionData && edgeSelectionData === defaultEdgeSelectionData && (
@@ -808,6 +696,7 @@ const EditableGraph = ({
                                 message='Select a node/edge to view/edit.'
                                 type='info'
                                 showIcon={true}
+                                style={{marginTop: '20px'}}
                             />
                         )}
                     </CustomSider>
@@ -817,7 +706,7 @@ const EditableGraph = ({
     );
 };
 
-const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)`
 	margin-top: 10px;
 
 	/* border-radius: 0px; */
@@ -827,9 +716,6 @@ const StyledDropdownButton = styled(Dropdown.Button)`
 	margin-top: 10px;
 
     /* border-radius: 0px; */
-`;
-
-const InputLabel = styled.h4`
 `;
 
 const Flex = styled.div`
