@@ -11,6 +11,7 @@ import {
 } from './editable_graph';
 import MarkdownTextArea from './markdown_textarea';
 import LabelWithInfoText, {Label} from './label_with_info_text';
+import InputNumber from './input_number';
 
 type Props = {
     editEnabled: boolean,
@@ -53,6 +54,34 @@ const EdgeSidebar: FC<Props> = ({
                 selectionData={edgeSelectionData}
                 editEnabled={editEnabled}
                 updateData={updateEdgeData}
+            />
+
+            <LabelWithInfoText
+                label='Criticality Level'
+                infoText={'On a level of 1 to 5, how does the community assess the criticality level of the supplied service to the consuming service/organisation. At least the provider and the consumer should contribute to the detemination of the criticality level.'}
+            />
+            <InputNumber
+                field='criticalityLevel'
+                min={1}
+                max={5}
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+            />
+
+            <LabelWithInfoText
+                label='Service Level Agreement'
+                infoText={'Key aspects of the type of service level agreements for the specific supply relationship, as defined by contracts and agreements between supplier and consumer of the service. Note that only those aspects of the agreements that are not confidential and add value to the awareness of the ecosystem should be shared. This is intended to capture the actually agreed service level between the service and the customer.'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <MarkdownTextArea
+                field='serviceLevelAgreement'
+                label='edge-serviceLevelAgreement'
+                placeholder='Enter edge Service Level Agreement'
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
             />
 
             <LabelWithInfoText

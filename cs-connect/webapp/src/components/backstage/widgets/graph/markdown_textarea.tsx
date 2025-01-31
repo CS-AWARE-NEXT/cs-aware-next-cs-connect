@@ -12,6 +12,7 @@ type Props = {
     editEnabled: boolean,
     selectionData: any,
     rows?: number,
+    visible?: boolean,
     updateData: (newData: any) => void,
 };
 
@@ -22,8 +23,13 @@ const MarkdownTextArea: FC<Props> = ({
     editEnabled,
     selectionData,
     rows = 3,
+    visible = true,
     updateData,
 }) => {
+    if (!visible) {
+        return null;
+    }
+
     return (
         <>
             {editEnabled ?

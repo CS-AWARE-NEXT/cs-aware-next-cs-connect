@@ -8,12 +8,18 @@ import {HorizontalContainer} from 'src/components/backstage/widgets/news/news';
 type Props = {
     label: string,
     infoText?: string,
+    visible?: boolean,
 };
 
 const LabelWithInfoText: FC<Props> = ({
     label,
     infoText = '',
+    visible = true,
 }) => {
+    if (!visible) {
+        return null;
+    }
+
     return (
         <HorizontalContainer>
             <InputLabel>{label}</InputLabel>
