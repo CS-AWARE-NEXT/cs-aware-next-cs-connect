@@ -27,7 +27,10 @@ const LabelWithInfoText: FC<Props> = ({
                 title={infoText}
             >
                 <QuestionCircleOutlined
-                    style={{marginTop: '10px', marginLeft: '4px'}}
+                    style={{
+                        marginTop: '10px',
+                        marginLeft: '4px',
+                    }}
                 />
             </Tooltip>
         </HorizontalContainer>
