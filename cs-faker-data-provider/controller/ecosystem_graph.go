@@ -8,6 +8,7 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
 	"github.com/pkg/errors"
 )
 
@@ -25,13 +26,17 @@ func NewEcosystemGraphController(ecosystemGraphRepository *repository.EcosystemG
 
 func (egc *EcosystemGraphController) GetEcosystemGraph(c *fiber.Ctx) error {
 	if ecosystemGraph, err := egc.ecosystemGraphRepository.GetEcosystemGraph(); err == nil {
+		log.Info("Ecosystem graph found in the database, returning it")
 		return c.JSON(ecosystemGraph)
 	} else if err == util.ErrNotFound {
+		log.Info("No ecosystem graph found in the database, falling back to default")
+
 		// Attempt retrieving a default graph from a json file
 		if ecosystemGraph, err := egc.getEcosystemGraphFromFile("ecosystem-graph.json"); err == nil {
 			return c.JSON(ecosystemGraph)
 		}
 	}
+	log.Info("The error was not 'ErrNotFound', returning an empty graph")
 	return c.JSON(model.EcosystemGraphData{})
 }
 
