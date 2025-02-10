@@ -77,7 +77,142 @@ const EdgeSidebar: FC<Props> = ({
             <MarkdownTextArea
                 field='serviceLevelAgreement'
                 label='edge-serviceLevelAgreement'
-                placeholder='Enter edge Service Level Agreement'
+                placeholder='Enter Service Level Agreement'
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='BC/DR Description'
+                infoText={'An optional free-form description of BC/DR relevant aspects related to this service.'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <MarkdownTextArea
+                field='bcdrDescription'
+                label='edge-bcdrDescription'
+                placeholder='Enter BC/DR Description'
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='RTO'
+                infoText={'What is the Recovery Time Objective of the service.'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <MarkdownTextArea
+                field='rto'
+                label='edge-rto'
+                placeholder='Enter RTO'
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='RPO'
+                infoText={'What is the Recovery Point Objective of the service from the organisation perspective.'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <MarkdownTextArea
+                field='rpo'
+                label='edge-rpo'
+                placeholder='Enter RPO'
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='Confidentiality Level'
+                infoText={'From the organisation perspective, what is the reliance on Confidentiality on a scale from 0 to 5 for this service (0 meaning that confidentiality is not important and 5 meaning that the service requires a high level of confidentiality).'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <InputNumber
+                field='confidentialityLevel'
+                min={0}
+                max={5}
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='Integrity Level'
+                infoText={'From the organisation perspective, what is the reliance on Integrity on a scale from 0 to 5 for this service (0 meaning that Integrity is not important and 5 meaning that the service requires a high level of Integrity).'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <InputNumber
+                field='integrityLevel'
+                min={0}
+                max={5}
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='Availability Level'
+                infoText={'From the organisation perspective, what is the reliance on Availability on a scale from 0 to 5 for this service (0 meaning that Availability is not important and 5 meaning that the service requires a high level of Availability).'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <InputNumber
+                field='availabilityLevel'
+                min={0}
+                max={5}
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='CIA Rationale'
+                infoText={'CIA (Confidentiality, Integrity, Availability) justification.'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <MarkdownTextArea
+                field='ciaRationale'
+                label='edge-ciaRationale'
+                placeholder='Enter CIA Rationale'
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='MTPD'
+                infoText={'What is the Maximum Tolerable Period of Disruption of the service.'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <MarkdownTextArea
+                field='mtpd'
+                label='edge-mtpd'
+                placeholder='Enter MTPD'
+                selectionData={edgeSelectionData}
+                editEnabled={editEnabled}
+                updateData={updateEdgeData}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+
+            <LabelWithInfoText
+                label='Real-time Status'
+                infoText={'The ability to update the service status for specific supply relationships to its current state. While it can be possible in future to integrate this with service with incidents detected in real-time, currently this is restricted to manual updates of real-time service status via the ecosystem alert channel.'}
+                visible={edgeSelectionData.kind === EDGE_TYPE_SUPPLIED_BY}
+            />
+            <MarkdownTextArea
+                field='realtimeStatus'
+                label='edge-realtimeStatus'
+                placeholder='Enter real-time status'
                 selectionData={edgeSelectionData}
                 editEnabled={editEnabled}
                 updateData={updateEdgeData}
