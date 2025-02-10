@@ -68,6 +68,7 @@ export type NodeSelectionData = {
     label: string,
     description: string,
     kind: string,
+    ecosystemOrganization?: string,
 };
 
 export type EdgeSelectionData = {

@@ -92,7 +92,7 @@ const EdgeSidebar: FC<Props> = ({
             <MarkdownTextArea
                 field='bcdrDescription'
                 label='edge-bcdrDescription'
-                placeholder='Enter BC/DR Description'
+                placeholder='Enter BC/DR description'
                 selectionData={edgeSelectionData}
                 editEnabled={editEnabled}
                 updateData={updateEdgeData}
