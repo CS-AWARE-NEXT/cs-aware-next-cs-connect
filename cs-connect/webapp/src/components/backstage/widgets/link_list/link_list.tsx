@@ -85,7 +85,6 @@ const LinkList = ({
             organizationId,
             parentId,
         };
-        console.log(linkItem, value, JSON.stringify(linkItem));
         saveLinkListItem(linkItem, url);
         if (forceRefresh) {
             forceRefresh((prev) => !prev);
