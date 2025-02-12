@@ -153,6 +153,47 @@ const CopyLink: FC<Props & Attrs> = ({
     );
 };
 
+const CopyText: FC<Props & Attrs> = ({
+    iconWidth,
+    iconHeight,
+    id,
+    name,
+    text,
+    tooltipMessage,
+    ...attrs
+}) => {
+    const {formatMessage} = useIntl();
+    const [wasCopied, setWasCopied] = useState(false);
+
+    const copyText = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        copyToClipboard(text);
+        setWasCopied(true);
+    };
+
+    return (
+        <Tooltip
+            id={id}
+            placement='bottom'
+            delay={OVERLAY_DELAY}
+            onExited={() => setWasCopied(false)}
+            shouldUpdatePosition={true}
+            content={wasCopied ? formatMessage({defaultMessage: 'Copied!'}) : (tooltipMessage ?? formatMessage({defaultMessage: "Copy text from ''{name}''"}, {name}))}
+        >
+            <AutoSizeCopyIcon
+                onClick={copyText}
+                clicked={wasCopied}
+                {...attrs}
+                className={'icon-link-variant ' + attrs.className}
+                iconWidth={iconWidth}
+                iconHeight={iconHeight}
+            />
+        </Tooltip>
+    );
+};
+
+export const StyledCopyText = styled(CopyText)``;
+
 const CopyIcon = styled.button<{clicked: boolean, iconWidth?: string, iconHeight?: string}>`
     display: inline-block;
 

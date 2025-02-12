@@ -114,6 +114,10 @@ const SocialMediaPost: FC<Props> = ({
         </Target>,
     ];
 
+    const getTextToCopy = (postToCopy: Post): string => {
+        return `---\n### 📢 ${postToCopy.title}\n🗓 *Posted on ${moment(postToCopy.date).format('MMMM Do YYYY, h:mm:ss a')}*\n> ${postToCopy.content.split('\n').join('\n> ')}\n\n---`;
+    };
+
     const getAvatarComponent = (
         avatar: string | undefined,
         hint: string,
@@ -193,6 +197,7 @@ const SocialMediaPost: FC<Props> = ({
                         sectionId={sectionId}
                         hyperlinkPath={hyperlinkPath}
                         postOptions={options}
+                        textToCopy={getTextToCopy(post)}
                     />}
             />
             <MarkdownEditWithID

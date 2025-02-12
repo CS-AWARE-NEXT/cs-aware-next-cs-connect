@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import {FullUrlContext} from 'src/components/rhs/rhs';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {buildQuery, buildTo, buildToForCopy} from 'src/hooks';
-import CopyLink from 'src/components/commons/copy_link';
+import CopyLink, {StyledCopyText} from 'src/components/commons/copy_link';
 
 import {PostOptions} from './social_media_post';
 
@@ -16,6 +16,7 @@ type Props = {
     sectionId: string;
     hyperlinkPath: string;
     postOptions?: PostOptions;
+    textToCopy?: string;
 };
 
 const SocialMediaPostTitle: FC<Props> = ({
@@ -25,6 +26,7 @@ const SocialMediaPostTitle: FC<Props> = ({
     sectionId,
     hyperlinkPath,
     postOptions,
+    textToCopy = '',
 }) => {
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);
@@ -35,7 +37,7 @@ const SocialMediaPostTitle: FC<Props> = ({
     return (
         <Title>
             <TitleText>{title}</TitleText>
-            {shouldAllowCopy &&
+            {shouldAllowCopy ?
                 <CopyLink
                     id={id}
                     text={`${hyperlinkPath}.${title}`}
@@ -44,7 +46,17 @@ const SocialMediaPostTitle: FC<Props> = ({
                     area-hidden={true}
                     iconWidth={'1.45em'}
                     iconHeight={'1.45em'}
-                />}
+                /> :
+                <StyledCopyText
+                    id={id}
+                    text={textToCopy}
+                    to=''
+                    name={title}
+                    area-hidden={true}
+                    iconWidth={'1.45em'}
+                    iconHeight={'1.45em'}
+                />
+            }
         </Title>
     );
 };
@@ -60,6 +72,16 @@ const Title = styled.div<{
         transition: opacity ease 0.15s;
     }
     &:not(:hover) ${CopyLink}:not(:hover) {
+        opacity: 0;
+    }
+
+    ${StyledCopyText} {
+        margin-left: ${(props) => (props.iconMarginLeft ? props.iconMarginLeft : '8px')};
+        margin-right: ${(props) => (props.iconMarginRight ? props.iconMarginRight : '8px')};
+        opacity: 1;
+        transition: opacity ease 0.15s;
+    }
+    &:not(:hover) ${StyledCopyText}:not(:hover) {
         opacity: 0;
     }
 `;
