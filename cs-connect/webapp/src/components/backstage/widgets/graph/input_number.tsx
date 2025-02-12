@@ -29,9 +29,9 @@ const InputNumber: FC<Props> = ({
             min={min}
             max={max}
             defaultValue={min}
-            value={selectionData[field]}
+            value={selectionData[field] || min}
             onChange={(value) => {
-                updateData({criticalityLevel: value || 0});
+                updateData({[field]: value || min});
             }}
             disabled={!editEnabled}
         />
