@@ -80,6 +80,8 @@ const News: FC<Props> = ({
             search: '',
             offset: '0',
             limit: '10',
+            orderBy: 'observation_created',
+            direction: 'desc',
         });
     }, [sectionId]);
 

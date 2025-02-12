@@ -32,6 +32,8 @@ const NewsWrapper = ({
         search: '',
         offset: '0',
         limit: '10',
+        orderBy: 'observation_created',
+        direction: 'desc',
     });
 
     const parent = getSectionById(parentId);
