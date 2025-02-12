@@ -18,6 +18,14 @@ const NodeSidebar: FC<Props> = ({
     nodeSelectionData,
     updateNodeData,
 }) => {
+    // if (nodeSelectionData.kind === 'default') {
+    //     return (
+    //         <Label>
+    //             <InfoCircleOutlined/> {nodeSelectionData?.label ? `${nodeSelectionData?.label}` : 'Node information'}
+    //         </Label>
+    //     );
+    // }
+
     return (
         <>
             <Label>
@@ -98,7 +106,7 @@ const NodeSidebar: FC<Props> = ({
                         infoText={'Is the organisation an approved ecosystem collaborator, or an organisation that is not a formal collaborator in the ecosystem context (e.g. supplier or client)?'}
                     />
                     <Select
-                        defaultValue='default'
+                        placeholder='Select the approval state of the organization.'
                         value={nodeSelectionData.ecosystemOrganization}
                         style={{width: '100%'}}
                         disabled={!editEnabled}
@@ -116,6 +124,7 @@ const NodeSidebar: FC<Props> = ({
             <LabelWithInfoText
                 label='Criticality Level'
                 infoText={'On a level of 1 to 5, how does the community assess the criticality level of the service to the region/ecosystem.'}
+                visible={nodeSelectionData.kind === 'oval'}
             />
             <InputNumber
                 field='criticalityLevel'
