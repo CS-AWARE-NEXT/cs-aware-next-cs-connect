@@ -32,6 +32,8 @@ const NewsWrapper = ({
         search: '',
         offset: '0',
         limit: '10',
+        orderBy: 'observation_created',
+        direction: 'desc',
     });
 
     const parent = getSectionById(parentId);
@@ -39,12 +41,6 @@ const NewsWrapper = ({
 
     const [loading, setLoading] = useState(false);
     const [todayLoading, setTodayLoading] = useState(false);
-
-    // console.log('NewsWrapper',
-    //     'sectionIdForUrl', sectionIdForUrl,
-    //     'sectionInfo', sectionInfo,
-    //     'parentId', parentId,
-    //     'parent', {parent});
 
     const data = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), query, setLoading);
     const todayData = useNewsPostData(formatUrlWithId(url, sectionIdForUrl), {

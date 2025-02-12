@@ -90,7 +90,6 @@ export const Exporter = ({parentId, sectionId}: Props) => {
         try {
             switch (format) {
             case 'JSON': {
-                console.log('exporting in JSON', {data}, section.url);
                 message.info('Exporting discussion...');
                 const result = await exportChannelToDatalake(buildBaseProviderUrl(section.url), data);
                 if (!result.success) {

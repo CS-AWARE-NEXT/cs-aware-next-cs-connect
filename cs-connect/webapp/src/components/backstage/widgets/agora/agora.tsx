@@ -24,7 +24,6 @@ const Agora = ({
     parentId,
     sectionId,
 }: Props) => {
-    console.log('parentId', parentId, 'sectionId', sectionId);
     const {formatMessage} = useIntl();
     const isEcosystemRhs = useContext(IsEcosystemRhsContext);
     const fullUrl = useContext(FullUrlContext);

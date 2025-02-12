@@ -31,11 +31,23 @@ const getStroke = (kind: string | undefined) => {
 };
 
 // This is needed to add a label to handle an edge onclick event. React Flow doesn't allow a proper onClick handler on the svg itself.
+// IMPORTANT: add here extra edge data info
 const CustomEdge: FC<EdgeProps & {
     onEdgeClick: (
         id: string,
         kind: string,
         description: string | undefined,
+        criticalityLevel: number | undefined,
+        serviceLevelAgreement: string | undefined,
+        bcdrDescription: string | undefined,
+        rto: string | undefined,
+        rpo: string | undefined,
+        confidentialityLevel: number | undefined,
+        integrityLevel: number | undefined,
+        availabilityLevel: number | undefined,
+        ciaRationale: string | undefined,
+        mtpd: string | undefined,
+        realtimeStatus: string | undefined,
     ) => void;
 }> = ({
     id,
@@ -79,7 +91,22 @@ const CustomEdge: FC<EdgeProps & {
                 <div
                     onClick={() => {
                         // IMPORTANT: add here all extra edge info
-                        onEdgeClick(id, data.kind, data.description);
+                        onEdgeClick(
+                            id,
+                            data.kind,
+                            data.description,
+                            data.criticalityLevel,
+                            data.serviceLevelAgreement,
+                            data.bcdrDescription,
+                            data.rto,
+                            data.rpo,
+                            data.confidentialityLevel,
+                            data.integrityLevel,
+                            data.availabilityLevel,
+                            data.ciaRationale,
+                            data.mtpd,
+                            data.realtimeStatus,
+                        );
                     }}
                     style={{
                         position: 'absolute',

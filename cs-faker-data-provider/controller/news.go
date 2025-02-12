@@ -158,7 +158,8 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx, vars map[string]string) err
 	}
 	direction := c.Query("direction")
 	if direction == "" {
-		direction = "asc"
+		// desc retrieves the newest first, so we are using it as default
+		direction = "desc"
 	}
 
 	log.Info("creating body ", search, " ", offset, " ", offsetInt, " ", limit, " ", limitInt, " ", orderBy, " ", direction)
@@ -167,11 +168,11 @@ func (nc *NewsController) GetNewsPosts(c *fiber.Ctx, vars map[string]string) err
 	// This is the oldest NewerThan date (provided by Peter)
 	// NewerThan:      "2021-12-13T13:57:11.819492600Z",
 	targetLanguage := "en"
-	sourceType := "twitter"
+
+	// sourceType := "twitter"
 	queryString := fmt.Sprintf(
-		"targetLanguage=%s&sourceType=%s&offset=%s&limit=%s&newerThan=2024-10-14T00:00:00&order_by=%s&direction=%s",
+		"targetLanguage=%s&offset=%s&limit=%s&newerThan=2024-10-14T00:00:00&order_by=%s&direction=%s",
 		targetLanguage,
-		sourceType,
 		offset,
 		limit,
 		orderBy,

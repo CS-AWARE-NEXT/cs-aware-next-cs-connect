@@ -8,20 +8,15 @@ import React, {
 import {useLocation, useRouteMatch} from 'react-router-dom';
 import qs from 'qs';
 import {Edge, Node, ReactFlowProvider} from 'reactflow';
-
 import {getCurrentUserId} from 'mattermost-webapp/packages/mattermost-redux/src/selectors/entities/common';
-
 import {useSelector} from 'react-redux';
-
 import styled from 'styled-components';
 
 import {FullUrlContext, SectionContext} from 'src/components/rhs/rhs';
 import Graph, {getLayoutedElements} from 'src/components/backstage/widgets/graph/graph';
 import {IsEcosystemRhsContext} from 'src/components/rhs/rhs_widgets';
 import {Direction, GraphData, GraphDirection} from 'src/types/graph';
-
 import {fillEdges, fillNodes} from 'src/components/backstage/widgets/graph/graph_node_type';
-
 import EditableGraph from 'src/components/backstage/widgets/graph/editable_graph';
 import {dropEcosystemGraphLock, refreshEcosystemGraphLock} from 'src/clients';
 import {LockStatus} from 'src/types/ecosystem_graph';
@@ -89,6 +84,20 @@ const EcosystemGraphWrapper = ({
                     label: ecosystemNode.name,
                     description: ecosystemNode.description,
                     kind: ecosystemNode.type,
+                    contacts: ecosystemNode.contacts,
+                    collaborationPolicies: ecosystemNode.collaborationPolicies,
+                    criticalityLevel: ecosystemNode.criticalityLevel,
+                    serviceLevelAgreement: ecosystemNode.serviceLevelAgreement,
+                    bcdrDescription: ecosystemNode.bcdrDescription,
+                    rto: ecosystemNode.rto,
+                    rpo: ecosystemNode.rpo,
+                    confidentialityLevel: ecosystemNode.confidentialityLevel,
+                    integrityLevel: ecosystemNode.integrityLevel,
+                    availabilityLevel: ecosystemNode.availabilityLevel,
+                    ciaRationale: ecosystemNode.ciaRationale,
+                    mtpd: ecosystemNode.mtpd,
+                    realtimeStatus: ecosystemNode.realtimeStatus,
+                    ecosystemOrganization: ecosystemNode.ecosystemOrganization,
                 },
             } as unknown;
         }) as Node[] : [];
@@ -101,7 +110,18 @@ const EcosystemGraphWrapper = ({
                 target: ecosystemEdge.destinationNodeID,
                 data: {
                     kind: ecosystemEdge.kind,
-                    description: '',
+                    description: ecosystemEdge.description,
+                    criticalityLevel: ecosystemEdge.criticalityLevel,
+                    serviceLevelAgreement: ecosystemEdge.serviceLevelAgreement,
+                    bcdrDescription: ecosystemEdge.bcdrDescription,
+                    rto: ecosystemEdge.rto,
+                    rpo: ecosystemEdge.rpo,
+                    confidentialityLevel: ecosystemEdge.confidentialityLevel,
+                    integrityLevel: ecosystemEdge.integrityLevel,
+                    availabilityLevel: ecosystemEdge.availabilityLevel,
+                    ciaRationale: ecosystemEdge.ciaRationale,
+                    mtpd: ecosystemEdge.mtpd,
+                    realtimeStatus: ecosystemEdge.realtimeStatus,
                 },
             } as unknown;
         }) as Edge[] : [];
@@ -115,7 +135,7 @@ const EcosystemGraphWrapper = ({
         const filledEdges = fillEdges(mappedEdges, true);
         const {nodes, edges} = getLayoutedElements(filledNodes, filledEdges, direction);
         setUpdatedData({nodes, edges});
-    }, [direction, isEcosystemRhs, parentId, sectionIdForUrl, sectionUrl, serverGraphData]);
+    }, [direction, isEcosystemRhs, parentId, sectionIdForUrl, sectionUrl, serverGraphData, serverGraphData?.nodes, serverGraphData?.edges]);
 
     const refreshLock = useCallback(() => {
         (async () => {
@@ -136,6 +156,20 @@ const EcosystemGraphWrapper = ({
                 name: node.data.label,
                 description: node.data.description,
                 type: node.data.kind,
+                contacts: node.data.contacts,
+                collaborationPolicies: node.data.collaborationPolicies,
+                criticalityLevel: node.data.criticalityLevel,
+                serviceLevelAgreement: node.data.serviceLevelAgreement,
+                bcdrDescription: node.data.bcdrDescription,
+                rto: node.data.rto,
+                rpo: node.data.rpo,
+                confidentialityLevel: node.data.confidentialityLevel,
+                integrityLevel: node.data.integrityLevel,
+                availabilityLevel: node.data.availabilityLevel,
+                ciaRationale: node.data.ciaRationale,
+                mtpd: node.data.mtpd,
+                realtimeStatus: node.data.realtimeStatus,
+                ecosystemOrganization: node.data.ecosystemOrganization || 'no',
             })),
 
             // IMPORTANT: add here extra edge data info
@@ -145,6 +179,17 @@ const EcosystemGraphWrapper = ({
                 destinationNodeID: edge.target,
                 kind: edge.data.kind,
                 description: edge.data.description,
+                criticalityLevel: edge.data.criticalityLevel,
+                serviceLevelAgreement: edge.data.serviceLevelAgreement,
+                bcdrDescription: edge.data.bcdrDescription,
+                rto: edge.data.rto,
+                rpo: edge.data.rpo,
+                confidentialityLevel: edge.data.confidentialityLevel,
+                integrityLevel: edge.data.integrityLevel,
+                availabilityLevel: edge.data.availabilityLevel,
+                ciaRationale: edge.data.ciaRationale,
+                mtpd: edge.data.mtpd,
+                realtimeStatus: edge.data.realtimeStatus,
             })),
         };
         const lockAcquired = await refreshEcosystemGraphLock(url, userID, autoSaveDelay, mappedData);
