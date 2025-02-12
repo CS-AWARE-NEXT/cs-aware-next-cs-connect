@@ -68,6 +68,19 @@ export type NodeSelectionData = {
     label: string,
     description: string,
     kind: string,
+    contacts?: string,
+    collaborationPolicies?: string,
+    criticalityLevel?: number,
+    serviceLevelAgreement?: string,
+    bcdrDescription?: string,
+    rto?: string,
+    rpo?: string,
+    confidentialityLevel?: number,
+    integrityLevel?: number,
+    availabilityLevel?: number,
+    ciaRationale?: string,
+    mtpd?: string,
+    realtimeStatus?: string,
     ecosystemOrganization?: string,
 };
 
@@ -75,6 +88,17 @@ export type EdgeSelectionData = {
     id: string,
     kind: string,
     description?: string,
+    criticalityLevel?: number,
+    serviceLevelAgreement?: string,
+    bcdrDescription?: string,
+    rto?: string,
+    rpo?: string,
+    confidentialityLevel?: number,
+    integrityLevel?: number,
+    availabilityLevel?: number,
+    ciaRationale?: string,
+    mtpd?: string,
+    realtimeStatus?: string,
 };
 
 type GraphData = {
@@ -222,6 +246,20 @@ const EditableGraph = ({
                 label: targetNode.data.label || '',
                 description: targetNode.data.description || '',
                 kind: targetNode.data.kind || '',
+                contacts: targetNode.data.contacts || '',
+                collaborationPolicies: targetNode.data.collaborationPolicies || '',
+                criticalityLevel: targetNode.data.criticalityLevel || '',
+                serviceLevelAgreement: targetNode.data.serviceLevelAgreement || '',
+                bcdrDescription: targetNode.data.bcdrDescription || '',
+                rto: targetNode.data.rto || '',
+                rpo: targetNode.data.rpo || '',
+                confidentialityLevel: targetNode.data.confidentialityLevel || '',
+                integrityLevel: targetNode.data.integrityLevel || '',
+                availabilityLevel: targetNode.data.availabilityLevel || '',
+                ciaRationale: targetNode.data.ciaRationale || '',
+                mtpd: targetNode.data.mtpd || '',
+                realtimeStatus: targetNode.data.realtimeStatus || '',
+                ecosystemOrganization: targetNode.data.ecosystemOrganization || 'no',
             });
             setEdgeSelectionData(defaultEdgeSelectionData);
         }
@@ -232,6 +270,17 @@ const EditableGraph = ({
         id: string,
         kind: string,
         description: string | undefined,
+        criticalityLevel: number | undefined,
+        serviceLevelAgreement: string | undefined,
+        bcdrDescription: string | undefined,
+        rto: string | undefined,
+        rpo: string | undefined,
+        confidentialityLevel: number | undefined,
+        integrityLevel: number | undefined,
+        availabilityLevel: number | undefined,
+        ciaRationale: string | undefined,
+        mtpd: string | undefined,
+        realtimeStatus: string | undefined,
     ) => {
         setNodes((nds) => {
             nds.forEach((node) => {
@@ -255,6 +304,17 @@ const EditableGraph = ({
             id,
             kind,
             description,
+            criticalityLevel,
+            serviceLevelAgreement,
+            bcdrDescription,
+            rto,
+            rpo,
+            confidentialityLevel,
+            integrityLevel,
+            availabilityLevel,
+            ciaRationale,
+            mtpd,
+            realtimeStatus,
         });
     }, [edges, setEdges]);
 
@@ -442,11 +502,26 @@ const EditableGraph = ({
                 node.data = {...node.data, ...newData};
 
                 // Update the input field
+                // IMPORTANT: add here extra node data info
                 setNodeSelectionData({
                     id: node.id,
                     label: node.data.label || '',
                     description: node.data.description || '',
                     kind: node.data.kind || '',
+                    contacts: node.data.contacts || '',
+                    collaborationPolicies: node.data.collaborationPolicies || '',
+                    criticalityLevel: node.data.criticalityLevel,
+                    serviceLevelAgreement: node.data.serviceLevelAgreement || '',
+                    bcdrDescription: node.data.bcdrDescription || '',
+                    rto: node.data.rto || '',
+                    rpo: node.data.rpo || '',
+                    confidentialityLevel: node.data.confidentialityLevel,
+                    integrityLevel: node.data.integrityLevel,
+                    availabilityLevel: node.data.availabilityLevel,
+                    ciaRationale: node.data.ciaRationale || '',
+                    mtpd: node.data.mtpd || '',
+                    realtimeStatus: node.data.realtimeStatus || '',
+                    ecosystemOrganization: node.data.ecosystemOrganization || '',
                 });
             }
 
@@ -503,6 +578,17 @@ const EditableGraph = ({
             id: edgeSelectionData.id,
             kind: edgeData.kind || '',
             description: edgeData.description || '',
+            criticalityLevel: edgeData.criticalityLevel,
+            serviceLevelAgreement: edgeData.serviceLevelAgreement || '',
+            bcdrDescription: edgeData.bcdrDescription || '',
+            rto: edgeData.rto || '',
+            rpo: edgeData.rpo || '',
+            confidentialityLevel: edgeData.confidentialityLevel,
+            integrityLevel: edgeData.integrityLevel,
+            availabilityLevel: edgeData.availabilityLevel,
+            ciaRationale: edgeData.ciaRationale || '',
+            mtpd: edgeData.mtpd || '',
+            realtimeStatus: edgeData.realtimeStatus || '',
         });
     }, [edgeSelectionData, setEdges, editEnabled]);
 
