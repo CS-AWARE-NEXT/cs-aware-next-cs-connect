@@ -287,14 +287,14 @@ organizations:
             type: table
             url: http://www.isislab.it:3000/cs-data-provider/organizations/4/incidents/:id/table
           - type: channel
-      - name: Playbooks
-        id: "19"
-        url: http://www.isislab.it:3000/cs-data-provider/organizations/4/playbooks
-        widgets:
-          - name: Detail
-            type: cacao-playbook
-            url: http://www.isislab.it:3000/cs-data-provider/organizations/4/playbooks/:id/detail
-          - type: channel
+      # - name: Playbooks
+      #   id: "19"
+      #   url: http://www.isislab.it:3000/cs-data-provider/organizations/4/playbooks
+      #   widgets:
+      #     - name: Detail
+      #       type: cacao-playbook
+      #       url: http://www.isislab.it:3000/cs-data-provider/organizations/4/playbooks/:id/detail
+      #     - type: channel
       - name: Policies
         id: "34"
         internal: true

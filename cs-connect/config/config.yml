@@ -287,14 +287,14 @@ organizations:
             type: table
             url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/incidents/:id/table
           - type: channel
-      - name: Playbooks
-        id: "19"
-        url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks
-        widgets:
-          - name: Detail
-            type: cacao-playbook
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks/:id/detail
-          - type: channel
+      # - name: Playbooks
+      #   id: "19"
+      #   url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks
+      #   widgets:
+      #     - name: Detail
+      #       type: cacao-playbook
+      #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/playbooks/:id/detail
+      #     - type: channel
       - name: Policies
         id: "34"
         internal: true
