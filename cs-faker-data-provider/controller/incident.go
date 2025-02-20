@@ -54,7 +54,7 @@ func (ic *IncidentController) GetIncidents(c *fiber.Ctx, vars map[string]string)
 		Rows:    []model.PaginatedTableRow{},
 	}
 
-	if organizationId == "9" {
+	if organizationId == "9" || organizationId == "10" {
 		tableData.Rows = ic.getIncidentsAsRows(c, organizationId, vars)
 		return c.JSON(tableData)
 	}
@@ -153,7 +153,7 @@ func (ic *IncidentController) GetIncidentsByOrganizationId(organizationId string
 
 func (ic *IncidentController) GetIncident(c *fiber.Ctx, vars map[string]string) error {
 	organizationId := c.Params("organizationId")
-	if organizationId == "9" {
+	if organizationId == "9" || organizationId == "10" {
 		// this is needed in section_details.tsx to get the basic incident's information
 		// to keep building the visualization, in this case it is the same as the content of the incident's widget
 		log.Infof("GetIncident -> Requesting incident details for organization %s", organizationId)
