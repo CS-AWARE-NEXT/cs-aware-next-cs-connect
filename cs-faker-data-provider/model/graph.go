@@ -42,6 +42,7 @@ type GraphNodePosition struct {
 type GraphNode struct {
 	Data     GraphNodeData     `json:"data"`
 	ID       string            `json:"id"`
+	OldID    string            `json:"oldId"`
 	Position GraphNodePosition `json:"position"`
 	Type     string            `json:"type"`
 }

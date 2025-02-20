@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
@@ -32,12 +33,20 @@ func NewGraphController(authService *service.AuthService, endpoint string) *Grap
 
 func (gc *GraphController) GetGraph(c *fiber.Ctx, vars map[string]string) error {
 	organizationId := c.Params("organizationId")
+	log.Infof("Getting graph for organization %s", organizationId)
+
+	organizationIdAsInt, err := strconv.ParseInt("123", 10, 64)
+	if err != nil {
+		log.Infof("Error in parsing organization id to number: %s", err.Error())
+	}
 
 	// TODO: Temporary to return the same graph of organization
 	// Demo CS-AWARE for the organization NexDev CS-AWARE
-	if organizationId > "4" {
-		graphData, err := gc.getGraphFromJson(organizationId, vars)
+	if organizationIdAsInt > 4 {
+		log.Infof("Getting graph from json for organization %s", organizationId)
+		graphData, err := gc.getGraphFromJson(organizationId, organizationIdAsInt, vars)
 		if err != nil {
+			log.Infof("Error in getting graph from json: %s", err.Error())
 			return c.JSON(model.GraphData{})
 		}
 		return c.JSON(graphData)
@@ -47,6 +56,7 @@ func (gc *GraphController) GetGraph(c *fiber.Ctx, vars map[string]string) error 
 
 func (gc *GraphController) getGraphFromJson(
 	organizationId string,
+	organizationIdAsInt int64,
 	vars map[string]string,
 ) (model.GraphData, error) {
 	organizationName := "foggia"
@@ -62,8 +72,26 @@ func (gc *GraphController) getGraphFromJson(
 	if organizationId == "9" {
 		organizationName = "nextdev"
 	}
+	if organizationId == "10" {
+		organizationName = "nextdemo"
+	}
+
+	log.Infof("Getting graph for organization %s with id %s", organizationName, organizationId)
+
+	// Search in the data lake first for the organizations that are already in it
+	if organizationId == "9" || organizationId == "10" {
+		log.Infof("Searching for organization %s graph in DataLake", organizationId)
+		graph, err := gc.getGraphFromDataLake(organizationId, vars)
+		if err != nil {
+			log.Infof("Error in getting graph from DataLake: %s", err.Error())
+			return model.GraphData{}, err
+		}
+		return gc.fromDataLakeGraphData(graph)
+	}
+
 	filePath, err := util.GetEmbeddedFilePath(fmt.Sprintf("%s.json", organizationName), "*.json")
 	if err != nil {
+		log.Infof("Error in getting file path for graph data: %s", err.Error())
 		return model.GraphData{}, err
 	}
 
@@ -71,21 +99,15 @@ func (gc *GraphController) getGraphFromJson(
 	// content, err := data.Data.ReadFile(fmt.Sprintf("%s.json", organizationName))
 	content, err := data.Data.ReadFile(filePath)
 	if err != nil {
+		log.Infof("Error in reading graph data from file: %s", err.Error())
 		return model.GraphData{}, err
 	}
 
-	if organizationId == "9" {
-		graph, err := gc.getGraphFromDataLake(organizationId, vars)
-		if err != nil {
-			return model.GraphData{}, err
-		}
-		return gc.fromDataLakeGraphData(graph)
-	}
-
-	if organizationId >= "6" || organizationId <= "8" {
+	if organizationIdAsInt >= 6 || organizationIdAsInt <= 8 {
 		var csAwareGraphData model.CSAwareGraphData
 		err = json.Unmarshal(content, &csAwareGraphData)
 		if err != nil {
+			log.Infof("Error in unmarshaling graph data: %s", err.Error())
 			return model.GraphData{}, err
 		}
 		return gc.fromCSAwareGraphData(csAwareGraphData), nil
@@ -172,7 +194,8 @@ func (gc *GraphController) fromDataLakeGraphData(
 	for _, dataLakeNode := range dataLakeGraphData.Graph.Objects {
 		nodes = append(nodes, model.GraphNode{
 			Position: model.GraphNodePosition{X: 0, Y: 0},
-			ID:       dataLakeNode.ID,
+			ID:       util.ConvertToNoDots(dataLakeNode.ID),
+			OldID:    dataLakeNode.ID,
 			Data: model.GraphNodeData{
 				Label:       dataLakeNode.Name,
 				Description: dataLakeNode.Description,
@@ -190,16 +213,16 @@ func (gc *GraphController) fromDataLakeGraphData(
 	log.Info("Creating data lake edges")
 	nodeIndexes, nodeIDs, bfs := gc.getBfs(csaNodes)
 	for _, node := range nodes {
-		path := bfs.Path(nodeIndexes[node.ID])
+		path := bfs.Path(nodeIndexes[node.OldID])
 		if len(path) < 2 {
 			continue
 		}
 		index := path[len(path)-2]
 		ID := nodeIDs[index]
 		edges = append(edges, model.GraphEdge{
-			ID:     fmt.Sprintf("%s-%s", ID, node.ID),
-			Source: ID,
-			Target: node.ID,
+			ID:     fmt.Sprintf("%s-%s", util.ConvertToNoDots(ID), util.ConvertToNoDots(node.ID)),
+			Source: util.ConvertToNoDots(ID),
+			Target: util.ConvertToNoDots(node.ID),
 		})
 	}
 
