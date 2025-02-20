@@ -147,4 +147,5 @@ type Link struct {
 // e.g., nextdev is 9 in cs-connect and 30 in cs-aware
 var OrgToDataLakeOrgMap map[string]string = map[string]string{
 	"9": "30",
+	"10": "32",
 }
