@@ -2,6 +2,7 @@ package util
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 )
 
@@ -17,4 +18,8 @@ func ConvertUnixMilliToUTC(timestamp int64) string {
 	// format := time.RFC3339
 	format := "2006-01-02T15:04:05.000000Z"
 	return time.UnixMilli(timestamp).UTC().Format(format)
+}
+
+func ConvertToNoDots(input string) string {
+	return strings.ReplaceAll(input, ".", "-")
 }
