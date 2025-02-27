@@ -2,7 +2,7 @@ import React, {FC, useContext} from 'react';
 import styled from 'styled-components';
 import {useIntl} from 'react-intl';
 import moment from 'moment';
-import {Tag} from 'antd';
+import {Alert, Tag} from 'antd';
 
 import {Anomaly as AnomalyType, Incident as IncidentType} from 'src/types/incident';
 import {AnchorLinkTitle, Header} from 'src/components/backstage/widgets/shared';
@@ -17,6 +17,7 @@ import {OrganizationIdContext} from 'src/components/backstage/organizations/orga
 import GraphWrapper from 'src/components/backstage/widgets/graph/wrappers/graph_wrapper';
 import Accordion from 'src/components/backstage/widgets/accordion/accordion';
 import Loading from 'src/components/commons/loading';
+import {CS_CONNECT_COMPLIANCE_OLD_VERSIONS} from 'src/constants';
 
 import AnomalyAccordionChild from './anomaly_accordion_child';
 
@@ -87,6 +88,18 @@ const Incident: FC<Props> = ({
         return <Loading marginTop='8px'/>;
     }
 
+    if (data && data.reference_id === CS_CONNECT_COMPLIANCE_OLD_VERSIONS) {
+        return (
+            <NoIncidentContainer>
+                <Alert
+                    message={formatMessage({defaultMessage: 'This incidents does not exist in the data lake anymore.\nYou can archive this channel.'})}
+                    type='info'
+                    style={{marginTop: '8px'}}
+                />
+            </NoIncidentContainer>
+        );
+    }
+
     return (
         <Container data-testid={id}>
             <Header id={id}>
@@ -132,7 +145,7 @@ const Incident: FC<Props> = ({
                 }
             </HorizontalContainer>
 
-            {isRhs &&
+            {(isRhs && data.anomalies && data.anomalies.length > 0) &&
                 <HorizontalContainer>
                     <a
                         style={{marginTop: '24px'}}
@@ -294,6 +307,14 @@ const Incident: FC<Props> = ({
                 </>
             )}
 
+            {(!data.anomalies || data.anomalies.length < 1) && (
+                <Alert
+                    message={formatMessage({defaultMessage: 'There are no anomalies attached to this incident.'})}
+                    type='info'
+                    style={{marginTop: '8px'}}
+                />
+            )}
+
             {isRhs &&
                 <HorizontalContainer>
                     <a
@@ -320,6 +341,11 @@ export const HorizontalContainer = styled.div<{disable?: boolean}>`
     display: flex;
     flex-direction: ${({disable}) => (disable ? 'column' : 'row')};
     justify-content: 'space-between';
+`;
+
+const NoIncidentContainer = styled.div`
+    padding: 10px;
+    overflow-y: auto;
 `;
 
 export default Incident;

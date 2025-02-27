@@ -42,6 +42,10 @@ export const PARENT_ID_PARAM = 'parentId';
 export const SECTION_ID_PARAM = 'sectionId';
 export const OBJECT_ID_TOKEN = ':id';
 
+// This is because it might be due to fake incidents that were created
+// before datalake integration, in the first versions of cs-connect
+export const CS_CONNECT_COMPLIANCE_OLD_VERSIONS = 'cs-connect-incident-not-found-in-datalake';
+
 // export const ecosystemObjectivesWidget = 'objectives and research area';
 export const ecosystemObjectivesWidget = 'summary of event and questions for ecosystem';
 export const ecosystemOutcomesWidget = 'outcomes';
