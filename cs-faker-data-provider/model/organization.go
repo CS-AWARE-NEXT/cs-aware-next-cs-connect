@@ -146,6 +146,9 @@ type Link struct {
 // this maps organization ids from the cs-connect ones to the cs-aware ones
 // e.g., nextdev is 9 in cs-connect and 30 in cs-aware
 var OrgToDataLakeOrgMap map[string]string = map[string]string{
-	"9": "30",
+	"6":  "34",
+	"7":  "33",
+	"8":  "35",
+	"9":  "30",
 	"10": "32",
 }
