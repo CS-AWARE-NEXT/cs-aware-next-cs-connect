@@ -7,8 +7,8 @@
 - Build the packages by following the steps for each project.
 - Execute the command: `./start.sh` to clean the compose and run mattermost and cs-connect with the data provider.
 
-# System architecture overview
-![architecture](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/raw/main/assets/architecture_overview.png)
+<!-- # System architecture overview
+![architecture](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/raw/main/assets/architecture_overview.png) -->
 
 # Develop
 Run in `cs-connect` directory:
