@@ -10,6 +10,7 @@ import (
 
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
 )
@@ -54,7 +55,8 @@ func (ic *IncidentController) GetIncidents(c *fiber.Ctx, vars map[string]string)
 		Rows:    []model.PaginatedTableRow{},
 	}
 
-	if organizationId == "9" || organizationId == "10" {
+	orgsInDataLake := []string{"6", "7", "8", "9", "10"}
+	if util.Contains(orgsInDataLake, organizationId) {
 		tableData.Rows = ic.getIncidentsAsRows(c, organizationId, vars)
 		return c.JSON(tableData)
 	}
@@ -153,7 +155,8 @@ func (ic *IncidentController) GetIncidentsByOrganizationId(organizationId string
 
 func (ic *IncidentController) GetIncident(c *fiber.Ctx, vars map[string]string) error {
 	organizationId := c.Params("organizationId")
-	if organizationId == "9" || organizationId == "10" {
+	orgsInDataLake := []string{"6", "7", "8", "9", "10"}
+	if util.Contains(orgsInDataLake, organizationId) {
 		// this is needed in section_details.tsx to get the basic incident's information
 		// to keep building the visualization, in this case it is the same as the content of the incident's widget
 		log.Infof("GetIncident -> Requesting incident details for organization %s", organizationId)
@@ -216,6 +219,16 @@ func (ic *IncidentController) GetIncidentDetails(
 	log.Info("Response Headers: ", resp.Header)
 	if resp.StatusCode != http.StatusOK {
 		log.Error("error getting incident details ", resp.Status)
+
+		// This is because it might be due to fake incidents that were created
+		// before datalake integration, in the first versions of cs-connect
+		if resp.StatusCode == http.StatusNotFound {
+			return c.JSON(model.DataLakeIncident{
+				ID:          -1,
+				ReferenceID: "cs-connect-incident-not-found-in-datalake",
+				Name:        "Incident Not Found",
+			})
+		}
 		c.Status(resp.StatusCode)
 		return c.JSON(model.DataLakeIncident{})
 	}
