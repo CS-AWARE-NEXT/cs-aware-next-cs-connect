@@ -54,10 +54,10 @@ organizations:
         id: "22"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents
         widgets:
-          - name: System
-            type: graph
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/graph
-          - type: channels
+          - name: Details
+            type: incident
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/incidents/:id/details
+          - type: channel
       - name: Social Media
         id: "23"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/8/social_media
@@ -110,10 +110,10 @@ organizations:
         id: "18"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents
         widgets:
-          - name: System
-            type: graph
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/graph
-          - type: channels
+          - name: Details
+            type: incident
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/incidents/:id/details
+          - type: channel
       - name: Social Media
         id: "21"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/7/social_media
@@ -166,10 +166,10 @@ organizations:
         id: "17"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents
         widgets:
-          - name: System
-            type: graph
-            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/graph
-          - type: channels
+          - name: Details
+            type: incident
+            url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/incidents/:id/details
+          - type: channel
       - name: Social Media
         id: "20"
         url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/6/social_media
@@ -331,16 +331,4 @@ organizations:
       #       chartType: simple-line
       #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/4/charts/:id/line_chart
       #     - type: channel
-    # - name: NextDev CS-AWARE
-    #   id: "9"
-    #   description: The NextDev organization
-    #   sections:
-    #     - name: Incidents
-    #       id: "44"
-    #       url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/9/incidents
-    #       widgets:
-    #         - name: Details
-    #           type: incident
-    #           url: https://cs-connect-demo.cs-aware.eu/cs-data-provider/organizations/9/incidents/:id/details
-    #         - type: channel
     widgets: []
