@@ -54,10 +54,10 @@ organizations:
         id: "22"
         url: http://www.isislab.it:3000/cs-data-provider/organizations/8/incidents
         widgets:
-          - name: System
-            type: graph
-            url: http://www.isislab.it:3000/cs-data-provider/organizations/8/incidents/:id/graph
-          - type: channels
+          - name: Details
+            type: incident
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/8/incidents/:id/details
+          - type: channel
       - name: Social Media
         id: "23"
         url: http://www.isislab.it:3000/cs-data-provider/organizations/8/social_media
@@ -110,10 +110,10 @@ organizations:
         id: "18"
         url: http://www.isislab.it:3000/cs-data-provider/organizations/7/incidents
         widgets:
-          - name: System
-            type: graph
-            url: http://www.isislab.it:3000/cs-data-provider/organizations/7/incidents/:id/graph
-          - type: channels
+          - name: Details
+            type: incident
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/7/incidents/:id/details
+          - type: channel
       - name: Social Media
         id: "21"
         url: http://www.isislab.it:3000/cs-data-provider/organizations/7/social_media
@@ -166,10 +166,10 @@ organizations:
         id: "17"
         url: http://www.isislab.it:3000/cs-data-provider/organizations/6/incidents
         widgets:
-          - name: System
-            type: graph
-            url: http://www.isislab.it:3000/cs-data-provider/organizations/6/incidents/:id/graph
-          - type: channels
+          - name: Details
+            type: incident
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/6/incidents/:id/details
+          - type: channel
       - name: Social Media
         id: "20"
         url: http://www.isislab.it:3000/cs-data-provider/organizations/6/social_media
@@ -342,5 +342,17 @@ organizations:
           - name: Details
             type: incident
             url: http://www.isislab.it:3000/cs-data-provider/organizations/9/incidents/:id/details
+          - type: channel
+  - name: NextDemo CS-AWARE
+    id: "10"
+    description: The NextDemo organization
+    sections:
+      - name: Incidents
+        id: "46"
+        url: http://www.isislab.it:3000/cs-data-provider/organizations/10/incidents
+        widgets:
+          - name: Details
+            type: incident
+            url: http://www.isislab.it:3000/cs-data-provider/organizations/10/incidents/:id/details
           - type: channel
     widgets: []
