@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Select} from 'antd';
+import {Alert, Select} from 'antd';
 import {InfoCircleOutlined} from '@ant-design/icons';
 
 import {NodeSelectionData, StyledButton} from './editable_graph';
@@ -18,14 +18,6 @@ const NodeSidebar: FC<Props> = ({
     nodeSelectionData,
     updateNodeData,
 }) => {
-    // if (nodeSelectionData.kind === 'default') {
-    //     return (
-    //         <Label>
-    //             <InfoCircleOutlined/> {nodeSelectionData?.label ? `${nodeSelectionData?.label}` : 'Node information'}
-    //         </Label>
-    //     );
-    // }
-
     return (
         <>
             <Label>
@@ -72,6 +64,7 @@ const NodeSidebar: FC<Props> = ({
                         'A list of contacts defining how the community can engage with the company for different purposes. Should at least contain the contact information for the cybersecurity and data protection responsibles in the company.' :
                         'A list of contacts defining how the community can engage with the company for different purposes. Should at least contain the contact information for the cybersecurity and data protection responsibles in the company. Can be the same as contacts for the organisation, but may also be service specific contacts.'
                 }
+                visible={nodeSelectionData.kind !== 'default'}
             />
             <MarkdownTextArea
                 field='contacts'
@@ -80,6 +73,7 @@ const NodeSidebar: FC<Props> = ({
                 selectionData={nodeSelectionData}
                 editEnabled={editEnabled}
                 updateData={updateNodeData}
+                visible={nodeSelectionData.kind !== 'default'}
             />
 
             <LabelWithInfoText
@@ -89,6 +83,7 @@ const NodeSidebar: FC<Props> = ({
                         'An optional set of rules and guidelines that define how the community should engage with the company in the context of cybersecurity.' :
                         'An optional set of rules and guidelines that define how the community should engage with the company in the context of cybersecurity. Can be the same as on organisation level, but may also be different.'
                 }
+                visible={nodeSelectionData.kind !== 'default'}
             />
             <MarkdownTextArea
                 field='collaborationPolicies'
@@ -97,6 +92,7 @@ const NodeSidebar: FC<Props> = ({
                 selectionData={nodeSelectionData}
                 editEnabled={editEnabled}
                 updateData={updateNodeData}
+                visible={nodeSelectionData.kind !== 'default'}
             />
 
             {nodeSelectionData.kind === 'rectangle' && (
@@ -298,6 +294,7 @@ const NodeSidebar: FC<Props> = ({
                 options={[
                     {value: 'default', label: 'Default'},
 
+                    // TODO: need an enum for this
                     // {value: 'database', label: 'Database'},
                     // {value: 'cloud', label: 'Cloud'},
                     // {value: 'network', label: 'Network'},
@@ -308,6 +305,14 @@ const NodeSidebar: FC<Props> = ({
                     updateNodeData({kind: value});
                 }}
             />
+
+            {(nodeSelectionData.kind === 'default') && (
+                <Alert
+                    showIcon={true}
+                    message={'Change node type to see more of the available fields.'}
+                    type='warning'
+                    style={{marginTop: '8px'}}
+                />)}
 
             {/* <Divider/> */}
 

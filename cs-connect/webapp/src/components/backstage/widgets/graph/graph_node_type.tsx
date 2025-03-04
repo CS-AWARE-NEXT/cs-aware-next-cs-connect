@@ -218,7 +218,26 @@ const GraphNodeType: FC<NodeProps & {
     if (setNodeInfo && setTargetNodeId && setIsDrawerOpen && hyperlinkPath) {
         const onInfoClick = () => {
             setIsDrawerOpen(true);
-            setNodeInfo({name: data.label, description: data.description, nodeId: id});
+            setNodeInfo({
+                nodeId: id,
+                kind: data.kind,
+                name: data.label,
+                description: data.description,
+                contacts: data.contacts || '',
+                collaborationPolicies: data.collaborationPolicies || '',
+                criticalityLevel: data.criticalityLevel || '',
+                serviceLevelAgreement: data.serviceLevelAgreement || '',
+                bcdrDescription: data.bcdrDescription || '',
+                rto: data.rto || '',
+                rpo: data.rpo || '',
+                confidentialityLevel: data.confidentialityLevel || '',
+                integrityLevel: data.integrityLevel || '',
+                availabilityLevel: data.availabilityLevel || '',
+                ciaRationale: data.ciaRationale || '',
+                mtpd: data.mtpd || '',
+                realtimeStatus: data.realtimeStatus || '',
+                ecosystemOrganization: data.ecosystemOrganization || 'no',
+            });
             setOpenDropdown(false);
         };
 

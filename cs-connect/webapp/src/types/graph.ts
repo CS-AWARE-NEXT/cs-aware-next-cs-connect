@@ -27,15 +27,42 @@ export type GraphSectionOptions = {
 
 // IMPORTANT: add here extra node data info
 export type GraphNodeInfo = {
+    nodeId: string;
+    kind?: string,
     name: string;
     description?: string;
-    nodeId: string;
+    contacts?: string;
+    collaborationPolicies?: string,
+    criticalityLevel?: number,
+    serviceLevelAgreement?: string,
+    bcdrDescription?: string,
+    rto?: string,
+    rpo?: string,
+    confidentialityLevel?: number,
+    integrityLevel?: number,
+    availabilityLevel?: number,
+    ciaRationale?: string,
+    mtpd?: string,
+    realtimeStatus?: string,
+    ecosystemOrganization?: string,
 };
 
 // IMPORTANT: add here extra edge data info
 export type GraphEdgeInfo = {
-    description?: string;
     edgeId: string;
+    kind?: string,
+    description?: string;
+    criticalityLevel?: number;
+    serviceLevelAgreement?: string,
+    bcdrDescription?: string,
+    rto?: string,
+    rpo?: string,
+    confidentialityLevel?: number,
+    integrityLevel?: number,
+    availabilityLevel?: number,
+    ciaRationale?: string,
+    mtpd?: string,
+    realtimeStatus?: string,
 };
 
 export type GraphDirection = 'LR' | 'TB';

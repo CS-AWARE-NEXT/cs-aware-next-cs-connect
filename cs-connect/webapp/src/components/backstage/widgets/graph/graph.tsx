@@ -2,6 +2,7 @@ import 'reactflow/dist/style.css';
 import React, {
     Dispatch,
     SetStateAction,
+    createContext,
     useCallback,
     useContext,
     useEffect,
@@ -65,6 +66,8 @@ import GraphNodeType, {markNodesAndEdges} from './graph_node_type';
 import GraphNodeInfo, {NODE_INFO_ID_PREFIX} from './graph_node_info';
 import CustomEdge from './graph_edge_type';
 import GraphEdgeInfo, {EDGE_INFO_ID_PREFIX} from './graph_edge_info';
+
+export const IsEcosystemGraphViewContext = createContext(false);
 
 type GraphStyle = {
     containerDirection: string,
@@ -237,6 +240,17 @@ const Graph = ({
         id: string,
         kind: string,
         description: string | undefined,
+        criticalityLevel: number | undefined,
+        serviceLevelAgreement: string | undefined,
+        bcdrDescription: string | undefined,
+        rto: string | undefined,
+        rpo: string | undefined,
+        confidentialityLevel: number | undefined,
+        integrityLevel: number | undefined,
+        availabilityLevel: number | undefined,
+        ciaRationale: string | undefined,
+        mtpd: string | undefined,
+        realtimeStatus: string | undefined,
     ) => {
         setNodes((nds) => {
             nds.forEach((node) => {
@@ -254,7 +268,22 @@ const Graph = ({
             return [...eds];
         });
 
-        setEdgeInfo({edgeId: id, description});
+        setEdgeInfo({
+            edgeId: id,
+            kind,
+            description,
+            criticalityLevel,
+            serviceLevelAgreement,
+            bcdrDescription,
+            rto,
+            rpo,
+            confidentialityLevel,
+            integrityLevel,
+            availabilityLevel,
+            ciaRationale,
+            mtpd,
+            realtimeStatus,
+        });
         setIsEdgeDrawerOpen(true);
     }, [edges, setEdges]);
 
@@ -337,7 +366,26 @@ const Graph = ({
             if (hashedNode !== undefined) {
                 setIsEdgeDrawerOpen(false);
                 setIsDrawerOpen(true);
-                setNodeInfo({name: hashedNode.data.label, description: hashedNode.data.description, nodeId});
+                setNodeInfo({
+                    nodeId,
+                    kind: hashedNode.data.kind,
+                    name: hashedNode.data.label,
+                    description: hashedNode.data.description,
+                    contacts: hashedNode.data.contacts || '',
+                    collaborationPolicies: hashedNode.data.collaborationPolicies || '',
+                    criticalityLevel: hashedNode.data.criticalityLevel || '',
+                    serviceLevelAgreement: hashedNode.data.serviceLevelAgreement || '',
+                    bcdrDescription: hashedNode.data.bcdrDescription || '',
+                    rto: hashedNode.data.rto || '',
+                    rpo: hashedNode.data.rpo || '',
+                    confidentialityLevel: hashedNode.data.confidentialityLevel || '',
+                    integrityLevel: hashedNode.data.integrityLevel || '',
+                    availabilityLevel: hashedNode.data.availabilityLevel || '',
+                    ciaRationale: hashedNode.data.ciaRationale || '',
+                    mtpd: hashedNode.data.mtpd || '',
+                    realtimeStatus: hashedNode.data.realtimeStatus || '',
+                    ecosystemOrganization: hashedNode.data.ecosystemOrganization || 'no',
+                });
             }
         }
         if (sectionUrlHash.includes(EDGE_INFO_ID_PREFIX)) {
@@ -350,7 +398,22 @@ const Graph = ({
             if (hashedEdge !== undefined) {
                 setIsDrawerOpen(false);
                 setIsEdgeDrawerOpen(true);
-                setEdgeInfo({description: hashedEdge.data.description, edgeId});
+                setEdgeInfo({
+                    edgeId,
+                    kind: hashedEdge.data.kind,
+                    description: hashedEdge.data.description,
+                    criticalityLevel: hashedEdge.data.criticalityLevel,
+                    serviceLevelAgreement: hashedEdge.data.serviceLevelAgreement,
+                    bcdrDescription: hashedEdge.data.bcdrDescription,
+                    rto: hashedEdge.data.rto,
+                    rpo: hashedEdge.data.rpo,
+                    confidentialityLevel: hashedEdge.data.confidentialityLevel,
+                    integrityLevel: hashedEdge.data.integrityLevel,
+                    availabilityLevel: hashedEdge.data.availabilityLevel,
+                    ciaRationale: hashedEdge.data.ciaRationale,
+                    mtpd: hashedEdge.data.mtpd,
+                    realtimeStatus: hashedEdge.data.realtimeStatus,
+                });
             }
         }
     }, [sectionUrlHash, data]);
@@ -389,112 +452,114 @@ const Graph = ({
             containerDirection={graphStyle.containerDirection}
             marginBottom={(isRhs && isRhsClosed && isDescriptionProvided(graphDescription)) ? '0px' : '42px'}
         >
-            <GraphContainer
-                id={id}
-                data-testid={id}
-                width={graphStyle.graphWidth}
-                height={graphStyle.graphHeight}
-            >
-                <Header>
-                    <AnchorLinkTitle
-                        fullUrl={fullUrl}
-                        id={id}
-                        query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
-                        text={name}
-                        title={name}
-                    />
-                </Header>
-                <StyledSelect
-                    value={selectedObject?.value}
-                    showSearch={true}
-                    placeholder='Select a node'
-                    optionFilterProp='children'
-                    onChange={onChange}
-                    filterOption={filterOption}
-                    options={data.nodes.map((node) => {
-                        return {value: node.id, label: node.data.label};
-                    })}
-                />
-                <ReactFlow
-                    nodes={nodes}
-                    edges={edges}
-                    onNodesChange={onNodesChange}
-                    onEdgesChange={onEdgesChange}
-                    nodeTypes={nodeTypes}
-                    edgeTypes={isEcosystemGraphView ? edgeTypes : undefined}
-                    fitView={true}
-                    fitViewOptions={fitViewOptions}
-                    proOptions={hideOptions}
+            <IsEcosystemGraphViewContext.Provider value={isEcosystemGraphView}>
+                <GraphContainer
+                    id={id}
+                    data-testid={id}
+                    width={graphStyle.graphWidth}
+                    height={graphStyle.graphHeight}
                 >
-                    <Background/>
-                    <Controls/>
-                    <MiniMap
-                        style={minimapStyle}
-                        zoomable={true}
-                        pannable={true}
+                    <Header>
+                        <AnchorLinkTitle
+                            fullUrl={fullUrl}
+                            id={id}
+                            query={isEcosystemRhs ? '' : buildQuery(parentId, sectionId)}
+                            text={name}
+                            title={name}
+                        />
+                    </Header>
+                    <StyledSelect
+                        value={selectedObject?.value}
+                        showSearch={true}
+                        placeholder='Select a node'
+                        optionFilterProp='children'
+                        onChange={onChange}
+                        filterOption={filterOption}
+                        options={data.nodes.map((node) => {
+                            return {value: node.id, label: node.data.label};
+                        })}
                     />
-                    <Panel position={panelPosition}>
-                        <Tooltip
-                            title={formatMessage({defaultMessage: 'Toggle graph direction'})}
-                            placement='bottom'
-                        >
-                            <Button
-                                icon={<PartitionOutlined/>}
-                                onClick={() => onLayout(toggleDirection(direction))}
-                            />
-                        </Tooltip>
-                    </Panel>
-                </ReactFlow>
-            </GraphContainer>
-            <Drawer
-                title={nodeInfo?.name}
-                placement='right'
-                onClose={() => {
-                    setIsDrawerOpen(false);
-                }}
-                open={isDrawerOpen}
-                size='large'
-            >
-                {nodeInfo &&
-                <GraphNodeInfo
-                    info={nodeInfo}
-                    sectionId={sectionId}
-                    parentId={parentId}
-                    graphName={name}
-                />}
-            </Drawer>
-            <Drawer
-                title={'Edge Info'}
-                placement='right'
-                onClose={() => {
-                    setIsEdgeDrawerOpen(false);
-                }}
-                open={isEdgeDrawerOpen}
-                size='large'
-            >
-                {edgeInfo &&
-                <GraphEdgeInfo
-                    info={edgeInfo}
-                    sectionId={sectionId}
-                    parentId={parentId}
-                    graphName={name}
-                />}
-            </Drawer>
-            {isDescriptionProvided(graphDescription) &&
-            <GraphSidebar
-                width={graphSidebarStyle.width}
-                noMargin={(isRhsClosed && isRhs) ?? false}
-            >
-                <TextBox
-                    idPrefix={DESCRIPTION_ID_PREFIX}
-                    name={graphDescription.name}
-                    sectionId={sectionId}
-                    style={graphStyle.textBoxStyle}
-                    parentId={parentId}
-                    text={graphDescription.text}
-                />
-            </GraphSidebar>
-            }
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        nodeTypes={nodeTypes}
+                        edgeTypes={isEcosystemGraphView ? edgeTypes : undefined}
+                        fitView={true}
+                        fitViewOptions={fitViewOptions}
+                        proOptions={hideOptions}
+                    >
+                        <Background/>
+                        <Controls/>
+                        <MiniMap
+                            style={minimapStyle}
+                            zoomable={true}
+                            pannable={true}
+                        />
+                        <Panel position={panelPosition}>
+                            <Tooltip
+                                title={formatMessage({defaultMessage: 'Toggle graph direction'})}
+                                placement='bottom'
+                            >
+                                <Button
+                                    icon={<PartitionOutlined/>}
+                                    onClick={() => onLayout(toggleDirection(direction))}
+                                />
+                            </Tooltip>
+                        </Panel>
+                    </ReactFlow>
+                </GraphContainer>
+                <Drawer
+                    title={nodeInfo?.name}
+                    placement='right'
+                    onClose={() => {
+                        setIsDrawerOpen(false);
+                    }}
+                    open={isDrawerOpen}
+                    size='large'
+                >
+                    {nodeInfo &&
+                    <GraphNodeInfo
+                        info={nodeInfo}
+                        sectionId={sectionId}
+                        parentId={parentId}
+                        graphName={name}
+                    />}
+                </Drawer>
+                <Drawer
+                    title={'Edge Info'}
+                    placement='right'
+                    onClose={() => {
+                        setIsEdgeDrawerOpen(false);
+                    }}
+                    open={isEdgeDrawerOpen}
+                    size='large'
+                >
+                    {edgeInfo &&
+                    <GraphEdgeInfo
+                        info={edgeInfo}
+                        sectionId={sectionId}
+                        parentId={parentId}
+                        graphName={name}
+                    />}
+                </Drawer>
+                {isDescriptionProvided(graphDescription) &&
+                <GraphSidebar
+                    width={graphSidebarStyle.width}
+                    noMargin={(isRhsClosed && isRhs) ?? false}
+                >
+                    <TextBox
+                        idPrefix={DESCRIPTION_ID_PREFIX}
+                        name={graphDescription.name}
+                        sectionId={sectionId}
+                        style={graphStyle.textBoxStyle}
+                        parentId={parentId}
+                        text={graphDescription.text}
+                    />
+                </GraphSidebar>
+                }
+            </IsEcosystemGraphViewContext.Provider>
         </Container>
     );
 };
