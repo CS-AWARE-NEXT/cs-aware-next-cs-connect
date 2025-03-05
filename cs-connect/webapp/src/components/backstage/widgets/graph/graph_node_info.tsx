@@ -33,7 +33,6 @@ type Props = {
 };
 
 const textBoxStyle = {
-    height: '5vh',
     marginTop: '0px',
 };
 
@@ -97,17 +96,16 @@ const GraphNodeInfo: FC<Props> = ({
                 titleText={`${graphName}.${name}.Description`}
             />
 
-            {(isEcosystemGraphView) &&
+            {(isEcosystemGraphView && kind !== 'default') &&
                 <TextBox
                     name={'Contacts'}
                     sectionId={sectionId}
                     parentId={parentId}
                     text={contacts ?? 'No contacts provided.'}
-                    style={{marginTop: '48px'}}
                     customId={`_${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-contacts-widget`}
                     titleText={`${graphName}.${name}.Contacts`}
                 />}
-            {(isEcosystemGraphView) &&
+            {(isEcosystemGraphView && kind !== 'default') &&
                 <TextBox
                     name={'Collaboration Policies'}
                     sectionId={sectionId}
@@ -230,9 +228,6 @@ const GraphNodeInfo: FC<Props> = ({
                 name={'Type'}
                 sectionId={sectionId}
                 parentId={parentId}
-                style={{
-                    marginTop: isEcosystemGraphView ? '24px' : '48px',
-                }}
                 text={getNodeTypeFromKind(kind, isEcosystemGraphView)}
                 customId={`_${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-type-widget`}
                 titleText={`${graphName}.${name}.Type`}

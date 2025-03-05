@@ -79,7 +79,9 @@ func (gc *GraphController) getGraphFromJson(
 	log.Infof("Getting graph for organization %s with id %s", organizationName, organizationId)
 
 	// Search in the data lake first for the organizations that are already in it
-	if organizationId == "9" || organizationId == "10" {
+	orgsInDataLake := []string{"6", "7", "8", "9", "10"}
+	if util.Contains(orgsInDataLake, organizationId) {
+		// if organizationId == "9" || organizationId == "10" {
 		log.Infof("Searching for organization %s graph in DataLake", organizationId)
 		graph, err := gc.getGraphFromDataLake(organizationId, vars)
 		if err != nil {

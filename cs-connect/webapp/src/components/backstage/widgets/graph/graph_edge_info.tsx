@@ -20,7 +20,6 @@ type Props = {
 };
 
 const textBoxStyle = {
-    height: '5vh',
     marginTop: '0px',
 };
 
@@ -86,7 +85,6 @@ const GraphEdgeInfo: FC<Props> = ({
                     sectionId={sectionId}
                     parentId={parentId}
                     text={`${criticalityLevel}` || 'No criticality level provided.'}
-                    style={{marginTop: '48px'}}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-critlevel-widget`}
                     titleText={`${graphName}.Edge.CriticalityLevel`}
                 />}
