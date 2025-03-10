@@ -194,6 +194,9 @@ func (gc *GraphController) fromDataLakeGraphData(
 
 	log.Info("Creating data lake nodes")
 	for _, dataLakeNode := range dataLakeGraphData.Graph.Objects {
+		if dataLakeNode.OntologyNodeType != "" {
+			continue
+		}
 		nodes = append(nodes, model.GraphNode{
 			Position: model.GraphNodePosition{X: 0, Y: 0},
 			ID:       util.ConvertToNoDots(dataLakeNode.ID),
@@ -209,6 +212,9 @@ func (gc *GraphController) fromDataLakeGraphData(
 	log.Info("Converting data lake nodes to CSA nodes")
 	csaNodes := []model.CSAwareGraphNode{}
 	for _, dln := range dataLakeGraphData.Graph.Objects {
+		if dln.OntologyNodeType != "" {
+			continue
+		}
 		csaNodes = append(csaNodes, dln.ToCSAwareNode(dln))
 	}
 

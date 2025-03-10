@@ -147,6 +147,7 @@ type DataLakeGraphNode struct {
 	Redundancy            []string `json:"redundancy"`
 	InfrastructureType    string   `json:"infrastructure_type,omitempty"`
 	NeedsInfrastructure   string   `json:"needsInfrastructure,omitempty"`
+	OntologyNodeType      string   `json:"OntologyNodeType,omitempty"`
 }
 
 type DataLakeGraphRoot struct {
