@@ -61,7 +61,10 @@ func (ac *AuthService) Auth(username, password string) (AuthResponse, error) {
 		log.Error("error reading response body ", string(respBody), err.Error())
 		return AuthResponse{}, err
 	}
-	log.Info("Auth response Body: ", string(respBody))
+
+	// This logs the access token and id token, so it is commented out
+	// now that things have been tested for a long time
+	// log.Info("Auth response Body: ", string(respBody))
 
 	log.Info("unmarshaling auth response")
 	var response AuthResponse
@@ -70,6 +73,7 @@ func (ac *AuthService) Auth(username, password string) (AuthResponse, error) {
 		log.Error("error unmarshaling news posts ", err.Error())
 		return AuthResponse{}, err
 	}
+	log.Info("unmarshalled auth response successfully")
 
 	return response, nil
 }
