@@ -16,7 +16,9 @@ type AuthResponse struct {
 }
 
 func (ar AuthResponse) String() string {
-	return fmt.Sprintf("AccessToken: %s, IdToken: %s", ar.AccessToken, ar.IdToken)
+	// TODO: we need a env var to differentiate between dev and prod
+	// return fmt.Sprintf("AccessToken: %s, IdToken: %s", ar.AccessToken, ar.IdToken)
+	return fmt.Sprintf("AccessToken: %s, IdToken: %s", "<hidden>", "<hidden>")
 }
 
 type AuthService struct {
@@ -61,7 +63,10 @@ func (ac *AuthService) Auth(username, password string) (AuthResponse, error) {
 		log.Error("error reading response body ", string(respBody), err.Error())
 		return AuthResponse{}, err
 	}
-	log.Info("Auth response Body: ", string(respBody))
+
+	// This logs the access token and id token, so it is commented out
+	// now that things have been tested for a long time
+	// log.Info("Auth response Body: ", string(respBody))
 
 	log.Info("unmarshaling auth response")
 	var response AuthResponse
@@ -70,6 +75,7 @@ func (ac *AuthService) Auth(username, password string) (AuthResponse, error) {
 		log.Error("error unmarshaling news posts ", err.Error())
 		return AuthResponse{}, err
 	}
+	log.Info("unmarshalled auth response successfully")
 
 	return response, nil
 }
