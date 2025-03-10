@@ -16,7 +16,9 @@ type AuthResponse struct {
 }
 
 func (ar AuthResponse) String() string {
-	return fmt.Sprintf("AccessToken: %s, IdToken: %s", ar.AccessToken, ar.IdToken)
+	// TODO: we need a env var to differentiate between dev and prod
+	// return fmt.Sprintf("AccessToken: %s, IdToken: %s", ar.AccessToken, ar.IdToken)
+	return fmt.Sprintf("AccessToken: %s, IdToken: %s", "<hidden>", "<hidden>")
 }
 
 type AuthService struct {
