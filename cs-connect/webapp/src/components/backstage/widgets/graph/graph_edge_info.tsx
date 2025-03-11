@@ -129,7 +129,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'Confidentiality Level'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${confidentialityLevel}` || 'No confidentiality level provided.'}
+                    text={confidentialityLevel ? `${confidentialityLevel}` : 'No confidentiality level provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-confidentialityLevel-widget`}
                     titleText={`${graphName}.Edge.ConfidentialityLevel`}
                 />}
@@ -138,7 +138,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'Integrity Level'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${integrityLevel}` || 'No integrity level provided.'}
+                    text={integrityLevel ? `${integrityLevel}` : 'No integrity level provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-integrityLevel-widget`}
                     titleText={`${graphName}.Edge.IntegrityLevel`}
                 />}
@@ -147,7 +147,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'Availability Level'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${availabilityLevel}` || 'No availability level provided.'}
+                    text={availabilityLevel ? `${availabilityLevel}` : 'No availability level provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-availabilityLevel-widget`}
                     titleText={`${graphName}.Edge.AvailabilityLevel`}
                 />}
