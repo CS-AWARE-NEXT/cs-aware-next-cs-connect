@@ -129,7 +129,6 @@ const GraphNodeInfo: FC<Props> = ({
                     sectionId={sectionId}
                     parentId={parentId}
                     text={`${criticalityLevel}` || 'No criticality level provided.'}
-                    style={{marginTop: '48px'}}
                     customId={`_${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-critlevel-widget`}
                     titleText={`${graphName}.${name}.CriticalityLevel`}
                 />}
