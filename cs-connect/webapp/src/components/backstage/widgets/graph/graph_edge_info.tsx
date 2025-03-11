@@ -93,7 +93,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'Service Level Agreement'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${serviceLevelAgreement}` || 'No service level agreement provided.'}
+                    text={serviceLevelAgreement || 'No service level agreement provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-sla-widget`}
                     titleText={`${graphName}.Edge.ServiceLevelAgreement`}
                 />}
@@ -102,7 +102,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'BC/DR Description'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${bcdrDescription}` || 'No BC/DR description provided.'}
+                    text={bcdrDescription || 'No BC/DR description provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-bcdrdesc-widget`}
                     titleText={`${graphName}.Edge.BCDRDescription`}
                 />}
@@ -111,7 +111,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'RTO'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${rto}` || 'No RTO provided.'}
+                    text={rto || 'No RTO provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-rto-widget`}
                     titleText={`${graphName}.Edge.RTO`}
                 />}
@@ -120,7 +120,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'RPO'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${rpo}` || 'No RPO provided.'}
+                    text={rpo || 'No RPO provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-rpo-widget`}
                     titleText={`${graphName}.Edge.RPO`}
                 />}
@@ -156,7 +156,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'CIA Rationale'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${ciaRationale}` || 'No CIA rationale provided.'}
+                    text={ciaRationale || 'No CIA rationale provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-ciaRationale-widget`}
                     titleText={`${graphName}.Edge.CIARationale`}
                 />}
@@ -165,7 +165,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'MTPD'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${mtpd}` || 'No MTPD provided.'}
+                    text={mtpd || 'No MTPD provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-mtpd-widget`}
                     titleText={`${graphName}.Edge.MTPD`}
                 />}
@@ -174,7 +174,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'Real-time Status'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${realtimeStatus}` || 'No real-time status provided.'}
+                    text={realtimeStatus || 'No real-time status provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-realtimeStatus-widget`}
                     titleText={`${graphName}.Edge.RealtimeStatus`}
                 />}
@@ -184,7 +184,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'Type'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${getEdgeTypeFromKind(kind)}` || 'No type provided.'}
+                    text={getEdgeTypeFromKind(kind)}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-type-widget`}
                     titleText={`${graphName}.Edge.Type`}
                 />}
