@@ -46,6 +46,30 @@ organizations:
         id: "1"
         url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/issues/ecosystem_graph
         customView: ecosystem-graph
+  - name: NextDemo CS-AWARE
+    id: "10"
+    description: The NextDemo organization
+    sections:
+      - name: Incidents
+        id: "46"
+        url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/10/incidents
+        widgets:
+          - name: Details
+            type: incident
+            url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/10/incidents/:id/details
+          - type: channel
+  - name: NextDev CS-AWARE
+    id: "9"
+    description: The NextDev organization
+    sections:
+      - name: Incidents
+        id: "44"
+        url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/9/incidents
+        widgets:
+          - name: Details
+            type: incident
+            url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/9/incidents/:id/details
+          - type: channel
   - name: Demo CS-AWARE EU
     id: "4"
     description: The organization at https://demo.cs-aware.eu/index.html
@@ -108,28 +132,4 @@ organizations:
       #       chartType: simple-line
       #       url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/4/charts/:id/line_chart
       #     - type: channel
-  - name: NextDev CS-AWARE
-    id: "9"
-    description: The NextDev organization
-    sections:
-      - name: Incidents
-        id: "44"
-        url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/9/incidents
-        widgets:
-          - name: Details
-            type: incident
-            url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/9/incidents/:id/details
-          - type: channel
-  - name: NextDemo CS-AWARE
-    id: "10"
-    description: The NextDemo organization
-    sections:
-      - name: Incidents
-        id: "46"
-        url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/10/incidents
-        widgets:
-          - name: Details
-            type: incident
-            url: https://cs-connect-demonstrator.cs-aware.eu/cs-data-provider/organizations/10/incidents/:id/details
-          - type: channel
     widgets: []
