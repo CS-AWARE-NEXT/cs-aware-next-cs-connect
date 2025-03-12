@@ -84,7 +84,7 @@ const GraphEdgeInfo: FC<Props> = ({
                     name={'Criticality Level'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={`${criticalityLevel}` || 'No criticality level provided.'}
+                    text={criticalityLevel ? `${criticalityLevel}` : 'No criticality level provided.'}
                     customId={`_${info.edgeId}-${sectionId}-${parentId}-${EDGE_INFO_ID_PREFIX}-critlevel-widget`}
                     titleText={`${graphName}.Edge.CriticalityLevel`}
                 />}
