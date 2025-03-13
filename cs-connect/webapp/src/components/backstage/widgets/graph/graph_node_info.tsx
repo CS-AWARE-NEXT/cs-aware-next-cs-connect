@@ -90,7 +90,7 @@ const GraphNodeInfo: FC<Props> = ({
                 name={'Description'}
                 sectionId={sectionId}
                 parentId={parentId}
-                text={description ?? EMPTY_NODE_DESCRIPTION}
+                text={description || EMPTY_NODE_DESCRIPTION}
                 style={textBoxStyle}
                 customId={`_${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-desc-widget`}
                 titleText={`${graphName}.${name}.Description`}
@@ -101,7 +101,7 @@ const GraphNodeInfo: FC<Props> = ({
                     name={'Contacts'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={contacts ?? 'No contacts provided.'}
+                    text={contacts || 'No contacts provided.'}
                     customId={`_${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-contacts-widget`}
                     titleText={`${graphName}.${name}.Contacts`}
                 />}
@@ -110,7 +110,7 @@ const GraphNodeInfo: FC<Props> = ({
                     name={'Collaboration Policies'}
                     sectionId={sectionId}
                     parentId={parentId}
-                    text={collaborationPolicies ?? 'No collaboration policies provided.'}
+                    text={collaborationPolicies || 'No collaboration policies provided.'}
                     customId={`_${info.nodeId}-${sectionId}-${parentId}-${NODE_INFO_ID_PREFIX}-collabopols-widget`}
                     titleText={`${graphName}.${name}.CollaborationPolicies`}
                 />}
