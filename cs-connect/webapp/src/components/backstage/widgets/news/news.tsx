@@ -18,6 +18,7 @@ import {FullUrlContext} from 'src/components/rhs/rhs';
 import {buildQuery} from 'src/hooks';
 import {formatName} from 'src/helpers';
 import {NewsError, NewsPostData, NewsQuery} from 'src/types/news';
+import Loading from 'src/components/commons/loading';
 
 import NewsPosts from './news_posts';
 
@@ -143,6 +144,8 @@ const News: FC<Props> = ({
                     loading={loading}
                 />
             </HorizontalContainer>}
+
+            {(noSearchBar && loading) && <Loading marginTop='12px'/>}
 
             {Body}
         </Container>
