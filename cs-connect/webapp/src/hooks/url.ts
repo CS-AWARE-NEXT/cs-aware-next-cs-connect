@@ -80,8 +80,21 @@ export const buildEcosystemGraphUrl = (issues_url: string, append_last_path: boo
 export const buildBaseProviderUrl = (sectionUrl: string): string => {
     // match the word "provider"
     const match = sectionUrl.match(/^(.*?\/[^/]*provider)/);
+    const url = getSiteUrl();
     if (!match) {
-        throw new Error('No "provider" segment found in the URL.');
+        console.log('proxying export to ' + toFixedProviderUrl(url));
+        return toFixedProviderUrl(url);
     }
+    console.log('proxying export to ' + match[1]);
     return match[1];
+};
+
+const toFixedProviderUrl = (originalUrl: string): string => {
+    const url = new URL(originalUrl);
+    if (url.port !== '') {
+        url.port = '3000';
+    }
+
+    url.pathname = '/cs-data-provider';
+    return url.toString();
 };

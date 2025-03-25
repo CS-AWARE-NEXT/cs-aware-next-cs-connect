@@ -91,7 +91,7 @@ export const Exporter = ({parentId, sectionId}: Props) => {
             switch (format) {
             case 'JSON': {
                 message.info('Exporting discussion...');
-                const result = await exportChannelToDatalake(buildBaseProviderUrl(section.url), data);
+                const result = await exportChannelToDatalake(buildBaseProviderUrl(section?.url || ''), data);
                 if (!result.success) {
                     message.error(result.message);
                     break;
