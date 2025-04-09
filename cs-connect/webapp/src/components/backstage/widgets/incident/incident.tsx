@@ -82,6 +82,7 @@ const Incident: FC<Props> = ({
 
     // the incident container expects the url to be /details
     // and then converts it to be the graph url /graph
+    // to add relations, you can use the list like in playbook
     const graphUrl = url.replace('details', 'graph');
 
     if (loading) {
