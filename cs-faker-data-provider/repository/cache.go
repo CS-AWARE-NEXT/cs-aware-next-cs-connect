@@ -86,3 +86,22 @@ func (r *CacheRepository) DropLock(lockName string, owner string) error {
 	}
 	return nil
 }
+
+func (r *CacheRepository) DropLockIfExists(lockName string) error {
+	tx, err := r.db.DB.Beginx()
+	if err != nil {
+		return errors.Wrap(err, "could not begin transaction")
+	}
+	defer r.db.FinalizeTransaction(tx)
+
+	if _, err := r.db.ExecBuilder(tx, sq.
+		Delete("CSFDP_Locks").
+		Where(sq.Eq{"Key": lockName})); err != nil {
+		return errors.Wrap(err, "could not delete lock ecosystem-graph")
+	}
+
+	if err := tx.Commit(); err != nil {
+		return errors.Wrap(err, "could not commit transaction")
+	}
+	return nil
+}
