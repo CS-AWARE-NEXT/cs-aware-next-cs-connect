@@ -30,9 +30,10 @@ import {
     Drawer,
     Dropdown,
     Layout,
+    Modal,
     Tooltip,
 } from 'antd';
-import {LeftOutlined, RightOutlined} from '@ant-design/icons';
+import {HighlightOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons';
 import {Content} from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import styled from 'styled-components';
@@ -41,11 +42,13 @@ import withAdditionalProps from 'src/components/hoc/with_additional_props';
 import {uuidv4} from 'src/helpers/uuid';
 import {LockStatus} from 'src/types/ecosystem_graph';
 import {getSystemConfig} from 'src/config/config';
+import {ModalBody} from 'src/components/backstage/widgets/steps_modal/steps_modal';
 
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
 import EdgeSidebar from './edge_sidebar';
 import NodeSidebar from './node_sidebar';
+import WritingTips from './writing_tips';
 
 const ON_CREATION_NODE_TYPE = 'default';
 export const EDGE_TYPE_MANAGED_BY = 'managed-by';
@@ -592,6 +595,20 @@ const EditableGraph = ({
         });
     }, [edgeSelectionData, setEdges, editEnabled]);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <Flex>
             <RightElements>
@@ -625,6 +642,31 @@ const EditableGraph = ({
                         />
                     </Tooltip>
                 }
+                <Tooltip title='Open writing tips'>
+                    <StyledButton
+                        type='default'
+                        icon={<HighlightOutlined/>}
+                        block={true}
+                        onClick={showModal}
+                        style={{
+                            width: '50px',
+                            border: 'none',
+                        }}
+                    />
+                </Tooltip>
+                <Modal
+                    title='Writing Tips'
+                    width={1200}
+                    cancelText='Close'
+                    okText='Got it!'
+                    open={isModalOpen}
+                    onOk={handleOk}
+                    onCancel={handleCancel}
+                >
+                    <ModalBody>
+                        <WritingTips/>
+                    </ModalBody>
+                </Modal>
             </RightElements>
 
             <Layout

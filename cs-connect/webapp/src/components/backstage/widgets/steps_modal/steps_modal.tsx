@@ -261,7 +261,7 @@ const Text = styled.div`
     text-align: left;
 `;
 
-const ModalBody = styled.div`
+export const ModalBody = styled.div`
     max-height: 500px;
     overflow-y: auto;
     padding: 8px;

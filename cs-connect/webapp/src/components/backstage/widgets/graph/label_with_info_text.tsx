@@ -37,7 +37,36 @@ const LabelWithInfoText: FC<Props> = ({
     );
 };
 
+export const LabelWithInfoTextBig: FC<Props> = ({
+    label,
+    infoText = '',
+    visible = true,
+}) => {
+    if (!visible) {
+        return null;
+    }
+
+    return (
+        <HorizontalContainer>
+            <InputLabelBig>{label}</InputLabelBig>
+            <Tooltip
+                title={infoText}
+            >
+                <QuestionCircleOutlined
+                    style={{
+                        marginTop: '13px',
+                        marginLeft: '4px',
+                    }}
+                />
+            </Tooltip>
+        </HorizontalContainer>
+    );
+};
+
 export const InputLabel = styled.h5``;
+
+export const InputLabelBig = styled.h4``;
+
 export const Label = styled.h4`
     margin-bottom: 12px;
     margin-top: 20px;
