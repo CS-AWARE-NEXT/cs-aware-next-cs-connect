@@ -6,6 +6,7 @@ import (
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/data"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/model"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/repository"
+	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/service"
 	"github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/cs-faker-data-provider/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
@@ -15,12 +16,21 @@ import (
 type EcosystemGraphController struct {
 	ecosystemGraphRepository *repository.EcosystemGraphRepository
 	cacheRepository          *repository.CacheRepository
+	authService              *service.AuthService
+	endpoint                 string
 }
 
-func NewEcosystemGraphController(ecosystemGraphRepository *repository.EcosystemGraphRepository, cacheRepository *repository.CacheRepository) *EcosystemGraphController {
+func NewEcosystemGraphController(
+	ecosystemGraphRepository *repository.EcosystemGraphRepository,
+	cacheRepository *repository.CacheRepository,
+	authService *service.AuthService,
+	endpoint string,
+) *EcosystemGraphController {
 	return &EcosystemGraphController{
 		ecosystemGraphRepository: ecosystemGraphRepository,
 		cacheRepository:          cacheRepository,
+		authService:              authService,
+		endpoint:                 endpoint,
 	}
 }
 
@@ -99,4 +109,36 @@ func (egc *EcosystemGraphController) DropLockEcosystemGraph(c *fiber.Ctx) error 
 		return errors.Wrap(err, "couldn't delete lock")
 	}
 	return c.JSON(fiber.Map{})
+}
+
+func (egc *EcosystemGraphController) ExportEcosystemGraph(
+	c *fiber.Ctx,
+	vars map[string]string,
+) error {
+	ecosystemGraphExporter := service.NewJSONEcosystemGraphExporter(
+		vars["ecosystemId"],
+		egc.endpoint,
+		egc.authService,
+	)
+	ecosystemGraph, err := egc.ecosystemGraphRepository.GetEcosystemGraph()
+	if err != nil {
+		log.Infof("Could not load ecosystem graph: %s", err.Error())
+		return c.JSON(model.BaseResponse{
+			Success: false,
+			Message: "Could not export ecosystem graph, try again later",
+		})
+	}
+	ecosystemGraphExport, err := ecosystemGraphExporter.ExportEcosystemGraph(ecosystemGraph, vars)
+	if err != nil {
+		log.Infof("Could not export ecosystem graph: %s", err.Error())
+		return c.JSON(model.BaseResponse{
+			Success: false,
+			Message: "Could not export ecosystem graph because the external server returned an error",
+		})
+	}
+	log.Infof("Ecosystem graph exported successfully: %s", ecosystemGraphExport.EcosystemID)
+	return c.JSON(model.BaseResponse{
+		Success: true,
+		Message: "Ecosystem graph exported successfully",
+	})
 }
