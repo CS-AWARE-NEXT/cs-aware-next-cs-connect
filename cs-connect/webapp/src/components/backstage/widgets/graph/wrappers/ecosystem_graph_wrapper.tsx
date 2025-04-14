@@ -298,6 +298,7 @@ const EcosystemGraphWrapper = ({
                         }}
                         lockStatus={lockStatus}
                         refreshNodeInternals={refreshNodeInternals}
+                        exportUrl={`${url}/export`}
                     />
                 ) : (
                     <Graph
