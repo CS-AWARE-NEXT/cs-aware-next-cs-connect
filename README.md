@@ -4,6 +4,7 @@
 1. [cs-faker-data-provider](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/tree/main/cs-faker-data-provider) a web server that provides fake data using the RESTful protocol.
 
 # Install
+
 - Build the packages by following the steps for each project.
 - Execute the command: `./start.sh` to clean the compose and run mattermost and cs-connect with the data provider.
 
@@ -11,6 +12,7 @@
 ![architecture](https://github.com/CS-AWARE-NEXT/cs-aware-next-cs-connect/raw/main/assets/architecture_overview.png) -->
 
 # Develop
+
 Run in `cs-connect` directory:
 
 ```sh
@@ -36,12 +38,14 @@ $ ./make.sh -p config.local.yml
 ```
 
 # Troubleshooting
+
 If you're developing on Windows through WSL2, you may have to fix some permissions first. It is recommended to clone the project on the WSL filesystem to avoid incurring in slowdowns caused by the Windows - WSL filesystem synchronization overhead.
 Be sure that:
 1) the `config/config` and `config/logs` folder are owned by the user 2000 (the Mattermost container user);
 2) the `cs-connect/build/manifest` and `cs-connect/build/pluginctl` files should have the execute flag (this might be needed if you cloned the project on the Windows filesystem and later moved it on the WSL filesystem)
 
 # Deploy on the AWS machine with the locally packaged cs-connect plugin
+
 1) Build the cs-connect package locally as instructed in [its README](cs-connect/README.md). Be sure to use the correct config passed as argument. This is required due to the AWS machine not being powerful enough for the build step.
 2) Copy the packaged plugin to the machine with the `aws.copy-package.sh` script. The script assumes the existence of the required private key to authenticate with the machine in the path `~/.ssh/isislab/cs-connect-demo.cs-aware.eu`.
 3) Access the machine via SSH.
@@ -60,9 +64,10 @@ sudo docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile
 ```sh
 sudo docker-compose up -d
 ```
-10) Clean up the images that aren't needed anymore. Keep an eye out for the <none> image generated while updating the faker module image, which should also be deleted.
+10) Clean up the images that aren't needed anymore. Keep an eye out for the `none` image generated while updating the faker module image, which should also be deleted.
 
 # Deploy on local machine with the locally packaged cs-connect plugin
+
 1) Build the cs-connect package locally as instructed in [its README](cs-connect/README.md). Be sure to use the correct config passed as argument. This is required due to the AWS machine not being powerful enough for the build step.
 2) Copy the packaged plugin to the local machine with the `local.copy-package.sh` script. The script assumes the user has access to the `www.isislab.it` machine used for development.
 3) Execute a git pull. This isn't required to update the cs-connect plugin, but it is required if you want to update the cs-faker-data-provider, since the latter is built directly on the local machine.
@@ -80,7 +85,7 @@ docker build -t csconnect/mattermost:{VERSION} -f docker/package.Dockerfile .
 ```sh
 bash start.sh -p
 ```
-9) Clean up the images that aren't needed anymore. Keep an eye out for the <none> image generated while updating the faker module image, which should also be deleted.
+9) Clean up the images that aren't needed anymore. Keep an eye out for the `none` image generated while updating the faker module image, which should also be deleted.
 10) Undeploy using:
 ```sh
 docker compose down
