@@ -46,6 +46,7 @@ import {getSystemConfig} from 'src/config/config';
 import {ModalBody} from 'src/components/backstage/widgets/steps_modal/steps_modal';
 import {ToastStyle} from 'src/components/backstage/toast';
 import {useToaster} from 'src/components/backstage/toast_banner';
+import {exportEcosystemGraph} from 'src/clients';
 
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
@@ -152,6 +153,7 @@ type Props = {
     triggerUpdate: (save: boolean, close: boolean) => void,
     lockStatus: LockStatus,
     refreshNodeInternals?: Record<string, never>,
+    exportUrl: string,
 };
 
 const EditableGraph = ({
@@ -163,6 +165,7 @@ const EditableGraph = ({
     triggerUpdate,
     lockStatus,
     refreshNodeInternals,
+    exportUrl,
 }: Props) => {
     const {formatMessage} = useIntl();
     const {add: addToast} = useToaster();
@@ -614,9 +617,11 @@ const EditableGraph = ({
     const showExportModal = () => {
         const onExport = async () => {
             addToast({content: 'Exporting ecosystem graph...'});
-
-            // TODO: here call a dedicated API to export the graph
-
+            const result = await exportEcosystemGraph(exportUrl);
+            if (!result.success) {
+                addToast({content: result.message, toastStyle: ToastStyle.Failure});
+                return;
+            }
             addToast({content: 'Ecosystem graph exported successfully!', toastStyle: ToastStyle.Success});
         };
 
