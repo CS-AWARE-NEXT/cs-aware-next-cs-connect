@@ -494,7 +494,13 @@ func useEcosystem(basePath fiber.Router, context *config.Context) {
 	ecosystemGraphRepository := context.RepositoriesMap["ecosystemGraph"].(*repository.EcosystemGraphRepository)
 	cacheRepository := context.RepositoriesMap["cache"].(*repository.CacheRepository)
 	issueController := controller.NewIssueController(issueRepository)
-	ecosystemGraphController := controller.NewEcosystemGraphController(ecosystemGraphRepository, cacheRepository)
+	authService := service.NewAuthService(context.EndpointsMap["auth"])
+	ecosystemGraphController := controller.NewEcosystemGraphController(
+		ecosystemGraphRepository,
+		cacheRepository,
+		authService,
+		context.EndpointsMap["ecosystemGraphExport"],
+	)
 
 	linksRepository := context.RepositoriesMap["links"].(*repository.LinkRepository)
 	linksController := controller.NewLinkController(linksRepository)
@@ -526,6 +532,9 @@ func useEcosystem(basePath fiber.Router, context *config.Context) {
 	})
 	ecosystem.Post("/ecosystem_graph/drop_lock", func(c *fiber.Ctx) error {
 		return ecosystemGraphController.DropLockEcosystemGraph(c)
+	})
+	ecosystem.Put("/ecosystem_graph/export", func(c *fiber.Ctx) error {
+		return ecosystemGraphController.ExportEcosystemGraph(c, context.Vars)
 	})
 	ecosystem.Post("/:issueId", func(c *fiber.Ctx) error {
 		return issueController.UpdateIssue(c)

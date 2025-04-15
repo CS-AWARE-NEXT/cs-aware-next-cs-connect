@@ -55,3 +55,9 @@ type RefreshLockEcosystemGraphParams struct {
 type DropLockEcosystemGraphParams struct {
 	UserID string `json:"userID"`
 }
+
+type EcosystemGraphExport struct {
+	EcosystemID string                `json:"ecosystem_id"`
+	Nodes       []*EcosystemGraphNode `json:"nodes"`
+	Edges       []*EcosystemGraphEdge `json:"edges"`
+}

@@ -37,12 +37,16 @@ import {HighlightOutlined, LeftOutlined, RightOutlined} from '@ant-design/icons'
 import {Content} from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import styled from 'styled-components';
+import {useIntl} from 'react-intl';
 
 import withAdditionalProps from 'src/components/hoc/with_additional_props';
 import {uuidv4} from 'src/helpers/uuid';
 import {LockStatus} from 'src/types/ecosystem_graph';
 import {getSystemConfig} from 'src/config/config';
 import {ModalBody} from 'src/components/backstage/widgets/steps_modal/steps_modal';
+import {ToastStyle} from 'src/components/backstage/toast';
+import {useToaster} from 'src/components/backstage/toast_banner';
+import {exportEcosystemGraph} from 'src/clients';
 
 import GraphNodeType, {edgeType, nodeType} from './graph_node_type';
 import CustomEdge from './graph_edge_type';
@@ -149,6 +153,7 @@ type Props = {
     triggerUpdate: (save: boolean, close: boolean) => void,
     lockStatus: LockStatus,
     refreshNodeInternals?: Record<string, never>,
+    exportUrl: string,
 };
 
 const EditableGraph = ({
@@ -160,7 +165,11 @@ const EditableGraph = ({
     triggerUpdate,
     lockStatus,
     refreshNodeInternals,
+    exportUrl,
 }: Props) => {
+    const {formatMessage} = useIntl();
+    const {add: addToast} = useToaster();
+
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const store = useStoreApi();
@@ -172,7 +181,6 @@ const EditableGraph = ({
     const [savedTooltipOpen, setSavedTooltipOpen] = useState(false);
     const [resetNodes, setResetNodes] = useState(false);
     const [hideSidebar, setHideSidebar] = useState(false);
-
     const [nodeSelectionData, setNodeSelectionData] = useState<NodeSelectionData>(defaultNodeSelectionData);
     const [edgeSelectionData, setEdgeSelectionData] = useState<EdgeSelectionData>(defaultEdgeSelectionData);
     const systemConfig = getSystemConfig();
@@ -595,18 +603,37 @@ const EditableGraph = ({
         });
     }, [edgeSelectionData, setEdges, editEnabled]);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const showModal = () => {
-        setIsModalOpen(true);
+    const [isWritingTipsModalOpen, setIsWritingTipsModalOpen] = useState(false);
+    const showWritingTipsModal = () => {
+        setIsWritingTipsModalOpen(true);
+    };
+    const handleWritingTipsOk = () => {
+        setIsWritingTipsModalOpen(false);
+    };
+    const handleWritingTipsCancel = () => {
+        setIsWritingTipsModalOpen(false);
     };
 
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
+    const showExportModal = () => {
+        const onExport = async () => {
+            addToast({content: 'Exporting ecosystem graph...'});
+            const result = await exportEcosystemGraph(exportUrl);
+            if (!result.success) {
+                addToast({content: result.message, toastStyle: ToastStyle.Failure});
+                return;
+            }
+            addToast({content: 'Ecosystem graph exported successfully!', toastStyle: ToastStyle.Success});
+        };
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
+        Modal.confirm({
+            title: formatMessage({defaultMessage: 'Export'}),
+            content: formatMessage({defaultMessage: 'Are you sure you want to export?'}),
+            onOk: onExport,
+            okText: formatMessage({defaultMessage: 'Yes'}),
+            cancelText: formatMessage({defaultMessage: 'No'}),
+            focusTriggerAfterClose: false,
+            width: '512px',
+        });
     };
 
     return (
@@ -642,12 +669,18 @@ const EditableGraph = ({
                         />
                     </Tooltip>
                 }
+                <Tooltip title='Export'>
+                    <ExportIcon
+                        className={'fa fa-share-square-o'}
+                        onClick={showExportModal}
+                    />
+                </Tooltip>
                 <Tooltip title='Open writing tips'>
                     <StyledButton
                         type='default'
                         icon={<HighlightOutlined/>}
                         block={true}
-                        onClick={showModal}
+                        onClick={showWritingTipsModal}
                         style={{
                             width: '50px',
                             border: 'none',
@@ -659,9 +692,9 @@ const EditableGraph = ({
                     width={1200}
                     cancelText='Close'
                     okText='Got it!'
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
+                    open={isWritingTipsModalOpen}
+                    onOk={handleWritingTipsOk}
+                    onCancel={handleWritingTipsCancel}
                 >
                     <ModalBody>
                         <WritingTips/>
@@ -879,6 +912,20 @@ const CustomSider = styled(Sider)`
 
     &::-webkit-scrollbar-track {
         background: transparent;
+    }
+`;
+
+const ExportIcon = styled.button`
+    display: inline-block;
+
+    font-size: 15px;
+    margin-top: 14px;
+
+    border: none;
+    background: transparent;
+
+    &:hover {
+        color: #4096FF;
     }
 `;
 
