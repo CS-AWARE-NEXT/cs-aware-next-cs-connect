@@ -228,6 +228,11 @@ export const exportChannelToDatalake = async (
     return data;
 };
 
+export const exportEcosystemGraph = async (url: string): Promise<any> => {
+    const data = await doPut(url, {});
+    return data;
+};
+
 /**
  * Refresh the lock required to edit the ecosystem graph.
  *

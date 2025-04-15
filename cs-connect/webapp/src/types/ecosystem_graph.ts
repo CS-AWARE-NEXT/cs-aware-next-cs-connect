@@ -49,3 +49,8 @@ export enum LockStatus {
     Acquired,
     Busy
 }
+
+export interface ExportEcosystemGraphResult {
+    success: boolean;
+    message: string;
+}
