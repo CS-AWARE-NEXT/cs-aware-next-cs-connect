@@ -1,5 +1,9 @@
 #!/bin/bash
 
+KEY_PATH=<YOUR_KEY_PATH>
+USER=<YOUR_USER_NAME>
+IP=<YOUR_IP_ADDRESS>
+
 CONTAINER_NAME=cs-connect-base
 PACKAGE_NAME=cs-aware-connect-+.tar.gz
 
@@ -13,9 +17,9 @@ docker cp $CONTAINER_NAME:/home/cs-aware-next-cs-connect/cs-connect/dist/$PACKAG
 echo "Copy completed."
 
 echo "Remote copying pluging from $HOST_TEMP_PACKAGE to AWS."
-scp -i ~/.ssh/isislab/cs-connect-demo.cs-aware.eu \
+scp -i $KEY_PATH \
     $HOST_TEMP_PACKAGE \
-    ubuntu@cs-connect-demo.cs-aware.eu:/home/ubuntu/cs-aware-next-cs-connect/cs-connect/docker/package/$PACKAGE_NAME
+    $USER@$IP:/home/$USER/cs-aware-next-cs-connect/cs-connect/docker/package/$PACKAGE_NAME
 echo "Remote copy completed."
 
 echo "Removing temporary package."
